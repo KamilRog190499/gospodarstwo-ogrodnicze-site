@@ -1,21 +1,15 @@
-/* The two faces of the design, self-hosted.
+/* Dwa kroje motywu 2a, self-hosted — te same zasady, co poprzednio.
  *
- * docs/design/README.md shows a <link> to fonts.googleapis.com - that is how the
- * prototype loads them, and the same document's "Assets" section says to host them
- * locally on a Polish commercial site, because the CDN hands every visitor's IP address
- * to Google. Both families are OFL, so we may. Nothing here is fetched at runtime.
+ * Instrument Serif i Karla wychodzą; Newsreader i Public Sans wchodzą. Oba są OFL i oba
+ * mają wariant zmienny na Fontsource, więc zamiast trzech plików na rodzinę leci jeden.
  *
- * Each import carries `unicode-range` for latin and latin-ext separately, so the file
- * with the Polish diacritics (ą ć ę ł ń ó ś ź ż) is only fetched when a page uses them -
- * which every page here does, but the split costs nothing and keeps the latin file small.
+ * Newsreader italic jest wczytywany celowo: słowo „Saran” w nagłówku jest kursywą i
+ * przeglądarka, która musiałaby ją zesyntetyzować, robi z tej litery co innego.
  *
- * Instrument Serif italic is loaded on purpose: the word "Saran" in the H1 is set in it,
- * and a browser that has to synthesise a slant makes a visibly different letterform out
- * of a face this high-contrast.
+ * Public Sans italic nie jest importowany — projekt nigdy nie pochyla bezszeryfowego.
  *
- * Karla ships italic too; it is deliberately not imported, because the design never
- * slants the sans.
+ * Nadal nic nie leci z CDN Google (RODO — patrz komentarz w poprzedniej wersji pliku).
  */
-@import "@fontsource/instrument-serif/index.css";
-@import "@fontsource/instrument-serif/400-italic.css";
-@import "@fontsource-variable/karla/wght.css";
+@import "@fontsource-variable/newsreader/index.css";
+@import "@fontsource-variable/newsreader/standard-italic.css";
+@import "@fontsource-variable/public-sans/wght.css";

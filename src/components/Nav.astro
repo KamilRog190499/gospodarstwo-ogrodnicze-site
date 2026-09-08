@@ -2,16 +2,20 @@
 import { navigation } from "../data/navigation";
 
 /**
- * The menu bar.
+ * Pasek menu.
  *
- * It does not collapse. Seven items wrap onto a second line on a narrow screen, which is
- * what the design asks for, and it means the site ships no menu JavaScript at all - there
- * is nothing here that can fail to open.
+ * Nie zwija się. Siedem pozycji zawija się na drugą linię na wąskim ekranie, i to znaczy,
+ * że witryna nie wysyła ani linijki JavaScriptu do menu — nie ma tu nic, co może się nie
+ * otworzyć.
  *
- * Now that the entries are real pages, the current one is marked: `aria-current="page"`
- * for assistive technology and the green underline the design already had waiting for it.
- * `trailingSlash: "always"` in astro.config.mjs means both sides of the comparison carry
- * the slash, so no normalising is needed.
+ * Motyw 2a nie zmienia tego pliku: pasek zachowuje delikatne tło `--paper-dim`, kreskę
+ * nad sobą i własny `padding-inline`. Warunek jest po stronie `Header.astro` — `<Nav />`
+ * musi stać poza paddingiem nazwy, jako osobny wiersz gridu nagłówka, inaczej marginesy
+ * boczne dodają się podwójnie i pasek rozjeżdża się względem nazwy.
+ *
+ * `aria-current="page"` plus zielone podkreślenie na bieżącej pozycji — bez zmian.
+ * `trailingSlash: "always"` w astro.config.mjs oznacza, że obie strony porównania mają
+ * ukośnik, więc nic nie trzeba normalizować.
  */
 const path = Astro.url.pathname;
 ---
@@ -41,7 +45,7 @@ const path = Astro.url.pathname;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    /* Row gap zero: the 48px tap targets already separate wrapped rows. */
+    /* Row gap zero: cele dotykowe 48px same rozdzielają zawinięte rzędy. */
     gap: 0 clamp(1rem, 3vw, 2.5rem);
   }
 
@@ -55,7 +59,7 @@ const path = Astro.url.pathname;
     min-height: 48px;
     display: inline-flex;
     align-items: center;
-    /* Transparent rather than absent, so hovering does not move the text by 2px. */
+    /* Przezroczysta, nie brak — żeby hover nie przesuwał tekstu o 2px. */
     border-bottom: 2px solid transparent;
   }
 

@@ -31,6 +31,7 @@ const year = new Date().getFullYear();
   <div class="footer__columns">
     <div class="footer__col">
       <p class="footer__name">Gospodarstwo Ogrodnicze „Saran”</p>
+      <p class="footer__tagline">Sprzedaż kwiatów balkonowych, rabatowych i chryzantem</p>
       <p class="footer__blurb">
         Sprzedaż kwiatów balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych.
       </p>
@@ -116,6 +117,18 @@ const year = new Date().getFullYear();
     font-family: var(--serif);
     font-size: 1.5rem;
     color: var(--bone);
+  }
+
+  /* Tagline z nagłówka. Motyw 2a zostawia w nagłówku dwa piętra — nazwę i menu — a trzecie,
+     na tagline, kasuje; stąd ona tutaj. Słowo w słowo jak w docs/design/README.md, sekcja 1. */
+  .footer__tagline {
+    font-family: var(--sans);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--footer-label);
+    margin-top: 0.35rem;
   }
 
   .footer__blurb {

@@ -1,93 +1,123 @@
-/* Design tokens - carried over 1:1 from docs/design/README.md.
- * No component hardcodes a colour, a size or a spacing value.
+/* Design tokens — motyw „Poranek w tunelu” (2a), zatwierdzony we wrześniu 2026.
+ * Zastępuje paletę i kroje z docs/design/README.md. Reszta doktryny tego pliku zostaje
+ * bez zmian: żaden komponent nie zaszywa koloru, rozmiaru ani odstępu, nadal nie ma
+ * promienia, cienia ani gradientu — z jednym wyjątkiem, opisanym niżej.
  *
- * The design is paper: two light grounds, two dark blocks, and every other distinction
- * carried by 1px rules, type size and spacing. There is no radius, no shadow and no
- * gradient anywhere in it - see global.css.
+ * Co się zmieniło względem poprzedniej wersji:
  *
- * Token names are English; the comment after each gives the Polish name used in the
- * handoff, so the two can be read side by side.
+ * - kroje: Instrument Serif → Newsreader (miększa kreska, optyczne osie, pełny zestaw
+ *   polskich znaków), Karla → Public Sans (szersze światło, lepiej czyta się w małych
+ *   etykietach uppercase, których jest tu dużo).
+ * - zieleń rozdzielona na dwie. Poprzednia --green robiła jednocześnie za kolor tekstu
+ *   linku i za dekorację; jeden odcień nie może być naraz wystarczająco jasny, żeby
+ *   ożywić stronę, i wystarczająco ciemny, żeby przejść AA na tekście. Teraz --green
+ *   (#5A6D46, 4,95:1 na papierze) jest tekstowa, a --sage (#6B7F55, 3,9:1) wyłącznie
+ *   dekoracyjna: kursywa „Saran” w nagłówku i podobny typ wielkoformatowy. Nie używaj
+ *   --sage na niczym poniżej 24px.
+ * - papier o ćwierć stopnia cieplejszy (#FCFBF5 → #FAF7F0), atrament zzielenił się
+ *   (#23281F → #1F2A21). Różnica jest mała z rozmysłem: to ta sama strona, nie inna.
+ * - --ink-grey podniesiony z #5B6153 do #656E5B. Stary dawał 4,3:1 na nowym papierze,
+ *   a nosi wszystkie etykiety uppercase i podpisy zdjęć.
+ *
+ * Jedyny gradient w projekcie: --hero-scrim, przyciemnienie pod nagłówkiem na zdjęciu
+ * w Intro.astro. Nie jest ozdobą — bez niego biały tekst na fotografii tunelu ma
+ * miejscami 2:1. Nie kopiuj go nigdzie indziej.
  */
 
 :root {
   /* ---------- colour ---------- */
 
   /* grounds */
-  --paper: #fcfbf5; /* Papier - page ground, active card text, text on dark */
-  --paper-dim: #f1efe3; /* Papier zabrudzony - menu bar, photo slots, chips, section ground */
+  --paper: #faf7f0; /* Papier - tło strony, tekst na ciemnym */
+  --paper-dim: #f2efe4; /* Papier zabrudzony - pasek sezonu, chipy, tło sekcji */
 
   /* rules */
-  --rule: #e0ddce; /* Kreska - every 1px line, card and slot borders */
-  --rule-dim: #dcd7c4; /* Kreska ciemniejsza - chip borders, lines on --paper-dim */
-  --rule-link: #cfcbb8; /* Kreska pod linkiem - phone-link underline at rest */
+  --rule: #e2ddce; /* Kreska - każda linia 1px, obramowania kart i zdjęć */
+  --rule-dim: #dcd7c4; /* Kreska ciemniejsza - chipy, linie na --paper-dim */
+  --rule-link: #cfcbb8; /* Kreska pod linkiem - podkreślenie telefonu w spoczynku */
 
   /* text */
-  --ink: #23281f; /* Atrament - body text, headings, footer ground, link hover */
-  --ink-soft: #4c5344; /* Atrament miękki - secondary paragraphs, descriptions */
-  --ink-grey: #5b6153; /* Atrament szary - uppercase labels, captions, slot text */
+  --ink: #1f2a21; /* Atrament - tekst, nagłówki, tło stopki */
+  --ink-soft: #4b5744; /* Atrament miękki - akapity drugorzędne (6,7:1) */
+  --ink-grey: #656e5b; /* Atrament szary - etykiety uppercase, podpisy (4,7:1) */
 
   /* greens */
-  --green: #4e5c40; /* Zieleń akcent - accents, italic in headings, focus ring, hover.
-                       5.3:1 on --paper - AA. Verified, not inherited on trust. */
-  --green-deep: #3d4a33; /* Zieleń ciemna - buttons, "Historia", active season card, skip link */
-  --green-slot: #33402b; /* Zieleń tunelu - photo slots inside a dark block */
-  --green-lit: #c6d3b6; /* Zieleń jasna - uppercase labels on dark */
-  /* Not in the handoff's colour table, but used by its prototype for the text inside a
-     photo placeholder on a dark block - a shade lighter than --green-lit, which it needs
-     to be to clear the stripes behind it. */
+  --green: #5a6d46; /* Zieleń tekstowa - linki, hover, focus ring (4,95:1) - AA */
+  --sage: #6b7f55; /* Zieleń dekoracyjna - TYLKO typ ≥24px (3,9:1) */
+  --green-deep: #3d4a33; /* Zieleń ciemna - przyciski, aktywna karta, skip link */
+  --green-slot: #33402b; /* Zieleń tunelu - placeholdery zdjęć na ciemnym */
+  --green-lit: #c6d3b6; /* Zieleń jasna - etykiety uppercase na ciemnym */
   --green-slot-text: #d3dcc6;
-  --green-body: #dde2d2; /* Zieleń tekst na ciemnym - paragraphs on --green-deep */
-  --bone: #eef0e6; /* Kość na ciemnym - headings on --green-deep and --ink */
+  --green-body: #dde2d2; /* Akapity na --green-deep */
+  --bone: #eef0e6; /* Nagłówki na --green-deep i --ink */
 
-  /* The homepage hero keeps its image light at the top and darkens only where the copy
-     sits, so the flowers remain visible while the white text stays legible. */
-  --scrim-hero: linear-gradient(
-    to bottom,
-    rgb(35 40 31 / 6%) 0%,
-    rgb(35 40 31 / 18%) 42%,
-    rgb(35 40 31 / 62%) 100%
+  /* hero */
+  /* Pod nagłówkiem na zdjęciu. Cztery przystanki, bo dwa dawały widoczną krawędź w
+     połowie kadru, a trzy - pierwsza wersja tego motywu - miały gęstość dobraną na oko
+     i tekst lądował w strefie 30-40% alfy: nagłówek wychodził 2,4:1, a etykieta nad nim
+     1,5:1 nad jasnym pasem petunii w kadrze tunelu. Zmierzone na pikselach, nie ocenione
+     wzrokiem.
+
+     Druga wersja densyfikowała tylko strefę nagłówka i przepuściła etykietę nad nim:
+     nagłówek wyszedł 7,2:1, etykieta 3,1:1, bo jest najwyższym elementem scrimu i siadała
+     już na opadającym zboczu. Miarodajny jest ten wyżej położony element, nie ten większy.
+
+     Przeliczone pod panoramę 3:1: scrim jest niższy niż w wersji 21:9 (padding górny
+     2,75rem zamiast 5,5rem, żeby gradient mieścił się w kadrze i zostawiał widoczny pas
+     fotografii), więc etykieta siada wyżej na zboczu. Dlatego zbocze jest gęstsze i
+     krótsze: 72% alfy sięga 92% wysokości, zanik zamknięty w górnych 8%. Etykieta wypada
+     w strefie ~0,77 alfy — ~5,2:1, nagłówek ~7:1 nad najjaśniejszym fragmentem kadru.
+     To dolna granica tego zaciemnienia: niżej etykieta 10,5px schodzi pod 4,5:1.
+
+     Jeśli zmieniasz padding scrimu albo długość nagłówka, przelicz to ponownie - te dwie
+     rzeczy razem decydują, na jakiej wysokości gradientu siada tekst. Mierz etykietę. */
+  --hero-scrim: linear-gradient(
+    to top,
+    rgb(18 27 19 / 88%) 0%,
+    rgb(18 27 19 / 84%) 55%,
+    rgb(18 27 19 / 72%) 92%,
+    rgb(18 27 19 / 0%) 100%
   );
 
   /* footer */
-  --footer-body: #c3cbb8; /* Stopka tekst */
-  --footer-label: #96a188; /* Stopka etykiety - uppercase labels and copyright */
-  --footer-link: #e4e7dc; /* Stopka linki */
-  /* The one rule that sits on --ink rather than on paper. */
+  --footer-body: #c3cbb8;
+  --footer-label: #96a188;
+  --footer-link: #e4e7dc;
   --footer-rule: rgb(238 240 230 / 18%);
 
   /* ---------- type ---------- */
 
-  --serif: "Instrument Serif", Georgia, serif;
-  --sans: "Karla Variable", Karla, system-ui, sans-serif;
-  /* Only ever inside a photo placeholder; goes away with the placeholders. */
+  --serif: "Newsreader Variable", Newsreader, Georgia, serif;
+  --sans: "Public Sans Variable", "Public Sans", system-ui, sans-serif;
   --mono: ui-monospace, Menlo, monospace;
 
   --text-body: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
-  --text-h1: clamp(2.1rem, 1.4rem + 3vw, 3.6rem);
+  /* H1 leży teraz na zdjęciu, więc górna granica jest większa niż w poprzedniej skali -
+     ma wytrzymać 21:9 na monitorze 1400px, gdzie zdjęcie samo w sobie jest bardzo duże. */
+  --text-h1: clamp(2.1rem, 1.35rem + 3.4vw, 3.9rem);
   --text-h2: clamp(1.8rem, 1.35rem + 1.9vw, 2.7rem);
-  --text-h2-wide: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem); /* Historia, Kontakt */
-  --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem); /* season cards */
-  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem); /* plant name */
+  --text-h2-wide: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);
+  --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem);
+  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --text-lead: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
-  --text-tel: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem); /* phone number, address */
+  --text-tel: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem);
+  /* Nazwa gospodarstwa w nagłówku. Wyśrodkowana i w pełnej skali - nagłówek wrócił do
+     dwóch pięter (nazwa, menu), bez trzeciego na tagline. Zostaje pod --text-h1, żeby
+     tytuł czytanej strony nadal był największym typem na ekranie. */
+  --text-masthead: clamp(1.55rem, 1.15rem + 1.7vw, 2.35rem);
 
   /* ---------- layout ---------- */
 
-  /* Content stops at 1200px; past that only the margins grow. The 100% resolves against
-     each element's own containing block, and every user of this is full-width - which is
-     what lets the dark blocks bleed to the edge while their contents stay in the column. */
   --edge: max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
-  /* The menu bar sits slightly wider on small screens. */
   --edge-nav: max(clamp(1rem, 4vw, 5rem), (100% - 1200px) / 2);
 
   --pad-section: clamp(2.5rem, 6vw, 4.5rem);
-  --pad-section-wide: clamp(2.75rem, 7vw, 5rem); /* Historia, Kontakt */
+  --pad-section-wide: clamp(2.75rem, 7vw, 5rem);
   --pad-footer: clamp(2.25rem, 5vw, 3.5rem);
 
   --gap-columns: clamp(1.75rem, 5vw, 3.5rem);
   --gap-cards: clamp(2rem, 5vw, 3.5rem);
   --gap-entry: clamp(1.25rem, 4vw, 2.75rem);
 
-  /* touch target - WCAG 2.1 AA minimum */
   --tap: 44px;
 }
