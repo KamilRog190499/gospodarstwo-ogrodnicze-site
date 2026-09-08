@@ -5,7 +5,7 @@ import { plantLinks } from "../data/plant-links";
 import { primaryPhone } from "../data/contact";
 
 /**
- * `/inspiracje/` - the plantings.
+ * The plantings - `/inspiracje/` in full, and the home page in a reduced variant.
  *
  * Replaces `Slideshow.astro`. That component's good parts are kept verbatim and its one
  * real fault is the reason this file exists.
@@ -39,7 +39,54 @@ import { primaryPhone } from "../data/contact";
  * Heading outline: `h1` for the page, then one `h2` per planting inside its own `figcaption`.
  * The image keeps `alt=""` and is described by that caption - as in `Slideshow`, so a screen
  * reader does not read the same sentence twice.
+ *
+ * ## The home page variant
+ *
+ * The home page shows the same 23 plantings with `level={2}` and the navigation aids off.
+ * Four of the props exist to keep two copies of one thing from lying about each other, and
+ * none of them is a matter of taste:
+ *
+ * - `structuredData` - the `ItemList` names `/inspiracje/#…` as the `@id` of every planting.
+ *   Emitting it at a second address describes the same list twice, and `representativeOfPage`
+ *   would be false on a page whose representative image is the hero.
+ * - `ids` - `id={composition.id}` would put 23 anchors under `/#kosz-…` competing with the
+ *   real ones under `/inspiracje/#kosz-…`. The home strip has no rail to jump with, so it
+ *   needs none of them; `compositions.ts` is written to survive their absence.
+ * - `showRail`, `showFilters` - the reduced variant is the strip, the buttons and the
+ *   counter. Filtering and browsing all 23 by thumbnail are what `/inspiracje/` is for, and
+ *   the panel headings link there.
+ *
+ * The per-panel phone CTA is gated on `level` for the same class of reason and is the one
+ * that bites hardest: 23 panels would put `602 518 401` on the home page 23 times over.
+ *
+ * `eager` on the first photograph belongs to `/inspiracje/`, where it is the LCP. On the
+ * home page the LCP is the hero in `Intro.astro`, which asks for `fetchpriority="high"` -
+ * a second eager image would only compete with it for bandwidth.
  */
+interface Props {
+  /** `1` where the strip is the page, `2` where it is a section on another one. */
+  level?: 1 | 2;
+  showFilters?: boolean;
+  showRail?: boolean;
+  /** Emit the `ItemList`. One address only - see the note above. */
+  structuredData?: boolean;
+  /** Give each panel the planting's id as an anchor. One address only. */
+  ids?: boolean;
+  /** Add "Zobacz wszystkie obsadzenia" under the strip, pointing at `/inspiracje/`. */
+  allLink?: boolean;
+}
+
+const {
+  level = 1,
+  showFilters = true,
+  showRail = true,
+  structuredData = true,
+  ids = true,
+  allLink = false,
+} = Astro.props;
+
+const Heading = `h${level}` as "h1" | "h2";
+const PanelHeading = level === 1 ? "h2" : "h3";
 
 /** The lightbox target: the full frame, at what the sources actually hold. `Slideshow` asked
  *  for 1200px, which was smaller than the file on disk - a zoom that zoomed less than the
@@ -48,10 +95,12 @@ const previews = await Promise.all(
   compositions.map((photo) => getImage({ src: photo.src, width: 2000, format: "webp" })),
 );
 
-/** 2x of the 96px rail. */
-const thumbnails = await Promise.all(
-  compositions.map((photo) => getImage({ src: photo.src, width: 192, format: "webp" })),
-);
+/** 2x of the 96px rail. Only built where the rail is rendered. */
+const thumbnails = showRail
+  ? await Promise.all(
+      compositions.map((photo) => getImage({ src: photo.src, width: 192, format: "webp" })),
+    )
+  : [];
 
 const total = compositions.length;
 
@@ -62,51 +111,58 @@ const kinds = compositionKinds.filter((kind) =>
   compositions.some((photo) => photo.composition.kind === kind),
 );
 
-const imageList = Astro.site
-  ? {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      name: "Obsadzenia z kwiatów Gospodarstwa Ogrodniczego „Saran”",
-      itemListElement: compositions.map((photo, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "ImageObject",
-          "@id": new URL(`/inspiracje/#${photo.composition.id}`, Astro.site).href,
-          name: photo.composition.title,
-          description: photo.alt,
-          contentUrl: new URL(previews[index]!.src, Astro.site).href,
-          representativeOfPage: index === 0,
-        },
-      })),
-    }
-  : null;
+const imageList =
+  structuredData && Astro.site
+    ? {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Obsadzenia z kwiatów Gospodarstwa Ogrodniczego „Saran”",
+        itemListElement: compositions.map((photo, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "ImageObject",
+            "@id": new URL(`/inspiracje/#${photo.composition.id}`, Astro.site).href,
+            name: photo.composition.title,
+            description: photo.alt,
+            contentUrl: new URL(previews[index]!.src, Astro.site).href,
+            representativeOfPage: index === 0,
+          },
+        })),
+      }
+    : null;
 ---
 
 {imageList && <script type="application/ld+json" set:html={JSON.stringify(imageList)} is:inline />}
 
-<section class="comp" aria-labelledby="comp-title">
+<section class="comp" data-comp aria-labelledby="comp-title">
   <div class="comp__head">
-    <h1 class="comp__title" id="comp-title">Inspiracje</h1>
+    <Heading class="comp__title" id="comp-title">Inspiracje</Heading>
     <p class="comp__lead">
       Obsadzenia z naszej uprawy — kosze, skrzynki, donice i rabaty. Przy każdym piszemy, jakie
       kwiaty w nim są i gdzie ich szukać w ofercie.
     </p>
   </div>
 
-  <div class="filters" data-filters>
-    <p class="filters__label" id="filters-label">Co obsadzasz</p>
-    <div class="filters__row" role="group" aria-labelledby="filters-label">
-      <button type="button" data-filter="all" aria-pressed="true">Wszystkie</button>
-      {
-        kinds.map((kind) => (
-          <button type="button" data-filter={kind} aria-pressed="false">
-            {kind}
+  {
+    showFilters && (
+      <div class="filters" data-filters>
+        <p class="filters__label" id="filters-label">
+          Co obsadzasz
+        </p>
+        <div class="filters__row" role="group" aria-labelledby="filters-label">
+          <button type="button" data-filter="all" aria-pressed="true">
+            Wszystkie
           </button>
-        ))
-      }
-    </div>
-  </div>
+          {kinds.map((kind) => (
+            <button type="button" data-filter={kind} aria-pressed="false">
+              {kind}
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   <div class="controls" data-controls>
     <button type="button" data-prev aria-controls="comp-track">Poprzednie</button>
@@ -133,7 +189,12 @@ const imageList = Astro.site
   >
     {
       compositions.map((photo, index) => (
-        <li class="panel" id={photo.composition.id} data-panel data-kind={photo.composition.kind}>
+        <li
+          class="panel"
+          id={ids ? photo.composition.id : undefined}
+          data-panel
+          data-kind={photo.composition.kind}
+        >
           <figure class="panel__figure">
             <a
               class="panel__link"
@@ -152,7 +213,7 @@ const imageList = Astro.site
                 width={480}
                 height={640}
                 alt=""
-                loading={index === 0 ? "eager" : "lazy"}
+                loading={level === 1 && index === 0 ? "eager" : "lazy"}
               />
             </a>
 
@@ -160,7 +221,15 @@ const imageList = Astro.site
               <p class="panel__kind">
                 {photo.composition.kind} · <span>{index + 1}</span> z {total}
               </p>
-              <h2 class="panel__name">{photo.composition.title}</h2>
+              <PanelHeading class="panel__name">
+                {/* On the home page the strip is a preview, so its heading is the way in to
+                    the planting's own address rather than a dead end. */}
+                {level === 1 ? (
+                  photo.composition.title
+                ) : (
+                  <a href={`/inspiracje/#${photo.composition.id}`}>{photo.composition.title}</a>
+                )}
+              </PanelHeading>
               <p class="panel__desc">{photo.alt}</p>
 
               <div class="panel__plants">
@@ -191,9 +260,18 @@ const imageList = Astro.site
               </div>
 
               <div class="panel__actions">
-                <a class="cta" href={primaryPhone.href}>
-                  Zapytaj: {primaryPhone.display}
-                </a>
+                {/* The phone belongs to `/inspiracje/`, where a visitor who has just found a
+                    basket they like should not have to go looking for it. It must **not**
+                    appear in the reduced variant: 23 panels on the home page would print
+                    `602 518 401` twenty-three times, and with the Intro and the footer that
+                    is 25 times on the entrance page - the defect version 0.6 deleted
+                    `ContactStrip` to fix, eight times over. The way to the phone from here
+                    is the link beside it, one click away. */}
+                {level === 1 && (
+                  <a class="cta" href={primaryPhone.href}>
+                    Zapytaj: {primaryPhone.display}
+                  </a>
+                )}
                 <a class="cta-line" href="/kontakt/">
                   Kontakt i dojazd
                 </a>
@@ -205,33 +283,47 @@ const imageList = Astro.site
     }
   </ul>
 
-  <nav class="rail" data-rail aria-label="Wszystkie obsadzenia">
-    <p class="rail__label" id="rail-label">Wszystkie obsadzenia</p>
-    <ul aria-labelledby="rail-label">
-      {
-        compositions.map((photo, index) => (
-          <li data-thumb-item>
-            {/* An anchor, not a button: without JavaScript it still jumps to the panel. */}
-            <a
-              class="thumb"
-              href={`#${photo.composition.id}`}
-              data-thumb
-              data-kind={photo.composition.kind}
-              aria-current={index === 0 ? "true" : undefined}
-            >
-              <img
-                src={thumbnails[index]!.src}
-                alt={photo.composition.title}
-                width="96"
-                height="128"
-                loading="lazy"
-              />
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
+  {
+    allLink && (
+      <p class="comp__all">
+        <a class="cta-line" href="/inspiracje/">
+          Zobacz wszystkie obsadzenia
+        </a>
+      </p>
+    )
+  }
+
+  {
+    showRail && (
+      <nav class="rail" data-rail aria-label="Wszystkie obsadzenia">
+        <p class="rail__label" id="rail-label">
+          Wszystkie obsadzenia
+        </p>
+        <ul aria-labelledby="rail-label">
+          {compositions.map((photo, index) => (
+            <li data-thumb-item>
+              {/* An anchor, not a button: without JavaScript it still jumps to the panel. */}
+              <a
+                class="thumb"
+                href={`#${photo.composition.id}`}
+                data-thumb
+                data-kind={photo.composition.kind}
+                aria-current={index === 0 ? "true" : undefined}
+              >
+                <img
+                  src={thumbnails[index]!.src}
+                  alt={photo.composition.title}
+                  width="96"
+                  height="128"
+                  loading="lazy"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
 </section>
 
 <style>
@@ -453,6 +545,19 @@ const imageList = Astro.site
     font-size: var(--text-h3);
   }
 
+  /* In the home page variant the heading is a link to the planting on `/inspiracje/`. It
+     keeps the heading's colour and takes the same understated rule the plant links have,
+     rather than announcing itself as a second call to action. */
+  .panel__name a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+  }
+  .panel__name a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
   .panel__desc {
     font-size: 0.95rem;
     color: var(--ink-soft);
@@ -517,6 +622,13 @@ const imageList = Astro.site
     flex-wrap: wrap;
     gap: 0.6rem 1.25rem;
     align-items: center;
+  }
+
+  /* ---------- the way out of the reduced variant ---------- */
+
+  .comp__all {
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
   }
 
   /* ---------- the rail ---------- */

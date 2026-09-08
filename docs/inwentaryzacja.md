@@ -250,6 +250,25 @@ zamówień, jako komponent `PhotoStrip.astro`.
   różowy, amarantowy, liliowy i kremowy — a chipy nad nimi mówią „biały, żółty, fiolet,
   złoty”. Sprzeczność jest teraz widoczna gołym okiem na jednym ekranie.
 
+**Wrzesień 2026: `heroPhoto` podmienione na obraz wygenerowany przez AI**, na wyraźne
+polecenie, nie zdjęcie gospodarstwa. Plik: `src/assets/hero/hero-glasshouse.jpg` (1448×1086,
+4:3 — ten sam kadr poziomy, jakiego wymaga pas na górze strony głównej). Wcześniej `heroPhoto`
+było aliasem `gallery[18]` (`gallery-19`); teraz to osobny wpis poza tablicą `gallery`, żeby
+`/inspiracje/` i skład `pelargonie-w-pelnym-kwitnieniu` nadal pokazywały prawdziwe zdjęcie.
+
+- **To jest wyjątek od reguły całej tej sekcji i całego projektu**: każda inna fotografia na
+  stronie jest zdjęciem własnej uprawy gospodarstwa, nie generowanym obrazem — dokładnie po
+  to, żeby uniknąć stocku, jakim była stara strona (patrz niżej). Ten kadr przedstawia scenę,
+  której na gospodarstwie nie ma (palmy/banany, promienie światła jak w renderze). Flagowane
+  przy poleceniu, potwierdzone mimo to.
+- Kontrast etykiety i nagłówka na scrimie **nie został zmierzony w przeglądarce** dla tego
+  zdjęcia — tylko przybliżeniem offline (patrz komentarz w `Intro.astro`), bo w tej sesji
+  narzędzie do zrzutów ekranu nie działało. Wyszło w tej samej okolicy co stare liczby
+  (~5,1:1 / ~8,4:1), ale **wart prawdziwej weryfikacji** przed uznaniem za zamknięte.
+- Jeśli ten obraz ma zostać na stałe, wart też przejrzenia pod kątem SEO/UX: to pierwszy kadr
+  strony (LCP), więc jego `alt` i wiarygodność wobec odwiedzającego liczą się bardziej niż
+  gdziekolwiek indziej na stronie.
+
 ### Zdjęcia na starej stronie
 
 W sekcji balkonowej i rabatowej jest 13 obrazów na żywych stronach, z czego 9 to stocki
@@ -382,6 +401,157 @@ wszystkie trzy karty wygaszone, żadnego zmyślonego komunikatu.
 mówi 1.03–31.08, ale marzec i kwiecień należą teraz do karty 1) i czy tytuł „Bratki na
 otwarcie sezonu" im odpowiada.
 
+## Strona główna jako witryna — wrzesień 2026
+
+Do wersji 0.6 strona główna była **wejściem**: intro, karty sezonowe i cztery kafelki oferty.
+Zdjęć było na niej cztery, przy 47 własnych fotografiach w repozytorium, a kafelki oferty nie
+miały ani jednego — na stronie gospodarstwa, którego całym produktem jest to, jak roślina
+wygląda. Od 0.7 strona główna jest **podglądem każdej części witryny**, a podstrony zostają
+miejscem pełnych opisów uprawy, list kolorów i telefonów.
+
+| Sekcja                | Co pokazuje                                      | Skąd bierze zdjęcia                       |
+| --------------------- | ------------------------------------------------ | ----------------------------------------- |
+| Intro                 | bez zmian                                        | `heroPhoto`                               |
+| Sezon                 | bez zmian, trzy karty                            | bratki / tunel / chryzantemy              |
+| Oferta                | **nowość:** mozaika 1–3 kadrów na grupę          | kolekcja `plants`, pierwsze wpisy z `image` |
+| Inspiracje            | **nowość:** wszystkie 23 obsadzenia, uproszczone  | `compositions`                            |
+| Jak do nas trafić     | **nowość:** mapa, adres, „Wyznacz trasę”         | —                                         |
+
+### Mozaika w kafelku — dlaczego grupy są nierówne
+
+Kadry wybiera **kolekcja, nie ręczna lista**: pierwsze wpisy grupy wg `order`, które mają
+`image`. Dzięki temu dodanie zdjęcia dahlii, pelargonii bluszczolistnej albo sundaville samo
+wchodzi do kafelka, bez edycji komponentu. Cena jest taka, że dziś grupy mają po tyle kadrów,
+ile wpisów ze zdjęciem:
+
+| Grupa       | Kadrów | Które                                                        |
+| ----------- | ------ | ------------------------------------------------------------ |
+| Balkonowe   | 3      | alstromeria, fuksja, tunbergia                                |
+| Rabatowe    | 2      | pelargonia rabatowa, niecierpek nowogwinejski                 |
+| Bratki      | 1      | bratek ogrodowy                                               |
+| Chryzantemy | 3      | wielkokwiatowa, średniokwiatowa, igiełkowa                    |
+
+Rząd miniatur bierze **tyle kolumn, ile ma zdjęć** (`grid-auto-flow: column`), więc jedno
+zdjęcie wypełnia szerokość kafelka, a dwa dzielą ją na pół. Sztywne `repeat(3, 1fr)`
+zostawiłoby w kafelku bratków dwie puste komórki, co czyta się jak usterka, a nie decyzja.
+
+### Nowe teksty — do przejrzenia przez właścicieli
+
+Napisane przez nas, nie nadesłane. Tak jak opisy `alt`, czekają na potwierdzenie:
+
+| Miejsce               | Tekst                                                                                                 |
+| --------------------- | ----------------------------------------------------------------------------------------------------- |
+| Nagłówek bloku dojazdu | „Jak do nas trafić”                                                                                    |
+| Lead bloku dojazdu     | „Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty oglądasz i kupujesz na miejscu, w tunelach — zapraszamy.” |
+| Odnośnik w bloku dojazdu | „Telefony i kontakt”                                                                                 |
+| Odnośnik pod pokazem   | „Zobacz wszystkie obsadzenia”                                                                          |
+
+### Czego blok dojazdu celowo nie robi
+
+**Nie drukuje ani jednego numeru telefonu.** W 0.5 stał w tym miejscu `ContactStrip` i został
+usunięty w 0.6, bo powtarzał adres, numer i „Wyznacz trasę” tuż nad stopką niosącą to samo —
+`602 518 401` pojawiał się trzy razy na jednej stronie. Nowy blok odpowiada na jedno pytanie,
+na które stopka odpowiedzieć nie może (*gdzie to jest, na mapie*), a po telefony odsyła do
+`/kontakt/`. Adres jest powtórzony świadomie: adres obok mapy jest tym, co czyni mapę czytelną.
+
+**Uwaga na licznik telefonów — pierwsza wersja 0.7 się na tym wyłożyła.** Blok dojazdu
+rzeczywiście nie niesie numeru, ale pokaz obsadzeń niósł go w **każdym z 23 paneli**
+(„Zapytaj: 602 518 401”). Razem z intro i stopką dawało to **25 wystąpień na stronie
+głównej** — dokładnie ta choroba, na którą lekarstwem było usunięcie `ContactStrip`, tylko
+osiem razy silniejsza — podczas gdy komentarz w `index.astro` twierdził, że numer występuje
+raz. Panelowe CTA jest od tej pory zależne od `level`: zostaje na `/inspiracje/`, znika na
+stronie głównej, gdzie drogą do telefonu jest sąsiedni odnośnik „Kontakt i dojazd”. Cokolwiek
+powtarza się w panelu, powtarza się tu 23 razy — liczba do sprawdzenia na zbudowanej stronie
+(`grep -o 'tel:+48602518401' dist/index.html | wc -l` ma dawać 2), nie do przyjęcia na słowo.
+
+Skutek uboczny, oczekiwany: strona główna osadza teraz mapę, więc **pasek zgody pokazuje się
+także na niej** (`consent.ts` pyta tylko tam, gdzie pytanie ma konsekwencję). Zgoda jest
+wspólna dla całej witryny — kto zgodzi się na stronie głównej, ma mapę wczytaną na `/kontakt/`.
+
+### Pokaz obsadzeń na dwóch adresach
+
+`Compositions.astro` renderuje ten sam zestaw 23 obsadzeń w dwóch wariantach. Na stronie
+głównej wyłączone są cztery rzeczy i żadna z nich nie jest kwestią gustu:
+
+- **`structuredData`** — `ItemList` wskazuje `/inspiracje/#…` jako `@id` każdego obsadzenia;
+  wyemitowany pod drugim adresem opisywałby tę samą listę dwa razy.
+- **`ids`** — kotwice `/#kosz-…` konkurowałyby z prawdziwymi pod `/inspiracje/#kosz-…`.
+- **`showRail`, `showFilters`** — filtrowanie i przeglądanie miniaturami to zadanie
+  `/inspiracje/`; nagłówek każdego panelu na stronie głównej jest odnośnikiem właśnie tam.
+
+`src/scripts/compositions.ts` obsługuje od 0.7 wiele instancji (`init(root)` po każdym
+`[data-comp]`) zamiast jednej na dokument.
+
+### Znany defekt — zastany, ale 0.7 go odsłania szerzej
+
+Panel pokazu, którego zdjęcie nie zostało jeszcze wczytane (`loading="lazy"`), zwija obrazek
+do 2×2 px, bo `.panel__link img` ma `width: auto`, a `global.css` daje `height: auto`
+(wczytany kadr mierzy 419×558, niewczytany 2×2). W efekcie na krawędziach paska widać skrawki
+tekstu sąsiedniego panelu zamiast skrawka zdjęcia.
+
+Przyczyna jest starsza niż ta zmiana i dotyczy tak samo `/inspiracje/` — ale **0.7 zdejmuje
+to, co ją tam maskowało**. Na `/inspiracje/` pierwszy kadr ma `loading="eager"`, więc panel
+wiodący jest zawsze narysowany; na stronie głównej żaden kadr nie jest `eager` (LCP należy do
+zdjęcia w intro i nie ma z czym konkurować), więc **panel wiodący też jest podatny**: przy
+wolnym łączu rysuje się jako skrawek tekstu i dopiero potem podskakuje do pełnego kadru.
+
+Naprawa to zarezerwowanie pudełka dla niewczytanego obrazka. Nie jest to jednolinijkowiec —
+źródła mają różne proporcje i `object-fit: contain` jest tam właśnie dlatego, więc sztywne
+`aspect-ratio` popsułoby kadry poziome, a `min-height` dokłada pustkę pod kadrem poziomym na
+telefonie. Zostaje jako osobna zmiana, z weryfikacją obu adresów i obu orientacji.
+
+## Posty z Facebooka — wrzesień 2026
+
+Strona główna dostała blok „Co u nas słychać”: trzy ostatnie wpisy z profilu gospodarstwa,
+pobierane raz dziennie i zapisywane w repozytorium. Jak to działa i co zrobić, gdy przestanie —
+w [`docs/facebook.md`](facebook.md). Tu tylko to, co jest **decyzją do przejrzenia przez
+właścicieli**, a nie mechaniką.
+
+### Publikacja jest automatyczna, bez przeglądu
+
+Nikt nie zatwierdza wpisu, zanim pojawi się na stronie. Każdy post z profilu — także
+przypadkowy, prywatny w tonie albo udostępniony z cudzego profilu — trafia na wizytówkę firmy
+w ciągu doby. Jedyne sito to „post musi mieć tekst albo zdjęcie”.
+
+Tak zostało ustalone świadomie i tak działa, ale **właściciele muszą o tym wiedzieć**, bo to
+zmienia sposób, w jaki korzysta się z profilu: od teraz Facebook gospodarstwa jest częścią
+strony. Wycofanie wpisu ze strony = usunięcie lub ukrycie go na Facebooku; zniknie przy
+najbliższym odświeżeniu, razem ze zdjęciem.
+
+Gdyby to się okazało zbyt ryzykowne, jest gotowa alternatywa mniejszym kosztem: zadanie może
+otwierać pull request zamiast commitować od razu, a scalenie to jedno kliknięcie.
+
+### Opisy `alt` zdjęć — do przejrzenia
+
+Facebook nie dostarcza tekstu alternatywnego, a zgadywanie gatunku ze zdjęcia jest na tej
+stronie wykluczone (patrz [Zdjęcia](#zdjęcia)). Zdjęcia z wpisów dostają więc opis, który mówi,
+**czym jest kadr**, a nie co na nim rośnie:
+
+> `Zdjęcie z wpisu gospodarstwa z 6 września 2026`
+
+To rozwiązanie uczciwe, ale ubogie — nic nie mówi osobie korzystającej z czytnika ekranu o
+treści zdjęcia. Lepszego nie ma bez pracy człowieka przy każdym wpisie, czego cały ten
+mechanizm miał uniknąć. Do decyzji: zostawić tak, czy przyjąć, że opis pisze się ręcznie przy
+wpisach, na których zależy.
+
+### Emoji zostają
+
+Reguła projektu mówi „bez emoji”, ale dotyczy ona elementów samej strony. W cytowanym wpisie
+emoji są częścią wypowiedzi właścicieli i są traktowane tak samo jak reszta ich tekstu: nie
+przepisujemy, nie czyścimy, tylko skracamy do ok. 200 znaków z linkiem do całości.
+
+### Czego ten blok celowo nie robi
+
+- **Nie prosi o zgodę na cookies i nie musi.** Zdjęcia są pobrane na nasz serwer, a nie
+  wyświetlane z serwerów Meta — przeglądarka odwiedzającego nie łączy się z Facebookiem.
+  To jedyny powód, dla którego blok nie potrzebuje bramki takiej jak mapa Google, i pierwsza
+  rzecz, którą traci każde „uproszczenie” do wtyczki Facebooka albo linkowanego zdjęcia.
+- **Nie drukuje numeru telefonu.** Strona główna pokazuje `602 518 401` dokładnie dwa razy i
+  tak ma zostać (patrz komentarz w `src/pages/index.astro`).
+- **Nie ma nagłówka na wpis ani żadnego brandingu Facebooka** — bez logo, bez niebieskiego,
+  bez ikon i liczników reakcji. Że wpisy są z Facebooka, mówi jedno zdanie pod nagłówkiem.
+- **Nie dodaje podstrony ani pozycji w menu.** Menu ma nadal osiem pozycji.
+
 ## Czego nadal brakuje
 
 1. Zdjęcia — po jednym na dahlię, pelargonię bluszczolistną i sundaville (4:3, żadne
@@ -410,3 +580,12 @@ otwarcie sezonu" im odpowiada.
    pinezki.
 8. Okno sprzedaży tunbergii i werbeny — stara strona pisała „wiosna”, nadesłane opisy tego
    nie powtarzają. Wraz z resztą zdań z tabeli w [Wymianie opisów](#co-wypadło-ze-starych-opisów--do-decyzji-właścicieli).
+9. Cztery nowe teksty na stronie głównej — nagłówek i lead bloku dojazdu oraz dwa odnośniki.
+   Napisane przez nas, nie nadesłane; tabela w
+   [Strona główna jako witryna](#nowe-teksty--do-przejrzenia-przez-właścicieli).
+10. **Dostęp do Facebook Graph API** — `FB_PAGE_ID` i `FB_ACCESS_TOKEN` nie są jeszcze ustawione
+    w sekretach repozytorium, więc blok „Co u nas słychać” nie pokazuje niczego (i tak ma być
+    do pierwszego udanego pobrania — nie wyświetla pustej sekcji). Token wystawia administrator
+    strony na Facebooku; procedura w [`docs/facebook.md`](facebook.md). Do przejrzenia razem
+    z tym: [decyzje o automatycznej publikacji i o opisach `alt`](#posty-z-facebooka--wrzesień-2026).
+11. Nagłówek i lead bloku „Co u nas słychać” — napisane przez nas, jak teksty z punktu 9.

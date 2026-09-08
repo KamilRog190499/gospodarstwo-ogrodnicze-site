@@ -1,0 +1,66 @@
+# Refreshes the Facebook snapshot the home page builds from.
+#
+# The job fetches the latest posts and their photographs and commits them to `main`. It does
+# not deploy anything: the commit lands on the branch the deploy workflow watches, so the
+# ordinary build carries the change out. One deployment path, not two.
+#
+# Why a commit rather than writing straight to the web server: Astro optimises images at build
+# time, so a photograph delivered after the deploy would be the one unoptimised file on the
+# site. Committing also gives the feed its safety net - a token that has stopped working means
+# the snapshot is not refreshed, never that the page goes blank.
+#
+# A useful side effect: GitHub disables `schedule:` on repositories with 60 days of no
+# activity. A workflow that commits keeps its own schedule alive.
+#
+# Secrets: FB_PAGE_ID, FB_ACCESS_TOKEN. See docs/facebook.md.
+
+name: Odświeżenie postów z Facebooka
+
+on:
+  schedule:
+    # Once a day, at 05:23 UTC. Off the hour on purpose - GitHub queues everything scheduled on
+    # the hour and runs it late. Once a day, not every half hour: a market garden posts a few
+    # times a month, and a missed run is made up by the next one.
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+# The runner is the one that deploys (VM #1). If it is switched off the run simply does not
+# happen; the next day's does.
+concurrency:
+  group: facebook-feed
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: self-hosted
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # `sharp` is a production dependency, so a full install is what the script needs.
+      - run: npm ci
+
+      - run: node scripts/fetch-facebook.mjs
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+
+      # Nothing to commit is the normal outcome on most days, and it is not a failure. A
+      # failure here means the fetch failed - which is the alert that the token needs
+      # reissuing, delivered by GitHub's own notification for a failed run.
+      - name: Commit the snapshot if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Staged first, then compared. A new photograph is an untracked file, and
+          # `git diff` on the working tree does not see one - checking before staging would
+          # skip the commit on exactly the day the first picture arrives.
+          git add -A src/data/facebook-posts.json src/assets/facebook
+          if git diff --cached --quiet; then
+            echo "Bez zmian - nic do zrobienia."
+            exit 0
+          fi
+          git commit -m "Odświeżenie postów z Facebooka"
+          git push

@@ -1,4 +1,4 @@
-/** `/inspiracje/` - the plantings strip.
+/** The plantings strip - `/inspiracje/` in full, and the home page in a reduced variant.
  *
  *  Supersedes `slideshow.ts`, whose whole job it keeps: progressive enhancement over a
  *  scroll-snap track. Without this file the page is still a scrollable strip of complete
@@ -16,25 +16,43 @@
  *  button press cannot then disagree), and the `programmatic` flag that lets the scroll
  *  handler tell our own smooth scroll apart from a swipe.
  *
- *  New: `visible`. The filter hides panels, so "next" means the next *shown* panel and the
+ *  `visible`: the filter hides panels, so "next" means the next *shown* panel and the
  *  counter counts within the filtered set. Everything indexes into `panels`; `visible` is
  *  the list of indices currently on show.
+ *
+ *  ## One strip per root, not one per document
+ *
+ *  Every query below is scoped to the `[data-comp]` element `init` was called with, because
+ *  the site now has more than one strip: `/inspiracje/` carries the full one and the home
+ *  page a reduced one. The previous version reached for `document.querySelector`, so a
+ *  second strip would have been driven by the buttons of the first and would have moved the
+ *  wrong track.
+ *
+ *  Which parts exist is up to the markup, not to this file: `Compositions.astro` can be
+ *  asked for a strip with no filters, no rail, or no controls at all. The only thing `init`
+ *  insists on is a track with panels in it - everything else degrades to "that feature is
+ *  not on this page".
  */
 
-const track = document.querySelector<HTMLElement>("[data-track]");
-const controls = document.querySelector<HTMLElement>("[data-controls]");
+function init(root: HTMLElement): void {
+  const track = root.querySelector<HTMLElement>("[data-track]");
+  if (!track) return;
 
-if (track && controls) {
   const panels = [...track.querySelectorAll<HTMLElement>("[data-panel]")];
-  const thumbItems = [...document.querySelectorAll<HTMLElement>("[data-thumb-item]")];
-  const thumbs = [...document.querySelectorAll<HTMLAnchorElement>("[data-thumb]")];
-  const filters = [...document.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+  if (panels.length === 0) return;
 
-  const indexLabel = controls.querySelector<HTMLElement>("[data-index]");
-  const totalLabel = controls.querySelector<HTMLElement>("[data-total]");
-  const toggle = controls.querySelector<HTMLButtonElement>("[data-toggle]");
-  const previous = controls.querySelector<HTMLButtonElement>("[data-prev]");
-  const next = controls.querySelector<HTMLButtonElement>("[data-next]");
+  /** Absent in a variant rendered without buttons. The strip is then the scroll-snap track
+   *  and the arrow keys - the no-JavaScript experience plus keyboard steps. */
+  const controls = root.querySelector<HTMLElement>("[data-controls]");
+  const thumbItems = [...root.querySelectorAll<HTMLElement>("[data-thumb-item]")];
+  const thumbs = [...root.querySelectorAll<HTMLAnchorElement>("[data-thumb]")];
+  const filters = [...root.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+
+  const indexLabel = controls?.querySelector<HTMLElement>("[data-index]") ?? null;
+  const totalLabel = controls?.querySelector<HTMLElement>("[data-total]") ?? null;
+  const toggle = controls?.querySelector<HTMLButtonElement>("[data-toggle]") ?? null;
+  const previous = controls?.querySelector<HTMLButtonElement>("[data-prev]") ?? null;
+  const next = controls?.querySelector<HTMLButtonElement>("[data-next]") ?? null;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const INTERVAL = 6000;
@@ -92,8 +110,21 @@ if (track && controls) {
     }, 700);
   }
 
+  /** Whether the strip is on screen. The advance does not run while it is not.
+   *
+   *  On `/inspiracje/` the strip is the page and this changes nothing. On the home page it
+   *  is one section among five, and the counter is a `role="status"` live region: without
+   *  this, a screen reader sitting on the hero announces "3 z 23", "4 z 23" every six
+   *  seconds about a strip several screens below that the visitor has not reached. It is
+   *  the same restraint the pointer and focus handlers already apply - do not move under
+   *  someone who is not looking.
+   *
+   *  Starts `true` where `IntersectionObserver` is missing, so an old browser gets the
+   *  previous behaviour rather than a strip that never advances. */
+  let onScreen = true;
+
   function start(): void {
-    if (stopped || timer !== null) return;
+    if (stopped || timer !== null || !onScreen) return;
     timer = setInterval(() => {
       const position = visible.indexOf(currentIndex());
       const following = visible[(position + 1) % visible.length];
@@ -226,8 +257,12 @@ if (track && controls) {
   // A visitor who arrived on `/inspiracje/#kosz-z-petuniami-i-srebrem` is already looking at
   // that planting: the browser scrolled the track to it. Do not move, and do not start the
   // advance under someone who came for one thing.
-  if (location.hash) {
-    const target = panels.findIndex((panel) => `#${panel.id}` === location.hash);
+  //
+  // Guarded on `length > 1` and on the panel having an id at all: a bare "#" is a hash too,
+  // and in a variant rendered without ids every panel would match `#${panel.id}` and stop
+  // the strip on the first one.
+  if (location.hash.length > 1) {
+    const target = panels.findIndex((panel) => panel.id && `#${panel.id}` === location.hash);
     if (target !== -1) {
       stopped = true;
       if (toggle) {
@@ -238,5 +273,26 @@ if (track && controls) {
   }
 
   render();
-  start();
+
+  if ("IntersectionObserver" in window) {
+    onScreen = false;
+    new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          onScreen = entry.isIntersecting;
+          if (onScreen) start();
+          else pause();
+        }
+      },
+      // A quarter of the section: enough that the strip is genuinely being looked at, not
+      // just clipping the bottom of the viewport.
+      { threshold: 0.25 },
+    ).observe(root);
+  } else {
+    start();
+  }
+}
+
+for (const root of document.querySelectorAll<HTMLElement>("[data-comp]")) {
+  init(root);
 }

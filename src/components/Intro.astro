@@ -17,14 +17,17 @@ import { directionsUrl, primaryPhone } from "../data/contact";
  * da się nadrobić kodem. Pierwsza wersja pasa brała `tunnelPhoto` — pionowy kadr 1500×2000,
  * jak 22 z 23 zdjęć z sesji. Przy `sizes="100vw"` dawało to sufit 1500px realnych detali na
  * zdjęciu, które na monitorze 1400px w skali 2× potrzebuje 2800px, a przy okazji wycinało
- * z fotografii środkową ćwiartkę wysokości. `heroPhoto` (gallery-19, 2000×1500) jest jedyną
- * poziomą klatką w sesji. Reguła na przyszłość jest krótka: **do tego pasa wchodzi wyłącznie
- * kadr poziomy**, a jeśli właściciele zrobią kiedyś prawdziwą panoramę, podmienia się
- * `heroPhoto` i nic więcej.
+ * z fotografii środkową ćwiartkę wysokości. Do wersji 0.7 `heroPhoto` było gallery-19
+ * (2000×1500), jedyną poziomą klatką w sesji zdjęciowej gospodarstwa; we wrześniu 2026 na
+ * wyraźne polecenie podmienione na wygenerowany obraz (1448×1086, to samo 4:3) — patrz
+ * komentarz przy `heroPhoto` w `src/data/gallery.ts` o tym, dlaczego to niezgodne z resztą
+ * tego pliku. Reguła na przyszłość jest krótka: **do tego pasa wchodzi wyłącznie kadr
+ * poziomy**, a jeśli właściciele zrobią kiedyś prawdziwą panoramę, podmienia się `heroPhoto`
+ * i nic więcej.
  *
- * Sufit 2000px zostaje i jest świadomy: tyle ma oryginał. Lepiej wyczerpać źródło niż
- * prosić `<Picture>` o 2400px, których nie ma — Astro i tak przycina listę do szerokości
- * pliku, więc nadmiarowa wartość niczego nie dodaje poza złudzeniem.
+ * Sufit szerokości w `widths` śledzi rzeczywisty plik za `heroPhoto.src` — świadomie, nie
+ * `2400px, których nie ma`: Astro i tak przycina listę do szerokości pliku, więc nadmiarowa
+ * wartość niczego nie dodaje poza złudzeniem. Przy obecnym pliku to 1448px.
  *
  * ## Jeden kadr, nie dwa
  *
@@ -48,10 +51,18 @@ import { directionsUrl, primaryPhone } from "../data/contact";
  * dostaje najrzadszą część gradientu, a przy 10,5px potrzebuje 4,5:1 tam, gdzie nagłówek
  * przy 46px potrzebuje 3:1. Dwie wersje z rzędu przeszły na nagłówku i oblały na etykiecie.
  *
- * Przeliczone dla tego kadru na najjaśniejszym pikselu, jaki w nim jest — a jest nim czysta
- * biel (255,255,255) w prześwicie szklarni, czyli przypadek najgorszy z możliwych: etykieta
- * 5,3:1 przy alfie 0,77, nagłówek 7,8–11,6:1 niżej na zboczu. Zmiana zdjęcia, paddingu
- * scrimu albo długości nagłówka wymaga ponownego pomiaru **etykiety**.
+ * Przeliczone dla gallery-19 na najjaśniejszym pikselu, jaki było w nim — czysta biel
+ * (255,255,255) w prześwicie szklarni, czyli przypadek najgorszy z możliwych: etykieta 5,3:1
+ * przy alfie 0,77, nagłówek 7,8–11,6:1 niżej na zboczu. Zmiana zdjęcia, paddingu scrimu albo
+ * długości nagłówka wymaga ponownego pomiaru **etykiety**.
+ *
+ * Wrześniowa podmiana na wygenerowany obraz nie miała tego pomiaru zrobionego w prawdziwej
+ * przeglądarce — narzędzie do zrzutów ekranu było w tej sesji niedostępne. Szacunek offline
+ * (przycięcie 3:1 przy `object-position: center 42%`, ten sam czterostopniowy gradient,
+ * pudełko scrimu ~237px dla szerokości ~1440px) wyszedł na ~5,1:1 dla etykiety i ~8,4:1 dla
+ * nagłówka — w tej samej okolicy co stare liczby, więc nic nie wskazuje na regres, ale to
+ * przybliżenie jednej szerokości ekranu, nie pomiar. **Potwierdzić w przeglądarce**, zwłaszcza
+ * przy szerokościach, gdzie pas jest 3:2 zamiast 3:1.
  *
  * `loading="eager"` i `fetchpriority="high"` — to jest LCP strony głównej i nie ma sensu
  * udawać, że jest inaczej.
@@ -65,10 +76,10 @@ import { directionsUrl, primaryPhone } from "../data/contact";
       src={heroPhoto.src}
       formats={["avif", "webp"]}
       fallbackFormat="jpg"
-      widths={[960, 1400, 2000]}
+      widths={[960, 1400]}
       sizes="100vw"
-      width={2000}
-      height={1500}
+      width={1448}
+      height={1086}
       alt={heroPhoto.alt}
       loading="eager"
       fetchpriority="high"

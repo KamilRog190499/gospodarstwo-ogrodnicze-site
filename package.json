@@ -1,6 +1,6 @@
 {
   "name": "gospodarstwo-ogrodnicze-site",
-  "version": "0.6.0",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -12,7 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "lint": "astro check && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "fetch:facebook": "node scripts/fetch-facebook.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

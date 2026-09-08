@@ -8,8 +8,16 @@
  *
  * Public Sans italic nie jest importowany — projekt nigdy nie pochyla bezszeryfowego.
  *
+ * Fontsource dzieli Newsreader na osobne pliki per oś zmienna zamiast jednego pliku
+ * zmiennego na obu osiach naraz — `opsz.css` daje `opsz` 6-72 (zamrożone `wght` na
+ * domyślnym 400), `wght.css` odwrotnie. Cała strona rysuje szeryf wyłącznie wagą 400
+ * (sprawdzone: żaden komponent nie ustawia innej), więc `wght` nigdy się i tak nie
+ * przyda — a `opsz` jest tym, co ma znaczenie: bez niego duży tekst (h1, telefon, nazwa
+ * gospodarstwa w maszcie) renderuje się krojem dostrojonym pod ~16px tekstu, rozciągniętym
+ * do rozmiaru display, zamiast krojem, jaki Newsreader ma dla dużych rozmiarów.
+ *
  * Nadal nic nie leci z CDN Google (RODO — patrz komentarz w poprzedniej wersji pliku).
  */
-@import "@fontsource-variable/newsreader/index.css";
-@import "@fontsource-variable/newsreader/standard-italic.css";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
 @import "@fontsource-variable/public-sans/wght.css";

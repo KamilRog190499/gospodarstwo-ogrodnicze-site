@@ -1,0 +1,202 @@
+---
+import { Picture } from "astro:assets";
+
+import { facebookPosts } from "../data/facebook";
+import { facebook } from "../data/contact";
+
+/**
+ * "Co u nas słychać" - the three most recent Facebook posts, on the home page.
+ *
+ * The site is a catalogue that changes once a season. Nothing on it could say *chrysanthemums
+ * are on sale now*, and the owners already write exactly that on Facebook. This block is that
+ * writing, and it exists so they do not have to do it twice.
+ *
+ * ## What this is not
+ *
+ * It is not an embed. There is no Facebook script, no iframe, no SDK, no like button and no
+ * `fbcdn.net` in the built page - the text is data in the repository and the photographs are
+ * files in `src/assets/facebook/`, put there by `scripts/fetch-facebook.mjs` and optimised by
+ * the same pipeline as every other picture here. **That is why this block, alone among the
+ * third-party things on this site, needs no consent gate:** the visitor's browser never
+ * contacts Meta. The only link out is one they choose to click. If anybody ever "simplifies"
+ * this into a plugin or a hotlinked `full_picture`, that property is what gets thrown away -
+ * see the header of the fetch script.
+ *
+ * It is also not Facebook-shaped. No logo, no blue, no icons, no reaction counts: the design
+ * is austere and a foreign brand block would be the loudest thing on the page (CLAUDE.md).
+ * What marks the posts as theirs is the sentence under the heading, not a badge.
+ *
+ * ## Rules that are easy to break here
+ *
+ * - **The text is not rewritten.** Same rule as the plant descriptions: it is the owners'
+ *   voice, including any emoji they used. It is only shortened, on a word boundary, with the
+ *   permalink carrying anyone who wants the rest.
+ * - **No phone number.** The home page prints `602 518 401` exactly twice (Intro, footer) and
+ *   `src/pages/index.astro` says to count it on the built page. This block adds none.
+ * - **`alt` is honest rather than descriptive.** Facebook supplies no alternative text and
+ *   guessing a species from a photograph is not done anywhere on this site, so the text says
+ *   what the picture *is* - a photograph from a post of that date - and claims nothing about
+ *   what is in it. Flagged in docs/inwentaryzacja.md for the owners.
+ * - **An empty snapshot renders nothing at all**, not an empty section. Until the first
+ *   successful refresh, and on any day the workflow has not run, the page is simply the page
+ *   it was before this block existed.
+ */
+
+/** Long enough for the seasonal announcements the owners actually write, short enough that
+ *  three of them side by side stay the same height. Cut on a word boundary. */
+const LIMIT = 200;
+
+const dateFormat = new Intl.DateTimeFormat("pl-PL", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+function shorten(text: string): { text: string; truncated: boolean } {
+  if (text.length <= LIMIT) return { text, truncated: false };
+
+  const cut = text.slice(0, LIMIT);
+  const lastSpace = cut.lastIndexOf(" ");
+  return { text: `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`, truncated: true };
+}
+
+const posts = facebookPosts.map((post) => {
+  const date = new Date(post.createdAt);
+  const dateText = dateFormat.format(date);
+
+  return {
+    ...post,
+    dateText,
+    /** `<time datetime>` wants the date alone, not the timestamp. */
+    dateAttr: date.toISOString().slice(0, 10),
+    body: shorten(post.text),
+    alt: `Zdjęcie z wpisu gospodarstwa z ${dateText}`,
+  };
+});
+---
+
+{
+  posts.length > 0 && (
+    <section id="aktualnosci" class="news" aria-labelledby="aktualnosci-title">
+      <div class="news__head">
+        <h2 class="news__title" id="aktualnosci-title">
+          Co u nas słychać
+        </h2>
+        <p class="news__lead">
+          Ostatnie wpisy z naszego profilu na Facebooku — co właśnie kwitnie i co jest w sprzedaży.
+        </p>
+      </div>
+
+      <ul class="news__grid">
+        {posts.map((post) => (
+          <li class="news__item">
+            {post.image && (
+              <Picture
+                class="news__photo"
+                src={post.image}
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                widths={[400, 800]}
+                sizes="(min-width: 1200px) 380px, (min-width: 640px) 30vw, 92vw"
+                width={400}
+                height={300}
+                alt={post.alt}
+                loading="lazy"
+              />
+            )}
+
+            <p class="news__date eyebrow">
+              <time datetime={post.dateAttr}>{post.dateText}</time>
+            </p>
+
+            {post.body.text && <p class="news__text">{post.body.text}</p>}
+
+            <p>
+              <a class="news__link" href={post.permalink} target="_blank" rel="noopener">
+                {post.body.truncated ? "Czytaj całość na Facebooku" : "Zobacz na Facebooku"}
+              </a>
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <p>
+        <a class="cta-line" href={facebook} target="_blank" rel="noopener">
+          Nasz profil na Facebooku
+        </a>
+      </p>
+    </section>
+  )
+}
+
+<style>
+  .news {
+    border-top: 1px solid var(--rule);
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: var(--gap-entry);
+  }
+
+  .news__head {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .news__title {
+    font-size: var(--text-h2);
+  }
+
+  .news__lead {
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+
+  /* Three across at full width, folding to two and then one as a column would drop under
+     260px. No breakpoint decides that - CLAUDE.md, "fix the minmax() value". */
+  .news__grid {
+    display: grid;
+    gap: var(--gap-cards);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+
+  .news__item {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+  }
+
+  /* 4:3, cropped to the frame, with the same 1px rule as every other photograph here.
+     A Facebook photograph can be any shape at all, so the frame decides and `cover` obeys. */
+  .news__photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+  }
+
+  .news__date {
+    font-size: 0.66rem;
+  }
+
+  /* Left in the owners' own words; only the length is ours. */
+  .news__text {
+    white-space: pre-line;
+  }
+
+  /* Quieter than `.cta-line`: there are three of these in a row, and in uppercase with a rule
+     under each they would out-shout the heading above them. */
+  .news__link {
+    color: var(--green);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+    padding-bottom: 0.15rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+
+  .news__link:hover {
+    border-bottom-color: var(--green);
+  }
+</style>

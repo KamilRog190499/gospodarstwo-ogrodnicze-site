@@ -1,13 +1,34 @@
 ---
+import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 
 /**
- * The offer on the home page: one card per category page.
+ * The offer on the home page: one card per category page, each opening with a mosaic of the
+ * group's own photographs.
  *
  * This is what replaced the flat list of fourteen plants that used to sit here. The home
  * page's job is to say what the holding sells and send people to the right page; the
  * descriptions are the plant names themselves, taken from the collection, so nothing here
  * is copy that has to be kept in step with the offer by hand.
+ *
+ * ## The mosaic
+ *
+ * Up to three frames per group, and **chosen by the collection rather than by a list here**:
+ * the first entries in `order` that have an `image`. Nothing to keep in step by hand, and
+ * the day dahlia, pelargonia bluszczolistna or sundaville gets a photograph it joins the
+ * queue by itself.
+ *
+ * The consequence is that the groups are uneven - three frames for balcony flowers and
+ * chrysanthemums, two for the bedding plants, one for the pansies, because that is how many
+ * entries hold a photograph today. So the row takes **as many columns as it has pictures**
+ * (`grid-auto-flow: column` over `grid-auto-columns: 1fr`) rather than a fixed three: one
+ * photograph fills the width of its card, two share it. A fixed `repeat(3, 1fr)` would leave
+ * the pansy card with two empty cells, which reads as a fault rather than as a decision.
+ *
+ * The frames are decorative - `alt=""` - and that is deliberate rather than lazy. The whole
+ * card is one link (see below); its accessible name is the text inside it, which already
+ * names every plant in the mosaic. Repeating `imageAlt` here would make a screen reader read
+ * three long sentences before the name of the group they belong to.
  */
 const plants = (await getCollection("plants")).sort((a, b) => a.data.order - b.data.order);
 
@@ -17,10 +38,17 @@ const groups = [
   { href: "/bratki/", title: "Bratki", group: "Bratki" },
   { href: "/chryzantemy/", title: "Chryzantemy", group: "Chryzantemy" },
 ]
-  .map((def) => ({
-    ...def,
-    names: plants.filter((plant) => plant.data.group === def.group).map((plant) => plant.data.name),
-  }))
+  .map((def) => {
+    const members = plants.filter((plant) => plant.data.group === def.group);
+    return {
+      ...def,
+      names: members.map((plant) => plant.data.name),
+      photos: members
+        .filter((plant) => plant.data.image !== undefined)
+        .slice(0, 3)
+        .map((plant) => plant.data.image!),
+    };
+  })
   // A card for an empty group would lead to a page with a heading and no list.
   .filter((def) => def.names.length > 0);
 ---
@@ -38,6 +66,24 @@ const groups = [
       groups.map((group) => (
         <li>
           <a class="tile" href={group.href}>
+            {group.photos.length > 0 && (
+              <span class="tile__photos">
+                {group.photos.map((photo) => (
+                  <Picture
+                    class="tile__photo"
+                    src={photo}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="jpg"
+                    widths={[240, 480]}
+                    sizes="(min-width: 1200px) 190px, (min-width: 700px) 15vw, 30vw"
+                    width={240}
+                    height={180}
+                    alt=""
+                    loading="lazy"
+                  />
+                ))}
+              </span>
+            )}
             <h3 class="tile__title">{group.title}</h3>
             <p class="tile__names">{group.names.join(" · ")}</p>
             <p class="tile__more">
@@ -99,6 +145,29 @@ const groups = [
   .tile:hover {
     border-color: var(--green);
     background: var(--paper);
+  }
+
+  /* One column per photograph, whatever the count - see the note at the top of this file.
+     `grid-auto-flow: column` gets that without a media query and without the component
+     knowing how many pictures the collection handed it. */
+  .tile__photos {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .tile__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+  }
+  .tile:hover .tile__photo {
+    border-color: var(--green);
   }
 
   .tile__title {

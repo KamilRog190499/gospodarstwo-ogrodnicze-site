@@ -1,0 +1,82 @@
+---
+import MapEmbed from "./MapEmbed.astro";
+import { address } from "../data/contact";
+
+/**
+ * "Jak do nas trafić" - the map on the home page.
+ *
+ * ## Why this is not `ContactStrip` coming back
+ *
+ * Version 0.5 had a contact band in this position and 0.6 removed it, for a reason worth
+ * repeating so nobody removes this block for the same one: the strip printed the address,
+ * one phone number and "Wyznacz trasę" directly above a footer printing the address, all
+ * four phone numbers and the same link. `602 518 401` appeared three times on one page.
+ *
+ * **This block carries no phone number at all.** It answers one question the footer does not
+ * - *where is this and how do I get there* - with the thing only a map can be, and sends
+ * anyone who wants to call to `/kontakt/`. The address is repeated, deliberately: an address
+ * beside a map is what makes the map readable, and it is the one fact a visitor copies.
+ *
+ * The map itself is `MapEmbed`, unchanged and unwrapped. It is consent-gated, so nothing
+ * reaches Google from the home page either until the visitor agrees; `consent.ts` already
+ * fills in every `[data-map]` on the page, and the answer is remembered across the site, so
+ * accepting here means the map on `/kontakt/` is already allowed. "Wyznacz trasę" lives
+ * inside `MapEmbed` and works without consent.
+ *
+ * The section id is `dojazd`, not `kontakt` - `Contact.astro` owns that one.
+ */
+---
+
+<section id="dojazd" class="directions" aria-labelledby="dojazd-title">
+  <div class="directions__where">
+    <h2 class="directions__title" id="dojazd-title">Jak do nas trafić</h2>
+    <p class="directions__lead">
+      Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty oglądasz i kupujesz na miejscu, w
+      tunelach — zapraszamy.
+    </p>
+    <p class="directions__address">
+      {address.street}<br />{address.postalCode}
+      {address.city}<br />{address.region}
+    </p>
+    <p>
+      <a class="cta-line" href="/kontakt/">Telefony i kontakt</a>
+    </p>
+  </div>
+
+  <MapEmbed />
+</section>
+
+<style>
+  /* The same two-column formula as `Contact.astro` - `auto-fit` at 300px, no breakpoint. */
+  .directions {
+    border-top: 1px solid var(--rule);
+    padding: var(--pad-section-wide) var(--edge);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--gap-columns);
+    align-items: start;
+  }
+
+  .directions__where {
+    display: grid;
+    gap: 1.1rem;
+    align-content: start;
+  }
+
+  .directions__title {
+    font-size: var(--text-h2);
+  }
+
+  .directions__lead {
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+
+  /* The address in the serif, at the size the phone numbers take on `/kontakt/` - it is the
+     fact this block exists to state. */
+  .directions__address {
+    font-family: var(--serif);
+    font-size: var(--text-tel);
+    line-height: 1.3;
+  }
+</style>

@@ -3,26 +3,58 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Intro from "../components/Intro.astro";
 import SeasonCards from "../components/SeasonCards.astro";
 import OfferOverview from "../components/OfferOverview.astro";
+import Compositions from "../components/Compositions.astro";
+import FacebookNews from "../components/FacebookNews.astro";
+import Directions from "../components/Directions.astro";
 
 /**
- * The home page. Says what the holding sells, which half of the year is running, and where
- * to go for each group - then gets out of the way.
+ * The home page: what the holding sells, which part of the year is running, what it looks
+ * like, and how to get there.
  *
- * It used to be the entire site: fourteen plant descriptions, the gallery, the history and
+ * It used to be the entire site - fourteen plant descriptions, the gallery, the history and
  * the contact section on one scroll, with a menu whose five entries pointed at three
- * anchors. Each of those now has its own address (src/data/navigation.ts), so this page is
- * an entrance rather than the whole building.
+ * anchors. Version 0.6 cut it back to an entrance: an intro, the season and four tiles.
+ *
+ * **0.7 puts the pictures back, and only the pictures.** The holding has 47 photographs of
+ * its own and the entrance showed four of them; the offer tiles carried none at all, on a
+ * business whose whole product is what a plant looks like. So the home page is now a preview
+ * of each part of the site rather than a table of contents for it - but a preview, not a
+ * copy. The subpages keep what makes them worth opening: the cultivation descriptions, the
+ * colour lists, the filters, the phone numbers.
  *
  * Outline: `h1` in Intro, then one `h2` per section.
  *
- * There is no contact band between the offer tiles and the footer. A `ContactStrip` sat
- * there in 0.5 and was removed: it printed the address, one phone number and "Wyznacz
- * trasę" directly above a footer printing the address, all four phone numbers and the same
- * link, so `602 518 401` appeared three times on one page (Intro's call button, the strip,
- * the footer) and the route link twice. Above the fold the Intro already carries both.
+ * ## The two blocks that repeat something, and what earns them their place
  *
- * The band becomes worth having again the day the owners give us selling hours - that is
- * the one fact it could carry that the footer does not. Until then it is repetition.
+ * - **Inspiracje** shows the same 23 plantings as `/inspiracje/`, with the filter, the
+ *   thumbnail rail, the anchors, the structured data and the per-panel phone CTA all
+ *   switched off (see the props on `Compositions.astro`). Every panel heading is a link to
+ *   that planting on `/inspiracje/`, so the preview feeds the page rather than replacing it.
+ * - **Directions** stands where `ContactStrip` stood in 0.5, and would deserve the same
+ *   deletion if it repeated what that one did. It does not: it prints no phone number.
+ *   The strip was removed because `602 518 401` appeared three times on this page - in the
+ *   Intro call button, in the strip and in the footer. The block answers the one question
+ *   the footer cannot: where this is, on a map.
+ *
+ * **The phone count is the thing to watch on this page, and it is easy to get wrong.** The
+ * first draft of 0.7 shipped the plantings strip with its panel CTA intact and put the number
+ * on this page **25 times** - once in the Intro, once in the footer and once in each of the
+ * 23 panels - while this very comment claimed it appeared once. Anything repeated per panel
+ * is repeated 23 times here. Count it on the built page before trusting a sentence about it:
+ * `grep -o 'tel:+48602518401' dist/index.html | wc -l` should read 2.
+ *
+ * ## The block that is not a preview of anything
+ *
+ * **Aktualności** (`FacebookNews`) stands between the plantings and the map, and it is the one
+ * thing on this page that has no subpage behind it. The catalogue changes once a season; this
+ * is where "chryzantemy są już w sprzedaży" can appear on a Tuesday, because the owners write
+ * it on Facebook and a workflow carries it here. It disappears entirely when the snapshot is
+ * empty, so the page has to read correctly without it - it does, because it is the newest and
+ * least structural thing here, not because anything was arranged around it.
+ *
+ * The map is consent-gated, and the Facebook block needs no gate because it embeds nothing -
+ * its pictures are our own files. So the home page still contacts nothing but our own server
+ * until a visitor asks for the map.
  */
 ---
 
@@ -34,4 +66,14 @@ import OfferOverview from "../components/OfferOverview.astro";
   <Intro />
   <SeasonCards />
   <OfferOverview />
+  <Compositions
+    level={2}
+    showFilters={false}
+    showRail={false}
+    structuredData={false}
+    ids={false}
+    allLink
+  />
+  <FacebookNews />
+  <Directions />
 </BaseLayout>

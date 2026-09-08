@@ -107,6 +107,11 @@
   --sans: "Public Sans Variable", "Public Sans", system-ui, sans-serif;
   --mono: ui-monospace, Menlo, monospace;
 
+  /* `auto` is the property's own initial value, so this is belt-and-braces rather than a
+     behaviour change — see src/styles/fonts.css for why the loaded Newsreader files vary
+     `opsz` at all. Inherited, so one declaration here covers every element. */
+  font-optical-sizing: auto;
+
   --text-body: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
   /* H1 leży teraz na zdjęciu, więc górna granica jest większa niż w poprzedniej skali -
      ma wytrzymać 21:9 na monitorze 1400px, gdzie zdjęcie samo w sobie jest bardzo duże. */

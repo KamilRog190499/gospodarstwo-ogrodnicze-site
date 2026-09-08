@@ -20,8 +20,15 @@ informational catalogue. Do not add a cart, checkout, forms, accounts or prices.
 
 **The site is built as eight pages and the content is migrated.** Astro scaffolded, design
 tokens and components in place, all 16 migrated plants and the farm history carried over from
-the WordPress site, plus one entry - the pansy - that was never on it. `/` is the entrance
-(intro, season cards, four offer tiles); the offer lives on `/kwiaty-balkonowe/`, `/rabatowe/`
+the WordPress site, plus one entry - the pansy - that was never on it. **`/` is a preview of
+the whole site** - intro, season cards, four offer tiles each opening with a mosaic of that
+group's own photographs, the plantings slideshow in a reduced variant, and a map block. It
+was an entrance through 0.6 and showed four photographs against 47 in the repository, none of
+them on the offer tiles; 0.7 put the pictures back and only the pictures, so the subpages keep
+what makes them worth opening (the cultivation descriptions, the colour lists, the filters,
+the phone numbers). What each home page block may and may not repeat is argued out in
+`docs/inwentaryzacja.md` under "Strona główna jako witryna". The offer lives on
+`/kwiaty-balkonowe/`, `/rabatowe/`
 and `/chryzantemy/` - the WordPress addresses, unchanged - and on `/bratki/`, the one offer
 address with no predecessor; the gallery, the history and the contact block have their own pages
 at `/inspiracje/`, `/o-nas/` and `/kontakt/`. A slideshow of 23 of the owners' own photographs
@@ -61,8 +68,31 @@ mislabelled "Pelargonie" - both **want owner confirmation**, recorded in
 `docs/inwentaryzacja.md`. `npm run lint` and `npm run build` are clean, and `linkinator`
 finds no dead internal link.
 
-What is not done: the privacy policy, the deploy workflow, and everything in
-`docs/inwentaryzacja.md` under "Czego nadal brakuje".
+**Version 0.8 added the one thing on the site that changes by itself: the Facebook block.**
+The catalogue changes once a season and nothing on it could say _chrysanthemums are on sale
+now_ - the owners already write that on their Facebook page and were never going to write it
+twice. `scripts/fetch-facebook.mjs` fetches the three latest posts once a day on the
+self-hosted runner and **commits them to `main`** - the text as `src/data/facebook-posts.json`,
+the photographs as real files in `src/assets/facebook/` - so the ordinary build carries them
+out. `FacebookNews.astro` renders them on the home page between the plantings and the map.
+The secrets are not set yet, so the block currently renders nothing, which is its designed
+empty state.
+
+**Three properties of that design are load-bearing, and all three are lost by the obvious
+"simplification".** (1) The photographs are downloaded, never linked: a `full_picture` URL is
+signed and expires within days, so a snapshot of those URLs rots into broken images while
+looking fresh. (2) Because the files are ours, the visitor's browser never contacts Meta -
+which is the only reason this block needs no consent gate while the map does; a Facebook
+plugin, an iframe or a hotlinked image would each hand every visitor's IP to Meta on page
+load. (3) Because the snapshot is in git, a token that has stopped working means "the feed did
+not refresh", never "the page is blank", and the images go through `sharp` like every other
+picture here. Do not move the refresh to the browser, to the web server, or to a Meta embed.
+The reasoning is in the header of the fetch script, `docs/facebook.md` is written for the
+owners, and the decisions that are theirs to review - automatic publication with no human in
+the loop, and the thin `alt` texts - are in `docs/inwentaryzacja.md`.
+
+What is not done: the privacy policy, the deploy workflow, the Facebook token, and everything
+in `docs/inwentaryzacja.md` under "Czego nadal brakuje".
 
 ## Design handoff - the source of truth
 
@@ -158,6 +188,13 @@ fix a layout; fix the `minmax()` value.
   rewritten: it is a scroll-snap strip, so with no JavaScript every photograph is still there and
   reachable; each slide carries its own caption; and the auto-advance pauses on hover and focus,
   stops for good on the first interaction, and never runs under `prefers-reduced-motion`.
+  Since 0.7 the exception stands at **two addresses**: `/inspiracje/` renders the component
+  with its defaults and the home page with `level={2}` and the filter, the rail, the anchors
+  and the structured data switched off. Those four are not styling props - each one stops the
+  two copies from contradicting each other, and the reason for each is in the component's own
+  header comment. `src/scripts/compositions.ts` drives one strip per `[data-comp]`, so scope
+  every query to the root if you touch it; a `document.querySelector` there would make the
+  home page buttons move the wrong track.
 - **Design tokens go in `src/styles/tokens.css`** from the colour table in the handoff; components
   must not hardcode colours or spacing.
 - **Fonts are self-hosted.** The handoff shows a Google Fonts `<link>` for the prototype and then
@@ -180,7 +217,11 @@ fix a layout; fix the `minmax()` value.
   the intro CTA, the contact list, the footer and the JSON-LD together.
 - **The Google map is consent-gated**, not lazy-loaded: nothing reaches Google before the visitor
   agrees. Either click-to-load or a consent banner writing one flag to `localStorage`. The
-  "Wyznacz trasę" link works without consent and stays visible as the alternative.
+  "Wyznacz trasę" link works without consent and stays visible as the alternative. Since 0.7
+  the map is on two pages (`/kontakt/` and the home page's `Directions.astro`); `consent.ts`
+  fills in every `[data-map]` on a page and the one flag serves the whole site, so a second
+  map costs no second question. It does mean the consent bar now appears on the home page -
+  that is the design working, not a regression.
 - **The season blocks are computed at build time from the date**, not from a prop. The handoff
   suggests 1.03-31.08 spring/summer (card 1) and 1.09-30.11 autumn (card 2); the spring window is
   **split** in `src/data/season.ts` because the pansies sell 1.03-30.04 and everything else from
