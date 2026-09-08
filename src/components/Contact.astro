@@ -1,0 +1,150 @@
+---
+import MapEmbed from "./MapEmbed.astro";
+import { phones, address } from "../data/contact";
+
+/**
+ * Phone numbers on the left, where to come on the right. The body of `/kontakt/`.
+ *
+ * The heading level is a prop: `h1` where the block is the page, `h2` where it is a section
+ * on another one. The address gets a heading of its own rather than an uppercase label
+ * pretending to be one, so the two halves of the page are both named in the outline.
+ *
+ * No e-mail and no opening hours: the owners have not given either, and the design's
+ * "do potwierdzenia" box was a note to them rather than part of the page. What is missing
+ * is tracked in docs/inwentaryzacja.md, not shown to visitors.
+ */
+interface Props {
+  level?: 1 | 2;
+}
+
+const { level = 2 } = Astro.props;
+const Heading = `h${level}` as "h1" | "h2";
+const SubHeading = level === 1 ? "h2" : "h3";
+---
+
+<section id="kontakt" class="contact" aria-labelledby="kontakt-title">
+  <div class="contact__phones">
+    <Heading class="contact__title" id="kontakt-title">Kontakt</Heading>
+    <p class="contact__lead">
+      Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa. Sklepu internetowego nie
+      prowadzimy.
+    </p>
+    <ul class="phones">
+      {
+        phones.map((phone) => (
+          <li class="phones__row">
+            <span class="phones__person">{phone.person}</span>
+            <a class="phones__number" href={phone.href}>
+              {phone.display}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="contact__where">
+    <div class="address">
+      <SubHeading class="address__label">Adres</SubHeading>
+      <p class="address__value">
+        {address.street}<br />{address.postalCode}
+        {address.city}<br />{address.region}
+      </p>
+    </div>
+    <MapEmbed />
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding: var(--pad-section-wide) var(--edge);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--gap-columns);
+    align-items: start;
+  }
+
+  .contact__phones {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .contact__title {
+    font-size: var(--text-h2-wide);
+  }
+
+  .contact__lead {
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+
+  .phones {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  /* A fixed first track, not flex. With `flex` plus a min-width the four numbers started
+     at four different positions, because each name is a different length - a defect found
+     in review and named in docs/design/README.md. The grid gives every number the same
+     left edge. */
+  .phones__row {
+    border-top: 1px solid var(--rule);
+    padding-top: 0.7rem;
+    display: grid;
+    grid-template-columns: minmax(8ch, auto) minmax(0, 1fr);
+    column-gap: 1rem;
+    align-items: baseline;
+  }
+
+  .phones__person {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .phones__number {
+    font-family: var(--serif);
+    font-size: var(--text-tel);
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+    /* The row is a grid cell, so without this the underline runs the full column width. */
+    justify-self: start;
+  }
+  .phones__number:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  .contact__where {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .address {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  /* A heading now, styled as the label it was. */
+  .address__label {
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .address__value {
+    font-family: var(--serif);
+    font-size: var(--text-tel);
+    line-height: 1.3;
+  }
+</style>

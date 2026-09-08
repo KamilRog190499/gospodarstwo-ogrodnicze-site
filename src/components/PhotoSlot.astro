@@ -1,0 +1,83 @@
+---
+/**
+ * A photograph that does not exist yet.
+ *
+ * Every image in the design is a placeholder naming the frame someone still has to shoot
+ * (docs/design/README.md, "Fidelity"). Printing the brief inside the box means whoever
+ * takes the pictures can read it off the page instead of off a document.
+ *
+ * When the photographs arrive this component is the one place to change: keep the
+ * `aspect-ratio` and the 1px border, swap the striped box for <Picture>. Until then it is
+ * `aria-hidden` - the brief is a note to us, not something to read out to a visitor.
+ */
+interface Props {
+  /** CSS aspect-ratio, e.g. "4 / 3". */
+  ratio: string;
+  /** What the photograph should show. */
+  label: string;
+  /** Which ground it sits on. "dark" is the inside of a --green-deep block. */
+  tone?: "light" | "dark";
+  /** Stripe width in px. The design uses a wider stripe on the bigger boxes. */
+  stripe?: number;
+  /** The plant entries frame the label in a small paper box; the wider boxes do not. */
+  boxed?: boolean;
+}
+
+const { ratio, label, tone = "light", stripe = 12, boxed = false } = Astro.props;
+---
+
+<div
+  aria-hidden="true"
+  class:list={["slot", `slot--${tone}`, boxed && "slot--boxed"]}
+  style={`--slot-ratio: ${ratio}; --slot-stripe: ${stripe}px;`}
+>
+  <span class="slot__label">{label}</span>
+</div>
+
+<style>
+  .slot {
+    width: 100%;
+    aspect-ratio: var(--slot-ratio);
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    border: 1px solid var(--slot-border);
+    background-color: var(--slot-ground);
+    /* The 100° slant is what makes the box read as "nothing here yet" rather than as a
+       flat panel that failed to load. */
+    background-image: repeating-linear-gradient(
+      100deg,
+      var(--slot-stripe-colour) 0 var(--slot-stripe),
+      rgb(252 251 245 / 0%) var(--slot-stripe) calc(var(--slot-stripe) * 2)
+    );
+  }
+
+  .slot--light {
+    --slot-ground: var(--paper-dim);
+    --slot-border: var(--rule);
+    --slot-stripe-colour: rgb(224 221 206 / 80%);
+    --slot-text: var(--ink-grey);
+  }
+
+  .slot--dark {
+    --slot-ground: var(--green-slot);
+    --slot-border: rgb(238 240 230 / 30%);
+    --slot-stripe-colour: rgb(238 240 230 / 14%);
+    --slot-text: var(--green-slot-text);
+  }
+
+  .slot__label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--slot-text);
+  }
+
+  .slot--boxed .slot__label {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 0.5rem 0.6rem;
+  }
+</style>

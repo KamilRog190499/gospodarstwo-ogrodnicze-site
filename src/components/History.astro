@@ -1,0 +1,100 @@
+---
+import { getEntry, render } from "astro:content";
+import { Picture } from "astro:assets";
+import { historyPhoto } from "../data/gallery";
+
+/**
+ * The dark block with the holding's own history - the text migrated from /o-nas/ on the
+ * current site: the founding year, the switch from vegetables to flowers, the awards.
+ *
+ * It is now the body of `/o-nas/`, the same address it had on WordPress, so the page that
+ * ranks for it keeps ranking. The heading level is a prop for that reason: `h1` where the
+ * block is the page, `h2` where it is a section on another one.
+ *
+ * The text is longer than the placeholder paragraph the prototype carried, so this column
+ * simply runs taller than the photograph beside it; nothing is trimmed to make the two
+ * match.
+ */
+interface Props {
+  level?: 1 | 2;
+}
+
+const { level = 2 } = Astro.props;
+const Heading = `h${level}` as "h1" | "h2";
+
+const entry = await getEntry("pages", "historia");
+if (!entry) {
+  throw new Error("Missing src/content/pages/historia.md - the history section has no text.");
+}
+const { Content } = await render(entry);
+---
+
+<section id="historia" class="history" aria-labelledby="historia-title">
+  <div class="history__text">
+    <p class="history__eyebrow">{entry.data.label}</p>
+    <Heading class="history__title" id="historia-title">{entry.data.title}</Heading>
+    <div class="history__body copy">
+      <Content />
+    </div>
+  </div>
+  <Picture
+    class="history__photo"
+    src={historyPhoto.src}
+    formats={["avif", "webp"]}
+    fallbackFormat="jpg"
+    widths={[640, 1280]}
+    sizes="(min-width: 1200px) 560px, (min-width: 700px) 45vw, 90vw"
+    width={640}
+    height={427}
+    alt={historyPhoto.alt}
+    loading="lazy"
+  />
+</section>
+
+<style>
+  .history {
+    background: var(--green-deep);
+    color: var(--bone);
+    padding: var(--pad-section-wide) var(--edge);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--gap-columns);
+    align-items: start;
+  }
+
+  .history__text {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+
+  .history__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-lit);
+  }
+
+  .history__title {
+    font-size: var(--text-h2-wide);
+    line-height: 1.06;
+    max-width: 24ch;
+  }
+
+  .history__body {
+    max-width: 54ch;
+    color: var(--green-body);
+  }
+
+  /* The 3:2 box the placeholder used to hold. The rule is the pale one used everywhere on
+     the dark blocks - a --rule border would vanish against the moss. */
+  .history__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border: 1px solid rgb(238 240 230 / 30%);
+  }
+</style>

@@ -1,0 +1,190 @@
+---
+import { phones, address, facebook } from "../data/contact";
+import { footerOfferLinks } from "../data/navigation";
+import { versionLabel, buildStamp } from "../data/version";
+
+/**
+ * Four columns and a rule.
+ *
+ * Structure fixed here: the column labels are headings rather than paragraphs styled to
+ * look like headings, the offer column is a real `<nav>` with a list in it, and the loose
+ * `<a>` elements in the last column are list items. Before this, a screen reader reaching
+ * the footer found four unnamed groups of text with links scattered through them.
+ *
+ * The site name is a paragraph, not a heading: the footer repeats the masthead, and the
+ * masthead is identity rather than a section of the document.
+ *
+ * Two departures from the prototype, both deliberate and both kept:
+ *
+ * - "Polityka prywatności" is not here. The prototype links it to `#`; there is no policy
+ *   yet, and a menu entry that goes nowhere is worse than one that is not there. Add it
+ *   with the page - it is the one item on docs/inwentaryzacja.md that the consent bar
+ *   makes urgent, because the bar asks about data processing and links to nothing.
+ * - "Ustawienia mapy" is here and is not in the design. Withdrawing consent has to be as
+ *   easy as giving it, and this is the only place a visitor can reach it from. It is
+ *   hidden without JavaScript, where there was never any consent to withdraw.
+ */
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__columns">
+    <div class="footer__col">
+      <p class="footer__name">Gospodarstwo Ogrodnicze „Saran”</p>
+      <p class="footer__blurb">
+        Sprzedaż kwiatów balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych.
+      </p>
+    </div>
+
+    <nav class="footer__col" aria-labelledby="footer-oferta">
+      <h2 class="footer__label" id="footer-oferta">Oferta</h2>
+      <ul class="footer__list">
+        {
+          footerOfferLinks.map((item) => (
+            <li>
+              <a class="footer__link" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h2 class="footer__label">Gospodarstwo</h2>
+      <p class="footer__text">{address.street}<br />{address.postalCode} {address.city}</p>
+      <ul class="footer__list">
+        {
+          phones.map((phone) => (
+            <li>
+              <a class="footer__link" href={phone.href}>
+                {phone.person} {phone.display}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <nav class="footer__col" aria-labelledby="footer-info">
+      <h2 class="footer__label" id="footer-info">Informacje</h2>
+      <ul class="footer__list">
+        <li><a class="footer__link" href="/o-nas/">Historia gospodarstwa</a></li>
+        <li><a class="footer__link" href="/kontakt/">Kontakt i dojazd</a></li>
+        <li>
+          <a class="footer__link" href={facebook} target="_blank" rel="noopener">Facebook</a>
+        </li>
+        <li class="footer__resetRow">
+          <button class="footer__link footer__reset" type="button" data-consent-reset>
+            Ustawienia mapy
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="footer__bar">
+    <span>© {year} Gospodarstwo Ogrodnicze „Saran”</span>
+    <span class="footer__version" title={buildStamp}>{versionLabel}</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--ink);
+    color: var(--footer-body);
+    padding: var(--pad-footer) var(--edge);
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .footer__columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.5rem 2.5rem;
+  }
+
+  .footer__col {
+    display: grid;
+    gap: 0.35rem;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .footer__name {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    color: var(--bone);
+  }
+
+  .footer__blurb {
+    font-size: 0.92rem;
+    max-width: 34ch;
+    margin-top: 0.15rem;
+  }
+
+  /* A heading now, with the type the label had. */
+  .footer__label {
+    font-family: var(--sans);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--footer-label);
+  }
+
+  .footer__text {
+    font-size: 0.95rem;
+  }
+
+  .footer__list {
+    display: grid;
+    gap: 0.2rem;
+    justify-items: start;
+    margin-top: 0.15rem;
+  }
+
+  .footer__link {
+    font-size: 0.95rem;
+    color: var(--footer-link);
+  }
+  .footer__link:hover {
+    color: var(--paper);
+  }
+
+  /* A button, because it changes stored state rather than going anywhere - dressed as a
+     link so the column reads as one list. */
+  .footer__resetRow {
+    display: none;
+  }
+  :global(html.js) .footer__resetRow {
+    display: block;
+  }
+
+  .footer__reset {
+    font-family: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    text-align: start;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+
+  .footer__bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    border-top: 1px solid var(--footer-rule);
+    padding-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--footer-label);
+  }
+
+  .footer__version {
+    margin-inline-start: auto;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

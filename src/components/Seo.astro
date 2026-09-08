@@ -1,0 +1,81 @@
+---
+/**
+ * Meta tags for a single page.
+ *
+ * `title` and `description` deliberately have no defaults: a missing description should be
+ * a type error at build time, not a silent gap in search results.
+ *
+ * `ogImage` has no default either, for a different reason - there is no photograph of the
+ * holding to use as one yet. A page without it simply emits no `og:*` image tags, which
+ * renders as a plain link card. Point it at a 1200x630 file in /public once there is one.
+ */
+interface Props {
+  title: string;
+  description: string;
+  /** Page path, e.g. "/". Turned into a full canonical URL. */
+  canonical: string;
+  /** Path in /public, sized 1200x630. */
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: "website" | "article";
+  /** Keeps the page out of search indexes and drops the canonical link. Used by 404,
+   *  which is served at every address that does not exist. */
+  noindex?: boolean;
+}
+
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogImageAlt,
+  ogType = "website",
+  noindex = false,
+} = Astro.props;
+
+if (!Astro.site) {
+  throw new Error("No `site` in astro.config.mjs - canonical URLs cannot be built without it.");
+}
+
+const canonicalUrl = new URL(canonical, Astro.site).href;
+const imageUrl = ogImage ? new URL(ogImage, Astro.site).href : null;
+
+const siteName = "Gospodarstwo Ogrodnicze „Saran”";
+/* The home page names the business inside its own title, so appending the site name there
+   would stutter. */
+const fullTitle = title.includes("Saran") ? title : `${title} - ${siteName}`;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+{
+  noindex ? (
+    <meta name="robots" content="noindex, follow" />
+  ) : (
+    <link rel="canonical" href={canonicalUrl} />
+  )
+}
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="pl_PL" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+{
+  imageUrl && (
+    <>
+      <meta property="og:image" content={imageUrl} />
+      <meta property="og:image:width" content={String(OG_WIDTH)} />
+      <meta property="og:image:height" content={String(OG_HEIGHT)} />
+      {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content={imageUrl} />
+    </>
+  )
+}
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />

@@ -1,0 +1,907 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+          html {
+            scroll-behavior: smooth;
+            scrollbar-gutter: stable;
+          }
+          body {
+            margin: 0;
+            background: #fcfbf5;
+            color: #23281f;
+            font-family: "Karla", system-ui, sans-serif;
+            font-size: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
+            line-height: 1.68;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+          }
+          h1,
+          h2,
+          h3,
+          h4,
+          p,
+          dl,
+          dd,
+          ul,
+          ol,
+          li,
+          figure,
+          blockquote {
+            margin: 0;
+          }
+          a {
+            color: #4e5c40;
+          }
+          a:hover {
+            color: #23281f;
+          }
+          :focus-visible {
+            outline: 2px solid #4e5c40;
+            outline-offset: 3px;
+          }
+        </style>
+      </helmet>
+
+      <a
+        href="#tresc"
+        style="
+          position: absolute;
+          inset-inline-start: 1rem;
+          top: -100%;
+          z-index: 200;
+          background: #3d4a33;
+          color: #fcfbf5;
+          font-size: 0.72rem;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          text-decoration: none;
+          padding: 0.75rem 1rem;
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+        "
+        style-focus="top: 0.5rem;"
+        >Przejdź do treści</a
+      >
+
+      <header style="border-bottom: 1px solid #e0ddce; background: #fcfbf5">
+        <div
+          style="
+            padding: clamp(1.5rem, 4vw, 2.75rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2)
+              clamp(1rem, 2vw, 1.5rem);
+            display: grid;
+            gap: 0.5rem;
+            justify-items: center;
+            text-align: center;
+          "
+        >
+          <h1
+            style="
+              font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+              font-size: clamp(2.1rem, 1.4rem + 3vw, 3.6rem);
+              font-weight: 400;
+              line-height: 1.05;
+              letter-spacing: -0.01em;
+            "
+          >
+            Gospodarstwo Ogrodnicze <em style="font-style: italic; color: #4e5c40">„Saran”</em>
+          </h1>
+          <p
+            style="
+              font-size: 0.72rem;
+              font-weight: 600;
+              letter-spacing: 0.2em;
+              text-transform: uppercase;
+              color: #5b6153;
+            "
+          >
+            Sprzedaż kwiatów balkonowych, rabatowych i chryzantem
+          </p>
+        </div>
+        <nav aria-label="Główne" style="border-top: 1px solid #e0ddce; background: #f1efe3">
+          <ul
+            style="
+              list-style: none;
+              padding: 0 max(clamp(1rem, 4vw, 5rem), (100% - 1200px) / 2);
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 0 clamp(1rem, 3vw, 2.5rem);
+            "
+          >
+            <sc-for list="{{ nav }}" as="item" hint-placeholder-count="5">
+              <li>
+                <a
+                  href="{{ item.href }}"
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 600;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                    text-decoration: none;
+                    color: #3d4a33;
+                    min-height: 48px;
+                    display: inline-flex;
+                    align-items: center;
+                    border-bottom: 2px solid transparent;
+                  "
+                  style-hover="color: #23281F; border-bottom-color: #4E5C40;"
+                  >{{ item.label }}</a
+                >
+              </li>
+            </sc-for>
+          </ul>
+        </nav>
+      </header>
+
+      <main id="tresc">
+        <section
+          style="
+            padding: clamp(2.5rem, 6vw, 4.5rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2)
+              clamp(2rem, 4vw, 3rem);
+            display: grid;
+            gap: 1.25rem;
+            justify-items: center;
+            text-align: center;
+            border-bottom: 1px solid #e0ddce;
+          "
+        >
+          <p
+            style="
+              font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+              font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
+              line-height: 1.25;
+              max-width: 30ch;
+              text-wrap: balance;
+            "
+          >
+            Zachęcamy do zapoznania się z naszą ofertą.
+          </p>
+          <p style="max-width: 56ch; color: #4c5344">
+            Zamówienia można składać telefonicznie lub na terenie naszego gospodarstwa w Cholewiance
+            pod Kazimierzem Dolnym. Wszystko, co sprzedajemy, pochodzi z naszej własnej uprawy.
+          </p>
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0.6rem 1.25rem;
+              justify-content: center;
+              margin-top: 0.25rem;
+            "
+          >
+            <a
+              href="tel:+48602518401"
+              style="
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: #fcfbf5;
+                background: #3d4a33;
+                padding: 0 1.5rem;
+                min-height: 50px;
+                display: inline-flex;
+                align-items: center;
+              "
+              style-hover="background: #23281F;"
+              >Zadzwoń: 602 518 401</a
+            >
+            <a
+              href="#oferta"
+              style="
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: #23281f;
+                border-bottom: 1px solid #23281f;
+                padding-bottom: 3px;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+              "
+              style-hover="color: #4E5C40; border-bottom-color: #4E5C40;"
+              >Zobacz ofertę</a
+            >
+          </div>
+        </section>
+
+        <section
+          style="
+            padding: clamp(2.5rem, 6vw, 4.5rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
+            display: grid;
+            gap: clamp(2rem, 5vw, 3.5rem);
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+          "
+        >
+          <sc-for list="{{ seasons }}" as="block" hint-placeholder-count="2">
+            <article style="{{ block.style }}">
+              <p style="{{ block.eyebrowStyle }}">{{ block.eyebrow }}</p>
+              <h2
+                style="font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem); font-weight: 400; line-height: 1.1; color: {{ block.ink }};"
+              >
+                {{ block.title }}
+              </h2>
+              <p style="{{ block.bodyStyle }}">{{ block.body }}</p>
+              <div aria-hidden="true" style="{{ block.slotStyle }}">
+                <span style="{{ block.slotTextStyle }}">{{ block.slot }}</span>
+              </div>
+              <p style="{{ block.metaStyle }}">{{ block.meta }}</p>
+            </article>
+          </sc-for>
+        </section>
+
+        <section
+          id="oferta"
+          style="
+            border-top: 1px solid #e0ddce;
+            padding: clamp(2.5rem, 6vw, 4.5rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2)
+              clamp(1.5rem, 3vw, 2rem);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0.5rem 1.5rem;
+              align-items: baseline;
+              border-bottom: 1px solid #e0ddce;
+              padding-bottom: 0.9rem;
+            "
+          >
+            <h2
+              style="
+                font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                font-size: clamp(1.8rem, 1.35rem + 1.9vw, 2.7rem);
+                font-weight: 400;
+              "
+            >
+              Kwiaty w naszej ofercie
+            </h2>
+            <p style="max-width: 42ch; font-size: 0.95rem; color: #4c5344">
+              Przy każdej roślinie piszemy, jak ją uprawiać i w jakich kolorach jest u nas dostępna.
+            </p>
+          </div>
+          <div style="display: grid">
+            <sc-for list="{{ entries }}" as="plant" hint-placeholder-count="3">
+              <article
+                style="
+                  border-bottom: 1px solid #e0ddce;
+                  padding-block: clamp(1.75rem, 4vw, 3rem);
+                  display: grid;
+                  gap: clamp(1.25rem, 4vw, 2.75rem);
+                  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+                  align-items: start;
+                "
+              >
+                <figure style="display: grid; gap: 0.6rem">
+                  <div
+                    aria-hidden="true"
+                    style="
+                      aspect-ratio: 4 / 3;
+                      background-color: #f1efe3;
+                      background-image: repeating-linear-gradient(
+                        100deg,
+                        rgb(224 221 206 / 80%) 0 10px,
+                        rgb(252 251 245 / 0%) 10px 20px
+                      );
+                      border: 1px solid #e0ddce;
+                      display: grid;
+                      place-items: center;
+                      padding: 1rem;
+                    "
+                  >
+                    <span
+                      style="
+                        font-family: ui-monospace, Menlo, monospace;
+                        font-size: 0.62rem;
+                        letter-spacing: 0.1em;
+                        text-transform: uppercase;
+                        color: #5b6153;
+                        text-align: center;
+                        background: #fcfbf5;
+                        border: 1px solid #e0ddce;
+                        padding: 0.5rem 0.6rem;
+                      "
+                      >{{ plant.slot }}</span
+                    >
+                  </div>
+                  <figcaption style="font-size: 0.8rem; color: #5b6153">
+                    {{ plant.caption }}
+                  </figcaption>
+                </figure>
+                <div style="display: grid; gap: 0.85rem; align-content: start">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: baseline;
+                      flex-wrap: wrap;
+                      gap: 0.5rem 0.9rem;
+                    "
+                  >
+                    <h3
+                      style="
+                        font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                        font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+                        font-weight: 400;
+                        line-height: 1.1;
+                      "
+                    >
+                      {{ plant.name }}
+                    </h3>
+                    <span style="{{ plant.tagStyle }}">{{ plant.group }}</span>
+                  </div>
+                  <p style="color: #4c5344">{{ plant.body }}</p>
+                  <dl
+                    style="
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+                      gap: 0.75rem 1.5rem;
+                      border-top: 1px solid #e0ddce;
+                      padding-top: 0.85rem;
+                    "
+                  >
+                    <sc-for list="{{ plant.facts }}" as="fact" hint-placeholder-count="3">
+                      <div style="display: grid; gap: 0.1rem">
+                        <dt
+                          style="
+                            font-size: 0.62rem;
+                            font-weight: 600;
+                            letter-spacing: 0.16em;
+                            text-transform: uppercase;
+                            color: #5b6153;
+                          "
+                        >
+                          {{ fact.k }}
+                        </dt>
+                        <dd style="font-size: 0.95rem">{{ fact.v }}</dd>
+                      </div>
+                    </sc-for>
+                  </dl>
+                  <div style="display: grid; gap: 0.5rem; margin-top: 0.15rem">
+                    <p
+                      style="
+                        font-size: 0.66rem;
+                        font-weight: 600;
+                        letter-spacing: 0.16em;
+                        text-transform: uppercase;
+                        color: #5b6153;
+                      "
+                    >
+                      Dostępne kolory
+                    </p>
+                    <ul
+                      style="
+                        list-style: none;
+                        padding: 0;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 0.4rem;
+                      "
+                    >
+                      <sc-for list="{{ plant.colors }}" as="c" hint-placeholder-count="5">
+                        <li
+                          style="
+                            font-size: 0.85rem;
+                            border: 1px solid #dcd7c4;
+                            background: #f1efe3;
+                            padding: 0.25rem 0.65rem;
+                          "
+                        >
+                          {{ c }}
+                        </li>
+                      </sc-for>
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </section>
+
+        <section
+          id="historia"
+          style="
+            background: #3d4a33;
+            color: #eef0e6;
+            padding: clamp(2.75rem, 7vw, 5rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: clamp(1.75rem, 5vw, 3.5rem);
+            align-items: start;
+          "
+        >
+          <div style="display: grid; gap: 1.1rem; justify-items: start">
+            <p
+              style="
+                font-size: 0.7rem;
+                font-weight: 600;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #c6d3b6;
+              "
+            >
+              Historia gospodarstwa
+            </p>
+            <h2
+              style="
+                font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);
+                font-weight: 400;
+                line-height: 1.06;
+                max-width: 24ch;
+              "
+            >
+              Rodzinna uprawa w Cholewiance
+            </h2>
+            <p style="max-width: 54ch; color: #dde2d2">
+              Kwiaty prowadzimy rodzinnie — wiosną rozsady, obsadzone skrzynki i doniczki, jesienią
+              chryzantemy wielkokwiatowe. Sprzedajemy tylko to, co sami wyhodowaliśmy, dlatego o
+              każdej partii wiemy, kiedy była siana i czego będzie potrzebowała u kupującego.
+            </p>
+            <sc-if value="{{ showPending }}" hint-placeholder-val="{{ true }}">
+              <aside
+                style="
+                  border: 1px dashed #c6d3b6;
+                  padding: 0.95rem 1.1rem;
+                  display: grid;
+                  gap: 0.3rem;
+                  max-width: 58ch;
+                "
+              >
+                <strong
+                  style="
+                    font-size: 0.66rem;
+                    font-weight: 600;
+                    letter-spacing: 0.16em;
+                    text-transform: uppercase;
+                    color: #c6d3b6;
+                  "
+                  >Do napisania</strong
+                >
+                <p style="font-size: 0.95rem; color: #dde2d2">
+                  Pełna historia z obecnej strony: rok założenia, pokolenia, jak rosło gospodarstwo.
+                  Prześlij tekst lub opowiedz — przepiszę.
+                </p>
+              </aside>
+            </sc-if>
+          </div>
+          <div
+            aria-hidden="true"
+            style="
+              aspect-ratio: 3 / 2;
+              background-color: #33402b;
+              background-image: repeating-linear-gradient(
+                100deg,
+                rgb(238 240 230 / 14%) 0 12px,
+                rgb(238 240 230 / 0%) 12px 24px
+              );
+              border: 1px solid rgb(238 240 230 / 30%);
+              display: grid;
+              place-items: center;
+              padding: 1rem;
+            "
+          >
+            <span
+              style="
+                font-family: ui-monospace, Menlo, monospace;
+                font-size: 0.66rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: #d3dcc6;
+                text-align: center;
+              "
+              >zdjęcie archiwalne — gospodarstwo, 3:2</span
+            >
+          </div>
+        </section>
+
+        <section
+          id="kontakt"
+          style="
+            padding: clamp(2.75rem, 7vw, 5rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: clamp(1.75rem, 5vw, 3.5rem);
+            align-items: start;
+          "
+        >
+          <div style="display: grid; gap: 1.2rem">
+            <h2
+              style="
+                font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                font-size: clamp(1.9rem, 1.35rem + 2.2vw, 2.9rem);
+                font-weight: 400;
+              "
+            >
+              Kontakt
+            </h2>
+            <p style="max-width: 46ch; color: #4c5344">
+              Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa. Sklepu
+              internetowego nie prowadzimy.
+            </p>
+            <ul style="list-style: none; padding: 0; display: grid; gap: 0.9rem">
+              <sc-for list="{{ phones }}" as="p" hint-placeholder-count="4">
+                <li
+                  style="
+                    border-top: 1px solid #e0ddce;
+                    padding-top: 0.7rem;
+                    display: grid;
+                    grid-template-columns: minmax(8ch, auto) minmax(0, 1fr);
+                    column-gap: 1rem;
+                    align-items: baseline;
+                  "
+                >
+                  <span
+                    style="
+                      font-size: 0.66rem;
+                      font-weight: 600;
+                      letter-spacing: 0.16em;
+                      text-transform: uppercase;
+                      color: #5b6153;
+                    "
+                    >{{ p.name }}</span
+                  >
+                  <a
+                    href="{{ p.href }}"
+                    style="
+                      font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                      font-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem);
+                      color: #23281f;
+                      text-decoration: none;
+                      border-bottom: 1px solid #cfcbb8;
+                      min-height: 44px;
+                      display: inline-flex;
+                      align-items: center;
+                    "
+                    style-hover="color: #4E5C40; border-bottom-color: #4E5C40;"
+                    >{{ p.tel }}</a
+                  >
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+          <div style="display: grid; gap: 1rem; justify-items: start">
+            <div style="display: grid; gap: 0.3rem">
+              <p
+                style="
+                  font-size: 0.66rem;
+                  font-weight: 600;
+                  letter-spacing: 0.16em;
+                  text-transform: uppercase;
+                  color: #5b6153;
+                "
+              >
+                Adres
+              </p>
+              <p
+                style="
+                  font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                  font-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem);
+                  line-height: 1.3;
+                "
+              >
+                Cholewianka 36<br />24-120 Kazimierz Dolny<br />woj. lubelskie
+              </p>
+            </div>
+            <div
+              aria-hidden="true"
+              style="
+                width: 100%;
+                aspect-ratio: 4 / 3;
+                background-color: #f1efe3;
+                background-image: repeating-linear-gradient(
+                  100deg,
+                  rgb(224 221 206 / 80%) 0 12px,
+                  rgb(252 251 245 / 0%) 12px 24px
+                );
+                border: 1px solid #e0ddce;
+                display: grid;
+                place-items: center;
+                padding: 1rem;
+              "
+            >
+              <span
+                style="
+                  font-family: ui-monospace, Menlo, monospace;
+                  font-size: 0.66rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #5b6153;
+                  text-align: center;
+                "
+                >mapa Google — wczytywana dopiero po zgodzie</span
+              >
+            </div>
+            <a
+              href="https://www.google.com/maps/search/?api=1&amp;query=Cholewianka+36+Kazimierz+Dolny"
+              target="_blank"
+              rel="noopener"
+              style="
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: #23281f;
+                border-bottom: 1px solid #23281f;
+                padding-bottom: 3px;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+              "
+              style-hover="color: #4E5C40; border-bottom-color: #4E5C40;"
+              >Wyznacz trasę</a
+            >
+            <sc-if value="{{ showPending }}" hint-placeholder-val="{{ true }}">
+              <aside
+                style="
+                  border: 1px dashed #4e5c40;
+                  background: rgb(78 92 64 / 8%);
+                  padding: 0.95rem 1.1rem;
+                  display: grid;
+                  gap: 0.3rem;
+                  max-width: 58ch;
+                "
+              >
+                <strong
+                  style="
+                    font-size: 0.66rem;
+                    font-weight: 600;
+                    letter-spacing: 0.16em;
+                    text-transform: uppercase;
+                    color: #4e5c40;
+                  "
+                  >Do potwierdzenia</strong
+                >
+                <p style="font-size: 0.95rem; color: #4c5344">
+                  Godziny sprzedaży w sezonie i adres e-mail. Telefony i adres pochodzą z obecnej
+                  strony.
+                </p>
+              </aside>
+            </sc-if>
+          </div>
+        </section>
+      </main>
+
+      <footer
+        style="
+          background: #23281f;
+          color: #c3cbb8;
+          padding: clamp(2.25rem, 5vw, 3.5rem) max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
+          display: grid;
+          gap: 1.5rem;
+        "
+      >
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: 1.5rem 2.5rem;
+          "
+        >
+          <div style="display: grid; gap: 0.5rem; align-content: start">
+            <span
+              style="
+                font-family: &quot;Instrument Serif&quot;, Georgia, serif;
+                font-size: 1.5rem;
+                color: #eef0e6;
+              "
+              >Gospodarstwo Ogrodnicze „Saran”</span
+            >
+            <p style="font-size: 0.92rem; max-width: 34ch">
+              Sprzedaż kwiatów balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych.
+            </p>
+          </div>
+          <div style="display: grid; gap: 0.35rem; align-content: start">
+            <p
+              style="
+                font-size: 0.64rem;
+                font-weight: 600;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: #96a188;
+              "
+            >
+              Adres
+            </p>
+            <p style="font-size: 0.95rem">Cholewianka 36<br />24-120 Kazimierz Dolny</p>
+          </div>
+          <div style="display: grid; gap: 0.35rem; align-content: start">
+            <p
+              style="
+                font-size: 0.64rem;
+                font-weight: 600;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: #96a188;
+              "
+            >
+              Telefony
+            </p>
+            <p style="font-size: 0.95rem">
+              Tadeusz 602 518 401<br />Mateusz 722 238 987<br />Łukasz 514 505 431<br />Jolanta 662
+              760 375
+            </p>
+          </div>
+          <div style="display: grid; gap: 0.35rem; align-content: start">
+            <p
+              style="
+                font-size: 0.64rem;
+                font-weight: 600;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: #96a188;
+              "
+            >
+              Informacje
+            </p>
+            <a
+              href="https://www.facebook.com/p/Gospodarstwo-Ogrodnicze-Saran-100070553132348/"
+              target="_blank"
+              rel="noopener"
+              style="font-size: 0.95rem; color: #e4e7dc"
+              >Facebook</a
+            >
+            <a href="#historia" style="font-size: 0.95rem; color: #e4e7dc">Historia gospodarstwa</a>
+            <a href="#" style="font-size: 0.95rem; color: #e4e7dc">Polityka prywatności</a>
+          </div>
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 2rem;
+            border-top: 1px solid rgb(238 240 230 / 18%);
+            padding-top: 1rem;
+            font-size: 0.78rem;
+            color: #96a188;
+          "
+        >
+          <span>© 2026 Gospodarstwo Ogrodnicze „Saran”</span>
+          <span style="margin-inline-start: auto; font-variant-numeric: tabular-nums"
+            >makieta v3 · struktura wg obecnej strony</span
+          >
+        </div>
+      </footer>
+    </x-dc>
+    <script
+      type="text/x-dc"
+      data-dc-script
+      data-props='{"season":{"editor":"enum","options":["Wiosna","Lato","Jesień"],"default":"Jesień","tsType":"\"Wiosna\" | \"Lato\" | \"Jesień\"","section":"Treść"},"showAllEntries":{"editor":"boolean","default":true,"tsType":"boolean","section":"Treść"},"showPending":{"editor":"boolean","default":true,"tsType":"boolean","section":"Treść"}}'
+    >
+      class Component extends DCLogic {
+        renderVals() {
+          const season = this.props.season ?? "Jesień";
+          const springNow = season === "Wiosna" || season === "Lato";
+
+          const band = (now) => ({
+            ink: now ? "#FCFBF5" : "#23281F",
+            style:
+              "padding: clamp(1.5rem, 4vw, 2.5rem); display: grid; gap: 0.7rem; align-content: start; border: 1px solid " +
+              (now ? "#3D4A33" : "#E0DDCE") + "; background: " + (now ? "#3D4A33" : "#FCFBF5") + ";",
+            eyebrowStyle:
+              "font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: " +
+              (now ? "#C6D3B6" : "#4E5C40") + ";",
+            bodyStyle: "color: " + (now ? "#DDE2D2" : "#4C5344") + "; max-width: 46ch;",
+            metaStyle:
+              "font-size: 0.85rem; font-weight: 500; color: " + (now ? "#C6D3B6" : "#5B6153") + ";",
+            slotStyle:
+              "aspect-ratio: 16 / 9; margin-top: 0.35rem; display: grid; place-items: center; padding: 1rem; border: 1px solid " +
+              (now ? "rgb(238 240 230 / 30%)" : "#E0DDCE") + "; background-color: " +
+              (now ? "#33402B" : "#F1EFE3") + "; background-image: repeating-linear-gradient(100deg, " +
+              (now ? "rgb(238 240 230 / 14%)" : "rgb(224 221 206 / 80%)") + " 0 11px, rgb(252 251 245 / 0%) 11px 22px);",
+            slotTextStyle:
+              "font-family: ui-monospace, Menlo, monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; color: " +
+              (now ? "#D3DCC6" : "#5B6153") + ";",
+          });
+
+          const seasons = [
+            {
+              eyebrow: springNow ? "Trwa teraz" : "Wiosna",
+              title: "Sprzedaż w okresie wiosennym",
+              body: "Kwiaty balkonowe i rabatowe, rozsady oraz gotowe obsadzone skrzynki i doniczki. Kolory i odmiany oglądasz na miejscu, w tunelu.",
+              meta: "Maj – czerwiec · szczyt sezonu",
+              slot: "galeria — tunel z kwiatami balkonowymi, 16:9",
+              ...band(springNow),
+            },
+            {
+              eyebrow: springNow ? "Jesień" : "Trwa teraz",
+              title: "Chryzantemy wielkokwiatowe",
+              body: "Duży wybór kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada. Przed Wszystkimi Świętymi zamówienia najlepiej złożyć z tygodniowym wyprzedzeniem.",
+              meta: "Październik – 1 listopada",
+              slot: "galeria — chryzantemy przed 1 listopada, 16:9",
+              ...band(!springNow),
+            },
+          ];
+
+          const tagBase =
+            "font-size: 0.6rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2rem 0.5rem; white-space: nowrap; border: 1px solid #DCD7C4; color: #4E5C40; background: #F1EFE3;";
+
+          const entries = [
+            {
+              name: "Alstromeria",
+              group: "Balkonowe",
+              slot: "zdjęcie — alstromeria, 4:3",
+              caption: "Zwana też lilią Inków — pochodzi z górskich regionów Ameryki Południowej.",
+              body: "Bylina o kilku pędach wyrastających z jednego kłącza, rośnie na 50–100 cm. Kwiaty są zwykle wielobarwne, z ciemniejszymi wzorami z plamek. Podłoże powinno być przepuszczalne, próchnicze, żyzne i lekko kwaśne, stanowisko półcieniste, ale ciepłe i jasne. Podlewać systematycznie, nie doprowadzając do zastoin wody. U nas uprawiana jako roślina jednoroczna — nie jest odporna na polskie mrozy.",
+              facts: [
+                { k: "Wysokość", v: "50–100 cm" },
+                { k: "Stanowisko", v: "Półcień, ciepłe" },
+                { k: "Zimowanie", v: "Nie zimuje" },
+              ],
+              colors: ["czerwony", "czerwono-biały", "biało-żółty", "biało-różowy", "lila", "pomarańczowy"],
+            },
+            {
+              name: "Pelargonia bluszczolistna",
+              group: "Balkonowe",
+              slot: "zdjęcie — pelargonia bluszczolistna w skrzynce, 4:3",
+              caption: "Klasyka balkonu — pędy zwisają, więc dobrze wygląda na balustradzie.",
+              body: "Pędy osiągają do 100 cm długości, dlatego sadzi się ją w wiszących pojemnikach, kwietnikach i skrzynkach zawieszanych na balustradzie balkonu. Najlepiej rośnie w pełnym słońcu, jest łatwa w uprawie i odstrasza owady. Kwitnie nieprzerwanie od maja do pierwszych przymrozków, jeśli regularnie usuwa się przekwitłe kwiaty.",
+              facts: [
+                { k: "Długość pędów", v: "do 100 cm" },
+                { k: "Stanowisko", v: "Pełne słońce" },
+                { k: "Kwitnienie", v: "Maj – przymrozki" },
+              ],
+              colors: ["czerwony", "różowy", "łososiowy", "biały", "lila", "dwubarwny"],
+            },
+            {
+              name: "Chryzantema wielkokwiatowa",
+              group: "Jesień",
+              slot: "zdjęcie — chryzantema wielkokwiatowa, 4:3",
+              caption: "Uprawa jesienna, sprzedaż od początku października.",
+              body: "Uprawiana w doniczkach, z jednym dużym kwiatem na pędzie. Wymaga stanowiska słonecznego i osłoniętego od wiatru oraz regularnego podlewania — w chłodne noce warto ją okryć. Na cmentarz i pod dom kupowana najczęściej w ostatnim tygodniu października; wtedy wybór kolorów jest największy, ale i ruch największy.",
+              facts: [
+                { k: "Forma", v: "Doniczkowa" },
+                { k: "Stanowisko", v: "Słońce, osłonięte" },
+                { k: "Sprzedaż", v: "1.10 – 1.11" },
+              ],
+              colors: ["biały", "żółty", "bordowy", "różowy", "pomarańczowy", "fioletowy"],
+            },
+          ].map((p) => ({ ...p, tagStyle: tagBase }));
+
+          return {
+            nav: [
+              { label: "Kwiaty balkonowe", href: "#oferta" },
+              { label: "Rabatowe", href: "#oferta" },
+              { label: "Chryzantemy", href: "#oferta" },
+              { label: "Historia gospodarstwa", href: "#historia" },
+              { label: "Kontakt", href: "#kontakt" },
+            ],
+            seasons,
+            entries: this.props.showAllEntries === false ? entries.slice(0, 1) : entries,
+            phones: [
+              { name: "Tadeusz", tel: "602 518 401", href: "tel:+48602518401" },
+              { name: "Mateusz", tel: "722 238 987", href: "tel:+48722238987" },
+              { name: "Łukasz", tel: "514 505 431", href: "tel:+48514505431" },
+              { name: "Jolanta", tel: "662 760 375", href: "tel:+48662760375" },
+            ],
+            showPending: this.props.showPending ?? true,
+          };
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,254 @@
+/* Global styles: reset, base typography and the few classes more than one section uses.
+ * Everything specific to a section lives in that component's own <style> block, where
+ * Astro scopes it.
+ *
+ * The design has no border radius, no shadow and no gradient (docs/design/README.md,
+ * "Border radius / shadows"). If a rule here grows one, it is a mistake, not a refinement.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* The menu links jump to anchors on the same page; without a stable gutter the page
+     shifts sideways by the scrollbar's width whenever a jump changes the document height. */
+  scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--text-body);
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+dl,
+dd,
+ul,
+ol,
+li,
+figure,
+blockquote {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
+/* ---------- headings ---------- */
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+/* ---------- shared pieces ---------- */
+
+/* The uppercase label above a heading or beside a fact. Three sizes appear in the
+   design; the size is set where it is used, everything else is the same everywhere. */
+.eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-grey);
+}
+
+/* The horizontal padding shared by every section: the gutter until the content reaches
+   1200px, then whatever it takes to centre it. */
+.shell {
+  padding-inline: var(--edge);
+}
+
+/* Primary call to action - solid green block. */
+.cta {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper);
+  background: var(--green-deep);
+  border: 1px solid var(--green-deep);
+  padding: 0.4rem 1.5rem 0.45rem;
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+}
+.cta:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* Secondary call to action - underlined text. Also the shape of "Wyznacz trasę". */
+.cta-line {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 0.2rem;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+}
+.cta-line:hover {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+/* ---------- skip to content ---------- */
+
+.skip {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -100%;
+  z-index: 200;
+  background: var(--green-deep);
+  color: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+}
+.skip:focus-visible {
+  top: 0.5rem;
+}
+
+/* ---------- editorial prose ---------- */
+
+/* The plant descriptions and the history text come from Markdown, so their paragraphs
+   are not written by a component and cannot carry a class of their own. */
+.copy p + p {
+  margin-block-start: 0.85rem;
+}
+.copy a {
+  color: var(--green);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.copy a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- gallery lightbox ---------- */
+
+/* The overlay is built by src/scripts/lightbox.ts rather than rendered into the page, so
+   its styles cannot live in a scoped component block - they belong here or nowhere. */
+/* The `display: grid` below is an author style, and any author `display` beats the
+   `display: none` the browser's own stylesheet attaches to [hidden]. Without this rule the
+   overlay is open on arrival with the whole page dimmed behind it. */
+.lightbox[hidden] {
+  display: none;
+}
+
+/* The consent bar is fixed to the bottom of the viewport, so at 92% backdrop it stayed
+   legible underneath the overlay and ran into the caption. It comes back on close - the
+   question it asks has not been answered by opening a photograph. */
+html.lightbox-open #consent {
+  display: none;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  /* The dark of the footer at opacity, not a generic black: the overlay should read as
+     part of this site rather than as the browser's own chrome. */
+  background: rgb(35 40 31 / 92%);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  padding: 1rem var(--edge) 2rem;
+}
+
+.lightbox__close {
+  justify-self: end;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bone);
+  background: none;
+  border: 1px solid var(--green-lit);
+  padding-inline: 1.1rem;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.lightbox__close:hover {
+  color: var(--ink);
+  background: var(--green-lit);
+}
+
+.lightbox__figure {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  justify-items: center;
+  min-height: 0;
+}
+
+/* `min-height: 0` above plus `max-height: 100%` here is what keeps a 3:4 photograph
+   inside the viewport instead of pushing the caption off the bottom of a laptop screen. */
+.lightbox__image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+  border: 1px solid var(--footer-rule);
+}
+
+.lightbox__caption {
+  font-size: 0.85rem;
+  color: var(--footer-body);
+  text-align: center;
+  max-width: 70ch;
+}

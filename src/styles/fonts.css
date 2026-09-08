@@ -1,0 +1,21 @@
+/* The two faces of the design, self-hosted.
+ *
+ * docs/design/README.md shows a <link> to fonts.googleapis.com - that is how the
+ * prototype loads them, and the same document's "Assets" section says to host them
+ * locally on a Polish commercial site, because the CDN hands every visitor's IP address
+ * to Google. Both families are OFL, so we may. Nothing here is fetched at runtime.
+ *
+ * Each import carries `unicode-range` for latin and latin-ext separately, so the file
+ * with the Polish diacritics (ą ć ę ł ń ó ś ź ż) is only fetched when a page uses them -
+ * which every page here does, but the split costs nothing and keeps the latin file small.
+ *
+ * Instrument Serif italic is loaded on purpose: the word "Saran" in the H1 is set in it,
+ * and a browser that has to synthesise a slant makes a visibly different letterform out
+ * of a face this high-contrast.
+ *
+ * Karla ships italic too; it is deliberately not imported, because the design never
+ * slants the sans.
+ */
+@import "@fontsource/instrument-serif/index.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/karla/wght.css";

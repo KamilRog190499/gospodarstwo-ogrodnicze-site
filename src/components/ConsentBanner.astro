@@ -1,0 +1,77 @@
+---
+/**
+ * Asks once per browser whether the Google map may load.
+ *
+ * Hidden until src/scripts/consent.ts decides it is needed - so without JavaScript it
+ * never appears, which is correct: without JavaScript the map never loads either, and
+ * there is nothing to consent to.
+ *
+ * Accept and reject are visually identical on purpose. A refusal that is harder to find
+ * than an agreement is not a choice, and the law that requires the question also requires
+ * that the two answers cost the same.
+ */
+---
+
+<aside id="consent" class="consent" hidden aria-label="Zgoda na mapę Google">
+  <p class="consent__text">
+    Mapa dojazdu pochodzi z Google. Jej wyświetlenie przekazuje Google Twój adres IP i pozwala na
+    zapisanie plików cookies. Bez zgody mapa się nie wczyta.
+  </p>
+  <div class="consent__actions">
+    <button type="button" data-consent="accept">Zgadzam się</button>
+    <button type="button" data-consent="reject">Odrzucam</button>
+  </div>
+</aside>
+
+<style>
+  .consent {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 100;
+    background: rgb(35 40 31 / 92%);
+    color: var(--footer-body);
+    border-top: 1px solid rgb(238 240 230 / 18%);
+    padding: 0.9rem var(--edge);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .consent__text {
+    font-size: 0.88rem;
+    max-width: 72ch;
+    flex: 1 1 22rem;
+    color: var(--footer-body);
+  }
+
+  .consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-inline-start: auto;
+  }
+
+  /* Identical, down to the last pixel. Do not make one of them quieter. */
+  .consent button {
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bone);
+    background: transparent;
+    border: 1px solid rgb(238 240 230 / 28%);
+    padding-inline: 1.1rem;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .consent button:hover {
+    color: var(--ink);
+    background: var(--green-lit);
+    border-color: var(--green-lit);
+  }
+</style>

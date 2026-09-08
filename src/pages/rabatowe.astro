@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import OfferSection from "../components/OfferSection.astro";
+
+/** `/rabatowe/` - the WordPress address, unchanged (docs/przekierowania.md). */
+---
+
+<BaseLayout
+  title="Kwiaty rabatowe i wieloletnie"
+  description="Kwiaty rabatowe i wieloletnie z własnej uprawy - pelargonie rabatowe i niecierpki nowogwinejskie. Opis uprawy i dostępne kolory. Gospodarstwo Ogrodnicze „Saran” pod Kazimierzem Dolnym."
+  canonical="/rabatowe/"
+  breadcrumb="Rabatowe"
+>
+  <OfferSection
+    group="Rabatowe"
+    title="Rabatowe i wieloletnie"
+    lead="Przy każdej roślinie piszemy, jak ją uprawiać i w jakich kolorach jest u nas dostępna."
+  />
+</BaseLayout>

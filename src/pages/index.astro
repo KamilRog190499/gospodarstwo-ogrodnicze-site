@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Intro from "../components/Intro.astro";
+import SeasonCards from "../components/SeasonCards.astro";
+import OfferOverview from "../components/OfferOverview.astro";
+
+/**
+ * The home page. Says what the holding sells, which half of the year is running, and where
+ * to go for each group - then gets out of the way.
+ *
+ * It used to be the entire site: fourteen plant descriptions, the gallery, the history and
+ * the contact section on one scroll, with a menu whose five entries pointed at three
+ * anchors. Each of those now has its own address (src/data/navigation.ts), so this page is
+ * an entrance rather than the whole building.
+ *
+ * Outline: `h1` in Intro, then one `h2` per section.
+ */
+---
+
+<BaseLayout
+  title="Gospodarstwo Ogrodnicze „Saran” - kwiaty balkonowe, rabatowe i chryzantemy"
+  description="Rodzinne gospodarstwo w Cholewiance pod Kazimierzem Dolnym. Kwiaty balkonowe, rabatowe i wieloletnie oraz chryzantemy wielkokwiatowe z własnej uprawy. Zamówienia telefonicznie lub na miejscu."
+  canonical="/"
+>
+  <Intro />
+  <SeasonCards />
+  <OfferOverview />
+</BaseLayout>

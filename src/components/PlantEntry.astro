@@ -1,0 +1,250 @@
+---
+import { Picture } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+import PhotoSlot from "./PhotoSlot.astro";
+
+/**
+ * One plant in the offer: photograph on the left, everything we know about it on the right.
+ *
+ * This is the pattern carried over from the current site and the reason people find it in
+ * search - a long, concrete cultivation description under the plant's name. The text is the
+ * owners' own; it is not shortened here or anywhere else.
+ *
+ * Two things changed with the move to real category pages:
+ *
+ * - the heading level is a prop. On a category page the plant sits directly under the
+ *   page's `h1`, so it is an `h2`; the level is passed in rather than hardcoded, because a
+ *   heading that is right in one place and wrong in another is the defect this had before.
+ * - the group chip is off by default. On `/kwiaty-balkonowe/` every entry is balkonowe;
+ *   the chip repeated the page's own title once per plant. It stays available for a mixed
+ *   listing (search results, a future "wszystkie rośliny" page).
+ *
+ * The photograph is the entry's own when it has one. `image` and `imageAlt` come from the
+ * frontmatter and the schema keeps them together, so the branch is on the pair, not on one
+ * of them; an entry without a photograph falls back to the striped `PhotoSlot`, which is now
+ * a waiting state rather than the default. Three of the sixteen plants are photographed so
+ * far, so both arms of this render on the live site and both have to keep working.
+ *
+ * The file name is the anchor, so /kwiaty-balkonowe/#fuksja links straight at one plant.
+ */
+interface Props {
+  entry: CollectionEntry<"plants">;
+  /** Heading level for the plant's name. 2 under a page `h1`. */
+  level?: 2 | 3 | 4;
+  /** Show the group chip - only where the listing mixes groups. */
+  showGroup?: boolean;
+  /** The first entry on a category page: its photograph is the likely LCP element, so it
+   *  is fetched eagerly instead of being pushed behind the lazy queue. */
+  priority?: boolean;
+  /** Show a "wróć do spisu" link back to the category page's `#offer-title` - only where
+   *  `OfferSection` also rendered its spis (more than one entry in the group), otherwise
+   *  there is nothing at the top worth returning to. */
+  backToIndex?: boolean;
+}
+
+const { entry, level = 2, showGroup = false, priority = false, backToIndex = false } = Astro.props;
+const { name, group, slot, image, imageAlt, facts, colors } = entry.data;
+const { Content } = await render(entry);
+
+const Heading = `h${level}` as "h2" | "h3" | "h4";
+---
+
+<article class="entry" id={entry.id}>
+  <figure class="entry__figure">
+    {
+      image && imageAlt ? (
+        <Picture
+          class="entry__photo"
+          src={image}
+          formats={["avif", "webp"]}
+          fallbackFormat="jpg"
+          widths={[560, 1120]}
+          sizes="(min-width: 1200px) 578px, (min-width: 700px) 45vw, 90vw"
+          width={560}
+          height={420}
+          alt={imageAlt}
+          loading={priority ? "eager" : "lazy"}
+          fetchpriority={priority ? "high" : undefined}
+        />
+      ) : (
+        <PhotoSlot ratio="4 / 3" label={slot} stripe={10} boxed />
+      )
+    }
+  </figure>
+
+  <div class="entry__text">
+    <div class="entry__head">
+      <Heading class="entry__name">{name}</Heading>
+      {showGroup && <span class="entry__group">{group}</span>}
+    </div>
+
+    <div class="entry__body copy">
+      <Content />
+    </div>
+
+    {
+      facts && (
+        <dl class="facts">
+          {facts.map((fact) => (
+            <div class="facts__item">
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+
+    {
+      colors && (
+        <div class="colors">
+          <p class="colors__label">Dostępne kolory</p>
+          <ul class="colors__list">
+            {colors.map((colour) => (
+              <li>{colour}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    {
+      backToIndex && (
+        <p class="entry__back">
+          <a class="cta-line" href="#offer-title">
+            Wróć do spisu roślin
+          </a>
+        </p>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .entry {
+    border-bottom: 1px solid var(--rule);
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    display: grid;
+    gap: var(--gap-entry);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    /* Without this the photograph stretches to the height of the text beside it. */
+    align-items: start;
+  }
+
+  .entry__figure {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  /* The same box the placeholder holds - 4:3 and a 1px rule - so an entry with a photograph
+     and an entry still waiting for one line up in the same grid. 578px in `sizes` is the
+     photograph column at full width: --edge caps the content at 1200px, .entry splits it in
+     two, and --gap-entry takes at most 2.75rem out of the middle. */
+  .entry__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+  }
+
+  .entry__text {
+    display: grid;
+    gap: 0.85rem;
+    align-content: start;
+  }
+
+  /* Baseline, not centre: the serif name and the uppercase chip have very different
+     cap heights, and centring them makes the chip look like it is falling. */
+  .entry__head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.9rem;
+  }
+
+  /* The size is on the class, not the tag, so the heading level can change without the
+     type changing with it. */
+  .entry__name {
+    font-size: var(--text-h3);
+    line-height: 1.1;
+  }
+
+  .entry__group {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: var(--paper-dim);
+    border: 1px solid var(--rule-dim);
+    padding: 0.2rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .entry__body {
+    color: var(--ink-soft);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+    gap: 0.75rem 1.5rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.85rem;
+  }
+
+  /* `start`, not the default stretch: the item box is stretched to the tallest fact in the
+     row, and stretched auto rows push the value away from its label - so a two-line value
+     next to a one-line one left the two `dd`s on different lines. */
+  .facts__item {
+    display: grid;
+    align-content: start;
+    gap: 0.1rem;
+  }
+
+  .facts dt {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .facts dd {
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .colors {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.15rem;
+  }
+
+  .colors__label {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .colors__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .colors__list li {
+    font-size: 0.85rem;
+    border: 1px solid var(--rule-dim);
+    background: var(--paper-dim);
+    padding: 0.25rem 0.65rem;
+  }
+
+  .entry__back {
+    margin-top: 0.4rem;
+  }
+</style>

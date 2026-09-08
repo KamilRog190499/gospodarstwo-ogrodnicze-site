@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import OfferSection from "../components/OfferSection.astro";
+import { pansyStrip } from "../data/gallery";
+
+/** `/bratki/` - the one offer address with no WordPress predecessor: the old site did not
+ *  sell pansies anywhere on it (docs/przekierowania.md, docs/inwentaryzacja.md).
+ *
+ *  The dates in `note` are the ones on the spring season card, kept in one wording so the two
+ *  cannot say different things. */
+---
+
+<BaseLayout
+  title="Bratki"
+  description="Bratki z własnej uprawy - sprzedaż w marcu i kwietniu, duży wybór kolorów. Gospodarstwo Ogrodnicze „Saran” pod Kazimierzem Dolnym."
+  canonical="/bratki/"
+  breadcrumb="Bratki"
+>
+  <OfferSection
+    group="Bratki"
+    title="Bratki"
+    note="Bratkami otwieramy sezon - są w sprzedaży najwcześniej ze wszystkiego, co uprawiamy, zanim ruszą kwiaty balkonowe i rabatowe."
+    photos={pansyStrip}
+  />
+</BaseLayout>

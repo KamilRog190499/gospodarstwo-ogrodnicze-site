@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import OfferSection from "../components/OfferSection.astro";
+
+/**
+ * `/kwiaty-balkonowe/` - the WordPress address, unchanged, so no 301 is needed and the
+ * page that ranks for "kwiaty balkonowe Kazimierz Dolny" keeps ranking
+ * (docs/przekierowania.md).
+ */
+---
+
+<BaseLayout
+  title="Kwiaty balkonowe"
+  description="Kwiaty balkonowe z własnej uprawy: pelargonie, surfinie, begonie, fuksje, calibrachoa i inne. Opis uprawy i dostępne kolory. Gospodarstwo Ogrodnicze „Saran” w Cholewiance pod Kazimierzem Dolnym."
+  canonical="/kwiaty-balkonowe/"
+  breadcrumb="Kwiaty balkonowe"
+>
+  <OfferSection
+    group="Balkonowe"
+    title="Kwiaty balkonowe"
+    lead="Przy każdej roślinie piszemy, jak ją uprawiać i w jakich kolorach jest u nas dostępna."
+    note="Poza samymi roślinami sprzedajemy gotowe obsadzone skrzynki, kosze i doniczki - kompozycje można oglądać w zakładce Inspiracje."
+  />
+</BaseLayout>

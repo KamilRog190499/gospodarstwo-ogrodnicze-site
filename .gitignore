@@ -1,0 +1,20 @@
+# build
+dist/
+.astro/
+
+# zaleznosci
+node_modules/
+
+# raporty Lighthouse - surowe wyniki waza kilka MB
+docs/lighthouse/*.html
+docs/lighthouse/*.json
+
+# systemowe
+.DS_Store
+Thumbs.db
+
+# lokalne
+.playwright-mcp/
+.env
+.env.production
+*.log

@@ -1,0 +1,124 @@
+---
+import { getCollection } from "astro:content";
+
+/**
+ * The offer on the home page: one card per category page.
+ *
+ * This is what replaced the flat list of fourteen plants that used to sit here. The home
+ * page's job is to say what the holding sells and send people to the right page; the
+ * descriptions are the plant names themselves, taken from the collection, so nothing here
+ * is copy that has to be kept in step with the offer by hand.
+ */
+const plants = (await getCollection("plants")).sort((a, b) => a.data.order - b.data.order);
+
+const groups = [
+  { href: "/kwiaty-balkonowe/", title: "Kwiaty balkonowe", group: "Balkonowe" },
+  { href: "/rabatowe/", title: "Rabatowe i wieloletnie", group: "Rabatowe" },
+  { href: "/bratki/", title: "Bratki", group: "Bratki" },
+  { href: "/chryzantemy/", title: "Chryzantemy", group: "Chryzantemy" },
+]
+  .map((def) => ({
+    ...def,
+    names: plants.filter((plant) => plant.data.group === def.group).map((plant) => plant.data.name),
+  }))
+  // A card for an empty group would lead to a page with a heading and no list.
+  .filter((def) => def.names.length > 0);
+---
+
+<section class="overview" aria-labelledby="oferta-title">
+  <div class="overview__head">
+    <h2 class="overview__title" id="oferta-title">Kwiaty w naszej ofercie</h2>
+    <p class="overview__lead">
+      Przy każdej roślinie piszemy, jak ją uprawiać i w jakich kolorach jest u nas dostępna.
+    </p>
+  </div>
+
+  <ul class="overview__grid">
+    {
+      groups.map((group) => (
+        <li>
+          <a class="tile" href={group.href}>
+            <h3 class="tile__title">{group.title}</h3>
+            <p class="tile__names">{group.names.join(" · ")}</p>
+            <p class="tile__more">
+              {group.names.length}{" "}
+              {group.names.length === 1 ? "roślina" : group.names.length < 5 ? "rośliny" : "roślin"}
+            </p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .overview {
+    border-top: 1px solid var(--rule);
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .overview__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.9rem;
+  }
+
+  .overview__title {
+    font-size: var(--text-h2);
+  }
+
+  .overview__lead {
+    max-width: 42ch;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .overview__grid {
+    display: grid;
+    gap: 1.4rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+
+  /* The whole card is the link, so the target is the card and not a word inside it. */
+  .tile {
+    height: 100%;
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    border: 1px solid var(--rule);
+    background: var(--paper-dim);
+    color: inherit;
+    text-decoration: none;
+  }
+  .tile:hover {
+    border-color: var(--green);
+    background: var(--paper);
+  }
+
+  .tile__title {
+    font-size: var(--text-h3);
+    line-height: 1.1;
+  }
+
+  .tile__names {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .tile__more {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+  .tile:hover .tile__more {
+    color: var(--green);
+  }
+</style>

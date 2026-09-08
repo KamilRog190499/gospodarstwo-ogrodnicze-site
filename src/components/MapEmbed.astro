@@ -1,0 +1,120 @@
+---
+import { addressOneLine, directionsUrl } from "../data/contact";
+
+/**
+ * The map - the only third-party resource on the whole site (fonts and images are
+ * self-hosted).
+ *
+ * It is not loaded until the visitor allows it. The iframe ships with an empty `src`
+ * behind a placeholder and src/scripts/consent.ts fills it in, either straight away for
+ * someone who accepted earlier or on the button below. Nothing leaves the browser first.
+ *
+ * Without JavaScript the placeholder is hidden rather than shown with a dead button: the
+ * "Wyznacz trasę" link answers the same question and requests nothing until it is followed.
+ *
+ * The consent bar would normally point at a privacy policy here. There is not one yet, so
+ * nothing links to a page that does not exist - add the link in both places at once when
+ * the policy is written.
+ */
+const query = encodeURIComponent(addressOneLine);
+const embedUrl = `https://maps.google.com/maps?q=${query}&z=14&output=embed&hl=pl`;
+---
+
+<div class="map">
+  <div class="map__frame" data-map>
+    <div class="map__ask">
+      <p class="map__lead">Mapa Google wyświetli się po wyrażeniu zgody.</p>
+      <button type="button">Pokaż mapę Google</button>
+    </div>
+    <iframe
+      data-src={embedUrl}
+      title={`Mapa dojazdu - ${addressOneLine}`}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen></iframe>
+  </div>
+  <a class="cta-line" href={directionsUrl} target="_blank" rel="noopener">Wyznacz trasę</a>
+</div>
+
+<style>
+  .map {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    width: 100%;
+  }
+
+  /* One box for both states, so the map appears exactly where the placeholder stood and
+     the section does not jump when it loads. */
+  .map__frame {
+    display: none;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--rule);
+    background-color: var(--paper-dim);
+    background-image: repeating-linear-gradient(
+      100deg,
+      rgb(224 221 206 / 80%) 0 12px,
+      rgb(252 251 245 / 0%) 12px 24px
+    );
+  }
+
+  :global(html.js) .map__frame {
+    display: block;
+  }
+
+  .map__ask {
+    display: grid;
+    height: 100%;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
+    gap: 0.9rem;
+    padding: 1rem;
+  }
+  .map__frame[data-shown] .map__ask {
+    display: none;
+  }
+
+  .map__lead {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+    max-width: 34ch;
+  }
+
+  /* The same shape as the primary call to action, because that is what it is: the button
+     that makes the thing happen. */
+  .map__ask button {
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--green-deep);
+    border: 0;
+    padding-inline: 1.25rem;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .map__ask button:hover {
+    background: var(--ink);
+  }
+
+  /* The iframe carries no `src` until it is asked for; showing an empty one would be a
+     blank panel where the placeholder was. */
+  .map__frame iframe {
+    display: none;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .map__frame[data-shown] iframe {
+    display: block;
+  }
+</style>

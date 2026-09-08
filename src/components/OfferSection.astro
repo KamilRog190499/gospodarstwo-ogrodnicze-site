@@ -1,0 +1,264 @@
+---
+import { getCollection } from "astro:content";
+import PlantEntry from "./PlantEntry.astro";
+import PhotoStrip from "./PhotoStrip.astro";
+import { offerPages } from "../data/navigation";
+import type { GalleryPhoto } from "../data/gallery";
+import { primaryPhone } from "../data/contact";
+
+/**
+ * The body of one category page: `/kwiaty-balkonowe/`, `/rabatowe/`, `/bratki/`, `/chryzantemy/`.
+ *
+ * One component rather than three copies of the same markup - docs/przekierowania.md said
+ * as much: "ta sama sekcja, węższy zbiór wpisów, ten sam komponent PlantEntry, ta sama
+ * siatka". Each page passes its group and its own words; everything else is here.
+ *
+ * Outline: `h1` (this page's subject) then one `h2` per plant. No level is skipped and no
+ * heading names anything other than the thing under it.
+ *
+ * The two blocks after the list exist because a category page is now an entry point -
+ * people arrive on it straight from search, having never seen the home page. Without them
+ * the page ends with the last plant and nothing to do next.
+ */
+interface Props {
+  /** The `group` value in the plants' frontmatter. */
+  group: "Balkonowe" | "Rabatowe" | "Bratki" | "Chryzantemy";
+  title: string;
+  /** Optional sentence beside the heading. `/chryzantemy/` ships without one - everything it
+   *  said (kolory, termin sprzedaży) is now in the entries' own chips and facts. */
+  lead?: string;
+  /** Optional sentence under the list - what the group covers beyond the entries. */
+  note?: string;
+  /** Photographs of the group as a whole, shown under the list and above the order block.
+   *  Mixed frames that belong to no single entry - see `PhotoStrip`. */
+  photos?: GalleryPhoto[];
+}
+
+const { group, title, lead, note, photos } = Astro.props;
+
+const entries = (await getCollection("plants"))
+  .filter((plant) => plant.data.group === group)
+  .sort((a, b) => a.data.order - b.data.order);
+
+if (entries.length === 0) {
+  throw new Error(`No plants with group "${group}" - the page would have a heading and no list.`);
+}
+
+/** The other three category pages, in menu order. A visitor on one of the four should not
+ *  have to go back to the menu to reach the others. */
+const others = offerPages.filter((item) => item.href !== Astro.url.pathname);
+
+const count = entries.length;
+const countWord = count === 1 ? "roślina" : count < 5 ? "rośliny" : "roślin";
+---
+
+<section class="offer" aria-labelledby="offer-title">
+  <div class="offer__head">
+    <h1 class="offer__title" id="offer-title">{title}</h1>
+    {lead && <p class="offer__lead">{lead}</p>}
+  </div>
+
+  <p class="offer__count">{count} {countWord} w tej grupie</p>
+
+  {
+    entries.length > 1 && (
+      <nav class="offer__index" aria-label="Spis roślin na tej stronie">
+        <p class="offer__indexLabel">Na tej stronie</p>
+        <ul>
+          {entries.map((plant) => (
+            <li>
+              <a href={`#${plant.id}`}>{plant.data.name}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  <div class="offer__list">
+    {
+      entries.map((plant, index) => (
+        <PlantEntry
+          entry={plant}
+          level={2}
+          priority={index === 0}
+          backToIndex={entries.length > 1}
+        />
+      ))
+    }
+  </div>
+
+  {note && <p class="offer__note">{note}</p>}
+
+  <p class="offer__prices">
+    Ceny detaliczne i hurtowe przy większych ilościach ustalamy na miejscu lub telefonicznie.
+    Istnieje możliwość dowozu własnym transportem.
+  </p>
+
+  {photos && photos.length > 0 && <PhotoStrip photos={photos} label="Zdjęcia z gospodarstwa" />}
+
+  <div class="offer__order">
+    <p class="offer__orderText">
+      Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa. Sklepu internetowego nie
+      prowadzimy.
+    </p>
+    <div class="offer__actions">
+      <a class="cta" href={primaryPhone.href}>Zadzwoń: {primaryPhone.display}</a>
+      <a class="cta-line" href="/kontakt/">Kontakt i dojazd</a>
+    </div>
+  </div>
+
+  <nav class="offer__others" aria-label="Pozostałe grupy">
+    <p class="offer__othersLabel">Pozostałe grupy</p>
+    <ul>
+      {
+        others.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</section>
+
+<style>
+  .offer {
+    padding: var(--pad-section) var(--edge) clamp(1.5rem, 3vw, 2rem);
+  }
+
+  /* Baseline row: the heading and the sentence beside it sit on one line on a wide screen
+     and stack on a narrow one, without a breakpoint deciding which. */
+  .offer__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.9rem;
+  }
+
+  .offer__title {
+    font-size: var(--text-h2);
+  }
+
+  .offer__lead {
+    max-width: 42ch;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .offer__count {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+    padding-top: 0.9rem;
+  }
+
+  .offer__index {
+    margin-top: 0.9rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .offer__indexLabel {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .offer__index ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+
+  .offer__index a {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+  .offer__index a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  .offer__list {
+    display: grid;
+  }
+
+  .offer__note,
+  .offer__prices {
+    max-width: 62ch;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .offer__order {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--rule);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .offer__orderText {
+    max-width: 52ch;
+    color: var(--ink-soft);
+  }
+
+  .offer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.25rem;
+    align-items: center;
+  }
+
+  .offer__others {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--rule);
+    padding-top: 1.1rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .offer__othersLabel {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .offer__others ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+
+  .offer__others a {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+  .offer__others a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+</style>

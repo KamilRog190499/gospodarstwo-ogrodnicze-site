@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Contact from "../components/Contact.astro";
+
+/**
+ * `/kontakt/` - phones, address and the map.
+ *
+ * The old address was `/kontakt-2/`, a WordPress slug collision; that one gets a 301 here
+ * (docs/przekierowania.md) rather than being carried over, because nobody types a "-2".
+ */
+---
+
+<BaseLayout
+  title="Kontakt i dojazd"
+  description="Telefony do gospodarstwa, adres w Cholewiance pod Kazimierzem Dolnym i dojazd. Zamówienia przyjmujemy telefonicznie oraz na miejscu."
+  canonical="/kontakt/"
+  breadcrumb="Kontakt"
+>
+  <Contact level={1} />
+</BaseLayout>

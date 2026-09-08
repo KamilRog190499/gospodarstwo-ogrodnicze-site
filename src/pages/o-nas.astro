@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import History from "../components/History.astro";
+
+/**
+ * `/o-nas/` - the address the history had on WordPress. Keeping it means the page that
+ * ranks for the holding's story keeps ranking, and the 301 the redirect map planned for it
+ * (`/o-nas/` → `/#historia`) is no longer needed at all.
+ */
+---
+
+<BaseLayout
+  title="Historia gospodarstwa"
+  description="Rodzinne gospodarstwo ogrodnicze w Cholewiance pod Kazimierzem Dolnym - od warzyw do kwiatów balkonowych i chryzantem. Historia, nagrody i dzisiejsza uprawa."
+  canonical="/o-nas/"
+  breadcrumb="Historia gospodarstwa"
+>
+  <History level={1} />
+</BaseLayout>

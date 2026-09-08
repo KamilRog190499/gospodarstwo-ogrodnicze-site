@@ -1,0 +1,141 @@
+---
+import "../styles/fonts.css";
+import "../styles/tokens.css";
+import "../styles/global.css";
+
+import Seo from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ConsentBanner from "../components/ConsentBanner.astro";
+import { phones, address, addressOneLine, facebook, directionsUrl } from "../data/contact";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  /** Short name for the breadcrumb - the SEO `title` is a sentence and reads badly in a
+   *  trail. Falls back to `title`. */
+  breadcrumb?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonical, breadcrumb, noindex = false } = Astro.props;
+
+if (!Astro.site) {
+  throw new Error("No `site` in astro.config.mjs - structured data needs absolute URLs.");
+}
+
+/** One stable name for the business as an entity, so every reference merges into it
+ *  instead of reading as two different holdings. */
+const businessId = new URL("/#gospodarstwo", Astro.site).href;
+
+/** Structured data for local search - the current site has none at all.
+ *
+ *  `Florist` rather than the generic `LocalBusiness` alone: it is what places the holding
+ *  among places that sell plants rather than among shops in general.
+ *
+ *  Two fields Google asks for are deliberately absent. `openingHoursSpecification` and
+ *  `priceRange` are both unconfirmed (src/data/contact.ts), and a guessed value in
+ *  structured data is worse than none - it is the version search engines quote back.
+ */
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "Florist"],
+  "@id": businessId,
+  name: "Gospodarstwo Ogrodnicze „Saran”",
+  description:
+    "Rodzinne gospodarstwo ogrodnicze w Cholewiance pod Kazimierzem Dolnym - kwiaty balkonowe, rabatowe i wieloletnie oraz chryzantemy wielkokwiatowe z własnej uprawy.",
+  url: Astro.site.href,
+  telephone: phones.map((phone) => phone.display),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: address.street,
+    postalCode: address.postalCode,
+    addressLocality: address.city,
+    addressCountry: address.country,
+  },
+  areaServed: ["Kazimierz Dolny", "Puławy", "Nałęczów", "województwo lubelskie"],
+  hasMap: directionsUrl,
+  sameAs: [facebook],
+};
+
+/** A trail of one is noise, so not on the home page; and not on 404, which is `noindex`
+ *  and stands in for every address that does not exist.
+ *
+ *  With the offer as real pages this is finally doing something: five pages sit one level
+ *  under the home page and say so. */
+const breadcrumbs =
+  noindex || canonical === "/"
+    ? null
+    : {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Strona główna",
+            item: new URL("/", Astro.site).href,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: breadcrumb ?? title,
+            item: new URL(canonical, Astro.site).href,
+          },
+        ],
+      };
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={Astro.generator} />
+
+    {
+      /* Marks that scripting is available, before first paint. The map placeholder and the
+        consent controls are gated on `.js` in CSS, so the no-JS state - where nothing can
+        contact Google and there is nothing to consent to - is the default rather than an
+        afterthought. Inline on purpose: a deferred module would flash them into view. */
+    }
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+
+    <Seo title={title} description={description} canonical={canonical} noindex={noindex} />
+
+    {
+      !noindex && (
+        <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
+      )
+    }
+    {
+      breadcrumbs && (
+        <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} is:inline />
+      )
+    }
+
+    <meta name="geo.placename" content={addressOneLine} />
+  </head>
+
+  <body>
+    <a class="skip" href="#tresc">Przejdź do treści</a>
+    <Header />
+    <main id="tresc">
+      <slot />
+    </main>
+    <Footer />
+    <ConsentBanner />
+    <script>
+      import "../scripts/consent";
+      // Both look for their markup and stop where there is none, so pages without a
+      // gallery or a map pay nothing.
+      import "../scripts/lightbox";
+      import "../scripts/compositions";
+    </script>
+  </body>
+</html>

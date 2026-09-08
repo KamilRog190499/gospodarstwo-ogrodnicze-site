@@ -1,0 +1,93 @@
+/* Design tokens - carried over 1:1 from docs/design/README.md.
+ * No component hardcodes a colour, a size or a spacing value.
+ *
+ * The design is paper: two light grounds, two dark blocks, and every other distinction
+ * carried by 1px rules, type size and spacing. There is no radius, no shadow and no
+ * gradient anywhere in it - see global.css.
+ *
+ * Token names are English; the comment after each gives the Polish name used in the
+ * handoff, so the two can be read side by side.
+ */
+
+:root {
+  /* ---------- colour ---------- */
+
+  /* grounds */
+  --paper: #fcfbf5; /* Papier - page ground, active card text, text on dark */
+  --paper-dim: #f1efe3; /* Papier zabrudzony - menu bar, photo slots, chips, section ground */
+
+  /* rules */
+  --rule: #e0ddce; /* Kreska - every 1px line, card and slot borders */
+  --rule-dim: #dcd7c4; /* Kreska ciemniejsza - chip borders, lines on --paper-dim */
+  --rule-link: #cfcbb8; /* Kreska pod linkiem - phone-link underline at rest */
+
+  /* text */
+  --ink: #23281f; /* Atrament - body text, headings, footer ground, link hover */
+  --ink-soft: #4c5344; /* Atrament miękki - secondary paragraphs, descriptions */
+  --ink-grey: #5b6153; /* Atrament szary - uppercase labels, captions, slot text */
+
+  /* greens */
+  --green: #4e5c40; /* Zieleń akcent - accents, italic in headings, focus ring, hover.
+                       5.3:1 on --paper - AA. Verified, not inherited on trust. */
+  --green-deep: #3d4a33; /* Zieleń ciemna - buttons, "Historia", active season card, skip link */
+  --green-slot: #33402b; /* Zieleń tunelu - photo slots inside a dark block */
+  --green-lit: #c6d3b6; /* Zieleń jasna - uppercase labels on dark */
+  /* Not in the handoff's colour table, but used by its prototype for the text inside a
+     photo placeholder on a dark block - a shade lighter than --green-lit, which it needs
+     to be to clear the stripes behind it. */
+  --green-slot-text: #d3dcc6;
+  --green-body: #dde2d2; /* Zieleń tekst na ciemnym - paragraphs on --green-deep */
+  --bone: #eef0e6; /* Kość na ciemnym - headings on --green-deep and --ink */
+
+  /* The homepage hero keeps its image light at the top and darkens only where the copy
+     sits, so the flowers remain visible while the white text stays legible. */
+  --scrim-hero: linear-gradient(
+    to bottom,
+    rgb(35 40 31 / 6%) 0%,
+    rgb(35 40 31 / 18%) 42%,
+    rgb(35 40 31 / 62%) 100%
+  );
+
+  /* footer */
+  --footer-body: #c3cbb8; /* Stopka tekst */
+  --footer-label: #96a188; /* Stopka etykiety - uppercase labels and copyright */
+  --footer-link: #e4e7dc; /* Stopka linki */
+  /* The one rule that sits on --ink rather than on paper. */
+  --footer-rule: rgb(238 240 230 / 18%);
+
+  /* ---------- type ---------- */
+
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Karla Variable", Karla, system-ui, sans-serif;
+  /* Only ever inside a photo placeholder; goes away with the placeholders. */
+  --mono: ui-monospace, Menlo, monospace;
+
+  --text-body: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
+  --text-h1: clamp(2.1rem, 1.4rem + 3vw, 3.6rem);
+  --text-h2: clamp(1.8rem, 1.35rem + 1.9vw, 2.7rem);
+  --text-h2-wide: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem); /* Historia, Kontakt */
+  --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem); /* season cards */
+  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem); /* plant name */
+  --text-lead: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
+  --text-tel: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem); /* phone number, address */
+
+  /* ---------- layout ---------- */
+
+  /* Content stops at 1200px; past that only the margins grow. The 100% resolves against
+     each element's own containing block, and every user of this is full-width - which is
+     what lets the dark blocks bleed to the edge while their contents stay in the column. */
+  --edge: max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
+  /* The menu bar sits slightly wider on small screens. */
+  --edge-nav: max(clamp(1rem, 4vw, 5rem), (100% - 1200px) / 2);
+
+  --pad-section: clamp(2.5rem, 6vw, 4.5rem);
+  --pad-section-wide: clamp(2.75rem, 7vw, 5rem); /* Historia, Kontakt */
+  --pad-footer: clamp(2.25rem, 5vw, 3.5rem);
+
+  --gap-columns: clamp(1.75rem, 5vw, 3.5rem);
+  --gap-cards: clamp(2rem, 5vw, 3.5rem);
+  --gap-entry: clamp(1.25rem, 4vw, 2.75rem);
+
+  /* touch target - WCAG 2.1 AA minimum */
+  --tap: 44px;
+}

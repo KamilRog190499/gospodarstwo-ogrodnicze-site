@@ -1,0 +1,569 @@
+---
+import { Picture, getImage } from "astro:assets";
+import { compositions, compositionKinds } from "../data/gallery";
+import { plantLinks } from "../data/plant-links";
+import { primaryPhone } from "../data/contact";
+
+/**
+ * `/inspiracje/` - the plantings.
+ *
+ * Replaces `Slideshow.astro`. That component's good parts are kept verbatim and its one
+ * real fault is the reason this file exists.
+ *
+ * **Kept.** It is still a scroll-snap track, so with no JavaScript the page is still a
+ * scrollable strip holding every frame - nothing hides behind a script. The auto-advance is
+ * still timid (pauses on hover and focus, stops for good on the first interaction, never
+ * runs under `prefers-reduced-motion`). The owners asked for a slideshow; this is still one.
+ * Do not quietly turn it into a grid.
+ *
+ * **Changed.** A slide was a photograph in a queue: no name, no address of its own, and not
+ * one link out. Someone who had just seen a basket they liked could not get from it to the
+ * plant or to the phone - on the most sales-shaped page of the site. A slide is now a
+ * *planting*: a container type, a short name, its plants as links into the offer entries,
+ * an anchor, and the phone number.
+ *
+ * What that buys, point by point against the review:
+ *
+ * - **1.** Every panel links to its plants and offers the phone.
+ * - **2, 6.** The rail underneath reaches any planting in one click - and it is a list of
+ *   real anchors, so it reaches them without JavaScript too. The filter turns 23 into four
+ *   or five.
+ * - **3, 4.** With the consent bar gone from this page (patch 0001) the photograph is no
+ *   longer capped at 52vh to keep the controls clear of it, and the panel is 980px rather
+ *   than 460px: one photograph large, instead of three cropped in half.
+ * - **5.** Each planting has an id and a name, and the page carries an `ItemList` of
+ *   `ImageObject` - before, 23 described photographs sat at one address with nothing to
+ *   index.
+ * - **8.** The lightbox gets 2000px instead of 1200px, which is what the sources hold.
+ *
+ * Heading outline: `h1` for the page, then one `h2` per planting inside its own `figcaption`.
+ * The image keeps `alt=""` and is described by that caption - as in `Slideshow`, so a screen
+ * reader does not read the same sentence twice.
+ */
+
+/** The lightbox target: the full frame, at what the sources actually hold. `Slideshow` asked
+ *  for 1200px, which was smaller than the file on disk - a zoom that zoomed less than the
+ *  original. */
+const previews = await Promise.all(
+  compositions.map((photo) => getImage({ src: photo.src, width: 2000, format: "webp" })),
+);
+
+/** 2x of the 96px rail. */
+const thumbnails = await Promise.all(
+  compositions.map((photo) => getImage({ src: photo.src, width: 192, format: "webp" })),
+);
+
+const total = compositions.length;
+
+/** Only the kinds that actually occur, in registry order - a filter that matches nothing is
+ *  a button that lies. This is also how the autumn shoot joins in later: add the frames, and
+ *  the filter grows by itself. */
+const kinds = compositionKinds.filter((kind) =>
+  compositions.some((photo) => photo.composition.kind === kind),
+);
+
+const imageList = Astro.site
+  ? {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "Obsadzenia z kwiatów Gospodarstwa Ogrodniczego „Saran”",
+      itemListElement: compositions.map((photo, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "ImageObject",
+          "@id": new URL(`/inspiracje/#${photo.composition.id}`, Astro.site).href,
+          name: photo.composition.title,
+          description: photo.alt,
+          contentUrl: new URL(previews[index]!.src, Astro.site).href,
+          representativeOfPage: index === 0,
+        },
+      })),
+    }
+  : null;
+---
+
+{imageList && <script type="application/ld+json" set:html={JSON.stringify(imageList)} is:inline />}
+
+<section class="comp" aria-labelledby="comp-title">
+  <div class="comp__head">
+    <h1 class="comp__title" id="comp-title">Inspiracje</h1>
+    <p class="comp__lead">
+      Obsadzenia z naszej uprawy — kosze, skrzynki, donice i rabaty. Przy każdym piszemy, jakie
+      kwiaty w nim są i gdzie ich szukać w ofercie.
+    </p>
+  </div>
+
+  <div class="filters" data-filters>
+    <p class="filters__label" id="filters-label">Co obsadzasz</p>
+    <div class="filters__row" role="group" aria-labelledby="filters-label">
+      <button type="button" data-filter="all" aria-pressed="true">Wszystkie</button>
+      {
+        kinds.map((kind) => (
+          <button type="button" data-filter={kind} aria-pressed="false">
+            {kind}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="controls" data-controls>
+    <button type="button" data-prev aria-controls="comp-track">Poprzednie</button>
+    <p class="counter" role="status">
+      <span data-index>1</span> z <span data-total>{total}</span>
+    </p>
+    <button type="button" data-next aria-controls="comp-track">Następne</button>
+    <button type="button" data-toggle aria-pressed="false">Zatrzymaj</button>
+  </div>
+
+  <p id="comp-hint" class="sr-only">
+    Przewijaj w poziomie albo używaj strzałek w lewo i w prawo. Obsadzeń jest {total}.
+  </p>
+
+  <ul
+    id="comp-track"
+    class="track"
+    data-track
+    tabindex="0"
+    role="list"
+    aria-roledescription="pokaz obsadzeń"
+    aria-label="Obsadzenia z naszych kwiatów"
+    aria-describedby="comp-hint"
+  >
+    {
+      compositions.map((photo, index) => (
+        <li class="panel" id={photo.composition.id} data-panel data-kind={photo.composition.kind}>
+          <figure class="panel__figure">
+            <a
+              class="panel__link"
+              href={previews[index]!.src}
+              data-lightbox
+              aria-label={`Powiększ: ${photo.alt}`}
+            >
+              {/* Described by the figcaption below - see the note at the top - so the
+                  image's own alt is empty. */}
+              <Picture
+                src={photo.src}
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                widths={[560, 1120]}
+                sizes="(min-width: 900px) 520px, 88vw"
+                width={480}
+                height={640}
+                alt=""
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+            </a>
+
+            <figcaption class="panel__meta">
+              <p class="panel__kind">
+                {photo.composition.kind} · <span>{index + 1}</span> z {total}
+              </p>
+              <h2 class="panel__name">{photo.composition.title}</h2>
+              <p class="panel__desc">{photo.alt}</p>
+
+              <div class="panel__plants">
+                <p class="panel__plantsLabel">Kwiaty w tym obsadzeniu</p>
+                {photo.composition.plants.length > 0 ? (
+                  <ul class="chips">
+                    {photo.composition.plants.map((slug) => {
+                      const plant = plantLinks[slug];
+                      return (
+                        <li>
+                          {plant.href ? (
+                            <a class="chip" href={plant.href}>
+                              {plant.label}
+                            </a>
+                          ) : (
+                            <span class="chip chip--flat">{plant.label}</span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+                <p class="panel__plantsNote">
+                  {photo.composition.plants.length > 0
+                    ? "Rozpoznane z opisu zdjęcia — do potwierdzenia przez gospodarstwo."
+                    : "Obsadzenie mieszane — gatunki do wpisania przez gospodarstwo."}
+                </p>
+              </div>
+
+              <div class="panel__actions">
+                <a class="cta" href={primaryPhone.href}>
+                  Zapytaj: {primaryPhone.display}
+                </a>
+                <a class="cta-line" href="/kontakt/">
+                  Kontakt i dojazd
+                </a>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
+
+  <nav class="rail" data-rail aria-label="Wszystkie obsadzenia">
+    <p class="rail__label" id="rail-label">Wszystkie obsadzenia</p>
+    <ul aria-labelledby="rail-label">
+      {
+        compositions.map((photo, index) => (
+          <li data-thumb-item>
+            {/* An anchor, not a button: without JavaScript it still jumps to the panel. */}
+            <a
+              class="thumb"
+              href={`#${photo.composition.id}`}
+              data-thumb
+              data-kind={photo.composition.kind}
+              aria-current={index === 0 ? "true" : undefined}
+            >
+              <img
+                src={thumbnails[index]!.src}
+                alt={photo.composition.title}
+                width="96"
+                height="128"
+                loading="lazy"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</section>
+
+<style>
+  .comp {
+    border-top: 1px solid var(--rule);
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .comp__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.9rem;
+  }
+
+  .comp__title {
+    font-size: var(--text-h2);
+  }
+
+  .comp__lead {
+    max-width: 52ch;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* ---------- filters ---------- */
+
+  /* The filter only works with a script, so it only exists with one. Gated on `html.js`
+     rather than [hidden], because an author `display` beats the browser's rule for it. */
+  .filters {
+    display: none;
+  }
+  :global(html.js) .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1rem;
+  }
+
+  .filters__label {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .filters__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filters button {
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: none;
+    border: 1px solid var(--rule-dim);
+    padding-inline: 1.1rem;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .filters button:hover {
+    color: var(--paper);
+    background: var(--green-deep);
+    border-color: var(--green-deep);
+  }
+  .filters button[aria-pressed="true"] {
+    color: var(--paper);
+    background: var(--green-deep);
+    border-color: var(--green-deep);
+  }
+
+  /* ---------- controls ---------- */
+
+  .controls {
+    display: none;
+  }
+  :global(html.js) .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1rem;
+  }
+
+  .controls button {
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: none;
+    border: 1px solid var(--rule-dim);
+    padding-inline: 1.1rem;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .controls button:hover {
+    color: var(--paper);
+    background: var(--green-deep);
+    border-color: var(--green-deep);
+  }
+  /* The `display: inline-flex` above is an author style and would otherwise beat the
+     browser's rule for [hidden] - the script hides the play control under reduced motion. */
+  .controls button[hidden] {
+    display: none;
+  }
+
+  .counter {
+    font-size: 0.85rem;
+    color: var(--ink-grey);
+    font-variant-numeric: tabular-nums;
+    min-width: 6ch;
+    text-align: center;
+  }
+
+  /* ---------- the strip ---------- */
+
+  .track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin: 0;
+    padding-inline: max(0px, (100% - 980px) / 2);
+    list-style: none;
+    overscroll-behavior-x: contain;
+  }
+
+  /* The scrollbar is the only affordance a visitor without JavaScript has, so it stays
+     visible for them and goes away once the buttons exist. */
+  :global(html.js) .track {
+    scrollbar-width: none;
+  }
+  :global(html.js) .track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .panel {
+    flex: 0 0 min(92vw, 980px);
+    scroll-snap-align: center;
+    /* Anchors land under nothing - the masthead does not stick - but a jump to a panel
+       should not put it flush against the viewport edge. */
+    scroll-margin-inline: 1rem;
+  }
+  .panel[hidden] {
+    display: none;
+  }
+
+  /* One photograph and its facts, side by side on a desk and stacked on a phone - without a
+     breakpoint deciding which. `auto-fit` measures the panel, which is a fixed flex item. */
+  .panel__figure {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.25rem var(--gap-columns);
+    align-items: start;
+  }
+
+  .panel__link {
+    display: block;
+    justify-self: start;
+    max-height: min(62vh, 620px);
+  }
+
+  .panel__link :global(img) {
+    display: block;
+    max-height: min(62vh, 620px);
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    border: 1px solid var(--rule);
+  }
+  .panel__link:hover :global(img) {
+    border-color: var(--green);
+  }
+
+  .panel__meta {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    max-width: 46ch;
+  }
+
+  .panel__kind {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .panel__name {
+    font-size: var(--text-h3);
+  }
+
+  .panel__desc {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .panel__plants {
+    border-top: 1px solid var(--rule);
+    padding-top: 0.9rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .panel__plantsLabel {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .chip {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--paper-dim);
+    border: 1px solid var(--rule-dim);
+    padding-inline: 0.85rem;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+  a.chip:hover {
+    color: var(--paper);
+    background: var(--green-deep);
+    border-color: var(--green-deep);
+  }
+  /* A plant we sell that has no entry to link to yet - see `plantLinks`. Named, not linked:
+     a chip that looks like a link and goes nowhere is worse than plain text. */
+  .chip--flat {
+    color: var(--ink-grey);
+  }
+
+  .panel__plantsNote {
+    font-size: 0.85rem;
+    color: var(--ink-grey);
+  }
+
+  .panel__actions {
+    border-top: 1px solid var(--rule);
+    padding-top: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.25rem;
+    align-items: center;
+  }
+
+  /* ---------- the rail ---------- */
+
+  .rail {
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .rail__label {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .rail ul {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.6rem;
+    list-style: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .rail li[hidden] {
+    display: none;
+  }
+
+  .thumb {
+    display: block;
+    border: 1px solid var(--rule);
+  }
+  .thumb img {
+    display: block;
+    width: 96px;
+    height: 128px;
+    object-fit: cover;
+  }
+  .thumb:hover {
+    border-color: var(--green);
+  }
+  .thumb[aria-current="true"] {
+    border-color: var(--green-deep);
+    outline: 1px solid var(--green-deep);
+    outline-offset: -3px;
+  }
+</style>

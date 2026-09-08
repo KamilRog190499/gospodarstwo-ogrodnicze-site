@@ -1,0 +1,71 @@
+---
+import { navigation } from "../data/navigation";
+
+/**
+ * The menu bar.
+ *
+ * It does not collapse. Seven items wrap onto a second line on a narrow screen, which is
+ * what the design asks for, and it means the site ships no menu JavaScript at all - there
+ * is nothing here that can fail to open.
+ *
+ * Now that the entries are real pages, the current one is marked: `aria-current="page"`
+ * for assistive technology and the green underline the design already had waiting for it.
+ * `trailingSlash: "always"` in astro.config.mjs means both sides of the comparison carry
+ * the slash, so no normalising is needed.
+ */
+const path = Astro.url.pathname;
+---
+
+<nav aria-label="Główne">
+  <ul>
+    {
+      navigation.map((item) => (
+        <li>
+          <a href={item.href} aria-current={item.href === path ? "page" : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  nav {
+    border-top: 1px solid var(--rule);
+    background: var(--paper-dim);
+  }
+
+  ul {
+    padding-inline: var(--edge-nav);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Row gap zero: the 48px tap targets already separate wrapped rows. */
+    gap: 0 clamp(1rem, 3vw, 2.5rem);
+  }
+
+  a {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--green-deep);
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    /* Transparent rather than absent, so hovering does not move the text by 2px. */
+    border-bottom: 2px solid transparent;
+  }
+
+  a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--green);
+  }
+
+  a[aria-current="page"] {
+    color: var(--ink);
+    border-bottom-color: var(--green);
+  }
+</style>

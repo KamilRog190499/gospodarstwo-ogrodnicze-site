@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Saran">
+  <!--
+    Provisional. There is no logotype - docs/design/README.md says the name is typographic
+    only, so the tab icon is too: the initial in a serif on the paper ground, with the
+    green from the design's accent.
+
+    It is set in Georgia rather than Instrument Serif because an SVG favicon can only use
+    fonts the viewer already has, and Georgia is the declared fallback for that face
+    anyway (src/styles/tokens.css). Replace the whole file if the owners produce a mark.
+  -->
+  <rect width="32" height="32" fill="#fcfbf5"/>
+  <rect x="0.5" y="0.5" width="31" height="31" fill="none" stroke="#e0ddce"/>
+  <text x="16" y="23" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#4e5c40">S</text>
+</svg>

@@ -1,0 +1,222 @@
+---
+import { Picture } from "astro:assets";
+import { currentSeason } from "../data/season";
+import { chrysanthemumPhoto, pansyPhoto, tunnelPhoto } from "../data/gallery";
+
+/**
+ * The selling year, card by card, with the part of it that is happening now filled in dark.
+ *
+ * The section now has a heading of its own and the cards sit under it as `h3`. Before, each
+ * card title was an `h2`, so "Sprzedaż w okresie wiosennym" stood in the document outline
+ * at the same level as the offer, the gallery and the contact section - the cards read as
+ * top-level sections, and the block they belong to had no name at all.
+ *
+ * **There are three of them, where the handoff draws two** (docs/design/README.md, section
+ * 3). The pansies the owners added in September 2026 sell in March and April, months the
+ * spring card used to swallow: a visitor in March got a photograph of a balcony-flower
+ * tunnel and a single link leading away from the only thing actually on sale. One card per
+ * selling window fixes that and costs the design nothing - the grid is `auto-fit`, so the
+ * third card is a third column where there is room and a third row where there is not.
+ * Card 2 and card 3 keep the handoff's copy verbatim.
+ *
+ * Which card is active comes from the build date (src/data/season.ts), not from a prop as
+ * in the prototype. In winter none is active and the eyebrows fall back to naming the
+ * season - the "closed for now" state is not designed and nothing is invented to fill it.
+ */
+const { activeCard } = currentSeason;
+
+const cards = [
+  {
+    id: 1,
+    season: "Wczesna wiosna",
+    title: "Bratki na otwarcie sezonu",
+    body: "Sezon otwierają bratki — w skrzynkach i doniczkach, prosto z tunelu. Sprzedajemy je od marca, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.",
+    meta: "Marzec – kwiecień",
+    photo: pansyPhoto,
+    href: "/bratki/",
+    hrefLabel: "Bratki",
+  },
+  {
+    id: 2,
+    season: "Wiosna",
+    title: "Sprzedaż w okresie wiosennym",
+    body: "Kwiaty balkonowe i rabatowe, rozsady oraz gotowe obsadzone skrzynki i doniczki. Kolory i odmiany oglądasz na miejscu, w tunelu.",
+    meta: "Maj – czerwiec · szczyt sezonu",
+    photo: tunnelPhoto,
+    href: "/kwiaty-balkonowe/",
+    hrefLabel: "Kwiaty balkonowe",
+  },
+  {
+    id: 3,
+    season: "Jesień",
+    title: "Chryzantemy wielkokwiatowe",
+    body: "Duży wybór kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada. Przed Wszystkimi Świętymi zamówienia najlepiej złożyć z tygodniowym wyprzedzeniem.",
+    meta: "Październik – 1 listopada",
+    photo: chrysanthemumPhoto,
+    href: "/chryzantemy/",
+    hrefLabel: "Chryzantemy",
+  },
+] as const;
+---
+
+<section class="seasons" aria-labelledby="sezon-title">
+  <div class="seasons__head">
+    <h2 class="seasons__title" id="sezon-title">Sezon w gospodarstwie</h2>
+  </div>
+
+  <div class="seasons__grid">
+    {
+      cards.map((card) => {
+        const now = activeCard === card.id;
+        return (
+          <article class:list={["card", now && "card--now"]}>
+            <p class="card__eyebrow">{now ? "Trwa teraz" : card.season}</p>
+            <h3 class="card__title">{card.title}</h3>
+            <p class="card__body">{card.body}</p>
+            <div class="card__slot">
+              <Picture
+                src={card.photo.src}
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                widths={[640, 1280]}
+                sizes="(min-width: 1200px) 400px, (min-width: 700px) 45vw, 90vw"
+                width={640}
+                height={360}
+                alt={card.photo.alt}
+                loading="lazy"
+              />
+            </div>
+            <p class="card__meta">{card.meta}</p>
+            <p class="card__link">
+              <a href={card.href}>{card.hrefLabel}</a>
+            </p>
+          </article>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style>
+  .seasons {
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .seasons__head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.9rem;
+  }
+
+  .seasons__title {
+    font-size: var(--text-h2);
+  }
+
+  .seasons__grid {
+    display: grid;
+    gap: 1.5rem;
+    /* The three cards sit in one row until one of them would be narrower than 320px, then
+       they reflow - three across on a desktop, two and one on a tablet, stacked on a phone.
+       No media query decides that; the 320px in the handoff still does. */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  }
+
+  .card {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+    border: 1px solid var(--rule);
+    background: var(--paper-dim);
+  }
+
+  .card--now {
+    border-color: var(--green-deep);
+    background: var(--green-deep);
+  }
+
+  .card__eyebrow {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .card--now .card__eyebrow {
+    color: var(--green-lit);
+  }
+
+  .card__title {
+    font-size: var(--text-h2-card);
+    line-height: 1.1;
+    color: var(--ink);
+  }
+  .card--now .card__title {
+    color: var(--paper);
+  }
+
+  .card__body {
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+  .card--now .card__body {
+    color: var(--green-body);
+  }
+
+  .card__slot {
+    margin-top: 0.35rem;
+  }
+
+  /* All three cards hold a real photograph, and each keeps the 16:9 box the placeholders had -
+     the handoff asks for the aspect ratio and the 1px border to survive the substitution
+     (docs/design/README.md, "Fidelity" and "Assets"). The sources are portrait; `cover` is
+     what crops them to the frame. */
+  .card__slot :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+  }
+  .card--now .card__slot :global(img) {
+    border-color: rgb(238 240 230 / 30%);
+  }
+
+  .card__meta {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-grey);
+  }
+  .card--now .card__meta {
+    color: var(--green-lit);
+  }
+
+  /* Each card describes what is on sale; now it also leads to the page that lists it -
+     the same shape as "Wyznacz trasę", so it reads as the site's secondary action. */
+  .card__link a {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 3px;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+  .card__link a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+  .card--now .card__link a {
+    color: var(--paper);
+    border-bottom-color: var(--green-lit);
+  }
+  .card--now .card__link a:hover {
+    color: var(--green-lit);
+  }
+</style>
