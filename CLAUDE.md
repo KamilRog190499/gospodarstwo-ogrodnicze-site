@@ -68,8 +68,16 @@ What is not done: the privacy policy, the deploy workflow, and everything in
 
 `docs/design/README.md` is the full specification: colour tokens, the type scale, the spacing
 formulas, every section, the exact Polish copy, the interaction rules and the list of what is
-still missing. **Read it before writing any markup or CSS.** It is high-fidelity - colours,
-typography, scale and spacing are final and are to be reproduced exactly.
+still missing. **Read it before writing any markup or CSS.** It is high-fidelity - scale and
+spacing are final and are to be reproduced exactly.
+
+**One exception, and it is at the top of that file: the "Poranek w tunelu" (2a) theme,
+approved September 2026, supersedes the handoff's colour table and its two typefaces.**
+`src/styles/tokens.css` is the source of truth for both. In short: paper `#FAF7F0`, ink
+`#1F2A21`, the single accent green split into `--green` `#5A6D46` (text, links, focus) and
+`--sage` `#6B7F55` (decorative, type >=24px only); Newsreader for the serif and Public Sans
+for the sans, both self-hosted. Do not copy `#FCFBF5`, `#23281F`, `#4E5C40`, Instrument Serif
+or Karla out of the handoff - they are the pre-2a record, kept for provenance.
 
 | File                                         | Role                                                                                                                                              |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -134,10 +142,14 @@ fix a layout; fix the `minmax()` value.
 
 ## Implementation rules that are easy to get wrong
 
-- **The design is deliberately austere.** No border radius, no shadows, no gradients, no
-  counters, no testimonials, no animations, no icons, no emoji. Hierarchy comes from
-  1px lines, type size and spacing. Two page backgrounds at most (`#FCFBF5`, `#F1EFE3`) plus two
-  dark blocks (`#3D4A33` history, `#23281F` footer).
+- **The design is deliberately austere.** No border radius, no shadows, no counters, no
+  testimonials, no animations, no icons, no emoji. Hierarchy comes from 1px lines, type size
+  and spacing. Two page backgrounds at most (`--paper`, `--paper-dim`) plus two dark blocks
+  (`--green-deep` history, `--ink` footer). **One sanctioned gradient exists:** `--hero-scrim`,
+  the scrim under the home page `h1` where it lies on the photograph. It is a legibility
+  device with measured contrast, not decoration - do not use it anywhere else, and re-measure
+  the _eyebrow_ (not the heading - it sits highest, in the thinnest part of the gradient) if
+  the photograph, the scrim padding or the heading length changes.
 - **The one sanctioned exception is the "Inspiracje" slideshow** (`Compositions.astro`, which
   replaced `Slideshow.astro` in September 2026: a slide is now a planting with a name, a
   container type, its plants as links into the offer, an anchor and the phone). The handoff
@@ -181,11 +193,21 @@ fix a layout; fix the `minmax()` value.
   "Do napisania" / "Do potwierdzenia" blocks are notes to the client, not design elements - they
   do not ship. Neither does the footer's "makieta v3 · struktura wg obecnej strony" label.
 - **Accessibility is part of the spec, not a polish pass:** skip link, `:focus-visible` outline
-  `2px solid #4E5C40` with `3px` offset (never remove it), 44 px minimum touch targets (48 px
-  menu, 50 px primary button), one `<h1>` per page - the masthead name is a `<p>`, the `h1`
-  belongs to the page - and `aria-current="page"` on the active nav item.
+  `2px solid var(--focus-ring)` with `3px` offset (never remove it), 44 px minimum touch targets
+  (48 px menu, 50 px primary button), one `<h1>` per page - the masthead name is a `<p>`, the
+  `h1` belongs to the page - and `aria-current="page"` on the active nav item. `--focus-ring`
+  is a variable rather than a fixed colour because it has to change with the ground: the
+  default `--green` is 2.63:1 on `--ink` and 1.67:1 on `--green-deep`, under the 3:1 that WCAG
+  1.4.11 asks of a focus indicator. **Every dark container raises it in one line**
+  (`--focus-ring: var(--green-lit)`); `.footer`, `.history`, `.card--now` and `.lightbox` do.
+  A dark element on a light ground (`.cta`, `.skip`) does not need it - the 3px offset puts
+  the ring on the paper around it.
 - **The header tagline** "Sprzedaż kwiatów balkonowych, rabatowych i chryzantem" is the exact
-  tagline from the current site - do not reword it.
+  tagline from the current site - do not reword it, and **do not move it.** Version 0.5 relocated
+  it to the footer's first column to buy header height; it landed one line above the footer blurb,
+  which is a superset of it, and the only record of the decision was a comment in the code
+  asserting it had been agreed. 0.6 put it back in the masthead. Moving it is a client-visible
+  change to the spec: ask, then write it down in `docs/`.
 - **Contact list layout:** the phone rows use `grid` with a fixed `minmax(8ch, auto)` first track.
   A previous flex version made the four numbers start at four different positions; that was a
   reported defect. Keep the grid.

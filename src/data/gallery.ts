@@ -66,7 +66,6 @@ import pansy02 from "../assets/pansies/offer-02.jpg";
 import pansy03 from "../assets/pansies/offer-03.jpg";
 import pansy04 from "../assets/pansies/offer-04.jpg";
 import pansyCrate from "../assets/pansies/crate-yellow.jpg";
-import homeHero from "../assets/home/hero-title.jpg";
 
 /** What was planted, not what is growing in it - the thing a visitor is choosing between.
  *
@@ -350,6 +349,23 @@ export const compositions = gallery.filter(
 /** The tunnel shot the spring card asks for: "galeria — tunel z kwiatami balkonowymi". */
 export const tunnelPhoto = gallery[17]!;
 
+/** The full-bleed band at the top of the home page.
+ *
+ *  **It has to be a landscape frame, and that is the whole reason this is not `tunnelPhoto`.**
+ *  Twenty-two of the twenty-three gallery files are 1500x2000 portraits; a 3:1 band cut from
+ *  one of those keeps a quarter of its height and, at `sizes="100vw"`, tops out at 1500px of
+ *  real detail - upscaled on any wide or retina screen, on the one image the page is judged by.
+ *  `gallery-19` is the single landscape frame in the shoot (2000x1500), so the band crops it
+ *  by a little instead of gutting it, and 2000px is an honest ceiling rather than a wish.
+ *
+ *  Do not swap this for a portrait frame. If the owners ever shoot a true panorama, that is
+ *  the replacement; until then the width of the source is the constraint that picked it.
+ *
+ *  It also appears on `/inspiracje/` as a planting, which is fine - that is a different page.
+ *  What is not fine is the same photograph twice on this one, which is why the spring season
+ *  card keeps `tunnelPhoto` and the band does not. */
+export const heroPhoto = gallery[18]!;
+
 /** The autumn card's frame: "galeria — chryzantemy przed 1 listopada, 16:9".
  *
  *  Deliberately outside `gallery`: that strip is the spring presentation, and a single
@@ -436,24 +452,6 @@ export const pansyStrip: GalleryPhoto[] = [
   { src: pansy03, alt: "Białe i kremowe bratki z ciemnofioletową plamką pośrodku kwiatu" },
   { src: pansy04, alt: "Fioletowe bratki z białym obrzeżem płatków i żółtym oczkiem" },
 ];
-
-/** The home page's own photograph, under the intro text and the two CTAs.
- *
- *  Outside `gallery` for the same reason `chrysanthemumPhoto` and the pansy strip are: this
- *  is a single frame asked for by name, not part of the `/inspiracje/` presentation shoot.
- *
- *  A panoramic garden composition made specifically for the opening band. The flower bed
- *  remains legible on every crop while the quieter middle gives the page heading room to breathe.
- *
- *  **Not on the design handoff** - the Intro section there is text and two CTAs only, no
- *  photograph. Added on the owners' own request rather than the handoff's say-so.
- *
- *  **The alt text is read off the picture, not confirmed by the owners** (docs/inwentaryzacja.md):
- *  the flowers read as impatiens by shape, but the bed is not attributed to a single species. */
-export const homeHeroPhoto: GalleryPhoto = {
-  src: homeHero,
-  alt: "Kolorowa ekspozycja wiszących koszy z różowymi i białymi petuniami w szklarni",
-};
 
 /** The photograph in the history block. The design brief there says "zdjęcie archiwalne";
  *  this one is current, because nothing archival exists yet - a better fit than an empty

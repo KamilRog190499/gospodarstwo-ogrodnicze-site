@@ -55,6 +55,8 @@ const { Content } = await render(entry);
   .history {
     background: var(--green-deep);
     color: var(--bone);
+    /* Ciemny blok: domyslna obwodka fokusa (--green) ma tu 1,67:1. Patrz tokens.css. */
+    --focus-ring: var(--green-lit);
     padding: var(--pad-section-wide) var(--edge);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));

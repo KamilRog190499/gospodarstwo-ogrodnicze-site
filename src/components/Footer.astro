@@ -31,7 +31,6 @@ const year = new Date().getFullYear();
   <div class="footer__columns">
     <div class="footer__col">
       <p class="footer__name">Gospodarstwo Ogrodnicze „Saran”</p>
-      <p class="footer__tagline">Sprzedaż kwiatów balkonowych, rabatowych i chryzantem</p>
       <p class="footer__blurb">
         Sprzedaż kwiatów balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych.
       </p>
@@ -95,6 +94,10 @@ const year = new Date().getFullYear();
   .footer {
     background: var(--ink);
     color: var(--footer-body);
+    /* Domyślna obwódka fokusa to --green (#5A6D46), a ona ma na --ink 2,63:1 — poniżej
+       3:1, których WCAG 1.4.11 wymaga od wskaźnika fokusa. Klawiatura przechodząca przez
+       stopkę nie widziała, gdzie jest. --green-lit daje 9,49:1. */
+    --focus-ring: var(--green-lit);
     padding: var(--pad-footer) var(--edge);
     display: grid;
     gap: 1.5rem;
@@ -119,22 +122,16 @@ const year = new Date().getFullYear();
     color: var(--bone);
   }
 
-  /* Tagline z nagłówka. Motyw 2a zostawia w nagłówku dwa piętra — nazwę i menu — a trzecie,
-     na tagline, kasuje; stąd ona tutaj. Słowo w słowo jak w docs/design/README.md, sekcja 1. */
-  .footer__tagline {
-    font-family: var(--sans);
-    font-size: 0.64rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--footer-label);
-    margin-top: 0.35rem;
-  }
+  /* Tu stał tagline z nagłówka, jedno zdanie nad blurbem, który jest jego nadzbiorem:
+     „Sprzedaż kwiatów balkonowych, rabatowych i chryzantem” nad „Sprzedaż kwiatów
+     balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych”. Wrócił do
+     nagłówka, gdzie stawia go specyfikacja; kolumna zostaje z blurbem, który mówi więcej. */
 
   .footer__blurb {
     font-size: 0.92rem;
     max-width: 34ch;
-    margin-top: 0.15rem;
+    /* 0,35rem, nie 0,15rem: blurb siedzi teraz bezpośrednio pod nazwą, a nie pod tagline. */
+    margin-top: 0.35rem;
   }
 
   /* A heading now, with the type the label had. */

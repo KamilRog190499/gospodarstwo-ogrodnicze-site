@@ -1,16 +1,40 @@
 ---
 import { Picture } from "astro:assets";
-import { tunnelPhoto } from "../data/gallery";
+import { heroPhoto } from "../data/gallery";
 import { directionsUrl, primaryPhone } from "../data/contact";
 
 /**
- * Wejście na stronę główną: zdjęcie tunelu na pełną szerokość, `h1` na nim, pod spodem
- * zdanie powitalne i trzy sposoby działania.
+ * Wejście na stronę główną: zdjęcie na pełną szerokość, `h1` na nim, pod spodem zdanie
+ * powitalne i trzy sposoby działania.
  *
  * Do wersji 0.5 to była wyśrodkowana kolumna tekstu na kremowym tle. Gospodarstwo ma od
  * września 35 własnych zdjęć, a strona główna nie pokazywała ani jednego powyżej zgięcia —
- * pierwszą fotografią była miniatura w karcie sezonu. Zdjęcie tunelu jest tym, co
- * odwiedzający próbuje sobie wyobrazić, czytając „przyjedź i obejrzyj na miejscu”.
+ * pierwszą fotografią była miniatura w karcie sezonu.
+ *
+ * ## Dlaczego akurat to zdjęcie
+ *
+ * Bo jest poziome. To jedyne kryterium, które ten kadr musi spełnić, i jedyne, którego nie
+ * da się nadrobić kodem. Pierwsza wersja pasa brała `tunnelPhoto` — pionowy kadr 1500×2000,
+ * jak 22 z 23 zdjęć z sesji. Przy `sizes="100vw"` dawało to sufit 1500px realnych detali na
+ * zdjęciu, które na monitorze 1400px w skali 2× potrzebuje 2800px, a przy okazji wycinało
+ * z fotografii środkową ćwiartkę wysokości. `heroPhoto` (gallery-19, 2000×1500) jest jedyną
+ * poziomą klatką w sesji. Reguła na przyszłość jest krótka: **do tego pasa wchodzi wyłącznie
+ * kadr poziomy**, a jeśli właściciele zrobią kiedyś prawdziwą panoramę, podmienia się
+ * `heroPhoto` i nic więcej.
+ *
+ * Sufit 2000px zostaje i jest świadomy: tyle ma oryginał. Lepiej wyczerpać źródło niż
+ * prosić `<Picture>` o 2400px, których nie ma — Astro i tak przycina listę do szerokości
+ * pliku, więc nadmiarowa wartość niczego nie dodaje poza złudzeniem.
+ *
+ * ## Jeden kadr, nie dwa
+ *
+ * `width`/`height` **muszą** odpowiadać proporcji oryginału. Kiedy nie odpowiadały (1600×686
+ * przy pliku 3:4), Astro przycinało zdjęcie do 2,33:1 przy generowaniu wariantów, a `cover`
+ * w CSS przycinał ten wynik po raz drugi do 3:1 — dwa kadrowania, z których żadnego nie
+ * dało się wycelować. Teraz Astro tylko skaluje, całe kadrowanie robi `object-fit` i steruje
+ * nim `object-position`.
+ *
+ * ## Scrim
  *
  * `h1` leży na zdjęciu, więc czytelność zależy od przyciemnienia (--hero-scrim), nie od
  * szczęścia w kadrze. Padding górny scrimu jest częścią tego rachunku, nie odstępem, i
@@ -24,17 +48,13 @@ import { directionsUrl, primaryPhone } from "../data/contact";
  * dostaje najrzadszą część gradientu, a przy 10,5px potrzebuje 4,5:1 tam, gdzie nagłówek
  * przy 46px potrzebuje 3:1. Dwie wersje z rzędu przeszły na nagłówku i oblały na etykiecie.
  *
- * Obecne wartości: etykieta ~5,2:1, nagłówek ~7:1 nad najjaśniejszym fragmentem tunelu.
- * Zmiana paddingu albo długości nagłówka wymaga ponownego pomiaru **etykiety**.
+ * Przeliczone dla tego kadru na najjaśniejszym pikselu, jaki w nim jest — a jest nim czysta
+ * biel (255,255,255) w prześwicie szklarni, czyli przypadek najgorszy z możliwych: etykieta
+ * 5,3:1 przy alfie 0,77, nagłówek 7,8–11,6:1 niżej na zboczu. Zmiana zdjęcia, paddingu
+ * scrimu albo długości nagłówka wymaga ponownego pomiaru **etykiety**.
  *
  * `loading="eager"` i `fetchpriority="high"` — to jest LCP strony głównej i nie ma sensu
  * udawać, że jest inaczej.
- *
- * 3:1 (i 3:2 na telefonie) to kadr, nie krop: `object-fit: cover` na pionowym oryginale wycina środek. Jeśli
- * właściciele dadzą kiedyś kadr panoramiczny, wystarczy podmienić `tunnelPhoto`.
- *
- * Trzeci przycisk („Wyznacz trasę”) jest nowy: adres był dotąd tylko w prozie i w stopce,
- * a „gdzie to jest” to pierwsze pytanie kogoś, kto kupuje na miejscu.
  */
 ---
 
@@ -42,14 +62,14 @@ import { directionsUrl, primaryPhone } from "../data/contact";
   <div class="intro__hero">
     <Picture
       class="intro__photo"
-      src={tunnelPhoto.src}
+      src={heroPhoto.src}
       formats={["avif", "webp"]}
       fallbackFormat="jpg"
-      widths={[960, 1600, 2400]}
+      widths={[960, 1400, 2000]}
       sizes="100vw"
-      width={1600}
-      height={686}
-      alt={tunnelPhoto.alt}
+      width={2000}
+      height={1500}
+      alt={heroPhoto.alt}
       loading="eager"
       fetchpriority="high"
     />
@@ -62,7 +82,8 @@ import { directionsUrl, primaryPhone } from "../data/contact";
   <div class="intro__below">
     <p class="intro__body">
       Zachęcamy do zapoznania się z naszą ofertą. Zamówienia można składać telefonicznie lub na
-      terenie naszego gospodarstwa. Wszystko, co sprzedajemy, pochodzi z naszej własnej uprawy.
+      terenie naszego gospodarstwa w Cholewiance pod Kazimierzem Dolnym. Wszystko, co sprzedajemy,
+      pochodzi z naszej własnej uprawy.
     </p>
     <div class="intro__actions">
       <a class="cta" href={primaryPhone.href}>Zadzwoń: {primaryPhone.display}</a>
@@ -118,7 +139,12 @@ import { directionsUrl, primaryPhone } from "../data/contact";
       /* Panorama 3:1 sama w sobie zjeżdża pod wysokość, którą scrim potrzebuje na etykietę
          i h1 — bez tego dolnego progu gradient wypełnia cały kadr i z fotografii nie zostaje
          nic. Próg jest liczony pod najwyższą treść scrimu, nie pod “wygląd”. `max(100%, …)`
-         zamiast samego progu, żeby dorastanie do wiersza zostało w mocy. */
+         zamiast samego progu, żeby dorastanie do wiersza zostało w mocy.
+
+         Skutek uboczny progu: między 700px a ~1150px pas jest szerszy niż 3:1 wynikające
+         z proporcji (przy 700px wychodzi ~1,75:1), bo próg trzyma wysokość. To celowe —
+         niżej niż 400px scrim zjada całe zdjęcie — ale oznacza, że w tym zakresie widać
+         *więcej* fotografii, nie mniej, więc `object-position` niżej nie ucieka. */
       min-height: max(100%, clamp(400px, 34vw, 560px));
     }
   }
@@ -129,6 +155,13 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     /* Bije `height: auto`, które global.css nakłada na każdy img. */
     height: 100%;
     object-fit: cover;
+    /* Jedyne kadrowanie zdjęcia w tym pasie, więc jest wycelowane, a nie zostawione na
+       środku. Scrim jest kotwiczony dołem i przy 3:1 zabiera większość wysokości, więc
+       fotografia czyta się głównie górą kadru — 42% podciąga w ten widoczny pas kosze
+       wiszące i tabliczki z nazwami odmian zamiast zostawiać tam sufit szklarni. Przy 3:2
+       na telefonie kadr jest niemal pełny (4:3 → 3:2 to 88% wysokości) i wartość niczego
+       istotnego nie przesuwa. */
+    object-position: center 42%;
   }
 
   .intro__scrim {
@@ -140,6 +173,10 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     gap: 0.6rem;
   }
 
+  /* Etykieta miejsca, nie zamiennik adresu w treści: nazwa wsi stoi też w akapicie niżej,
+     bo 10,5px wersalikami na fotografii to zła jedyna kryjówka dla najważniejszego faktu
+     na stronie gospodarstwa, do którego się przyjeżdża — i tekst na zdjęciu waży w
+     wyszukiwarce mniej niż zdanie w prozie. */
   .intro__place {
     font-size: 0.66rem;
     font-weight: 600;

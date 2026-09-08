@@ -67,7 +67,7 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--green);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -199,8 +199,17 @@ html.lightbox-open #consent {
   inset: 0;
   z-index: 300;
   /* The dark of the footer at opacity, not a generic black: the overlay should read as
-     part of this site rather than as the browser's own chrome. */
-  background: rgb(35 40 31 / 92%);
+     part of this site rather than as the browser's own chrome. Derived from the token
+     rather than typed out - it was written as `rgb(35 40 31 / 92%)`, which is the *old*
+     --ink (#23281F), so after the 2a theme moved --ink to #1F2A21 the overlay quietly
+     stopped matching the footer it claims to quote. */
+  /* Zapas dla przeglądarek bez color-mix: ten sam token, pełne krycie. Gorzej wygląda,
+     ale nie zostawia przezroczystej nakładki nad przewijającą się stroną — i nadal jest
+     tym samym kolorem, więc nie ma czego rozjechać przy następnej zmianie palety. */
+  background: var(--ink);
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  /* Dark ground, so the default ring fails 1.4.11 here too - see tokens.css. */
+  --focus-ring: var(--green-lit);
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 1rem;

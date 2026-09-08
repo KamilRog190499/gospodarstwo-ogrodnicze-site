@@ -134,6 +134,9 @@ const cards = [
   .card--now {
     border-color: var(--green-deep);
     background: var(--green-deep);
+    /* Ciemny blok: domyslna obwodka fokusa (--green) ma tu 1,67:1, a ta karta zawiera
+       link. Reszta kolorow karty ma juz swoje nadpisania nizej. Patrz tokens.css. */
+    --focus-ring: var(--green-lit);
   }
 
   .card__eyebrow {

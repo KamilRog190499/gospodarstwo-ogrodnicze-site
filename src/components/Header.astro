@@ -2,7 +2,7 @@
 import Nav from "./Nav.astro";
 
 /**
- * Nazwa i menu — dwa piętra, oba wyśrodkowane.
+ * Nazwa, tagline i menu — trzy piętra, wszystkie wyśrodkowane.
  *
  * Nazwa w skali własnej (--text-masthead) na środku, pod nią pasek menu na pełną
  * szerokość, z delikatnym tłem --paper-dim i własną kreską — tak jak w dzisiejszej
@@ -16,9 +16,16 @@ import Nav from "./Nav.astro";
  * gridu nagłówka. Pasek ma wtedy własny `padding-inline: var(--edge-nav)` i nic się nie
  * dodaje podwójnie — to było źródłem rozjeżdżania, nie samo tło.
  *
- * Trzeciego piętra nie ma: tagline („Sprzedaż kwiatów balkonowych, rabatowych i
- * chryzantem”) siedzi w pierwszej kolumnie stopki, tak jak ustalone. Dlatego nagłówek
- * zajmuje ~155px, nie dawne 260px, choć nazwa jest znowu duża.
+ * Tagline stoi tutaj i ma tu stać. Wersja 0.5 przeniosła go do pierwszej kolumny stopki,
+ * żeby nagłówek zmieścił się w dwóch piętrach — ale docs/design/README.md sekcja 1 stawia
+ * go w nagłówku, CLAUDE.md wymienia go wprost wśród rzeczy łatwych do zepsucia, a w stopce
+ * lądował zdanie nad blurbem, który mówi to samo szerzej. Zmiana specyfikacji nie jest
+ * decyzją do podjęcia w komentarzu w kodzie; wraca na miejsce, dopóki właściciele nie
+ * powiedzą inaczej — a wtedy zapisujemy to w docs/, nie tutaj.
+ *
+ * Brzmienie jest słowo w słowo z dzisiejszej witryny i nie podlega redakcji.
+ *
+ * Trzy piętra kosztują ~30px wysokości względem dwóch; nazwa zostaje w pełnej skali.
  *
  * Nazwa nadal nie jest `h1`; `h1` należy do strony.
  */
@@ -28,6 +35,7 @@ import Nav from "./Nav.astro";
   <p class="name">
     <a href="/">Gospodarstwo Ogrodnicze <em>„Saran”</em></a>
   </p>
+  <p class="tagline">Sprzedaż kwiatów balkonowych, rabatowych i chryzantem</p>
   <Nav />
 </header>
 
@@ -39,7 +47,7 @@ import Nav from "./Nav.astro";
   }
 
   .name {
-    padding: clamp(1.1rem, 2.5vw, 1.75rem) var(--edge-nav) clamp(0.9rem, 2vw, 1.35rem);
+    padding: clamp(1.1rem, 2.5vw, 1.75rem) var(--edge-nav) 0;
     font-family: var(--serif);
     font-weight: 400;
     font-size: var(--text-masthead);
@@ -52,6 +60,20 @@ import Nav from "./Nav.astro";
   .name a {
     color: inherit;
     text-decoration: none;
+  }
+
+  /* Odstęp dolny nagłówka wisi teraz na tagline, nie na nazwie — między nimi ma być
+     ciasno, bo to jedna jednostka, a nie dwa wiersze. */
+  .tagline {
+    padding: 0.55rem var(--edge-nav) clamp(0.9rem, 2vw, 1.35rem);
+    font-family: var(--sans);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+    text-align: center;
+    text-wrap: balance;
   }
 
   /* Jedyna kursywa na stronie, i jedyne miejsce, gdzie wolno użyć --sage: nazwa jest

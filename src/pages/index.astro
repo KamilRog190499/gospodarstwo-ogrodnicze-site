@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Intro from "../components/Intro.astro";
 import SeasonCards from "../components/SeasonCards.astro";
 import OfferOverview from "../components/OfferOverview.astro";
-import ContactStrip from "../components/ContactStrip.astro";
 
 /**
  * The home page. Says what the holding sells, which half of the year is running, and where
@@ -15,6 +14,15 @@ import ContactStrip from "../components/ContactStrip.astro";
  * an entrance rather than the whole building.
  *
  * Outline: `h1` in Intro, then one `h2` per section.
+ *
+ * There is no contact band between the offer tiles and the footer. A `ContactStrip` sat
+ * there in 0.5 and was removed: it printed the address, one phone number and "Wyznacz
+ * trasę" directly above a footer printing the address, all four phone numbers and the same
+ * link, so `602 518 401` appeared three times on one page (Intro's call button, the strip,
+ * the footer) and the route link twice. Above the fold the Intro already carries both.
+ *
+ * The band becomes worth having again the day the owners give us selling hours - that is
+ * the one fact it could carry that the footer does not. Until then it is repetition.
  */
 ---
 
@@ -26,5 +34,4 @@ import ContactStrip from "../components/ContactStrip.astro";
   <Intro />
   <SeasonCards />
   <OfferOverview />
-  <ContactStrip />
 </BaseLayout>

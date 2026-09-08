@@ -51,6 +51,22 @@
   --green-body: #dde2d2; /* Akapity na --green-deep */
   --bone: #eef0e6; /* Nagłówki na --green-deep i --ink */
 
+  /* focus */
+  /* Kolor obwódki :focus-visible, jako zmienna, bo ta jedna wartość musi się zmieniać
+     razem z tłem, a reszta palety nie. --green ma na papierze 4,95:1, ale na --ink 2,63:1
+     i na --green-deep 1,67:1 — WCAG 1.4.11 wymaga od wskaźnika fokusa 3:1 wobec sąsiadów,
+     więc na ciemnych blokach domyślna obwódka po prostu znikała.
+
+     Zmienne dziedziczą, więc ciemny blok podnosi ją u siebie jednym wierszem:
+     `--focus-ring: var(--green-lit)` na kontenerze (9,49:1 na --ink, 6,02:1 na
+     --green-deep, 7,02:1 na --green-slot) i wszystko w środku ma widoczny fokus.
+     Nadpisują ją: .footer, .history, .card--now i .lightbox.
+
+     Uwaga: element ciemny na jasnym tle (.cta, .skip) nadpisania NIE potrzebuje —
+     outline-offset 3px kładzie obwódkę poza nim, na papierze. Liczy się to, co jest
+     *dookoła*, nie to, co pod spodem. */
+  --focus-ring: var(--green);
+
   /* hero */
   /* Pod nagłówkiem na zdjęciu. Cztery przystanki, bo dwa dawały widoczną krawędź w
      połowie kadru, a trzy - pierwsza wersja tego motywu - miały gęstość dobraną na oko
@@ -101,9 +117,10 @@
   --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --text-lead: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
   --text-tel: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem);
-  /* Nazwa gospodarstwa w nagłówku. Wyśrodkowana i w pełnej skali - nagłówek wrócił do
-     dwóch pięter (nazwa, menu), bez trzeciego na tagline. Zostaje pod --text-h1, żeby
-     tytuł czytanej strony nadal był największym typem na ekranie. */
+  /* Nazwa gospodarstwa w nagłówku. Wyśrodkowana i w pełnej skali, nad tagline i paskiem
+     menu — trzy piętra. Zostaje pod --text-h1, żeby tytuł czytanej strony nadal był
+     największym typem na ekranie; sprawdzone na całym zakresie clampów, nie tylko na
+     końcach. */
   --text-masthead: clamp(1.55rem, 1.15rem + 1.7vw, 2.35rem);
 
   /* ---------- layout ---------- */

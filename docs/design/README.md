@@ -31,6 +31,32 @@ Dwa wyjątki, gdzie fidelity jest niepełna:
 | `saran-zielnik-v2.dc.html`       | Wariant alternatywny („zielnik”): numerowane tablice roślin I–IV, sekcja „Rytm roku” z czterema pasmami miesięcy, sekcja „Jak kupować”. Odrzucony jako główny kierunek, ale sekcja „Rytm roku” i wzorzec tablic mogą wrócić jako elementy podstron. Nie implementuj bez ustalenia z klientem. |
 | `support.js`                     | Runtime prototypu. **Nie przenoś do produkcji** — potrzebny tylko do otwarcia plików `.dc.html` lokalnie.                                                                                                                                                                                     |
 
+## ⚠️ Motyw „Poranek w tunelu” (2a) — co z poniższego już nie obowiązuje
+
+**Wrzesień 2026.** Zatwierdzony motyw 2a zastępuje **paletę kolorów i kroje pisma** z tego
+dokumentu. Żródłem prawdy dla obu jest `src/styles/tokens.css`. Tabela kolorów i sekcja
+o typografii poniżej opisują wersję sprzed 2a i są tu zachowane jako zapis pierwotnego
+handoffu — **nie kopiuj z nich wartości do kodu.**
+
+Co się zmieniło:
+
+| Element           | Handoff (nieaktualne) | Motyw 2a (obowiązuje)                                                                 |
+| ----------------- | --------------------- | ------------------------------------------------------------------------------------- |
+| Papier            | `#FCFBF5`             | `#FAF7F0`                                                                             |
+| Papier zabrudzony | `#F1EFE3`             | `#F2EFE4`                                                                             |
+| Atrament          | `#23281F`             | `#1F2A21`                                                                             |
+| Zielen akcent     | `#4E5C40`             | rozdzielona: `--green` `#5A6D46` (tekst, focus), `--sage` `#6B7F55` (tylko typ ≥24px) |
+| Krój szeryfowy    | Instrument Serif      | Newsreader                                                                            |
+| Krój bezszeryfowy | Karla                 | Public Sans                                                                           |
+
+Co **nadal obowiązuje** bez zmian: skala typograficzna, formuły odstępów, struktura sekcji,
+cała polska treść, reguły interakcji i dostępności, oraz zasada surowości (bez zaokrągleń,
+cieni, ikon). Jeden wyjątek od „bez gradientów”: `--hero-scrim`, przyciemnienie pod
+nagłówkiem leżącym na zdjęciu na stronie głównej. Nie używać go nigdzie indziej.
+
+Tagline w nagłówku (sekcja 1 niżej) obowiązuje i stoi w nagłówku. Wersja 0.5 przeniosła go
+do stopki; 0.6 cofa tę zmianę, bo nie była z nikim ustalona.
+
 ## Design Tokens
 
 ### Kolory
