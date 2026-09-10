@@ -608,17 +608,17 @@ strona. Grupa `Prymulki` i własny adres to decyzja na później, razem z treśc
 
 ## Kalendarz — do przejrzenia z właścicielami
 
-| Rzecz                      | Pytanie                                                                                                                                                                                                                                               |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| „W trakcie"                | dotąd w kodzie i w handoffie stało „Trwa teraz"                                                                                                                                                                                                       |
-| Nagłówek sekcji sezonu     | „Kiedy co sprzedajemy" zamiast „Sezon w gospodarstwie"                                                                                                                                                                                                |
-| Podpisy kart               | „Marzec" (było „Marzec – kwiecień") i „Kwiecień – czerwiec · szczyt sezonu" (było „Maj – czerwiec · szczyt sezonu") — to **odejście od dosłownej treści handoffu** na karcie 2                                                                        |
-| Tytuł karty 1              | „Bratki i prymulki na otwarcie sezonu"                                                                                                                                                                                                                |
-| Karty bez odnośników       | do grupy prowadzi teraz wyłącznie kafel oferty                                                                                                                                                                                                        |
-| Długość „Wkrótce"          | chryzantemy zapalają się 1 lipca (trzy miesiące wcześniej), bratki 2 listopada (cztery). Skrócenie to dołożenie granicy w tabeli okien, nie zmiana logiki                                                                                             |
+| Rzecz                      | Pytanie                                                                                                                                                                                                                                                             |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| „W trakcie"                | dotąd w kodzie i w handoffie stało „Trwa teraz"                                                                                                                                                                                                                     |
+| Nagłówek sekcji sezonu     | „Kiedy co sprzedajemy" zamiast „Sezon w gospodarstwie"                                                                                                                                                                                                              |
+| Podpisy kart               | „Marzec" (było „Marzec – kwiecień") i „Kwiecień – czerwiec · szczyt sezonu" (było „Maj – czerwiec · szczyt sezonu") — to **odejście od dosłownej treści handoffu** na karcie 2                                                                                      |
+| Tytuł karty 1              | „Bratki i prymulki na otwarcie sezonu"                                                                                                                                                                                                                              |
+| Karty bez odnośników       | do grupy prowadzi teraz wyłącznie kafel oferty                                                                                                                                                                                                                      |
+| Długość „Wkrótce"          | chryzantemy zapalają się 1 lipca (trzy miesiące wcześniej), bratki 2 listopada (cztery). Skrócenie to dołożenie granicy w tabeli okien, nie zmiana logiki                                                                                                           |
 | **Zima przestała milczeć** | od 2 listopada do końca lutego karta bratków jest ciemna i niesie „WKRÓTCE". CLAUDE.md mówi, że stan zimowy **nie jest zaprojektowany** i nic się w nim nie wymyśla; to jedno słowo, nie odrzucony baner „Sprzedaż wznawiamy w marcu", ale jest decyzją właścicieli |
-| Prymulki                   | własny wpis i własna grupa, gdy będzie tekst i zdjęcie                                                                                                                                                                                                |
-| Twarz kafla                | kadry wybiera kolejność `order`, więc zdjęcie pelargonii bluszczolistnej wypchnie kiedyś fuksję z mozaiki bez niczyjej decyzji. Alternatywa: pole `featured` we frontmatterze                                                                         |
+| Prymulki                   | własny wpis i własna grupa, gdy będzie tekst i zdjęcie                                                                                                                                                                                                              |
+| Twarz kafla                | kadry wybiera kolejność `order`, więc zdjęcie pelargonii bluszczolistnej wypchnie kiedyś fuksję z mozaiki bez niczyjej decyzji. Alternatywa: pole `featured` we frontmatterze                                                                                       |
 
 ## Posty z Facebooka — wrzesień 2026
 
@@ -671,6 +671,42 @@ przepisujemy, nie czyścimy, tylko skracamy do ok. 200 znaków z linkiem do cał
 - **Nie ma nagłówka na wpis ani żadnego brandingu Facebooka** — bez logo, bez niebieskiego,
   bez ikon i liczników reakcji. Że wpisy są z Facebooka, mówi jedno zdanie pod nagłówkiem.
 - **Nie dodaje podstrony ani pozycji w menu.** Menu ma nadal osiem pozycji.
+
+## Stopień telefonu i adresu — wrzesień 2026
+
+Właściciele zgłosili, że blok adresowy („Cholewianka 36 / 24-120 Kazimierz Dolny /
+woj. lubelskie”) i cztery numery telefonów mają za ciężką czcionkę.
+
+**Skąd się to wzięło.** Handoff rysował ten jeden stopień pisma w Instrument Serif — lekkim,
+wysokokontrastowym szeryfie display'owym. Motyw „Poranek w tunelu” (2a) podmienił szeryf na
+Newsreader, krój tekstowy o dużo mocniejszej kresce, ale rozmiaru ani wagi nie ruszył. Ten
+sam stopień, znacznie więcej atramentu na literę — i akurat na jedynym bloku na stronie,
+który składa się wyłącznie z takiego typu.
+
+**Co zrobiono.** Zmniejszony został stopień, nie waga: `--text-tel` w `src/styles/tokens.css`
+z `clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem)` na `clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem)`.
+W pikselach: 27,2 → 23,2 na szerokim ekranie i 21,6 → 19,2 na telefonie, czyli około 15% w
+dół. Adres i telefon nadal są wyraźnie większe od tekstu bieżącego (1,33× zamiast 1,56×),
+więc dalej czytają się jako to, po co ten blok istnieje.
+
+Token jest używany w dokładnie trzech miejscach — numery i adres na `/kontakt/` oraz adres
+przy mapie na stronie głównej — więc zmiana nie ruszyła nagłówków, nazw roślin, masztu ani
+leadów. Zostały nietknięte świadomie: zgłoszenie dotyczyło adresu i telefonów.
+
+**Przy okazji: brakująca spacja w adresie.** Zgłoszenie właścicieli cytowało adres tak, jak
+stał na stronie — „24-120Kazimierz Dolny”, bez spacji. To był prawdziwy defekt, nie literówka
+w zgłoszeniu. W szablonie `{address.postalCode}` i `{address.city}` stały w dwóch osobnych
+wierszach źródła, a kompilator Astro zjada odstęp między dwoma wyrażeniami; ta sama para
+w `Footer.astro` stała w jednym wierszu i renderowała się poprawnie. Dotyczyło to adresu na
+`/kontakt/` i przy mapie na stronie głównej. Spacja przeniesiona do `postalCity`
+w `src/data/contact.ts`, żeby nie zależała od tego, jak prettier złamie wiersz.
+
+**Co zostaje otwarte.** Ta sama przyczyna dotyczy każdego szeryfu na stronie — wszędzie stoi
+Newsreader tam, gdzie handoff rysował Instrument Serif. Jeśli nagłówki albo nazwa
+gospodarstwa w maszcie też okażą się za ciężkie, drugą dźwignią jest grubość
+(`font-weight`), która na wczytywanym pliku Newsreadera działa — wbrew temu, co do września
+2026 twierdził komentarz w `src/styles/fonts.css`. **Do decyzji właścicieli po zobaczeniu
+strony.**
 
 ## Czego nadal brakuje
 

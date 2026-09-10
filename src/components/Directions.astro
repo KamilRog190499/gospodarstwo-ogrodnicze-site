@@ -1,6 +1,6 @@
 ---
 import MapEmbed from "./MapEmbed.astro";
-import { address } from "../data/contact";
+import { address, postalCity } from "../data/contact";
 
 /**
  * "Jak do nas trafić" - the map on the home page.
@@ -35,8 +35,7 @@ import { address } from "../data/contact";
       tunelach — zapraszamy.
     </p>
     <p class="directions__address">
-      {address.street}<br />{address.postalCode}
-      {address.city}<br />{address.region}
+      {address.street}<br />{postalCity}<br />{address.region}
     </p>
     <p>
       <a class="cta-line" href="/kontakt/">Telefony i kontakt</a>

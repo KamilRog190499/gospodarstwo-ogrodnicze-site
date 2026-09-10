@@ -1,6 +1,6 @@
 ---
 import MapEmbed from "./MapEmbed.astro";
-import { phones, address } from "../data/contact";
+import { phones, address, postalCity } from "../data/contact";
 
 /**
  * Phone numbers on the left, where to come on the right. The body of `/kontakt/`.
@@ -47,8 +47,7 @@ const SubHeading = level === 1 ? "h2" : "h3";
     <div class="address">
       <SubHeading class="address__label">Adres</SubHeading>
       <p class="address__value">
-        {address.street}<br />{address.postalCode}
-        {address.city}<br />{address.region}
+        {address.street}<br />{postalCity}<br />{address.region}
       </p>
     </div>
     <MapEmbed />

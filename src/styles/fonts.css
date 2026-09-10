@@ -8,13 +8,23 @@
  *
  * Public Sans italic nie jest importowany — projekt nigdy nie pochyla bezszeryfowego.
  *
- * Fontsource dzieli Newsreader na osobne pliki per oś zmienna zamiast jednego pliku
- * zmiennego na obu osiach naraz — `opsz.css` daje `opsz` 6-72 (zamrożone `wght` na
- * domyślnym 400), `wght.css` odwrotnie. Cała strona rysuje szeryf wyłącznie wagą 400
- * (sprawdzone: żaden komponent nie ustawia innej), więc `wght` nigdy się i tak nie
- * przyda — a `opsz` jest tym, co ma znaczenie: bez niego duży tekst (h1, telefon, nazwa
- * gospodarstwa w maszcie) renderuje się krojem dostrojonym pod ~16px tekstu, rozciągniętym
- * do rozmiaru display, zamiast krojem, jaki Newsreader ma dla dużych rozmiarów.
+ * Wczytywany jest `opsz.css`, bo `opsz` jest tu tym, co ma znaczenie: bez tej osi duży
+ * tekst (h1, telefon, nazwa gospodarstwa w maszcie) renderuje się krojem dostrojonym pod
+ * ~16px tekstu i rozciągniętym do rozmiaru display, zamiast krojem, jaki Newsreader ma dla
+ * dużych rozmiarów.
+ *
+ * Sprostowanie, wrzesień 2026. Poprzednia wersja tego komentarza twierdziła, że Fontsource
+ * dzieli Newsreader na osobne pliki per oś, że `opsz.css` ma `wght` zamrożoną na 400 i że
+ * `wght` „nigdy się i tak nie przyda”. To nieprawda i warto o tym wiedzieć, zanim się
+ * sięgnie po grubość: `files/newsreader-latin-opsz-normal.woff2` jest bajt w bajt tym samym
+ * plikiem co `newsreader-latin-standard-normal.woff2` (md5 f94a697b16502ea4c1ea76b541b93b30),
+ * czyli pełnym fontem zmiennym z obiema osiami — `opsz` 6-72 i `wght` 200-800. Dlatego
+ * `@font-face` deklaruje `font-weight: 200 800`. Osobnym, instancjonowanym plikiem jest
+ * dopiero `wght.css` (inna suma kontrolna) i akurat jego nie potrzebujemy.
+ *
+ * Cała strona nadal rysuje szeryf wyłącznie wagą 400 — świadomie, nie z braku osi
+ * (sprawdzone: żaden komponent nie ustawia innej). Gdyby kiedyś potrzebny był lżejszy krój,
+ * `font-weight` na szeryfie działa i nie kosztuje ani jednego dodatkowego bajtu.
  *
  * Nadal nic nie leci z CDN Google (RODO — patrz komentarz w poprzedniej wersji pliku).
  */

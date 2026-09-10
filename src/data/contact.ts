@@ -32,6 +32,17 @@ export const address = {
   country: "PL",
 } as const;
 
+/** Postal code and town as one string.
+ *
+ *  It exists because it has to. Written in a template as two neighbouring expressions,
+ *  `{address.postalCode}` and `{address.city}` collapse to `24-120Kazimierz Dolny` the
+ *  moment Prettier puts them on separate source lines - the Astro compiler drops the
+ *  whitespace between two expressions, and both `Contact.astro` and `Directions.astro`
+ *  shipped that way. Keeping the space on this side of the boundary makes it immune to
+ *  how any template happens to be wrapped. Use this rather than writing the pair out.
+ */
+export const postalCity = `${address.postalCode} ${address.city}`;
+
 /** Full address on one line - footer and structured data. */
 export const addressOneLine = `${address.street}, ${address.postalCode} ${address.city}`;
 

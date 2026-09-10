@@ -40,16 +40,18 @@ handoffu — **nie kopiuj z nich wartości do kodu.**
 
 Co się zmieniło:
 
-| Element           | Handoff (nieaktualne) | Motyw 2a (obowiązuje)                                                                 |
-| ----------------- | --------------------- | ------------------------------------------------------------------------------------- |
-| Papier            | `#FCFBF5`             | `#FAF7F0`                                                                             |
-| Papier zabrudzony | `#F1EFE3`             | `#F2EFE4`                                                                             |
-| Atrament          | `#23281F`             | `#1F2A21`                                                                             |
-| Zielen akcent     | `#4E5C40`             | rozdzielona: `--green` `#5A6D46` (tekst, focus), `--sage` `#6B7F55` (tylko typ ≥24px) |
-| Krój szeryfowy    | Instrument Serif      | Newsreader                                                                            |
-| Krój bezszeryfowy | Karla                 | Public Sans                                                                           |
+| Element                   | Handoff (nieaktualne)                     | Motyw 2a (obowiązuje)                                                                                                                                                            |
+| ------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Papier                    | `#FCFBF5`                                 | `#FAF7F0`                                                                                                                                                                        |
+| Papier zabrudzony         | `#F1EFE3`                                 | `#F2EFE4`                                                                                                                                                                        |
+| Atrament                  | `#23281F`                                 | `#1F2A21`                                                                                                                                                                        |
+| Zielen akcent             | `#4E5C40`                                 | rozdzielona: `--green` `#5A6D46` (tekst, focus), `--sage` `#6B7F55` (tylko typ ≥24px)                                                                                            |
+| Krój szeryfowy            | Instrument Serif                          | Newsreader                                                                                                                                                                       |
+| Krój bezszeryfowy         | Karla                                     | Public Sans                                                                                                                                                                      |
+| Stopień telefonu i adresu | `clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem)` | `clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem)` — zmniejszony we wrześniu 2026 na zgłoszenie właścicieli, bo Newsreader w miejscu Instrument Serif czytał się w tym stopniu za ciężko |
 
-Co **nadal obowiązuje** bez zmian: skala typograficzna, formuły odstępów, struktura sekcji,
+Co **nadal obowiązuje** bez zmian: skala typograficzna — z jednym wyjątkiem, stopniem
+telefonu i adresu z tabeli wyżej — formuły odstępów, struktura sekcji,
 cała polska treść, reguły interakcji i dostępności, oraz zasada surowości (bez zaokrągleń,
 cieni, ikon). Jeden wyjątek od „bez gradientów”: `--hero-scrim`, przyciemnienie pod
 nagłówkiem leżącym na zdjęciu na stronie głównej. Nie używać go nigdzie indziej.
@@ -121,6 +123,9 @@ Skala (wszystkie fluid `clamp()`):
 | Stopka body                              | `0.92–0.95rem` Karla                                       | 400  | —           | —                 |
 | Stopka etykieta                          | `0.64rem` Karla                                            | 600  | —           | 0.18em, uppercase |
 | Copyright                                | `0.78rem` Karla                                            | 400  | —           | —                 |
+
+**Wiersz „Numer telefonu / adres” w tabeli wyżej jest nieaktualny.** Obowiązuje
+`clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem)` — patrz blok o motywie 2a i `src/styles/tokens.css`.
 
 `text-wrap: balance` na leadzie. `font-variant-numeric: tabular-nums` na wersji makiety w stopce.
 

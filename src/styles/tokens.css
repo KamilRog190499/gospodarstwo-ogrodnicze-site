@@ -122,7 +122,23 @@
   --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem);
   --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --text-lead: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
-  --text-tel: clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem);
+  /* Telefon i adres. Jedyny stopień w tej skali, który odbiega od handoffu — tabela
+     w docs/design/README.md rysuje tu clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem) i tej
+     wartości nie wolno przywracać „bo tak jest w specyfikacji”; odejście jest zapisane
+     w bloku o motywie 2a w tamtym pliku.
+
+     Handoff rysował ten stopień w Instrument Serif, lekkim szeryfie display'owym. Motyw 2a
+     podmienił szeryf na Newsreader — krój tekstowy o dużo mocniejszej kresce — a stopnia
+     nie ruszył, więc blok adresowy i cztery numery na /kontakt/ zostały najcięższym typem
+     na stronie. Zgłoszone przez właścicieli we wrześniu 2026; wybrali cięcie stopnia,
+     nie wagi. 27,2px → 23,2px na szerokim ekranie, 21,6px → 19,2px na telefonie: nadal
+     wyraźny krok nad tekstem bieżącym, 1,33× zamiast 1,56×.
+
+     Przy dalszych zmianach pamiętaj, że font-optical-sizing: auto wyżej wiąże oś opsz ze
+     stopniem: zmniejszanie tego tokenu czyni literę mniejszą, a jej kreskę odrobinę
+     mocniejszą. Drugą dźwignią jest font-weight — wczytywany plik Newsreadera ma oś wght,
+     wbrew temu, co komentarz w fonts.css twierdził do września 2026. */
+  --text-tel: clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem);
   /* Nazwa gospodarstwa w nagłówku. Wyśrodkowana i w pełnej skali, nad tagline i paskiem
      menu — trzy piętra. Zostaje pod --text-h1, żeby tytuł czytanej strony nadal był
      największym typem na ekranie; sprawdzone na całym zakresie clampów, nie tylko na
