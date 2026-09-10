@@ -23,8 +23,8 @@ import { primaryPhone } from "../data/contact";
  * the page ends with the last plant and nothing to do next.
  *
  * That is also why the selling window is printed here from 0.9 on, under the heading: the
- * home page tile says whether a group is on sale, and someone who arrives from a search for
- * "chryzantemy Kazimierz Dolny" never sees it. The line is built from `saleWindows`, so the
+ * home page says whether a group is on sale on its season cards, and someone who arrives
+ * from a search for "chryzantemy Kazimierz Dolny" never sees them. The line is built from `saleWindows`, so the
  * dates on this page cannot drift from the dates the tiles and the season cards quote - and
  * they had drifted. `/bratki/` was still offering "sprzedaż w marcu i kwietniu" after the
  * owners cut the window back to March, because that sentence was typed into the page by hand.
@@ -34,7 +34,7 @@ interface Props {
   group: PlantGroup;
   title: string;
   /** Optional sentence beside the heading. `/chryzantemy/` ships without one - everything it
-   *  said (kolory, termin sprzedaży) is now in the entries' own chips and facts. */
+   *  said (colours, selling dates) is now in the entries' own chips and facts. */
   lead?: string;
   /** Optional sentence under the list - what the group covers beyond the entries. */
   note?: string;
@@ -58,8 +58,8 @@ if (entries.length === 0) {
 const others = offerPages.filter((item) => item.href !== Astro.url.pathname);
 
 /** "Sprzedaż trwa: marzec" while the window is open, "Sprzedaż wkrótce: ..." while it is the
- *  next one to open, and the bare dates the rest of the year. The three readings are the same
- *  three the home page tiles use, from the same table. */
+ *  next one to open, and the bare dates the rest of the year. All three readings come out of
+ *  `saleWindows`, the same table the season cards read. */
 const saleWindow = windowFor(group);
 const saleState = currentSeason.groups[group];
 const months = saleWindow?.months.toLocaleLowerCase("pl-PL");

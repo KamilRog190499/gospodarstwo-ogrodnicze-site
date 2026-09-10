@@ -28,13 +28,13 @@ import { plantGroups, type PlantGroup } from "./offer";
  *
  * The resulting year:
  *
- * | Okres                     | Co mowi strona                        |
- * | ------------------------- | ------------------------------------- |
- * | marzec                    | bratki i prymulki - w trakcie          |
- * | kwiecien - czerwiec       | balkonowe i rabatowe - w trakcie       |
- * | 1 lipca - 30 wrzesnia     | chryzantemy - wkrotce                  |
- * | 1 pazdziernika - 1 listopada | chryzantemy - w trakcie             |
- * | 2 listopada - koniec lutego  | bratki i prymulki - wkrotce         |
+ * | Period                       | What the site says          | State  |
+ * | ---------------------------- | --------------------------- | ------ |
+ * | March                        | pansies and primroses       | `now`  |
+ * | April - June                 | balcony and bedding flowers | `now`  |
+ * | 1 July - 30 September        | chrysanthemums              | `soon` |
+ * | 1 October - 1 November       | chrysanthemums              | `now`  |
+ * | 2 November - end of February | pansies and primroses       | `soon` |
  *
  * Winter is no longer silent, and that is a change the owners have to want: CLAUDE.md records
  * that the handoff's "Sprzedaż wznawiamy w marcu" state **is not designed**, so nothing may be

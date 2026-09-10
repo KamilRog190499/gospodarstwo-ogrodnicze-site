@@ -4,68 +4,70 @@ import { heroPhoto } from "../data/gallery";
 import { directionsUrl, primaryPhone } from "../data/contact";
 
 /**
- * Wejście na stronę główną: zdjęcie na pełną szerokość, `h1` na nim, pod spodem zdanie
- * powitalne i trzy sposoby działania.
+ * The entrance to the home page: a full-width photograph, the `h1` on it, and under that a
+ * welcoming sentence and three things to do.
  *
- * Do wersji 0.5 to była wyśrodkowana kolumna tekstu na kremowym tle. Gospodarstwo ma od
- * września 35 własnych zdjęć, a strona główna nie pokazywała ani jednego powyżej zgięcia —
- * pierwszą fotografią była miniatura w karcie sezonu.
+ * Up to version 0.5 this was a centred column of text on a cream ground. The holding
+ * supplied its own photographs in September, and the home page showed not one of them above
+ * the fold - the first photograph on it was the thumbnail in a season card.
  *
- * ## Dlaczego akurat to zdjęcie
+ * ## Why this photograph in particular
  *
- * Bo jest poziome. To jedyne kryterium, które ten kadr musi spełnić, i jedyne, którego nie
- * da się nadrobić kodem. Pierwsza wersja pasa brała `tunnelPhoto` — pionowy kadr 1500×2000,
- * jak 22 z 23 zdjęć z sesji. Przy `sizes="100vw"` dawało to sufit 1500px realnych detali na
- * zdjęciu, które na monitorze 1400px w skali 2× potrzebuje 2800px, a przy okazji wycinało
- * z fotografii środkową ćwiartkę wysokości. Do wersji 0.7 `heroPhoto` było gallery-19
- * (2000×1500), jedyną poziomą klatką w sesji zdjęciowej gospodarstwa; we wrześniu 2026 na
- * wyraźne polecenie podmienione na wygenerowany obraz (1448×1086, to samo 4:3) — patrz
- * komentarz przy `heroPhoto` w `src/data/gallery.ts` o tym, dlaczego to niezgodne z resztą
- * tego pliku. Reguła na przyszłość jest krótka: **do tego pasa wchodzi wyłącznie kadr
- * poziomy**, a jeśli właściciele zrobią kiedyś prawdziwą panoramę, podmienia się `heroPhoto`
- * i nic więcej.
+ * Because it is landscape. That is the only criterion this frame has to meet, and the only
+ * one no amount of code can make up for. The first version of this band took `tunnelPhoto` -
+ * a portrait 1500x2000 frame, like 22 of the 23 photographs from the session. At
+ * `sizes="100vw"` that put a ceiling of 1500px of real detail on a photograph that needs
+ * 2800px on a 1400px monitor at 2x, and cropped the middle quarter out of its height along
+ * the way. Up to version 0.7 `heroPhoto` was gallery-19 (2000x1500), the only landscape
+ * frame in the holding's photo session; in September 2026 it was replaced, on an explicit
+ * instruction, with a generated image (1448x1086, the same 4:3) - see the comment beside
+ * `heroPhoto` in `src/data/gallery.ts` for why that is out of keeping with the rest of that
+ * file. The rule for the future is short: **only a landscape frame goes in this band**, and
+ * if the owners ever shoot a real panorama, `heroPhoto` is swapped and nothing else.
  *
- * Sufit szerokości w `widths` śledzi rzeczywisty plik za `heroPhoto.src` — świadomie, nie
- * `2400px, których nie ma`: Astro i tak przycina listę do szerokości pliku, więc nadmiarowa
- * wartość niczego nie dodaje poza złudzeniem. Przy obecnym pliku to 1448px.
+ * The width ceiling in `widths` tracks the actual file behind `heroPhoto.src` - deliberately,
+ * rather than `2400px that do not exist`: Astro trims the list to the file's width anyway, so
+ * a larger value adds nothing but an illusion. With the current file that is 1448px.
  *
- * ## Jeden kadr, nie dwa
+ * ## One crop, not two
  *
- * `width`/`height` **muszą** odpowiadać proporcji oryginału. Kiedy nie odpowiadały (1600×686
- * przy pliku 3:4), Astro przycinało zdjęcie do 2,33:1 przy generowaniu wariantów, a `cover`
- * w CSS przycinał ten wynik po raz drugi do 3:1 — dwa kadrowania, z których żadnego nie
- * dało się wycelować. Teraz Astro tylko skaluje, całe kadrowanie robi `object-fit` i steruje
- * nim `object-position`.
+ * `width`/`height` **must** match the original's ratio. When they did not (1600x686 against
+ * a 3:4 file), Astro cropped the photograph to 2.33:1 while generating the variants, and
+ * `cover` in CSS cropped that result a second time to 3:1 - two crops, neither of which
+ * could be aimed. Now Astro only scales, all the cropping is done by `object-fit`, and
+ * `object-position` aims it.
  *
- * ## Scrim
+ * ## The scrim
  *
- * `h1` leży na zdjęciu, więc czytelność zależy od przyciemnienia (--hero-scrim), nie od
- * szczęścia w kadrze. Padding górny scrimu jest częścią tego rachunku, nie odstępem, i
- * działa odwrotnie, niż podpowiada intuicja: scrim jest zakotwiczony dołem, więc **większy**
- * padding czyni go wyższym i spycha tekst na niższy ułamek jego wysokości, czyli w gęstszą
- * alfę. W kadrze 3:1 padding jest krótszy (2,75rem zamiast 5,5rem), żeby gradient mieścił
- * się w zdjęciu — i dlatego zbocze w --hero-scrim jest za to gęstsze. Te dwie liczby to
- * jeden rachunek w dwóch plikach: zmiana jednej wymaga przeliczenia drugiej.
+ * The `h1` lies on the photograph, so legibility depends on the darkening (--hero-scrim)
+ * rather than on luck in the frame. The scrim's top padding is part of that calculation, not
+ * a spacing, and it works the opposite way round to intuition: the scrim is anchored to the
+ * bottom, so **more** padding makes it taller and pushes the text onto a lower fraction of
+ * its height, which is denser alpha. In the 3:1 frame the padding is shorter (2.75rem rather
+ * than 5.5rem) so the gradient fits inside the photograph - and that is why the slope in
+ * --hero-scrim is denser to compensate. Those two numbers are one calculation spread across
+ * two files: changing either one requires recomputing the other.
  *
- * Krytycznym elementem jest etykieta nad nagłówkiem, nie nagłówek: jest najwyżej, więc
- * dostaje najrzadszą część gradientu, a przy 10,5px potrzebuje 4,5:1 tam, gdzie nagłówek
- * przy 46px potrzebuje 3:1. Dwie wersje z rzędu przeszły na nagłówku i oblały na etykiecie.
+ * The critical element is the eyebrow above the heading, not the heading: it sits highest, so
+ * it gets the thinnest part of the gradient, and at 10.5px it needs 4.5:1 where the heading
+ * at 46px needs 3:1. Two versions running passed on the heading and failed on the eyebrow.
  *
- * Przeliczone dla gallery-19 na najjaśniejszym pikselu, jaki było w nim — czysta biel
- * (255,255,255) w prześwicie szklarni, czyli przypadek najgorszy z możliwych: etykieta 5,3:1
- * przy alfie 0,77, nagłówek 7,8–11,6:1 niżej na zboczu. Zmiana zdjęcia, paddingu scrimu albo
- * długości nagłówka wymaga ponownego pomiaru **etykiety**.
+ * Computed for gallery-19 against the brightest pixel it contained - pure white
+ * (255,255,255) in a gap in the glasshouse, which is the worst case there is: the eyebrow at
+ * 5.3:1 with an alpha of 0.77, the heading at 7.8-11.6:1 lower down the slope. Changing the
+ * photograph, the scrim's padding or the length of the heading calls for measuring the
+ * **eyebrow** again.
  *
- * Wrześniowa podmiana na wygenerowany obraz nie miała tego pomiaru zrobionego w prawdziwej
- * przeglądarce — narzędzie do zrzutów ekranu było w tej sesji niedostępne. Szacunek offline
- * (przycięcie 3:1 przy `object-position: center 42%`, ten sam czterostopniowy gradient,
- * pudełko scrimu ~237px dla szerokości ~1440px) wyszedł na ~5,1:1 dla etykiety i ~8,4:1 dla
- * nagłówka — w tej samej okolicy co stare liczby, więc nic nie wskazuje na regres, ale to
- * przybliżenie jednej szerokości ekranu, nie pomiar. **Potwierdzić w przeglądarce**, zwłaszcza
- * przy szerokościach, gdzie pas jest 3:2 zamiast 3:1.
+ * September's swap to a generated image was not measured in a real browser - the screenshot
+ * tool was unavailable in that session. An offline estimate (a 3:1 crop at
+ * `object-position: center 42%`, the same four-stop gradient, a scrim box of ~237px at a
+ * width of ~1440px) came out at ~5.1:1 for the eyebrow and ~8.4:1 for the heading - the same
+ * neighbourhood as the old numbers, so nothing points to a regression, but it is an
+ * approximation at one screen width, not a measurement. **Confirm it in a browser**,
+ * especially at the widths where the band is 3:2 rather than 3:1.
  *
- * `loading="eager"` i `fetchpriority="high"` — to jest LCP strony głównej i nie ma sensu
- * udawać, że jest inaczej.
+ * `loading="eager"` and `fetchpriority="high"` - this is the home page's LCP and there is no
+ * point pretending otherwise.
  */
 ---
 
@@ -109,53 +111,56 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     border-bottom: 1px solid var(--rule);
   }
 
-  /* Zdjęcie i scrim leżą w jednej komórce siatki, oba jako elementy siatki — scrim nie
-     jest pozycjonowany absolutnie. To jest warunek poprawności, nie styl: scrim jest
-     kotwiczony dołem, a jego wysokość bierze się z długości nagłówka, nie z kadru.
-     Poniżej ~390px nagłówek łamie się na tyle wierszy, że scrim jest wyższy niż kadr 3:2
-     i — jako element absolutny — wychodził górą poza zdjęcie, kładąc szarą smugę na
-     papierze nad nim (na 360px 11px, na 320px 91px). Przycięcie `overflow: hidden` jest
-     tu pułapką: obcina wtedy etykietę i górę nagłówka. Jako element siatki scrim
-     współtworzy wysokość pasa, więc to kadr rośnie do tekstu, a nie tekst wychodzi poza
-     kadr. Gęstość gradientu i padding scrimu zostają nietknięte — pomiar etykiety
-     i nagłówka jest ten sam. */
+  /* The photograph and the scrim lie in one grid cell, both as grid items - the scrim is
+     not absolutely positioned. That is a correctness condition, not a style: the scrim is
+     anchored to the bottom and its height comes from the length of the heading, not from
+     the frame. Below ~390px the heading breaks onto enough lines that the scrim is taller
+     than the 3:2 frame and - as an absolute element - escaped above the photograph, laying
+     a grey smear on the paper over it (11px at 360px, 91px at 320px). Clipping it with
+     `overflow: hidden` is a trap here: it then cuts off the eyebrow and the top of the
+     heading. As a grid item the scrim helps determine the band's height, so the frame grows
+     to fit the text instead of the text escaping the frame. The gradient's density and the
+     scrim's padding are untouched - the eyebrow and heading measurements are the same. */
   .intro__hero {
     display: grid;
-    /* Jawna kolumna, nie domyślna `auto`: ścieżka `auto` mierzy się max-content swoich
-       elementów, a odkąd scrim jest elementem siatki, jego max-content (nierozłamany
-       nagłówek plus etykieta) rozpychał pas do 520px na ekranie 320px i dawał poziomy
-       pasek przewijania na całej stronie. `minmax(0, 1fr)` przypina kolumnę do szerokości
-       kontenera i pozwala zawartości się złamać. */
+    /* An explicit column rather than the default `auto`: an `auto` track measures the
+       max-content of its items, and since the scrim became a grid item its max-content (an
+       unbroken heading plus the eyebrow) pushed the band out to 520px on a 320px screen and
+       gave the whole page a horizontal scrollbar. `minmax(0, 1fr)` pins the column to the
+       container's width and lets the content break. */
     grid-template-columns: minmax(0, 1fr);
   }
 
-  /* <Picture> renderuje <picture><img>; elementem siatki jest owijka, więc kadr siedzi na
-     niej. `min-height: 100%` dorasta do wiersza, kiedy scrim okaże się wyższy niż kadr;
-     samo `align-self: stretch` tu nie działa, bo element z `aspect-ratio` się nie
-     rozciąga, a `height: 100%` rozpychałoby szerokość proporcją. */
+  /* <Picture> renders <picture><img>; the grid item is the wrapper, so the frame sits on
+     it. `min-height: 100%` grows to the row when the scrim turns out taller than the frame;
+     `align-self: stretch` alone does not work here, because an element with `aspect-ratio`
+     does not stretch, and `height: 100%` would push the width out by the ratio. */
   .intro__hero > :global(picture) {
     grid-area: 1 / 1;
     display: block;
     width: 100%;
     min-height: 100%;
-    /* Na telefonie 3:1 zostawia pasek zdjęcia wysokości palca; 3:2 daje tam kadr, w którym
-       widać, co jest w tunelu. Jedyne media query w projekcie i świadomie: to jest wybór
-       kadru, a nie układu, więc auto-fit go nie załatwi. */
+    /* On a phone, 3:1 leaves a band of photograph about as tall as a finger; 3:2 gives a
+       frame there in which you can see what is in the tunnel. The only media query in the
+       project, and a deliberate one: this is a choice of crop, not of layout, so auto-fit
+       cannot settle it. */
     aspect-ratio: 3 / 2;
   }
 
   @media (min-width: 700px) {
     .intro__hero > :global(picture) {
       aspect-ratio: 3 / 1;
-      /* Panorama 3:1 sama w sobie zjeżdża pod wysokość, którą scrim potrzebuje na etykietę
-         i h1 — bez tego dolnego progu gradient wypełnia cały kadr i z fotografii nie zostaje
-         nic. Próg jest liczony pod najwyższą treść scrimu, nie pod “wygląd”. `max(100%, …)`
-         zamiast samego progu, żeby dorastanie do wiersza zostało w mocy.
+      /* A 3:1 panorama drops below the height the scrim needs for the eyebrow and the h1 all
+         by itself - without this lower bound the gradient fills the whole frame and nothing
+         is left of the photograph. The bound is computed against the tallest content of the
+         scrim, not against "the look". `max(100%, ...)` rather than the bound alone, so
+         growing to the row stays in force.
 
-         Skutek uboczny progu: między 700px a ~1150px pas jest szerszy niż 3:1 wynikające
-         z proporcji (przy 700px wychodzi ~1,75:1), bo próg trzyma wysokość. To celowe —
-         niżej niż 400px scrim zjada całe zdjęcie — ale oznacza, że w tym zakresie widać
-         *więcej* fotografii, nie mniej, więc `object-position` niżej nie ucieka. */
+         A side effect of the bound: between 700px and ~1150px the band is wider than the
+         3:1 the ratio calls for (at 700px it works out at ~1.75:1), because the bound holds
+         the height. That is deliberate - below 400px the scrim eats the whole photograph -
+         but it means that in this range *more* of the photograph is visible, not less, so
+         `object-position` does not run away downwards. */
       min-height: max(100%, clamp(400px, 34vw, 560px));
     }
   }
@@ -163,15 +168,15 @@ import { directionsUrl, primaryPhone } from "../data/contact";
   .intro__photo {
     display: block;
     width: 100%;
-    /* Bije `height: auto`, które global.css nakłada na każdy img. */
+    /* Beats the `height: auto` that global.css puts on every img. */
     height: 100%;
     object-fit: cover;
-    /* Jedyne kadrowanie zdjęcia w tym pasie, więc jest wycelowane, a nie zostawione na
-       środku. Scrim jest kotwiczony dołem i przy 3:1 zabiera większość wysokości, więc
-       fotografia czyta się głównie górą kadru — 42% podciąga w ten widoczny pas kosze
-       wiszące i tabliczki z nazwami odmian zamiast zostawiać tam sufit szklarni. Przy 3:2
-       na telefonie kadr jest niemal pełny (4:3 → 3:2 to 88% wysokości) i wartość niczego
-       istotnego nie przesuwa. */
+    /* The only crop of the photograph in this band, so it is aimed rather than left in the
+       middle. The scrim is anchored to the bottom and at 3:1 takes most of the height, so
+       the photograph reads mainly through the top of the frame - 42% pulls the hanging
+       baskets and the variety labels up into that visible band instead of leaving the
+       glasshouse roof there. At 3:2 on a phone the frame is almost complete (4:3 -> 3:2 is
+       88% of the height) and the value moves nothing that matters. */
     object-position: center 42%;
   }
 
@@ -184,10 +189,11 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     gap: 0.6rem;
   }
 
-  /* Etykieta miejsca, nie zamiennik adresu w treści: nazwa wsi stoi też w akapicie niżej,
-     bo 10,5px wersalikami na fotografii to zła jedyna kryjówka dla najważniejszego faktu
-     na stronie gospodarstwa, do którego się przyjeżdża — i tekst na zdjęciu waży w
-     wyszukiwarce mniej niż zdanie w prozie. */
+  /* A label for the place, not a substitute for the address in the text: the name of the
+     village also stands in the paragraph below, because 10.5px of uppercase on a photograph
+     is a poor sole hiding place for the most important fact on the site of a holding people
+     drive to - and text on an image weighs less in a search engine than a sentence in
+     prose. */
   .intro__place {
     font-size: 0.66rem;
     font-weight: 600;

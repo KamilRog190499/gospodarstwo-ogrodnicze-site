@@ -14,7 +14,7 @@
 #
 # Secrets: FB_PAGE_ID, FB_ACCESS_TOKEN. See docs/facebook.md.
 
-name: Odświeżenie postów z Facebooka
+name: Refresh the Facebook feed
 
 on:
   schedule:
@@ -59,8 +59,8 @@ jobs:
           # skip the commit on exactly the day the first picture arrives.
           git add -A src/data/facebook-posts.json src/assets/facebook
           if git diff --cached --quiet; then
-            echo "Bez zmian - nic do zrobienia."
+            echo "No changes - nothing to do."
             exit 0
           fi
-          git commit -m "Odświeżenie postów z Facebooka"
+          git commit -m "Refresh the Facebook snapshot"
           git push

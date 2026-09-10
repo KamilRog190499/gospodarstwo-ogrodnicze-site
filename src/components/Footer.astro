@@ -94,9 +94,9 @@ const year = new Date().getFullYear();
   .footer {
     background: var(--ink);
     color: var(--footer-body);
-    /* Domyślna obwódka fokusa to --green (#5A6D46), a ona ma na --ink 2,63:1 — poniżej
-       3:1, których WCAG 1.4.11 wymaga od wskaźnika fokusa. Klawiatura przechodząca przez
-       stopkę nie widziała, gdzie jest. --green-lit daje 9,49:1. */
+    /* The default focus outline is --green (#5A6D46), and that is 2.63:1 on --ink - below
+       the 3:1 WCAG 1.4.11 asks of a focus indicator. A keyboard passing through the footer
+       could not see where it was. --green-lit gives 9.49:1. */
     --focus-ring: var(--green-lit);
     padding: var(--pad-footer) var(--edge);
     display: grid;
@@ -122,15 +122,17 @@ const year = new Date().getFullYear();
     color: var(--bone);
   }
 
-  /* Tu stał tagline z nagłówka, jedno zdanie nad blurbem, który jest jego nadzbiorem:
-     „Sprzedaż kwiatów balkonowych, rabatowych i chryzantem” nad „Sprzedaż kwiatów
-     balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych”. Wrócił do
-     nagłówka, gdzie stawia go specyfikacja; kolumna zostaje z blurbem, który mówi więcej. */
+  /* The header's tagline used to stand here, one sentence above a blurb that is a superset
+     of it: "Sprzedaż kwiatów balkonowych, rabatowych i chryzantem" over "Sprzedaż kwiatów
+     balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych". It went back to
+     the header, where the specification puts it; the column keeps the blurb, which says
+     more. */
 
   .footer__blurb {
     font-size: 0.92rem;
     max-width: 34ch;
-    /* 0,35rem, nie 0,15rem: blurb siedzi teraz bezpośrednio pod nazwą, a nie pod tagline. */
+    /* 0.35rem, not 0.15rem: the blurb now sits directly under the name rather than under
+       the tagline. */
     margin-top: 0.35rem;
   }
 

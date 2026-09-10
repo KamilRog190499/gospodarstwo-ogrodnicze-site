@@ -43,7 +43,8 @@ const home: NavItem = { label: "Strona główna", href: "/" };
  *  That order is importance, not the calendar. It used to claim to be "the order of the
  *  growing year", which stopped being true when the owners moved the pansies to March alone
  *  and the balcony flowers to April: the year now opens with `Bratki`, which sits third. The
- *  year is told by the state marker on the home page tiles instead - see `season.ts`. */
+ *  year is told by the season cards on the home page instead - see `SeasonCards.astro` and
+ *  `season.ts`. */
 export const offerPages: NavItem[] = offer.map((page) => ({
   label: page.menuLabel,
   href: page.href,

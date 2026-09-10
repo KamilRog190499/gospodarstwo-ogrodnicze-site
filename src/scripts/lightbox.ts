@@ -1,7 +1,7 @@
 /** The gallery's overlay preview.
  *
- *  Progressive enhancement, all of it. Every tile in Gallery.astro is already a link to
- *  the full-size photograph; this intercepts the click and shows it in place instead.
+ *  Progressive enhancement, all of it. Every slide in Compositions.astro is already a link
+ *  to the full-size photograph; this intercepts the click and shows it in place instead.
  *  With scripting off nothing here runs and the links keep working.
  *
  *  The overlay is built here rather than rendered into every page, so a visitor who never

@@ -1,32 +1,34 @@
-/* Dwa kroje motywu 2a, self-hosted — te same zasady, co poprzednio.
+/* The two typefaces of the 2a theme, self-hosted - the same rules as before.
  *
- * Instrument Serif i Karla wychodzą; Newsreader i Public Sans wchodzą. Oba są OFL i oba
- * mają wariant zmienny na Fontsource, więc zamiast trzech plików na rodzinę leci jeden.
+ * Instrument Serif and Karla are out; Newsreader and Public Sans are in. Both are OFL and
+ * both have a variable cut on Fontsource, so one file per family ships instead of three.
  *
- * Newsreader italic jest wczytywany celowo: słowo „Saran” w nagłówku jest kursywą i
- * przeglądarka, która musiałaby ją zesyntetyzować, robi z tej litery co innego.
+ * Newsreader italic is loaded on purpose: the word "Saran" in the masthead is italic, and a
+ * browser forced to synthesise that italic makes a different letter out of it.
  *
- * Public Sans italic nie jest importowany — projekt nigdy nie pochyla bezszeryfowego.
+ * Public Sans italic is not imported - the design never slants the sans.
  *
- * Wczytywany jest `opsz.css`, bo `opsz` jest tu tym, co ma znaczenie: bez tej osi duży
- * tekst (h1, telefon, nazwa gospodarstwa w maszcie) renderuje się krojem dostrojonym pod
- * ~16px tekstu i rozciągniętym do rozmiaru display, zamiast krojem, jaki Newsreader ma dla
- * dużych rozmiarów.
+ * `opsz.css` is the file that matters here, because the optical-size axis is what this
+ * design leans on: without it, large text (the h1, the phone number, the holding's name in
+ * the masthead) renders in a cut tuned for ~16px body copy and stretched up to display
+ * size, instead of the cut Newsreader actually has for large sizes.
  *
- * Sprostowanie, wrzesień 2026. Poprzednia wersja tego komentarza twierdziła, że Fontsource
- * dzieli Newsreader na osobne pliki per oś, że `opsz.css` ma `wght` zamrożoną na 400 i że
- * `wght` „nigdy się i tak nie przyda”. To nieprawda i warto o tym wiedzieć, zanim się
- * sięgnie po grubość: `files/newsreader-latin-opsz-normal.woff2` jest bajt w bajt tym samym
- * plikiem co `newsreader-latin-standard-normal.woff2` (md5 f94a697b16502ea4c1ea76b541b93b30),
- * czyli pełnym fontem zmiennym z obiema osiami — `opsz` 6-72 i `wght` 200-800. Dlatego
- * `@font-face` deklaruje `font-weight: 200 800`. Osobnym, instancjonowanym plikiem jest
- * dopiero `wght.css` (inna suma kontrolna) i akurat jego nie potrzebujemy.
+ * A correction, September 2026. An earlier version of this comment claimed that Fontsource
+ * splits Newsreader into one file per axis, that `opsz.css` freezes `wght` at 400, and that
+ * `wght` "would never be useful anyway". None of that is true, and it is worth knowing
+ * before anyone reaches for a weight: `files/newsreader-latin-opsz-normal.woff2` is byte for
+ * byte the same file as `newsreader-latin-standard-normal.woff2`
+ * (md5 f94a697b16502ea4c1ea76b541b93b30) - the full variable font with both axes, `opsz`
+ * 6-72 and `wght` 200-800. That is why the `@font-face` declares `font-weight: 200 800`.
+ * The separately instanced file is `wght.css` (a different checksum), and that is the one
+ * we do not need.
  *
- * Cała strona nadal rysuje szeryf wyłącznie wagą 400 — świadomie, nie z braku osi
- * (sprawdzone: żaden komponent nie ustawia innej). Gdyby kiedyś potrzebny był lżejszy krój,
- * `font-weight` na szeryfie działa i nie kosztuje ani jednego dodatkowego bajtu.
+ * The whole site still draws the serif at weight 400 only - deliberately, not for want of
+ * the axis (checked: no component sets another). If a lighter cut is ever wanted,
+ * `font-weight` on the serif works and costs not one extra byte.
  *
- * Nadal nic nie leci z CDN Google (RODO — patrz komentarz w poprzedniej wersji pliku).
+ * Still nothing from a Google CDN: no visitor's IP may reach Google without consent, which
+ * is the same rule that gates the map.
  */
 @import "@fontsource-variable/newsreader/opsz.css";
 @import "@fontsource-variable/newsreader/opsz-italic.css";

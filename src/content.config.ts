@@ -11,10 +11,11 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { plantGroups } from "./data/offer";
 
-/** The plants in the offer. Each renders as one entry in the `#oferta` section, with the
- *  Markdown body as the cultivation description.
+/** The plants in the offer. Each renders as one entry on its group's category page, with
+ *  the Markdown body as the cultivation description.
  *
- *  The file name becomes the anchor (`/#alstromeria`), which is why the names are Polish.
+ *  The file name becomes the anchor (`/kwiaty-balkonowe/#alstromeria`), which is why the
+ *  names are Polish.
  */
 const plants = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/plants" }),

@@ -9,15 +9,15 @@ Astro generujące czysty statyczny HTML. Zero frameworka na kliencie, zero hydra
 Do przeglądarki trafiają trzy własne moduły TypeScriptu:
 
 - `src/scripts/consent.ts` — pasek zgody i wczytywanie mapy Google,
-- `src/scripts/compositions.ts` — pokaz obsadzeń na stronie „Inspiracje”,
+- `src/scripts/compositions.ts` — pokaz obsadzeń („Inspiracje” i strona główna),
 - `src/scripts/lightbox.ts` — powiększenie zdjęcia na wierzchu strony.
 
 Menu się nie zwija: osiem pozycji łamie się na kolejne wiersze samo, więc żadnego
 JavaScriptu do nawigacji nie ma. Każda z nich prowadzi pod osobny adres — strona główna,
-cztery grupy oferty, inspiracje, historia i kontakt. Bez skryptu strona działa w całości — pokaz slajdów jest
-wtedy przewijalną w poziomie taśmą ze wszystkimi 23 zdjęciami i ich podpisami, a pasek
-zgody i miejsce na mapę znikają, bo bez skryptu nic się do Google nie łączy i nie ma o co
-pytać. Zostaje link „Wyznacz trasę”.
+cztery grupy oferty, inspiracje, historia i kontakt. Bez skryptu strona działa w całości —
+pokaz slajdów jest wtedy przewijalną w poziomie taśmą ze wszystkimi 23 zdjęciami i ich
+podpisami, a pasek zgody i miejsce na mapę znikają, bo bez skryptu nic się do Google nie
+łączy i nie ma o co pytać. Zostaje link „Wyznacz trasę”.
 
 ## Wymagania
 
@@ -49,11 +49,11 @@ Lighthouse i sprawdzenie szerokości od 320 px w górę.
 ```
 src/
 ├── assets/       zdjęcia źródłowe: gallery/ (23 kadry), plants/, chrysanthemums/,
-│              pansies/ — wszystko maks. 2000 px
+│              pansies/, hero/, facebook/ — wszystko maks. 2000 px
 ├── components/   komponenty .astro
 ├── content/      treść redakcyjna: plants/ (17 roślin), pages/ (historia)
-├── data/         dane nieredakcyjne w TypeScripcie (contact, navigation, season,
-│              gallery, version)
+├── data/         dane nieredakcyjne w TypeScripcie: offer, season, navigation,
+│              contact, gallery, plant-links, facebook, version
 ├── layouts/      BaseLayout.astro
 ├── pages/        index.astro, kwiaty-balkonowe.astro, rabatowe.astro,
 │              bratki.astro, chryzantemy.astro, inspiracje.astro,
@@ -61,10 +61,12 @@ src/
 ├── scripts/      consent.ts, compositions.ts, lightbox.ts — jedyny JavaScript
 └── styles/       tokens.css, global.css, fonts.css
 src/content.config.ts   schematy zod kolekcji treści
+scripts/fetch-facebook.mjs   pobieranie postów z Facebooka (tylko przy buildzie)
 docs/
 ├── design/                 projekt: specyfikacja i prototypy .dc.html
-├── inwentaryzacja.md       co było na starej stronie i gdzie trafiło
-└── przekierowania.md       mapa 301
+├── inwentaryzacja.md       co było na starej stronie, gdzie trafiło i co zostało otwarte
+├── przekierowania.md       mapa 301
+└── facebook.md             jak wystawić token do Facebooka
 ```
 
 ## Edytowanie treści
@@ -72,21 +74,25 @@ docs/
 **Rośliny** są w `src/content/plants/`, po jednym pliku Markdown na roślinę. Nazwa pliku
 staje się kotwicą na stronie swojej grupy — `alstromeria.md` to
 `/kwiaty-balkonowe/#alstromeria` — więc zmiana nazwy pliku psuje linki, które ktoś mógł
-zapisać. Pole `group` we frontmatterze decyduje, na której z trzech stron wpis się pojawi.
+zapisać. Pole `group` we frontmatterze decyduje, na której z **czterech** stron wpis się
+pojawi.
 
 Frontmatter jest walidowany schematem zod z `src/content.config.ts`: literówka w nazwie
 pola albo zdjęcie bez opisu **przerywa build**, zamiast po cichu wypuścić pustą sekcję.
 
 ```yaml
 name: Fuksja # nazwa w nagłówku
-group: Balkonowe # Balkonowe | Rabatowe | Chryzantemy — steruje chipem
+group: Balkonowe # Balkonowe | Rabatowe | Bratki | Chryzantemy — steruje chipem
 order: 2 # kolejność na stronie
 slot: zdjęcie — fuksja, 4:3 # opis kadru, widoczny w placeholderze
-facts: # maks. 3, opcjonalne
+facts: # maks. 4, opcjonalne
   - label: Stanowisko
     value: Półcień, osłonięte
 colors: [czerwony, biały] # opcjonalne — chipy „Dostępne kolory”
 ```
+
+Lista grup jest w `src/data/offer.ts` i **stamtąd** bierze ją schemat — nowa grupa zaczyna
+się w tym pliku, nie w `content.config.ts`.
 
 Opis uprawy to treść pliku pod frontmatterem. **Nie skracamy go** — długie, konkretne opisy
 to powód, dla którego ludzie trafiają na tę stronę z wyszukiwarki.
@@ -100,12 +106,12 @@ górze strony, w sekcji kontaktu, w stopce i w danych strukturalnych JSON-LD.
 **Zdjęcia w pokazie slajdów** („Inspiracje”) są w `src/data/gallery.ts` — kolejność wpisów
 to kolejność slajdów, a każdy wpis to import zdjęcia plus polski `alt`. Typ wymaga obu, więc
 zdjęcie bez opisu nie przejdzie kompilacji. Ten sam plik trzyma zdjęcia przypisane
-pojedynczo: `tunnelPhoto` (karta wiosenna), `historyPhoto` (sekcja Historia) i
-`chrysanthemumPhoto` (karta jesienna) oraz dwa pasy zdjęć pod listami roślin:
-`chrysanthemumStrip` (cztery ujęcia na `/chryzantemy/`) i `pansyStrip` (cztery skrzynki
-z bratkami na `/bratki/`). Wszystkie te eksporty leżą **poza** tablicą pokazu — slajdy są
-z wiosennej prezentacji gotowych obsadzeń i ujęcie sprzedażowe w ich środku czytałoby
-się jak pomyłka.
+pojedynczo: `heroPhoto` (pas na górze strony głównej), `tunnelPhoto` (karta wiosenna),
+`historyPhoto` (sekcja Historia), `pansyPhoto` i `chrysanthemumPhoto` (karty sezonowe) oraz
+dwa pasy zdjęć pod listami roślin: `chrysanthemumStrip` (cztery ujęcia na `/chryzantemy/`)
+i `pansyStrip` (cztery skrzynki z bratkami na `/bratki/`). Wszystkie te eksporty leżą
+**poza** tablicą pokazu — slajdy są z wiosennej prezentacji gotowych obsadzeń i ujęcie
+sprzedażowe w ich środku czytałoby się jak pomyłka.
 
 Żeby dodać zdjęcie: przeskaluj je do **maks. 2000 px** dłuższego boku i **wypal obrót
 z EXIF** — aparaty zapisują pionowe kadry jako poziome z flagą obrotu, a `<Picture>` tej
@@ -117,10 +123,10 @@ node -e "import('sharp').then(({default:s})=>s('IMG.jpg').rotate().resize({width
 
 Oryginałów nie commitujemy — do repo trafia dopiero wersja przeskalowana.
 
-**Zdjęcia roślin**: mają je na razie cztery z siedemnastu roślin — trzy chryzantemy i bratek;
-pozostałe placeholdery wypisują kadr, którego brakuje. Dodanie kolejnego
-to dwa kroki: przeskaluj plik jak wyżej do `src/assets/plants/` — nazwa taka sama jak
-nazwa pliku rośliny w `src/content/plants/` — i dopisz we frontmatterze:
+**Zdjęcia roślin**: ma je **czternaście z siedemnastu** roślin; brakuje dalii, pelargonii
+bluszczolistnej i sundaville, a ich placeholdery wypisują kadr, którego brakuje. Dodanie
+kolejnego to dwa kroki: przeskaluj plik jak wyżej do `src/assets/plants/` — nazwa taka sama
+jak nazwa pliku rośliny w `src/content/plants/` — i dopisz we frontmatterze:
 
 ```yaml
 image: ../../assets/plants/nazwa-rosliny.jpg
@@ -131,15 +137,47 @@ Schemat wymaga obu pól naraz, a `PlantEntry` sam podmienia placeholder na zdję
 
 ## Sezon
 
-Która z **trzech** kart sezonowych jest podświetlona, wynika z **daty builda**
-(`src/data/season.ts`), nie z ustawienia w treści. Okna: marzec–kwiecień to bratki,
-maj–sierpień kwiaty balkonowe i rabatowe, wrzesień–listopad chryzantemy. Konsekwencja: strona zbudowana w sierpniu
-będzie „wiosenna” aż do następnego pusha. Workflow wdrożeniowy musi mieć comiesięczny
-`schedule:` obok `push:`, inaczej 1 października strona nadal sprzedaje wiosnę.
+Który z **trzech** okresów sprzedaży jest podświetlony, wynika z **daty builda**
+(`src/data/season.ts`), nie z ustawienia w treści. Okna są takie, jakie podali właściciele:
 
-Stan zimowy (grudzień–luty) nie jest zaprojektowany: wszystkie karty są wtedy wygaszone,
-a etykiety pokazują nazwę pory roku zamiast „Trwa teraz”. Żaden komunikat nie jest
-zmyślany — do ustalenia z właścicielami.
+| Okres                  | Co jest w sprzedaży            |
+| ---------------------- | ------------------------------ |
+| marzec                 | bratki i prymulki              |
+| kwiecień – czerwiec    | kwiaty balkonowe i rabatowe    |
+| 1 października – 1 listopada | chryzantemy              |
+
+Reguła jest jedna: okno, które obejmuje dziś, daje swoim grupom **„W trakcie”**; kiedy żadne
+okno nie trwa, najbliższe do otwarcia daje swoim grupom **„Wkrótce”**, a reszta nie mówi nic.
+Dzięki temu na stronie stoi najwyżej jeden komunikat sezonowy naraz.
+
+Widać go w dwóch miejscach: na kartach sezonowych na stronie głównej (ciemna karta plus
+etykieta) i na stronie kategorii, jako linijka „Sprzedaż trwa: …” pod nagłówkiem. **Kafle
+oferty na stronie głównej nie mówią nic o dacie** — to są cztery równe drzwi do czterech
+stron.
+
+Konsekwencja liczenia z daty builda: strona zbudowana w sierpniu będzie pokazywać sierpień
+aż do następnego pusha. Workflow wdrożeniowy musi mieć **codzienny** `schedule:` obok
+`push:` — miesięczny przegapiłby 2 listopada i zostawiłby „CHRYZANTEMY · W TRAKCIE” na
+cały listopad.
+
+Zimą (2 listopada – koniec lutego) karta bratków pokazuje „Wkrótce”. To jest do potwierdzenia
+z właścicielami razem z resztą tabeli w [`docs/inwentaryzacja.md`](docs/inwentaryzacja.md);
+komunikat „Sprzedaż wznawiamy w marcu” z projektu graficznego nie jest zaprojektowany i nie
+jest wdrożony.
+
+## Posty z Facebooka
+
+Blok „Co u nas słychać” na stronie głównej to jedyna rzecz na stronie, która zmienia się
+sama. Raz dziennie `scripts/fetch-facebook.mjs` pobiera trzy ostatnie posty z profilu
+gospodarstwa i **commituje je do `main`** — tekst do `src/data/facebook-posts.json`, zdjęcia
+jako pliki do `src/assets/facebook/`. Zwykły build roznosi je dalej.
+
+Zdjęcia są **pobierane, nie podlinkowane**: adresy z Facebooka wygasają po kilku dniach,
+a dzięki temu, że pliki są nasze, przeglądarka odwiedzającego w ogóle nie łączy się z Metą —
+i tylko dlatego ten blok nie potrzebuje pytania o zgodę, którego wymaga mapa.
+
+Dopóki token nie jest ustawiony, blok nie pokazuje niczego i tak ma być. Procedura wystawienia
+tokenu: [`docs/facebook.md`](docs/facebook.md).
 
 ## Wersja
 
@@ -150,5 +188,6 @@ Stopka pokazuje sam numer, a `commit … · build … UTC` chowa w atrybucie `ti
 ## Czego brakuje przed wdrożeniem
 
 Pełna lista jest w [`docs/inwentaryzacja.md`](docs/inwentaryzacja.md). Najważniejsze:
-zdjęcia, godziny sprzedaży, e-mail, polityka prywatności i certyfikat HTTPS na serwerze.
+trzy brakujące zdjęcia roślin, godziny sprzedaży, e-mail, polityka prywatności, token
+do Facebooka, plik `deploy.yml` i certyfikat HTTPS na serwerze.
 Mapa przekierowań ze starych adresów: [`docs/przekierowania.md`](docs/przekierowania.md).

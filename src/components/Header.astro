@@ -2,32 +2,34 @@
 import Nav from "./Nav.astro";
 
 /**
- * Nazwa, tagline i menu — trzy piętra, wszystkie wyśrodkowane.
+ * The name, the tagline and the menu - three storeys, all centred.
  *
- * Nazwa w skali własnej (--text-masthead) na środku, pod nią pasek menu na pełną
- * szerokość, z delikatnym tłem --paper-dim i własną kreską — tak jak w dzisiejszej
- * witrynie, bo ten pasek się podoba i porządkuje górę ekranu.
+ * The name sits centre stage at its own scale (--text-masthead), with the full-width menu
+ * bar under it on a faint --paper-dim ground and a rule of its own - as on the current
+ * site, because that bar is liked and it tidies the top of the screen.
  *
- * Wersja „nazwa po lewej, menu po prawej w jednym rzędzie” została odrzucona: siedem
- * pozycji nie mieści się obok nazwy poniżej ~1150px, a zawijanie zrzucało cały pasek
- * pod nazwę wyrównany do prawej, z pustą dziurą po lewej.
+ * The "name on the left, menu on the right, one row" version was rejected: eight items do
+ * not fit beside the name below ~1150px, and wrapping dropped the whole bar under the name
+ * flush right, with an empty hole on the left.
  *
- * Kluczowe dla wyrównania: `<Nav />` stoi **poza** paddingiem nazwy, jako drugi wiersz
- * gridu nagłówka. Pasek ma wtedy własny `padding-inline: var(--edge-nav)` i nic się nie
- * dodaje podwójnie — to było źródłem rozjeżdżania, nie samo tło.
+ * Critical to the alignment: `<Nav />` stands **outside** the name's padding, as the second
+ * row of the header grid. The bar then has its own `padding-inline: var(--edge-nav)` and
+ * nothing is added twice - that double margin was the source of the misalignment, not the
+ * background itself.
  *
- * Tagline stoi tutaj i ma tu stać. Wersja 0.5 przeniosła go do pierwszej kolumny stopki,
- * żeby nagłówek zmieścił się w dwóch piętrach — ale docs/design/README.md sekcja 1 stawia
- * go w nagłówku, CLAUDE.md wymienia go wprost wśród rzeczy łatwych do zepsucia, a w stopce
- * lądował zdanie nad blurbem, który mówi to samo szerzej. Zmiana specyfikacji nie jest
- * decyzją do podjęcia w komentarzu w kodzie; wraca na miejsce, dopóki właściciele nie
- * powiedzą inaczej — a wtedy zapisujemy to w docs/, nie tutaj.
+ * The tagline belongs here and stays here. Version 0.5 moved it into the footer's first
+ * column to keep the header down to two storeys - but docs/design/README.md section 1 puts
+ * it in the header, CLAUDE.md names it among the things that are easy to get wrong, and in
+ * the footer it landed one line above a blurb that says the same thing at greater length.
+ * Changing the specification is not a decision to take in a code comment; it goes back
+ * where it belongs until the owners say otherwise - and then it is written down in docs/,
+ * not here.
  *
- * Brzmienie jest słowo w słowo z dzisiejszej witryny i nie podlega redakcji.
+ * The wording is that of the current site, word for word, and is not open to editing.
  *
- * Trzy piętra kosztują ~30px wysokości względem dwóch; nazwa zostaje w pełnej skali.
+ * Three storeys cost about 30px of height against two; the name keeps its full scale.
  *
- * Nazwa nadal nie jest `h1`; `h1` należy do strony.
+ * The name is still not an `h1`; the `h1` belongs to the page.
  */
 ---
 
@@ -62,8 +64,8 @@ import Nav from "./Nav.astro";
     text-decoration: none;
   }
 
-  /* Odstęp dolny nagłówka wisi teraz na tagline, nie na nazwie — między nimi ma być
-     ciasno, bo to jedna jednostka, a nie dwa wiersze. */
+  /* The header's bottom spacing now hangs on the tagline rather than on the name - the two
+     are meant to sit tight together, because they are one unit and not two rows. */
   .tagline {
     padding: 0.55rem var(--edge-nav) clamp(0.9rem, 2vw, 1.35rem);
     font-family: var(--sans);
@@ -76,8 +78,8 @@ import Nav from "./Nav.astro";
     text-wrap: balance;
   }
 
-  /* Jedyna kursywa na stronie, i jedyne miejsce, gdzie wolno użyć --sage: nazwa jest
-     zawsze ≥24.8px, więc 3,9:1 mieści się w AA dla dużego typu. */
+  /* The only italic on the site, and the only place --sage may be used: the name is always
+     >=24.8px, so 3.9:1 falls inside AA for large type. */
   .name em {
     font-style: italic;
     color: var(--sage);

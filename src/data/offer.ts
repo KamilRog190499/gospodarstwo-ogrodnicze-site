@@ -39,8 +39,8 @@ export interface OfferPage {
  * **That order is importance, not the calendar** - and it used to claim otherwise. The
  * comment here read "in menu order - which is the order of the growing year", which stopped
  * being true when the owners moved the pansies to March alone and the balcony flowers to
- * April: the year now opens with `Bratki`, which sits third. The year is told by the state
- * marker on the tiles (see `season.ts`), so the order does not have to tell it, and a menu
+ * April: the year now opens with `Bratki`, which sits third. The year is told by the season
+ * cards in `SeasonCards.astro` (see `season.ts`), so the order does not have to tell it, and a menu
  * that leads with one plant instead of eleven would be a worse menu.
  *
  * `tileTitle` says "Bratki i prymulki" while the group is only `Bratki`: the owners sell

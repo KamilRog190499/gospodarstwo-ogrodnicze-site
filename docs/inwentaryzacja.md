@@ -708,6 +708,51 @@ gospodarstwa w maszcie też okażą się za ciężkie, drugą dźwignią jest gr
 2026 twierdził komentarz w `src/styles/fonts.css`. **Do decyzji właścicieli po zobaczeniu
 strony.**
 
+## Historia wersji
+
+Ta sekcja przyjęła narrację, która do września 2026 stała w `CLAUDE.md`. Tam była szkodliwa:
+`CLAUDE.md` czyta asystent przy każdej sesji jako opis **stanu obecnego**, a opowieść „0.6
+zrobiło X, 0.7 to cofnęło” czyta się jak stan i prowadziła do błędnych wniosków o kodzie.
+Tutaj jest na swoim miejscu, bo ten plik jest kroniką projektu.
+
+Szczegóły każdej zmiany są w sekcjach wyżej; poniżej sam przebieg, żeby dało się dojść, skąd
+się co wzięło.
+
+| Wersja | Co przyniosła |
+| ------ | -------------- |
+| 0.1–0.4 | Rusztowanie Astro, tokeny, komponenty, migracja treści ze starej strony WordPressa: 14 opisów roślin i historia gospodarstwa. Menu miało wtedy pięć pozycji celujących w kotwice na jednej stronie, a trzy z nich w **tę samą** kotwicę `#oferta`. |
+| 0.5 | Przegląd kodu (13 znalezisk). Tagline przeniesiony z masztu do stopki — **cofnięte w 0.6**, patrz niżej. |
+| 2a | Motyw „Poranek w tunelu”: Instrument Serif → Newsreader, Karla → Public Sans, zieleń rozdzielona na `--green` (tekst) i `--sage` (dekoracja ≥24px), papier i atrament przestrojone. Zastępuje tabelę kolorów i typografię z handoffu; źródłem prawdy jest `src/styles/tokens.css`. |
+| 0.6 | Strona główna przestała być samą wizytówką. Tagline wrócił do masztu: w stopce lądował jedno zdanie nad blurbem, który jest jego nadzbiorem, a zmiana specyfikacji nie jest decyzją do podjęcia w komentarzu w kodzie. Usunięty powtarzający się `ContactStrip`. |
+| 0.7 | Oferta rozbita na cztery realne podstrony zamiast kotwic (patrz [`przekierowania.md`](przekierowania.md)). Strona główna stała się zapowiedzią całej witryny: kafle oferty otwierają się mozaiką własnych zdjęć grupy, a pokaz obsadzeń dostał drugi adres. Do 0.6 strona główna pokazywała cztery zdjęcia przy kilkudziesięciu w repozytorium. Szczegóły: [Strona główna jako witryna](#strona-główna-jako-witryna--wrzesień-2026) i [Pokaz obsadzeń na dwóch adresach](#pokaz-obsadzeń-na-dwóch-adresach). |
+| 0.8 | Blok „Co u nas słychać” — jedyna rzecz na stronie, która zmienia się sama. Szczegóły i decyzje do przejrzenia: [Posty z Facebooka](#posty-z-facebooka--wrzesień-2026). |
+| 0.9 | Przebudowa kalendarza sprzedaży pod okna podane przez właścicieli. Znacznik stanu trafił na jedną iterację na kafle oferty i **został z nich zdjęty** — kafle to cztery równe drzwi do czterech stron. Karty sezonowe straciły natomiast odnośnik. Szczegóły: [Kalendarz sprzedaży](#kalendarz-sprzedaży--wrzesień-2026). |
+| 0.9.1 | Zmniejszony stopień telefonu i adresu oraz brakująca spacja w adresie: [Stopień telefonu i adresu](#stopień-telefonu-i-adresu--wrzesień-2026). |
+
+### Paczki materiału od właścicieli
+
+Sześć dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
+i w [Wymianie opisów](#wymiana-opisów--wrzesień-2026); tutaj sam spis, bo kolejność bywa
+potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
+
+1. **23 zdjęcia gotowych obsadzeń** — pokaz „Inspiracje”; dwa z nich obsadziły kartę wiosenną
+   i blok historii.
+2. **8 zdjęć chryzantem** — trzy trafiły na wpisy (po jednym na typ, 4:3), jedno na kartę
+   jesienną, cztery w pas pod listą na `/chryzantemy/`. To były pierwsze zdjęcia przy
+   pojedynczych roślinach i powód, dla którego `PlantEntry` renderuje `image`/`imageAlt`.
+3. **Teksty o trzech typach chryzantem** — grupa urosła z jednego wpisu do trzech
+   (wielkokwiatowa, średniokwiatowa, igiełkowa).
+4. **6 zdjęć bratków** — przyniosły ze sobą całą nową grupę: `Bratki` w enumie schematu, wpis
+   `bratek-ogrodowy.md`, stronę `/bratki/`, pozycję w menu i **trzecią kartę sezonową**
+   ([Trzecia karta sezonowa](#trzecia-karta-sezonowa--wrzesień-2026)).
+5. **Opisy uprawy 14 roślin spoza chryzantem** — zastąpiły treść z WordPressa na jedenastu
+   wpisach i zamknęły trzy luki. Przy okazji limit `facts` podniesiony do czterech, bo tyle
+   linijek właściciele wypisali sami.
+6. **10 zdjęć balkonowych i rabatowych** — jedyna paczka **nie** nadesłana przez
+   właścicieli: zapytanie do `wp-json/wp/v2/media` starej strony wydobyło 58 fotografii
+   z lat 2019–2020, wgranych do biblioteki mediów, ale nigdy nieumieszczonych na żadnej
+   żywej podstronie.
+
 ## Czego nadal brakuje
 
 1. Zdjęcia — po jednym na dahlię, pelargonię bluszczolistną i sundaville (4:3, żadne

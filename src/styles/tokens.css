@@ -1,93 +1,97 @@
-/* Design tokens — motyw „Poranek w tunelu” (2a), zatwierdzony we wrześniu 2026.
- * Zastępuje paletę i kroje z docs/design/README.md. Reszta doktryny tego pliku zostaje
- * bez zmian: żaden komponent nie zaszywa koloru, rozmiaru ani odstępu, nadal nie ma
- * promienia, cienia ani gradientu — z jednym wyjątkiem, opisanym niżej.
+/* Design tokens - the "Poranek w tunelu" (2a) theme, approved September 2026.
+ * It supersedes the palette and the typefaces in docs/design/README.md. The rest of this
+ * file's doctrine is unchanged: no component hardcodes a colour, a size or a spacing, and
+ * there is still no border radius, no shadow and no gradient - with one exception, below.
  *
- * Co się zmieniło względem poprzedniej wersji:
+ * What changed against the previous version:
  *
- * - kroje: Instrument Serif → Newsreader (miększa kreska, optyczne osie, pełny zestaw
- *   polskich znaków), Karla → Public Sans (szersze światło, lepiej czyta się w małych
- *   etykietach uppercase, których jest tu dużo).
- * - zieleń rozdzielona na dwie. Poprzednia --green robiła jednocześnie za kolor tekstu
- *   linku i za dekorację; jeden odcień nie może być naraz wystarczająco jasny, żeby
- *   ożywić stronę, i wystarczająco ciemny, żeby przejść AA na tekście. Teraz --green
- *   (#5A6D46, 4,95:1 na papierze) jest tekstowa, a --sage (#6B7F55, 3,9:1) wyłącznie
- *   dekoracyjna: kursywa „Saran” w nagłówku i podobny typ wielkoformatowy. Nie używaj
- *   --sage na niczym poniżej 24px.
- * - papier o ćwierć stopnia cieplejszy (#FCFBF5 → #FAF7F0), atrament zzielenił się
- *   (#23281F → #1F2A21). Różnica jest mała z rozmysłem: to ta sama strona, nie inna.
- * - --ink-grey podniesiony z #5B6153 do #656E5B. Stary dawał 4,3:1 na nowym papierze,
- *   a nosi wszystkie etykiety uppercase i podpisy zdjęć.
+ * - typefaces: Instrument Serif -> Newsreader (a softer stroke, optical axes, a complete
+ *   set of Polish glyphs), Karla -> Public Sans (wider fit, easier to read in the small
+ *   uppercase labels this design uses a lot of).
+ * - the green split in two. The old --green served as both link text and decoration; one
+ *   shade cannot be light enough to lift the page and dark enough to pass AA as text at
+ *   the same time. Now --green (#5A6D46, 4.95:1 on paper) is the text green and --sage
+ *   (#6B7F55, 3.9:1) is decorative only: the italic "Saran" in the masthead and display
+ *   type of that size. Do not use --sage on anything below 24px.
+ * - the paper is a quarter step warmer (#FCFBF5 -> #FAF7F0) and the ink turned greener
+ *   (#23281F -> #1F2A21). The difference is small on purpose: this is the same site, not
+ *   a different one.
+ * - --ink-grey lifted from #5B6153 to #656E5B. The old value gave 4.3:1 on the new paper,
+ *   and it carries every uppercase label and every photo caption.
  *
- * Jedyny gradient w projekcie: --hero-scrim, przyciemnienie pod nagłówkiem na zdjęciu
- * w Intro.astro. Nie jest ozdobą — bez niego biały tekst na fotografii tunelu ma
- * miejscami 2:1. Nie kopiuj go nigdzie indziej.
+ * The only gradient in the design: --hero-scrim, the darkening under the heading that lies
+ * on the photograph in Intro.astro. It is not decoration - without it the white text over
+ * the tunnel photograph drops to 2:1 in places. Do not copy it anywhere else.
  */
 
 :root {
   /* ---------- colour ---------- */
 
   /* grounds */
-  --paper: #faf7f0; /* Papier - tło strony, tekst na ciemnym */
-  --paper-dim: #f2efe4; /* Papier zabrudzony - pasek sezonu, chipy, tło sekcji */
+  --paper: #faf7f0; /* Paper - the page ground, and text on dark */
+  --paper-dim: #f2efe4; /* Dimmed paper - the season strip, chips, section grounds */
 
   /* rules */
-  --rule: #e2ddce; /* Kreska - każda linia 1px, obramowania kart i zdjęć */
-  --rule-dim: #dcd7c4; /* Kreska ciemniejsza - chipy, linie na --paper-dim */
-  --rule-link: #cfcbb8; /* Kreska pod linkiem - podkreślenie telefonu w spoczynku */
+  --rule: #e2ddce; /* Rule - every 1px line, card and photo borders */
+  --rule-dim: #dcd7c4; /* Darker rule - chips, and lines on --paper-dim */
+  --rule-link: #cfcbb8; /* Link rule - the phone number's underline at rest */
 
   /* text */
-  --ink: #1f2a21; /* Atrament - tekst, nagłówki, tło stopki */
-  --ink-soft: #4b5744; /* Atrament miękki - akapity drugorzędne (6,7:1) */
-  --ink-grey: #656e5b; /* Atrament szary - etykiety uppercase, podpisy (4,7:1) */
+  --ink: #1f2a21; /* Ink - body text, headings, the footer ground */
+  --ink-soft: #4b5744; /* Soft ink - secondary paragraphs (6.7:1) */
+  --ink-grey: #656e5b; /* Grey ink - uppercase labels and captions (4.7:1) */
 
   /* greens */
-  --green: #5a6d46; /* Zieleń tekstowa - linki, hover, focus ring (4,95:1) - AA */
-  --sage: #6b7f55; /* Zieleń dekoracyjna - TYLKO typ ≥24px (3,9:1) */
-  --green-deep: #3d4a33; /* Zieleń ciemna - przyciski, aktywna karta, skip link */
-  --green-slot: #33402b; /* Zieleń tunelu - placeholdery zdjęć na ciemnym */
-  --green-lit: #c6d3b6; /* Zieleń jasna - etykiety uppercase na ciemnym */
+  --green: #5a6d46; /* Text green - links, hover, focus ring (4.95:1) - AA */
+  --sage: #6b7f55; /* Decorative green - type >=24px ONLY (3.9:1) */
+  --green-deep: #3d4a33; /* Deep green - buttons, the lit card, the skip link */
+  --green-slot: #33402b; /* Tunnel green - photo placeholders on dark */
+  --green-lit: #c6d3b6; /* Lit green - uppercase labels on dark */
   --green-slot-text: #d3dcc6;
-  --green-body: #dde2d2; /* Akapity na --green-deep */
-  --bone: #eef0e6; /* Nagłówki na --green-deep i --ink */
+  --green-body: #dde2d2; /* Paragraphs on --green-deep */
+  --bone: #eef0e6; /* Headings on --green-deep and on --ink */
 
   /* focus */
-  /* Kolor obwódki :focus-visible, jako zmienna, bo ta jedna wartość musi się zmieniać
-     razem z tłem, a reszta palety nie. --green ma na papierze 4,95:1, ale na --ink 2,63:1
-     i na --green-deep 1,67:1 — WCAG 1.4.11 wymaga od wskaźnika fokusa 3:1 wobec sąsiadów,
-     więc na ciemnych blokach domyślna obwódka po prostu znikała.
+  /* The :focus-visible outline colour, kept as a variable because this one value has to
+     change with the ground under it while the rest of the palette does not. --green is
+     4.95:1 on paper but 2.63:1 on --ink and 1.67:1 on --green-deep - WCAG 1.4.11 asks a
+     focus indicator for 3:1 against its neighbours, so on the dark blocks the default
+     outline simply disappeared.
 
-     Zmienne dziedziczą, więc ciemny blok podnosi ją u siebie jednym wierszem:
-     `--focus-ring: var(--green-lit)` na kontenerze (9,49:1 na --ink, 6,02:1 na
-     --green-deep, 7,02:1 na --green-slot) i wszystko w środku ma widoczny fokus.
-     Nadpisują ją: .footer, .history i .lightbox. Ciemna karta sezonowa (.card--lit) tego
-     nie robi, bo od 0.9 nie ma w środku niczego, co da się sfokusować — straciła odnośnik.
+     Custom properties inherit, so a dark block raises it for everything inside in one
+     line: `--focus-ring: var(--green-lit)` on the container (9.49:1 on --ink, 6.02:1 on
+     --green-deep, 7.02:1 on --green-slot). The overrides live on .footer, .history and
+     .lightbox. The lit season card (.card--lit) does not have one, because since 0.9 it
+     holds nothing focusable - it lost its link.
 
-     Uwaga: element ciemny na jasnym tle (.cta, .skip) nadpisania NIE potrzebuje —
-     outline-offset 3px kładzie obwódkę poza nim, na papierze. Liczy się to, co jest
-     *dookoła*, nie to, co pod spodem. */
+     Note: a dark element on a light ground (.cta, .skip) needs NO override - the 3px
+     outline-offset puts the ring outside it, on the paper. What counts is what surrounds
+     the ring, not what lies under it. */
   --focus-ring: var(--green);
 
   /* hero */
-  /* Pod nagłówkiem na zdjęciu. Cztery przystanki, bo dwa dawały widoczną krawędź w
-     połowie kadru, a trzy - pierwsza wersja tego motywu - miały gęstość dobraną na oko
-     i tekst lądował w strefie 30-40% alfy: nagłówek wychodził 2,4:1, a etykieta nad nim
-     1,5:1 nad jasnym pasem petunii w kadrze tunelu. Zmierzone na pikselach, nie ocenione
-     wzrokiem.
+  /* Under the heading that lies on the photograph. Four stops, because two left a visible
+     edge across the middle of the frame, and three - the first version of this theme - had
+     their density judged by eye, which landed the text in the 30-40% alpha band: the
+     heading came out at 2.4:1 and the eyebrow above it at 1.5:1 over the bright band of
+     petunias in the tunnel photograph. Measured on the pixels, not judged by eye.
 
-     Druga wersja densyfikowała tylko strefę nagłówka i przepuściła etykietę nad nim:
-     nagłówek wyszedł 7,2:1, etykieta 3,1:1, bo jest najwyższym elementem scrimu i siadała
-     już na opadającym zboczu. Miarodajny jest ten wyżej położony element, nie ten większy.
+     The second version densified the heading's band alone and let the eyebrow above it
+     slip through: the heading reached 7.2:1 and the eyebrow only 3.1:1, because it is the
+     highest element in the scrim and was already sitting on the falling slope. The element
+     that decides this is the higher one, not the larger one.
 
-     Przeliczone pod panoramę 3:1: scrim jest niższy niż w wersji 21:9 (padding górny
-     2,75rem zamiast 5,5rem, żeby gradient mieścił się w kadrze i zostawiał widoczny pas
-     fotografii), więc etykieta siada wyżej na zboczu. Dlatego zbocze jest gęstsze i
-     krótsze: 72% alfy sięga 92% wysokości, zanik zamknięty w górnych 8%. Etykieta wypada
-     w strefie ~0,77 alfy — ~5,2:1, nagłówek ~7:1 nad najjaśniejszym fragmentem kadru.
-     To dolna granica tego zaciemnienia: niżej etykieta 10,5px schodzi pod 4,5:1.
+     Recomputed for the 3:1 panorama: the scrim is shorter than it was in the 21:9 version
+     (2.75rem of top padding instead of 5.5rem, so the gradient fits the frame and leaves a
+     visible band of photograph), so the eyebrow sits higher on the slope. That is why the
+     slope is denser and shorter: 72% alpha reaches 92% of the height and the fade is
+     closed into the top 8%. The eyebrow falls in a band of ~0.77 alpha - about 5.2:1, with
+     the heading at about 7:1 over the brightest part of the frame. This is the lower bound
+     for the darkening: any lighter and the 10.5px eyebrow drops below 4.5:1.
 
-     Jeśli zmieniasz padding scrimu albo długość nagłówka, przelicz to ponownie - te dwie
-     rzeczy razem decydują, na jakiej wysokości gradientu siada tekst. Mierz etykietę. */
+     If you change the scrim's padding or the length of the heading, measure this again -
+     together those two decide how high up the gradient the text sits. Measure the
+     eyebrow. */
   --hero-scrim: linear-gradient(
     to top,
     rgb(18 27 19 / 88%) 0%,
@@ -114,35 +118,37 @@
   font-optical-sizing: auto;
 
   --text-body: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
-  /* H1 leży teraz na zdjęciu, więc górna granica jest większa niż w poprzedniej skali -
-     ma wytrzymać 21:9 na monitorze 1400px, gdzie zdjęcie samo w sobie jest bardzo duże. */
+  /* The h1 now lies on the photograph, so the upper bound is larger than in the previous
+     scale - it has to hold up against the 3:1 panorama on a 1400px monitor, where the
+     photograph is itself very large. */
   --text-h1: clamp(2.1rem, 1.35rem + 3.4vw, 3.9rem);
   --text-h2: clamp(1.8rem, 1.35rem + 1.9vw, 2.7rem);
   --text-h2-wide: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);
   --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem);
   --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --text-lead: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
-  /* Telefon i adres. Jedyny stopień w tej skali, który odbiega od handoffu — tabela
-     w docs/design/README.md rysuje tu clamp(1.35rem, 1.15rem + 0.6vw, 1.7rem) i tej
-     wartości nie wolno przywracać „bo tak jest w specyfikacji”; odejście jest zapisane
-     w bloku o motywie 2a w tamtym pliku.
+  /* The phone number and the address. The one step in this scale that departs from the
+     handoff - the table in docs/design/README.md draws clamp(1.35rem, 1.15rem + 0.6vw,
+     1.7rem) here, and that value must not be restored "because the spec says so"; the
+     departure is recorded in the 2a theme block in that same file.
 
-     Handoff rysował ten stopień w Instrument Serif, lekkim szeryfie display'owym. Motyw 2a
-     podmienił szeryf na Newsreader — krój tekstowy o dużo mocniejszej kresce — a stopnia
-     nie ruszył, więc blok adresowy i cztery numery na /kontakt/ zostały najcięższym typem
-     na stronie. Zgłoszone przez właścicieli we wrześniu 2026; wybrali cięcie stopnia,
-     nie wagi. 27,2px → 23,2px na szerokim ekranie, 21,6px → 19,2px na telefonie: nadal
-     wyraźny krok nad tekstem bieżącym, 1,33× zamiast 1,56×.
+     The handoff drew this step in Instrument Serif, a light display serif. The 2a theme
+     swapped the serif for Newsreader - a text face with a much stronger stroke - and left
+     the step alone, which made the address block and the four numbers on /kontakt/ the
+     heaviest type on the site. Reported by the owners in September 2026; they chose to cut
+     the size rather than the weight. 27.2px -> 23.2px on a wide screen, 21.6px -> 19.2px
+     on a phone: still a clear step above body text, 1.33x instead of 1.56x.
 
-     Przy dalszych zmianach pamiętaj, że font-optical-sizing: auto wyżej wiąże oś opsz ze
-     stopniem: zmniejszanie tego tokenu czyni literę mniejszą, a jej kreskę odrobinę
-     mocniejszą. Drugą dźwignią jest font-weight — wczytywany plik Newsreadera ma oś wght,
-     wbrew temu, co komentarz w fonts.css twierdził do września 2026. */
+     If you change this again, remember that font-optical-sizing: auto above ties the opsz
+     axis to the size: shrinking this token makes the letter smaller and its stroke
+     slightly stronger. The other lever is font-weight - the Newsreader file that is loaded
+     does carry a wght axis, contrary to what the comment in fonts.css claimed until
+     September 2026. */
   --text-tel: clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem);
-  /* Nazwa gospodarstwa w nagłówku. Wyśrodkowana i w pełnej skali, nad tagline i paskiem
-     menu — trzy piętra. Zostaje pod --text-h1, żeby tytuł czytanej strony nadal był
-     największym typem na ekranie; sprawdzone na całym zakresie clampów, nie tylko na
-     końcach. */
+  /* The holding's name in the masthead. Centred and at full scale, above the tagline and
+     the menu bar - three storeys. It stays below --text-h1 so that the title of the page
+     being read is still the largest type on screen; checked across the whole range of both
+     clamps, not only at their ends. */
   --text-masthead: clamp(1.55rem, 1.15rem + 1.7vw, 2.35rem);
 
   /* ---------- layout ---------- */

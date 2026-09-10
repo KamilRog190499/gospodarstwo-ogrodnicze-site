@@ -203,9 +203,9 @@ html.lightbox-open #consent {
      rather than typed out - it was written as `rgb(35 40 31 / 92%)`, which is the *old*
      --ink (#23281F), so after the 2a theme moved --ink to #1F2A21 the overlay quietly
      stopped matching the footer it claims to quote. */
-  /* Zapas dla przeglądarek bez color-mix: ten sam token, pełne krycie. Gorzej wygląda,
-     ale nie zostawia przezroczystej nakładki nad przewijającą się stroną — i nadal jest
-     tym samym kolorem, więc nie ma czego rozjechać przy następnej zmianie palety. */
+  /* Fallback for browsers without color-mix: the same token at full opacity. It looks
+     worse, but it does not leave a see-through overlay over a scrolling page - and it is
+     still the same colour, so there is nothing to drift at the next palette change. */
   background: var(--ink);
   background: color-mix(in srgb, var(--ink) 92%, transparent);
   /* Dark ground, so the default ring fails 1.4.11 here too - see tokens.css. */
