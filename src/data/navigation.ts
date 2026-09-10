@@ -9,6 +9,10 @@
  *  three ranking addresses collapsing into one anchor. `/bratki/` is the one address with no
  *  history behind it - the old site did not sell pansies anywhere on it.
  *
+ *  The four offer entries are no longer written out here. They are derived from
+ *  `src/data/offer.ts`, which is also where the home page tiles come from - the same four
+ *  addresses used to be typed into two files.
+ *
  *  `/o-nas/` likewise keeps its old address rather than becoming `/historia/`; the label
  *  is the one from the old menu.
  *
@@ -25,6 +29,8 @@
  *  either, and the footer's offer column still cannot drift away from the menu.
  */
 
+import { offer } from "./offer";
+
 export interface NavItem {
   label: string;
   href: string;
@@ -32,13 +38,16 @@ export interface NavItem {
 
 const home: NavItem = { label: "Strona główna", href: "/" };
 
-/** The four category pages, in menu order - which is the order of the growing year. */
-export const offerPages: NavItem[] = [
-  { label: "Kwiaty balkonowe", href: "/kwiaty-balkonowe/" },
-  { label: "Rabatowe", href: "/rabatowe/" },
-  { label: "Bratki", href: "/bratki/" },
-  { label: "Chryzantemy", href: "/chryzantemy/" },
-];
+/** The four category pages, in menu order.
+ *
+ *  That order is importance, not the calendar. It used to claim to be "the order of the
+ *  growing year", which stopped being true when the owners moved the pansies to March alone
+ *  and the balcony flowers to April: the year now opens with `Bratki`, which sits third. The
+ *  year is told by the state marker on the home page tiles instead - see `season.ts`. */
+export const offerPages: NavItem[] = offer.map((page) => ({
+  label: page.menuLabel,
+  href: page.href,
+}));
 
 /** The offer plus the gallery - the pages someone in the footer is most likely looking for. */
 export const footerOfferLinks: NavItem[] = [

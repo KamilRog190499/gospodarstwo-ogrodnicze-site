@@ -43,11 +43,11 @@ four general frames under the list - mixed plantings, deliberately attributed to
 group with it: `Bratki` in the schema enum, one entry (`bratek-ogrodowy.md`), the page
 `/bratki/` and a menu item placed chronologically between "Rabatowe" and "Chryzantemy". All six
 are in - one 4:3 frame on the entry, four in a `PhotoStrip` under the list, and the sixth on a
-**third season card**: the pansies sell in March and April, months the spring card used to
-swallow, so `SeasonCards` now runs one card per selling window (bratki, balcony flowers,
-chrysanthemums) where the handoff draws two. Cards 2 and 3 keep the handoff's copy verbatim,
-including the "Maj - czerwiec · szczyt sezonu" caption that the interim single-card fix had
-reworded. **A fifth batch, this one text, landed in September 2026: the owners' own cultivation
+**third season card**: the pansies sell before the balcony flowers do, months the spring card
+used to swallow, so `SeasonCards` now runs one card per selling window (bratki, balcony
+flowers, chrysanthemums) where the handoff draws two. The windows themselves were corrected by
+the owners in September 2026 and the cards stopped carrying the season state - see the season
+bullet below and `docs/inwentaryzacja.md`. **A fifth batch, this one text, landed in September 2026: the owners' own cultivation
 descriptions for all 14 plants outside the chrysanthemum group.** They replaced the WordPress
 copy on eleven entries wholesale and closed the last three content gaps - the pansy, which had
 no description at all, and `pelargonia-rabatowa.md` and `niecierpek-nowogwinejski.md`, which
@@ -222,14 +222,27 @@ fix a layout; fix the `minmax()` value.
   fills in every `[data-map]` on a page and the one flag serves the whole site, so a second
   map costs no second question. It does mean the consent bar now appears on the home page -
   that is the design working, not a regression.
-- **The season blocks are computed at build time from the date**, not from a prop. The handoff
-  suggests 1.03-31.08 spring/summer (card 1) and 1.09-30.11 autumn (card 2); the spring window is
-  **split** in `src/data/season.ts` because the pansies sell 1.03-30.04 and everything else from
-  May, so there are three cards and three windows. For 1.12-28.02 the handoff proposes a
-  "Sprzedaż wznawiamy w marcu" message - **that state is not designed**, so all three cards go
-  quiet and their eyebrows name the season instead. **Ask the client before shipping a message
-  there.** The season only changes when the site is rebuilt, so the deploy workflow needs a
-  monthly `schedule:` alongside `push:`.
+- **The selling calendar is computed at build time from the date**, not from a prop, and
+  `src/data/season.ts` is the only place selling dates are written down - the season cards,
+  the home page tiles and the category pages all read from it. The windows are the owners'
+  own, corrected in September 2026: March for pansies (and primroses), April to June for
+  balcony and bedding flowers, 1 October to 1 November for chrysanthemums. **A window that
+  covers today makes its groups "W trakcie"; when no window covers today, the next one to
+  open makes its groups "Wkrótce", and nothing else says anything** - so the page carries at
+  most one seasonal message at a time. **The marker lives on the season cards and nowhere
+  else** - both states light the dark `.card--lit` block and are told apart by the overline
+  alone, which works because only one card is ever lit; the offer tiles say nothing about the
+  date: they are four equal doors to four pages, and a
+  door that changes colour with the month is a worse door. 0.9 put the marker on the tiles for
+  one iteration; that was wrong and was reverted. What the cards did lose is their link - the
+  offer tiles are the one way to a category page now.
+  **The deploy workflow needs a daily `schedule:`, not a monthly one** - four of the
+  five transitions fall on the first of a month but the fifth is 2 November, and a monthly
+  build leaves "CHRYZANTEMY · W TRAKCIE" standing for the whole month after the season ended.
+  The handoff's 1.12-28.02 "Sprzedaż wznawiamy w marcu" message is still **not designed** and
+  is still not shipped; what does now appear in winter is the one word "WKRÓTCE" on the pansy
+  tile, which is on the owners' list to confirm. Everything about this is argued out in
+  `docs/inwentaryzacja.md` under "Kalendarz sprzedaży i stan na kaflach".
 - **The prototype props `showAllEntries` and `showPending` do not transfer**, and the two dashed
   "Do napisania" / "Do potwierdzenia" blocks are notes to the client, not design elements - they
   do not ship. Neither does the footer's "makieta v3 · struktura wg obecnej strony" label.
@@ -240,7 +253,7 @@ fix a layout; fix the `minmax()` value.
   is a variable rather than a fixed colour because it has to change with the ground: the
   default `--green` is 2.63:1 on `--ink` and 1.67:1 on `--green-deep`, under the 3:1 that WCAG
   1.4.11 asks of a focus indicator. **Every dark container raises it in one line**
-  (`--focus-ring: var(--green-lit)`); `.footer`, `.history`, `.card--now` and `.lightbox` do.
+  (`--focus-ring: var(--green-lit)`); `.footer`, `.history` and `.lightbox` do.
   A dark element on a light ground (`.cta`, `.skip`) does not need it - the 3px offset puts
   the ring on the paper around it.
 - **The header tagline** "Sprzedaż kwiatów balkonowych, rabatowych i chryzantem" is the exact
@@ -291,12 +304,17 @@ confirmation" state rather than a guessed value.
    the map's consent placeholder. Add the link in both places at once.
 4. **A logo** - the handoff says there is none, but the old site has one
    (`cropped-logo2`). `public/favicon.svg` is a provisional typographic stand-in.
-5. **The third season card** wants a pass: whether May-August is the right span for card 2
-   now that March and April belong to card 1, and whether "Bratki na otwarcie sezonu" is the
-   title they would use. The pansy's own text and colour chips are settled - the September
-   2026 batch supplied the description and repeated the colour list read off the photographs,
-   which confirms it. The home page `h1` and the footer blurb still name only three groups -
-   both sit close to the tagline, so neither was reworded. See `docs/inwentaryzacja.md`.
+5. **The selling calendar** wants a pass, and it is a whole table rather than one question:
+   the wording "W trakcie" (the handoff says "Trwa teraz"), the section heading "Kiedy co
+   sprzedajemy", the new card captions - card 2's departs from the handoff's verbatim copy -
+   the title "Bratki i prymulki na otwarcie sezonu", how early "Wkrótce" should light up
+   (three months ahead for chrysanthemums, four for pansies), and the fact that **winter is
+   no longer silent**. Primroses are on the site as a word only: they sell in the March
+   window but no description or photograph exists, so no entry and no group were invented.
+   The pansy's own text and colour chips are settled - the September 2026 batch supplied the
+   description and repeated the colour list read off the photographs, which confirms it. The
+   home page `h1` and the footer blurb still name only three groups - both sit close to the
+   tagline, so neither was reworded. See `docs/inwentaryzacja.md`.
 6. **What the new descriptions dropped.** Replacing the WordPress copy on eleven entries cost
    a handful of concrete details, tunbergia's and werbena's spring selling window among them.
    The full table is in `docs/inwentaryzacja.md` under "Wymiana opisów"; nothing goes back in

@@ -1,9 +1,11 @@
 ---
 import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
+import { offer, plantCount, type PlantGroup } from "../data/offer";
+import { chrysanthemumStrip, pansyStrip, type GalleryPhoto } from "../data/gallery";
 
 /**
- * The offer on the home page: one card per category page, each opening with a mosaic of the
+ * The offer on the home page: one card per category page, each opening with two of that
  * group's own photographs.
  *
  * This is what replaced the flat list of fourteen plants that used to sit here. The home
@@ -11,46 +13,72 @@ import { getCollection } from "astro:content";
  * descriptions are the plant names themselves, taken from the collection, so nothing here
  * is copy that has to be kept in step with the offer by hand.
  *
- * ## The mosaic
+ * The four pages come from `src/data/offer.ts` and no longer from a list in this file - the
+ * same four addresses used to be written out both here and in `navigation.ts`.
  *
- * Up to three frames per group, and **chosen by the collection rather than by a list here**:
- * the first entries in `order` that have an `image`. Nothing to keep in step by hand, and
- * the day dahlia, pelargonia bluszczolistna or sundaville gets a photograph it joins the
- * queue by itself.
+ * **Nothing here says what month it is.** For one release the "W trakcie" marker lived on
+ * these tiles; it belongs to `SeasonCards`, which is the block whose subject is the year.
+ * Four equal doors to four pages is what this block is for, and a door that changes colour
+ * with the date is a worse door.
  *
- * The consequence is that the groups are uneven - three frames for balcony flowers and
- * chrysanthemums, two for the bedding plants, one for the pansies, because that is how many
- * entries hold a photograph today. So the row takes **as many columns as it has pictures**
- * (`grid-auto-flow: column` over `grid-auto-columns: 1fr`) rather than a fixed three: one
- * photograph fills the width of its card, two share it. A fixed `repeat(3, 1fr)` would leave
- * the pansy card with two empty cells, which reads as a fault rather than as a decision.
+ * ## The mosaic: two frames, always
+ *
+ * **The count is fixed at two, and that is the whole design.** It was "up to three, whatever
+ * the collection happens to hold", and every problem this block has had came from that
+ * number moving: with the ratio on each frame, the pansy tile - one plant, one photograph -
+ * had a strip three times taller than the tile holding eleven, so the smallest group was the
+ * heaviest thing in the section. Moving the ratio onto the strip levelled the heights and
+ * broke the frames instead: three came out nearly square, two came out as 110x57 letterboxes
+ * on `Rabatowe i wieloletnie`.
+ *
+ * Two frames at 4:3 in two fixed columns has neither failure, because there is no longer a
+ * variable to fail on. Every tile is the same height and every frame is the same shape, and
+ * at ~110x82 they are bigger than the three ~70x53 slivers they replace.
+ *
+ * Two is also the number the content can actually guarantee. `Rabatowe` has exactly two
+ * entries with a photograph and no `PhotoStrip` to borrow from, so it can never reach three;
+ * a design needing three would be permanently broken on one of the four tiles.
+ *
+ * Which two: **the collection chooses, not a list here.** The group's entries in `order` that
+ * have an `image`, then, if that is fewer than two, the group's own `PhotoStrip` - the same
+ * frames that sit under the list on its page. The day dahlia, pelargonia bluszczolistna or
+ * sundaville gets a photograph it joins the queue by itself.
  *
  * The frames are decorative - `alt=""` - and that is deliberate rather than lazy. The whole
  * card is one link (see below); its accessible name is the text inside it, which already
  * names every plant in the mosaic. Repeating `imageAlt` here would make a screen reader read
- * three long sentences before the name of the group they belong to.
+ * two long sentences before the name of the group they belong to.
  */
 const plants = (await getCollection("plants")).sort((a, b) => a.data.order - b.data.order);
 
-const groups = [
-  { href: "/kwiaty-balkonowe/", title: "Kwiaty balkonowe", group: "Balkonowe" },
-  { href: "/rabatowe/", title: "Rabatowe i wieloletnie", group: "Rabatowe" },
-  { href: "/bratki/", title: "Bratki", group: "Bratki" },
-  { href: "/chryzantemy/", title: "Chryzantemy", group: "Chryzantemy" },
-]
-  .map((def) => {
-    const members = plants.filter((plant) => plant.data.group === def.group);
+/** Where a group short of two frames borrows the rest. Deliberately here and not in
+ *  `offer.ts`: these are the same photographs the category pages show under their lists, so
+ *  this is a presentation choice, and keeping it here spares every page that imports the
+ *  menu from pulling the image imports in with it. Only `Bratki` needs it today - one entry,
+ *  four strip frames. */
+const stripFallback: Partial<Record<PlantGroup, GalleryPhoto[]>> = {
+  Bratki: pansyStrip,
+  Chryzantemy: chrysanthemumStrip,
+};
+
+const tiles = offer
+  .map((page) => {
+    const members = plants.filter((plant) => page.groups.includes(plant.data.group));
+    const fromEntries = members
+      .filter((plant) => plant.data.image !== undefined)
+      .map((plant) => plant.data.image!);
+    const fromStrips = page.groups
+      .flatMap((group) => stripFallback[group] ?? [])
+      .map((photo) => photo.src);
+
     return {
-      ...def,
+      ...page,
       names: members.map((plant) => plant.data.name),
-      photos: members
-        .filter((plant) => plant.data.image !== undefined)
-        .slice(0, 3)
-        .map((plant) => plant.data.image!),
+      photos: [...fromEntries, ...fromStrips].slice(0, 2),
     };
   })
   // A card for an empty group would lead to a page with a heading and no list.
-  .filter((def) => def.names.length > 0);
+  .filter((page) => page.names.length > 0);
 ---
 
 <section class="overview" aria-labelledby="oferta-title">
@@ -63,19 +91,19 @@ const groups = [
 
   <ul class="overview__grid">
     {
-      groups.map((group) => (
+      tiles.map((tile) => (
         <li>
-          <a class="tile" href={group.href}>
-            {group.photos.length > 0 && (
-              <span class="tile__photos">
-                {group.photos.map((photo) => (
+          <a class="tile" href={tile.href}>
+            {tile.photos.length > 0 && (
+              <span class:list={["tile__photos", tile.photos.length === 1 && "tile__photos--one"]}>
+                {tile.photos.map((photo) => (
                   <Picture
                     class="tile__photo"
                     src={photo}
                     formats={["avif", "webp"]}
                     fallbackFormat="jpg"
                     widths={[240, 480]}
-                    sizes="(min-width: 1200px) 190px, (min-width: 700px) 15vw, 30vw"
+                    sizes="(min-width: 1200px) 110px, (min-width: 700px) 16vw, 45vw"
                     width={240}
                     height={180}
                     alt=""
@@ -84,12 +112,9 @@ const groups = [
                 ))}
               </span>
             )}
-            <h3 class="tile__title">{group.title}</h3>
-            <p class="tile__names">{group.names.join(" · ")}</p>
-            <p class="tile__more">
-              {group.names.length}{" "}
-              {group.names.length === 1 ? "roślina" : group.names.length < 5 ? "rośliny" : "roślin"}
-            </p>
+            <h3 class="tile__title">{tile.tileTitle}</h3>
+            <p class="tile__names">{tile.names.join(" · ")}</p>
+            <p class="tile__more">{plantCount(tile.names.length)}</p>
           </a>
         </li>
       ))
@@ -147,15 +172,25 @@ const groups = [
     background: var(--paper);
   }
 
-  /* One column per photograph, whatever the count - see the note at the top of this file.
-     `grid-auto-flow: column` gets that without a media query and without the component
-     knowing how many pictures the collection handed it. */
+  /* Two columns, fixed - see the note at the top of this file. Both the ratio and the count
+     are constants here, which is why the tiles cannot drift out of alignment with each
+     other: every strip is the same height because every tile is the same width. */
   .tile__photos {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
     margin-bottom: 0.2rem;
+  }
+
+  /* A group that cannot muster two frames spans its one across both columns rather than
+     leaving a hole, and takes the ratio that keeps the strip the height it would have had.
+     No group is in that state today; a new one would be, on the day it gets its first
+     photograph and before it gets its second. */
+  .tile__photos--one {
+    grid-template-columns: 1fr;
+  }
+  .tile__photos--one .tile__photo {
+    aspect-ratio: 8 / 3;
   }
 
   .tile__photo {

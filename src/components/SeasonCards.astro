@@ -1,76 +1,99 @@
 ---
 import { Picture } from "astro:assets";
-import { currentSeason } from "../data/season";
+import { currentSeason, saleWindows, type SaleWindow, type SaleState } from "../data/season";
 import { chrysanthemumPhoto, pansyPhoto, tunnelPhoto } from "../data/gallery";
 
 /**
- * The selling year, card by card, with the part of it that is happening now filled in dark.
+ * The selling year, window by window, with the window that is running - or, between
+ * windows, the one opening next - filled in dark.
  *
- * The section now has a heading of its own and the cards sit under it as `h3`. Before, each
- * card title was an `h2`, so "Sprzedaż w okresie wiosennym" stood in the document outline
- * at the same level as the offer, the gallery and the contact section - the cards read as
- * top-level sections, and the block they belong to had no name at all.
+ * The section has a heading of its own and the cards sit under it as `h3`. Before, each card
+ * title was an `h2`, so "Sprzedaż w okresie wiosennym" stood in the document outline at the
+ * same level as the offer, the gallery and the contact section - the cards read as top-level
+ * sections, and the block they belong to had no name at all.
  *
  * **There are three of them, where the handoff draws two** (docs/design/README.md, section
- * 3). The pansies the owners added in September 2026 sell in March and April, months the
- * spring card used to swallow: a visitor in March got a photograph of a balcony-flower
- * tunnel and a single link leading away from the only thing actually on sale. One card per
- * selling window fixes that and costs the design nothing - the grid is `auto-fit`, so the
- * third card is a third column where there is room and a third row where there is not.
- * Card 2 and card 3 keep the handoff's copy verbatim.
+ * 3). The pansies the owners added in September 2026 sell before the balcony flowers do,
+ * months the spring card used to swallow: a visitor in March got a photograph of a
+ * balcony-flower tunnel and a card describing the one thing not on sale. One card per selling
+ * window fixes that and costs the design nothing - the grid is `auto-fit`, so the third card
+ * is a third column where there is room and a third row where there is not.
  *
- * Which card is active comes from the build date (src/data/season.ts), not from a prop as
- * in the prototype. In winter none is active and the eyebrows fall back to naming the
- * season - the "closed for now" state is not designed and nothing is invented to fill it.
+ * ## This is where the season is told
+ *
+ * The dark `.card--lit` block and the "W trakcie" / "Wkrótce" overline live here and
+ * nowhere else. 0.9
+ * moved them to the offer tiles for one release and moved them back: the tiles are a menu,
+ * four equal doors to four pages, and a menu is the wrong place to say what month it is. The
+ * question "what is happening in the garden right now" is this block's whole subject, and it
+ * is the only block on the page with the room - a dark panel, a photograph and three
+ * sentences - to answer it properly.
+ *
+ * **"Wkrótce" is told here too**, on the window that opens next while none is open: between
+ * July and September the autumn card says it, from November to February the spring one does.
+ * It lights the same dark ground as "W trakcie" - the owners asked for that explicitly. The
+ * two states are told apart by the overline and nothing else, which is enough because they
+ * never appear together: the rule in `season.ts` puts at most one card in either state, so
+ * the page always has exactly one dark card or none, and never two saying different things.
+ *
+ * ## What the cards no longer do
+ *
+ * They carry no link. Three of the four offer pages used to be linked twice on the home page,
+ * a screen apart, in the same photograph-heading-paragraph-link shape - the repetition
+ * `ContactStrip` was deleted for in 0.6 - and the middle card could not tell the truth
+ * anyway: April to June sells balcony *and* bedding flowers, off two pages, from one card.
+ * The way to a page is the offer tiles below, which have one door per page.
+ *
+ * The months come from `saleWindows` rather than from copy typed in here, so this block and
+ * the category pages cannot end up quoting different dates - which is exactly what had
+ * happened to `/bratki/`, still advertising a window the owners had changed.
  */
-const { activeCard } = currentSeason;
+const stateFor = (window: SaleWindow): SaleState | null =>
+  window === currentSeason.open ? "now" : window === currentSeason.soon ? "soon" : null;
+
+const stateLabel: Record<SaleState, string> = { now: "W trakcie", soon: "Wkrótce" };
 
 const cards = [
   {
-    id: 1,
+    window: saleWindows[0]!,
     season: "Wczesna wiosna",
-    title: "Bratki na otwarcie sezonu",
-    body: "Sezon otwierają bratki — w skrzynkach i doniczkach, prosto z tunelu. Sprzedajemy je od marca, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.",
-    meta: "Marzec – kwiecień",
+    title: "Bratki i prymulki na otwarcie sezonu",
+    body: "Sezon otwierają bratki i prymulki — w skrzynkach i doniczkach, prosto z tunelu. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.",
+    meta: saleWindows[0]!.months,
     photo: pansyPhoto,
-    href: "/bratki/",
-    hrefLabel: "Bratki",
   },
   {
-    id: 2,
+    window: saleWindows[1]!,
     season: "Wiosna",
     title: "Sprzedaż w okresie wiosennym",
     body: "Kwiaty balkonowe i rabatowe, rozsady oraz gotowe obsadzone skrzynki i doniczki. Kolory i odmiany oglądasz na miejscu, w tunelu.",
-    meta: "Maj – czerwiec · szczyt sezonu",
+    // "szczyt sezonu" is the handoff's own wording; only the months in front of it moved.
+    meta: `${saleWindows[1]!.months} · szczyt sezonu`,
     photo: tunnelPhoto,
-    href: "/kwiaty-balkonowe/",
-    hrefLabel: "Kwiaty balkonowe",
   },
   {
-    id: 3,
+    window: saleWindows[2]!,
     season: "Jesień",
     title: "Chryzantemy wielkokwiatowe",
     body: "Duży wybór kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada. Przed Wszystkimi Świętymi zamówienia najlepiej złożyć z tygodniowym wyprzedzeniem.",
-    meta: "Październik – 1 listopada",
+    meta: saleWindows[2]!.months,
     photo: chrysanthemumPhoto,
-    href: "/chryzantemy/",
-    hrefLabel: "Chryzantemy",
   },
 ] as const;
 ---
 
 <section class="seasons" aria-labelledby="sezon-title">
   <div class="seasons__head">
-    <h2 class="seasons__title" id="sezon-title">Sezon w gospodarstwie</h2>
+    <h2 class="seasons__title" id="sezon-title">Kiedy co sprzedajemy</h2>
   </div>
 
   <div class="seasons__grid">
     {
       cards.map((card) => {
-        const now = activeCard === card.id;
+        const state = stateFor(card.window);
         return (
-          <article class:list={["card", now && "card--now"]}>
-            <p class="card__eyebrow">{now ? "Trwa teraz" : card.season}</p>
+          <article class:list={["card", state && "card--lit"]}>
+            <p class="card__eyebrow">{state ? stateLabel[state] : card.season}</p>
             <h3 class="card__title">{card.title}</h3>
             <p class="card__body">{card.body}</p>
             <div class="card__slot">
@@ -87,9 +110,6 @@ const cards = [
               />
             </div>
             <p class="card__meta">{card.meta}</p>
-            <p class="card__link">
-              <a href={card.href}>{card.hrefLabel}</a>
-            </p>
           </article>
         );
       })
@@ -131,12 +151,14 @@ const cards = [
     background: var(--paper-dim);
   }
 
-  .card--now {
+  /* The card the season is happening on - "W trakcie" while its window is open, "Wkrótce"
+     while it is the one opening next. Both light the same ground, and only one card is ever
+     lit, so the page still shows a single dark panel here or none at all. Nothing inside is
+     focusable, so it needs no `--focus-ring` raise - the card carried a link until 0.9 and
+     that is why it used to. */
+  .card--lit {
     border-color: var(--green-deep);
     background: var(--green-deep);
-    /* Ciemny blok: domyslna obwodka fokusa (--green) ma tu 1,67:1, a ta karta zawiera
-       link. Reszta kolorow karty ma juz swoje nadpisania nizej. Patrz tokens.css. */
-    --focus-ring: var(--green-lit);
   }
 
   .card__eyebrow {
@@ -146,7 +168,7 @@ const cards = [
     text-transform: uppercase;
     color: var(--green);
   }
-  .card--now .card__eyebrow {
+  .card--lit .card__eyebrow {
     color: var(--green-lit);
   }
 
@@ -155,7 +177,7 @@ const cards = [
     line-height: 1.1;
     color: var(--ink);
   }
-  .card--now .card__title {
+  .card--lit .card__title {
     color: var(--paper);
   }
 
@@ -163,7 +185,7 @@ const cards = [
     max-width: 46ch;
     color: var(--ink-soft);
   }
-  .card--now .card__body {
+  .card--lit .card__body {
     color: var(--green-body);
   }
 
@@ -183,7 +205,7 @@ const cards = [
     object-fit: cover;
     border: 1px solid var(--rule);
   }
-  .card--now .card__slot :global(img) {
+  .card--lit .card__slot :global(img) {
     border-color: rgb(238 240 230 / 30%);
   }
 
@@ -192,34 +214,7 @@ const cards = [
     font-weight: 400;
     color: var(--ink-grey);
   }
-  .card--now .card__meta {
-    color: var(--green-lit);
-  }
-
-  /* Each card describes what is on sale; now it also leads to the page that lists it -
-     the same shape as "Wyznacz trasę", so it reads as the site's secondary action. */
-  .card__link a {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--ink);
-    border-bottom: 1px solid var(--ink);
-    padding-bottom: 3px;
-    min-height: var(--tap);
-    display: inline-flex;
-    align-items: center;
-  }
-  .card__link a:hover {
-    color: var(--green);
-    border-bottom-color: var(--green);
-  }
-  .card--now .card__link a {
-    color: var(--paper);
-    border-bottom-color: var(--green-lit);
-  }
-  .card--now .card__link a:hover {
+  .card--lit .card__meta {
     color: var(--green-lit);
   }
 </style>

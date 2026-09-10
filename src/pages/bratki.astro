@@ -6,20 +6,29 @@ import { pansyStrip } from "../data/gallery";
 /** `/bratki/` - the one offer address with no WordPress predecessor: the old site did not
  *  sell pansies anywhere on it (docs/przekierowania.md, docs/inwentaryzacja.md).
  *
- *  The dates in `note` are the ones on the spring season card, kept in one wording so the two
- *  cannot say different things. */
+ *  **No date is written into this page any more.** The selling window is printed by
+ *  `OfferSection` from `src/data/season.ts`, which is the point: the sentences here used to
+ *  say "sprzedaż w marcu i kwietniu" and "zanim ruszą kwiaty balkonowe i rabatowe", and both
+ *  became untrue in September 2026 when the owners cut the pansy window back to March alone
+ *  and moved the balcony flowers up to April. Nothing here noticed, because the dates were
+ *  typed in by hand.
+ *
+ *  The page is also where primroses appear, as a word rather than as an entry: the owners
+ *  sell them in the same March window, but no description and no photograph of one exists
+ *  yet, and a placeholder entry would promise a page that cannot deliver. See
+ *  docs/inwentaryzacja.md. */
 ---
 
 <BaseLayout
   title="Bratki"
-  description="Bratki z własnej uprawy - sprzedaż w marcu i kwietniu, duży wybór kolorów. Gospodarstwo Ogrodnicze „Saran” pod Kazimierzem Dolnym."
+  description="Bratki i prymulki z własnej uprawy - sprzedaż w marcu, duży wybór kolorów. Gospodarstwo Ogrodnicze „Saran” pod Kazimierzem Dolnym."
   canonical="/bratki/"
   breadcrumb="Bratki"
 >
   <OfferSection
     group="Bratki"
     title="Bratki"
-    note="Bratkami otwieramy sezon - są w sprzedaży najwcześniej ze wszystkiego, co uprawiamy, zanim ruszą kwiaty balkonowe i rabatowe."
+    note="Bratkami i prymulkami otwieramy sezon - są w sprzedaży najwcześniej ze wszystkiego, co uprawiamy, zanim ruszą kwiaty balkonowe i rabatowe."
     photos={pansyStrip}
   />
 </BaseLayout>

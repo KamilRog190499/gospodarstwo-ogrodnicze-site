@@ -60,7 +60,8 @@
      Zmienne dziedziczą, więc ciemny blok podnosi ją u siebie jednym wierszem:
      `--focus-ring: var(--green-lit)` na kontenerze (9,49:1 na --ink, 6,02:1 na
      --green-deep, 7,02:1 na --green-slot) i wszystko w środku ma widoczny fokus.
-     Nadpisują ją: .footer, .history, .card--now i .lightbox.
+     Nadpisują ją: .footer, .history i .lightbox. Ciemna karta sezonowa (.card--lit) tego
+     nie robi, bo od 0.9 nie ma w środku niczego, co da się sfokusować — straciła odnośnik.
 
      Uwaga: element ciemny na jasnym tle (.cta, .skip) nadpisania NIE potrzebuje —
      outline-offset 3px kładzie obwódkę poza nim, na papierze. Liczy się to, co jest

@@ -9,6 +9,7 @@ import { glob } from "astro/loaders";
 // The `z` re-exported from "astro:content" is deprecated in Astro 7; take it straight from
 // Astro so the schema is validated by the same zod instance the content layer uses.
 import { z } from "astro/zod";
+import { plantGroups } from "./data/offer";
 
 /** The plants in the offer. Each renders as one entry in the `#oferta` section, with the
  *  Markdown body as the cultivation description.
@@ -21,8 +22,10 @@ const plants = defineCollection({
     z
       .object({
         name: z.string(),
-        /** Sets the chip beside the heading and groups the entries on the page. */
-        group: z.enum(["Balkonowe", "Rabatowe", "Bratki", "Chryzantemy"]),
+        /** Sets the chip beside the heading and groups the entries on the page. The values
+         *  come from `src/data/offer.ts`, so the union the components use and the enum the
+         *  build validates against cannot drift apart. */
+        group: z.enum(plantGroups),
         order: z.number().int().positive(),
         /** What the photograph should show, e.g. "zdjęcie — fuksja, 4:3". Printed inside
          *  the placeholder until a real photograph arrives, so whoever takes the pictures

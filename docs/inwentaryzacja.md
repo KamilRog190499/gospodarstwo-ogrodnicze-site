@@ -334,17 +334,17 @@ trzymała w bibliotece mediów, ale nikt nigdy nie wstawił na stronę. Stamtąd
 zdjęć — po jednym na roślinę, plus zapasowe warianty koloru tam, gdzie się nadarzyły:
 
 | Roślina                  | Źródło (WP media ID)       | Uwaga                                                                                         |
-| ------------------------ | --------------------------- | ---------------------------------------------------------------------------------------------- |
-| Alstromeria              | `337` (kolaż, prawy panel)  | Reszta kolażu (4 ujęcia) zostaje niewykorzystana.                                             |
-| Fuksja                   | `344` (kolaż, lewy panel)   | Alternatywa: `341`.                                                                            |
-| Goździk                  | `224`                       | —                                                                                              |
-| Begonia                  | `225`                       | Alternatywa: `351` (lewy panel).                                                               |
-| Tunbergia                | `226`                       | To dosłownie „black-eyed susan” ze stockowego opisu na starej stronie.                        |
-| Werbena                  | `227`                       | Warianty koloru: `229` (biała), `350` (czerwona, lewy panel), `352` (fioletowa, prawy panel).  |
-| Heliotrop                | `169`                       | —                                                                                              |
-| Pelargonia rabatowa      | `160`                       | Alternatywa: `351` (prawy panel).                                                              |
-| Calibrachoa              | `231`                       | **Do potwierdzenia**, patrz niżej.                                                             |
-| Niecierpek nowogwinejski | `228`                       | **Przeklasyfikowane ze starej strony**, patrz niżej.                                           |
+| ------------------------ | -------------------------- | --------------------------------------------------------------------------------------------- |
+| Alstromeria              | `337` (kolaż, prawy panel) | Reszta kolażu (4 ujęcia) zostaje niewykorzystana.                                             |
+| Fuksja                   | `344` (kolaż, lewy panel)  | Alternatywa: `341`.                                                                           |
+| Goździk                  | `224`                      | —                                                                                             |
+| Begonia                  | `225`                      | Alternatywa: `351` (lewy panel).                                                              |
+| Tunbergia                | `226`                      | To dosłownie „black-eyed susan” ze stockowego opisu na starej stronie.                        |
+| Werbena                  | `227`                      | Warianty koloru: `229` (biała), `350` (czerwona, lewy panel), `352` (fioletowa, prawy panel). |
+| Heliotrop                | `169`                      | —                                                                                             |
+| Pelargonia rabatowa      | `160`                      | Alternatywa: `351` (prawy panel).                                                             |
+| Calibrachoa              | `231`                      | **Do potwierdzenia**, patrz niżej.                                                            |
+| Niecierpek nowogwinejski | `228`                      | **Przeklasyfikowane ze starej strony**, patrz niżej.                                          |
 
 Dwie rzeczy tu **wymagają uwagi właścicieli**, zanim wejdą jako pewnik:
 
@@ -385,7 +385,7 @@ balkonowymi i jeden odnośnik, prowadzący do jedynej rzeczy, której wtedy nie 
 
 Teraz każde okno sprzedaży ma swoją kartę:
 
-| Karta | Okno         | Zdjęcie                  | Odnośnik             |
+| Karta | Okno (0.7)   | Zdjęcie                  | Odnośnik             |
 | ----- | ------------ | ------------------------ | -------------------- |
 | 1     | 1.03 – 30.04 | skrzynka żółtych bratków | `/bratki/`           |
 | 2     | 1.05 – 31.08 | tunel z kwiatami         | `/kwiaty-balkonowe/` |
@@ -397,9 +397,9 @@ nadal `auto-fit, minmax(min(100%, 320px), 1fr)` bez żadnego media query: trzy k
 gdzie się mieszczą, potem dwie plus jedna, potem stos. Zima (grudzień–luty) bez zmian —
 wszystkie trzy karty wygaszone, żadnego zmyślonego komunikatu.
 
-**Do przejrzenia z właścicielami:** czy okno maj–sierpień na karcie 2 jest właściwe (handoff
-mówi 1.03–31.08, ale marzec i kwiecień należą teraz do karty 1) i czy tytuł „Bratki na
-otwarcie sezonu" im odpowiada.
+> **Ta sekcja jest zapisem stanu z 0.7 i już nie obowiązuje.** Właściciele podali w tym samym
+> miesiącu inne okna, karty straciły odnośniki i ciemne tło, a stan sezonu przeniósł się na
+> kafle oferty — patrz „Kalendarz sprzedaży" niżej.
 
 ## Strona główna jako witryna — wrzesień 2026
 
@@ -409,49 +409,38 @@ miały ani jednego — na stronie gospodarstwa, którego całym produktem jest t
 wygląda. Od 0.7 strona główna jest **podglądem każdej części witryny**, a podstrony zostają
 miejscem pełnych opisów uprawy, list kolorów i telefonów.
 
-| Sekcja                | Co pokazuje                                      | Skąd bierze zdjęcia                       |
-| --------------------- | ------------------------------------------------ | ----------------------------------------- |
-| Intro                 | bez zmian                                        | `heroPhoto`                               |
-| Sezon                 | bez zmian, trzy karty                            | bratki / tunel / chryzantemy              |
-| Oferta                | **nowość:** mozaika 1–3 kadrów na grupę          | kolekcja `plants`, pierwsze wpisy z `image` |
-| Inspiracje            | **nowość:** wszystkie 23 obsadzenia, uproszczone  | `compositions`                            |
-| Jak do nas trafić     | **nowość:** mapa, adres, „Wyznacz trasę”         | —                                         |
+| Sekcja            | Co pokazuje                                      | Skąd bierze zdjęcia                         |
+| ----------------- | ------------------------------------------------ | ------------------------------------------- |
+| Intro             | bez zmian                                        | `heroPhoto`                                 |
+| Sezon             | bez zmian, trzy karty                            | bratki / tunel / chryzantemy                |
+| Oferta            | **nowość:** mozaika 1–3 kadrów na grupę          | kolekcja `plants`, pierwsze wpisy z `image` |
+| Inspiracje        | **nowość:** wszystkie 23 obsadzenia, uproszczone | `compositions`                              |
+| Jak do nas trafić | **nowość:** mapa, adres, „Wyznacz trasę”         | —                                           |
 
-### Mozaika w kafelku — dlaczego grupy są nierówne
+### Mozaika w kafelku — wersja z 0.7
 
-Kadry wybiera **kolekcja, nie ręczna lista**: pierwsze wpisy grupy wg `order`, które mają
-`image`. Dzięki temu dodanie zdjęcia dahlii, pelargonii bluszczolistnej albo sundaville samo
-wchodzi do kafelka, bez edycji komponentu. Cena jest taka, że dziś grupy mają po tyle kadrów,
-ile wpisów ze zdjęciem:
-
-| Grupa       | Kadrów | Które                                                        |
-| ----------- | ------ | ------------------------------------------------------------ |
-| Balkonowe   | 3      | alstromeria, fuksja, tunbergia                                |
-| Rabatowe    | 2      | pelargonia rabatowa, niecierpek nowogwinejski                 |
-| Bratki      | 1      | bratek ogrodowy                                               |
-| Chryzantemy | 3      | wielkokwiatowa, średniokwiatowa, igiełkowa                    |
-
-Rząd miniatur bierze **tyle kolumn, ile ma zdjęć** (`grid-auto-flow: column`), więc jedno
-zdjęcie wypełnia szerokość kafelka, a dwa dzielą ją na pół. Sztywne `repeat(3, 1fr)`
-zostawiłoby w kafelku bratków dwie puste komórki, co czyta się jak usterka, a nie decyzja.
+> **Nieaktualne.** Kadry były wtedy wybierane „ile się da, najwyżej trzy", więc grupy miały ich
+> po jednej, dwie albo trzy, a kafel bratków — jedno zdjęcie na całą szerokość — był
+> najcięższym elementem sekcji. Dziś każdy kafel ma dokładnie dwa kadry 4:3; dlaczego akurat
+> dwa i co po drodze nie wyszło, opisuje „Mozaika w kaflu — dwa kadry, zawsze" niżej.
 
 ### Nowe teksty — do przejrzenia przez właścicieli
 
 Napisane przez nas, nie nadesłane. Tak jak opisy `alt`, czekają na potwierdzenie:
 
-| Miejsce               | Tekst                                                                                                 |
-| --------------------- | ----------------------------------------------------------------------------------------------------- |
-| Nagłówek bloku dojazdu | „Jak do nas trafić”                                                                                    |
-| Lead bloku dojazdu     | „Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty oglądasz i kupujesz na miejscu, w tunelach — zapraszamy.” |
-| Odnośnik w bloku dojazdu | „Telefony i kontakt”                                                                                 |
-| Odnośnik pod pokazem   | „Zobacz wszystkie obsadzenia”                                                                          |
+| Miejsce                  | Tekst                                                                                                            |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Nagłówek bloku dojazdu   | „Jak do nas trafić”                                                                                              |
+| Lead bloku dojazdu       | „Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty oglądasz i kupujesz na miejscu, w tunelach — zapraszamy.” |
+| Odnośnik w bloku dojazdu | „Telefony i kontakt”                                                                                             |
+| Odnośnik pod pokazem     | „Zobacz wszystkie obsadzenia”                                                                                    |
 
 ### Czego blok dojazdu celowo nie robi
 
 **Nie drukuje ani jednego numeru telefonu.** W 0.5 stał w tym miejscu `ContactStrip` i został
 usunięty w 0.6, bo powtarzał adres, numer i „Wyznacz trasę” tuż nad stopką niosącą to samo —
 `602 518 401` pojawiał się trzy razy na jednej stronie. Nowy blok odpowiada na jedno pytanie,
-na które stopka odpowiedzieć nie może (*gdzie to jest, na mapie*), a po telefony odsyła do
+na które stopka odpowiedzieć nie może (_gdzie to jest, na mapie_), a po telefony odsyła do
 `/kontakt/`. Adres jest powtórzony świadomie: adres obok mapy jest tym, co czyni mapę czytelną.
 
 **Uwaga na licznik telefonów — pierwsza wersja 0.7 się na tym wyłożyła.** Blok dojazdu
@@ -499,6 +488,137 @@ Naprawa to zarezerwowanie pudełka dla niewczytanego obrazka. Nie jest to jednol
 źródła mają różne proporcje i `object-fit: contain` jest tam właśnie dlatego, więc sztywne
 `aspect-ratio` popsułoby kadry poziome, a `min-height` dokłada pustkę pod kadrem poziomym na
 telefonie. Zostaje jako osobna zmiana, z weryfikacją obu adresów i obu orientacji.
+
+## Kalendarz sprzedaży — wrzesień 2026
+
+Właściciele podali we wrześniu 2026 **inne okna sprzedaży niż te z 0.7**, a przy okazji wyszło,
+że daty są w kodzie w kilku miejscach naraz i jedno z nich nikt nie aktualizuje: `/bratki/`
+obiecywało „sprzedaż w marcu i kwietniu" i „zanim ruszą kwiaty balkonowe i rabatowe" długo po
+tym, jak jedno i drugie przestało być prawdą.
+
+### Okna sprzedaży
+
+| Okno | Od             | Do          | Grupy               |
+| ---- | -------------- | ----------- | ------------------- |
+| 1    | 1 marca        | 31 marca    | Bratki (i prymulki) |
+| 2    | 1 kwietnia     | 30 czerwca  | Balkonowe, Rabatowe |
+| 3    | 1 października | 1 listopada | Chryzantemy         |
+
+Tabela mieszka w `src/data/season.ts` i jest **jedynym miejscem, gdzie zapisane są daty
+sprzedaży**. Karty sezonowe i strony ofertowe czytają z niej; nic nie jest wpisywane ręcznie.
+
+### Reguła: „W trakcie" i „Wkrótce"
+
+Okno obejmujące dzisiejszą datę zapala swojej karcie **„W trakcie"** i ciemne tło. Kiedy żadne
+okno nie obejmuje dzisiejszej daty, **„Wkrótce"** dostaje karta najbliższego okna, które ma się
+otworzyć — **i to samo ciemne tło**. Stany rozróżnia wyłącznie nadkreślenie, co wystarcza,
+bo nigdy nie występują razem: reguła zapala **co najwyżej jedną kartę**, więc na stronie stoi
+albo jeden ciemny panel, albo żaden.
+
+| Okres                        | Karta                         | Ciemna |
+| ---------------------------- | ----------------------------- | ------ |
+| marzec                       | Bratki i prymulki — W TRAKCIE | tak    |
+| kwiecień – czerwiec          | Sprzedaż wiosenna — W TRAKCIE | tak    |
+| 1 lipca – 30 września        | Chryzantemy — WKRÓTCE         | tak    |
+| 1 października – 1 listopada | Chryzantemy — W TRAKCIE       | tak    |
+| 2 listopada – koniec lutego  | Bratki i prymulki — WKRÓTCE   | tak    |
+
+**Stan mieszka w sekcji „Kiedy co sprzedajemy" i nigdzie indziej.** Przez jedną iterację stał na
+kaflach oferty i to był błąd: kafle są menu — czworgiem równych drzwi do czterech stron — a menu
+jest złym miejscem na informację o tym, który jest miesiąc. Pytanie „co się teraz dzieje
+w gospodarstwie" jest tematem tej sekcji i tylko ona ma na odpowiedź miejsce: ciemny panel,
+zdjęcie i trzy zdania.
+
+### Czego karty już nie robią
+
+**Nie niosą odnośników.** Trzy z czterech stron ofertowych były przez to linkowane na stronie
+głównej dwa razy — raz z karty, raz z kafla — w tym samym kształcie „zdjęcie, nagłówek, akapit,
+odnośnik", w odstępie jednego ekranu; to ta sama choroba, na którą lekarstwem było usunięcie
+`ContactStrip` w 0.6. Karta środkowa i tak nie mogła powiedzieć prawdy: od kwietnia do czerwca
+sprzedają się kwiaty balkonowe **i** rabatowe, z dwóch osobnych stron, a karta niesie jeden
+odnośnik. Drogą na stronę grupy są kafle, które mają po jednych drzwiach na stronę.
+
+Nadkreślenie karty niesie stan albo nazwę pory roku, a miesiące wróciły do `card__meta` pod
+zdjęciem — tam, gdzie stały wcześniej, tyle że biorą się teraz z tabeli okien.
+
+### Wdrożenie: cron musi być codzienny, nie miesięczny
+
+Stan jest wypalany w HTML przy budowaniu, więc zmienia się dopiero przy kolejnym wdrożeniu.
+CLAUDE.md mówił dotąd o **miesięcznym** `schedule:` obok `push:` — i to nie wystarcza. Cztery
+z pięciu przejść wypadają pierwszego dnia miesiąca, ale piąte to **2 listopada**: przy budowaniu
+tylko 1. dnia miesiąca strona przez cały listopad twierdziłaby „CHRYZANTEMY · W TRAKCIE", już
+po zakończeniu sprzedaży, dokładnie wtedy, gdy ludzie dzwonią po Wszystkich Świętych.
+
+Codzienny workflow Facebooka tego **nie** załatwia: commituje tylko wtedy, gdy są nowe posty,
+więc w spokojnym listopadzie nie wywoła żadnego budowania. `deploy.yml` (jeszcze nie napisany)
+ma mieć `schedule:` **codziennie**.
+
+Granica dnia liczy się w `Europe/Warsaw`, nie w UTC — budowanie o 23:30 UTC 31 marca jest tu
+już 1 kwietnia, a klient patrzy na swój kalendarz.
+
+## Mozaika w kaflu — dwa kadry, zawsze
+
+Kafle oferty pokazują **po dwa zdjęcia, każde 4:3, w dwóch stałych kolumnach**. Liczba kadrów
+jest stałą, nie zmienną — i to jest cała ta poprawka, bo każdy problem tego bloku brał się
+z tego, że liczba się ruszała.
+
+**Wersja pierwsza: proporcja na kadrze, kadrów od jednego do trzech.** Kafel bratków — jedna
+roślina, jedno zdjęcie — miał pasek trzy razy wyższy niż kafel jedenastu roślin i był
+najcięższym elementem sekcji. Mozaika odwracała hierarchię, którą miała pokazywać.
+
+**Wersja druga: proporcja na pasku (4:1), kadrów nadal od jednego do trzech.** Wysokości się
+wyrównały, ale kształt kadru zaczął zależeć od tego, ile ich jest: trzy wychodziły prawie
+kwadratowe (~70×57 px), a dwa na kaflu „Rabatowe i wieloletnie" robiły się listwami 110×57.
+Jedna nierówność zamieniona na drugą.
+
+**Wersja trzecia, obecna: dwa kadry 4:3 w `repeat(2, 1fr)`.** Nie ma na czym się wyłożyć, bo nie
+ma już zmiennej: każdy kafel ma tę samą wysokość paska i ten sam kształt kadru, a przy ~110×82 px
+kadr jest **większy i czytelniejszy** niż trzy po ~70×53 px, które zastąpił.
+
+Dwa to też jedyna liczba, którą treść potrafi zagwarantować: `Rabatowe` mają dokładnie dwa wpisy
+ze zdjęciem i nie mają własnego `PhotoStrip`, więc trzeciego kadru nie będą miały nigdy — projekt
+wymagający trzech byłby trwale zepsuty na jednym z czterech kafli.
+
+Które dwa — wybiera **kolekcja, nie lista w komponencie**: wpisy grupy wg `order`, które mają
+`image`, a jeśli to mniej niż dwa, to `PhotoStrip` grupy (dziś dotyczy tylko bratków: jeden wpis,
+cztery zdjęcia w pasie). Grupa, która nie uzbiera dwóch, rozciąga swój jedyny kadr na obie kolumny
+w proporcji 8:3, żeby pasek zachował wysokość — dziś żadna nie jest w tym stanie.
+
+## Co jeszcze przy okazji
+
+- **Kafle biorą się z `src/data/offer.ts`**, nowej tabeli oferty, z której `navigation.ts`
+  wyprowadza menu, a `content.config.ts` — enum grup w schemacie. Te same cztery adresy stały
+  wcześniej w dwóch plikach naraz.
+- Kolejność kafli i menu **zostaje bez zmian** — jest kolejnością ważności, nie kalendarza.
+  Komentarz w `navigation.ts` twierdził, że to „kolejność roku"; po zmianie okien rok otwierają
+  bratki, które stoją trzecie, więc nieprawdziwe zdanie zniknęło.
+- **Strony ofertowe drukują okno sprzedaży** pod nagłówkiem („Sprzedaż trwa: marzec",
+  „Sprzedaż wkrótce: październik – 1 listopada"), bo wchodzi się na nie prosto z wyszukiwarki,
+  nigdy nie widząc strony głównej ani jej kart.
+- Odmiana licznika roślin liczy się teraz po polsku w trzech formach; poprzednia reguła
+  (`< 5`) dawała „22 roślin" przy dwucyfrowych końcówkach 2–4.
+
+## Prymulki
+
+Właściciele sprzedają je w marcu razem z bratkami, ale **nie ma opisu ani zdjęcia**, więc nie
+ma wpisu w kolekcji: byłaby to zaślepka obiecująca stronę, która nie ma czego pokazać.
+Prymulki wchodzą **jako słowo** — w tytule kafla („Bratki i prymulki"), w tytule karty
+sezonowej i w zdaniu pod listą na `/bratki/`. Licznik nadal mówi „1 roślina", bo tyle liczy
+strona. Grupa `Prymulki` i własny adres to decyzja na później, razem z treścią.
+
+## Kalendarz — do przejrzenia z właścicielami
+
+| Rzecz                      | Pytanie                                                                                                                                                                                                                                               |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| „W trakcie"                | dotąd w kodzie i w handoffie stało „Trwa teraz"                                                                                                                                                                                                       |
+| Nagłówek sekcji sezonu     | „Kiedy co sprzedajemy" zamiast „Sezon w gospodarstwie"                                                                                                                                                                                                |
+| Podpisy kart               | „Marzec" (było „Marzec – kwiecień") i „Kwiecień – czerwiec · szczyt sezonu" (było „Maj – czerwiec · szczyt sezonu") — to **odejście od dosłownej treści handoffu** na karcie 2                                                                        |
+| Tytuł karty 1              | „Bratki i prymulki na otwarcie sezonu"                                                                                                                                                                                                                |
+| Karty bez odnośników       | do grupy prowadzi teraz wyłącznie kafel oferty                                                                                                                                                                                                        |
+| Długość „Wkrótce"          | chryzantemy zapalają się 1 lipca (trzy miesiące wcześniej), bratki 2 listopada (cztery). Skrócenie to dołożenie granicy w tabeli okien, nie zmiana logiki                                                                                             |
+| **Zima przestała milczeć** | od 2 listopada do końca lutego karta bratków jest ciemna i niesie „WKRÓTCE". CLAUDE.md mówi, że stan zimowy **nie jest zaprojektowany** i nic się w nim nie wymyśla; to jedno słowo, nie odrzucony baner „Sprzedaż wznawiamy w marcu", ale jest decyzją właścicieli |
+| Prymulki                   | własny wpis i własna grupa, gdy będzie tekst i zdjęcie                                                                                                                                                                                                |
+| Twarz kafla                | kadry wybiera kolejność `order`, więc zdjęcie pelargonii bluszczolistnej wypchnie kiedyś fuksję z mozaiki bez niczyjej decyzji. Alternatywa: pole `featured` we frontmatterze                                                                         |
 
 ## Posty z Facebooka — wrzesień 2026
 
@@ -562,9 +682,13 @@ przepisujemy, nie czyścimy, tylko skracamy do ok. 200 znaków z linkiem do cał
    sześciu bratków i dziesięciu z piątej paczki — czekają na przejrzenie przez właścicieli;
    przy średniokwiatowej trzeba dodatkowo potwierdzić typ, a przy calibrachoi i niecierpku
    z piątej paczki — gatunek (patrz [Zdjęcia](#zdjęcia)).
-2. Trzecia karta sezonowa — okno maj–sierpień na karcie 2 i tytuł „Bratki na otwarcie
-   sezonu". (Opis uprawy bratka i jego kolory są już podane i potwierdzone przez
-   właścicieli — patrz [Wymiana opisów](#wymiana-opisów--wrzesień-2026).)
+2. Kalendarz sprzedaży — cała tabela „Do przejrzenia z właścicielami"
+   w [Kalendarzu sprzedaży](#kalendarz--do-przejrzenia-z-właścicielami): brzmienie
+   „W trakcie", nagłówek „Kiedy co sprzedajemy", nowe podpisy kart (karta 2 odchodzi od
+   dosłownej treści handoffu), tytuł „Bratki i prymulki na otwarcie sezonu", długość okresu
+   „Wkrótce" i to, że **zima przestała milczeć**. (Opis uprawy bratka i jego kolory są już
+   podane i potwierdzone przez właścicieli — patrz
+   [Wymiana opisów](#wymiana-opisów--wrzesień-2026).)
 3. Treść chryzantem — **pilne: osobne listy kolorów dla trzech typów.** Cztery ogólne
    zdjęcia w pasie pokazują czerwień, pomarańcz, róż i liliowy tuż pod chipami
    „biały / żółty / fiolet / złoty” (dziś wszystkie trzy wpisy mają tę samą czwórkę
@@ -589,3 +713,7 @@ przepisujemy, nie czyścimy, tylko skracamy do ok. 200 znaków z linkiem do cał
     strony na Facebooku; procedura w [`docs/facebook.md`](facebook.md). Do przejrzenia razem
     z tym: [decyzje o automatycznej publikacji i o opisach `alt`](#posty-z-facebooka--wrzesień-2026).
 11. Nagłówek i lead bloku „Co u nas słychać” — napisane przez nas, jak teksty z punktu 9.
+12. Prymulki — opis uprawy i zdjęcie. Dziś są na stronie tylko jako słowo w tytule kafla,
+    karty sezonowej i w zdaniu na `/bratki/`; bez treści nie zakładamy im wpisu ani grupy.
+13. `deploy.yml` z **codziennym** `schedule:`. Miesięczny przegapiłby 2 listopada i zostawiłby
+    „CHRYZANTEMY · W TRAKCIE" na stronie głównej przez cały listopad.

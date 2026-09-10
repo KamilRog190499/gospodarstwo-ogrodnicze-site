@@ -3,6 +3,8 @@ import { getCollection } from "astro:content";
 import PlantEntry from "./PlantEntry.astro";
 import PhotoStrip from "./PhotoStrip.astro";
 import { offerPages } from "../data/navigation";
+import { plantCount, type PlantGroup } from "../data/offer";
+import { currentSeason, windowFor } from "../data/season";
 import type { GalleryPhoto } from "../data/gallery";
 import { primaryPhone } from "../data/contact";
 
@@ -19,10 +21,17 @@ import { primaryPhone } from "../data/contact";
  * The two blocks after the list exist because a category page is now an entry point -
  * people arrive on it straight from search, having never seen the home page. Without them
  * the page ends with the last plant and nothing to do next.
+ *
+ * That is also why the selling window is printed here from 0.9 on, under the heading: the
+ * home page tile says whether a group is on sale, and someone who arrives from a search for
+ * "chryzantemy Kazimierz Dolny" never sees it. The line is built from `saleWindows`, so the
+ * dates on this page cannot drift from the dates the tiles and the season cards quote - and
+ * they had drifted. `/bratki/` was still offering "sprzedaż w marcu i kwietniu" after the
+ * owners cut the window back to March, because that sentence was typed into the page by hand.
  */
 interface Props {
   /** The `group` value in the plants' frontmatter. */
-  group: "Balkonowe" | "Rabatowe" | "Bratki" | "Chryzantemy";
+  group: PlantGroup;
   title: string;
   /** Optional sentence beside the heading. `/chryzantemy/` ships without one - everything it
    *  said (kolory, termin sprzedaży) is now in the entries' own chips and facts. */
@@ -48,8 +57,19 @@ if (entries.length === 0) {
  *  have to go back to the menu to reach the others. */
 const others = offerPages.filter((item) => item.href !== Astro.url.pathname);
 
-const count = entries.length;
-const countWord = count === 1 ? "roślina" : count < 5 ? "rośliny" : "roślin";
+/** "Sprzedaż trwa: marzec" while the window is open, "Sprzedaż wkrótce: ..." while it is the
+ *  next one to open, and the bare dates the rest of the year. The three readings are the same
+ *  three the home page tiles use, from the same table. */
+const saleWindow = windowFor(group);
+const saleState = currentSeason.groups[group];
+const months = saleWindow?.months.toLocaleLowerCase("pl-PL");
+const saleLine = saleWindow
+  ? saleState === "now"
+    ? `Sprzedaż trwa: ${months}`
+    : saleState === "soon"
+      ? `Sprzedaż wkrótce: ${months}`
+      : `Sprzedaż: ${months}`
+  : null;
 ---
 
 <section class="offer" aria-labelledby="offer-title">
@@ -58,7 +78,13 @@ const countWord = count === 1 ? "roślina" : count < 5 ? "rośliny" : "roślin";
     {lead && <p class="offer__lead">{lead}</p>}
   </div>
 
-  <p class="offer__count">{count} {countWord} w tej grupie</p>
+  {
+    saleLine && (
+      <p class:list={["offer__season", saleState === "now" && "offer__season--now"]}>{saleLine}</p>
+    )
+  }
+
+  <p class="offer__count">{plantCount(entries.length)} w tej grupie</p>
 
   {
     entries.length > 1 && (
@@ -146,6 +172,21 @@ const countWord = count === 1 ? "roślina" : count < 5 ? "rośliny" : "roślin";
     max-width: 42ch;
     font-size: 0.95rem;
     color: var(--ink-soft);
+  }
+
+  /* The selling window, directly under the heading - the first thing someone arriving from
+     search needs, and the only line on the page that changes with the build date. */
+  .offer__season {
+    padding-top: 0.9rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .offer__season--now {
+    font-weight: 600;
+    color: var(--green);
+  }
+  .offer__season + .offer__count {
+    padding-top: 0.35rem;
   }
 
   .offer__count {
