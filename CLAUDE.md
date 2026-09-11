@@ -345,8 +345,11 @@ that shape code decisions:
    pre-2a colours.
 5. **The selling calendar** wants a pass, and it is a whole table rather than one question:
    the wording "W trakcie" (the handoff says "Trwa teraz"), the section heading "Kiedy co
-   sprzedajemy", the new card captions, the title "Bratki i prymulki na otwarcie sezonu", how
-   early "Wkrótce" should light up, and the fact that **winter is no longer silent**.
+   sprzedajemy", the new card captions, the three card titles and bodies rewritten in
+   September 2026 - "Bratki i prymulki", "Wiosenny sezon" and "Chryzantemy", which drop two
+   of the handoff's own headings and leave two cards named exactly like the offer tiles a
+   screen below them - how early "Wkrótce" should light up, and the fact that **winter is
+   no longer silent**.
    Primroses are on the site as a word only: they sell in the March window but no description
    or photograph exists, so no entry and no group were invented.
 6. **What the new descriptions dropped.** Replacing the WordPress copy cost a handful of

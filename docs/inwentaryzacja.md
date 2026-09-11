@@ -614,6 +614,67 @@ Prymulki wchodzą **jako słowo** - w tytule kafla („Bratki i prymulki"), w ty
 sezonowej i w zdaniu pod listą na `/bratki/`. Licznik nadal mówi „1 roślina", bo tyle liczy
 strona. Grupa `Prymulki` i własny adres to decyzja na później, razem z treścią.
 
+## Teksty kart sezonowych - wrzesień 2026
+
+Wszystkie trzy karty dostały krótsze tytuły i przepisane opisy. **To szkic projektowy, nie
+słowa właścicieli** - punkt „Kalendarz” niżej zostaje przez to otwarty, a tabela poniżej jest
+po to, żeby właściciele mieli co z czym porównać.
+
+| Karta                        | Było                                                                                                                                                                          | Jest                                                                                                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1 · marzec, tytuł            | „Bratki i prymulki na otwarcie sezonu”                                                                                                                                        | „Bratki i prymulki”                                                                                                                                    |
+| 1 · marzec, opis             | „Sezon otwierają bratki i prymulki - w skrzynkach i doniczkach, prosto z tunelu. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.”                    | „Zaczynamy sezon od kolorowych bratków i prymulek w skrzynkach i doniczkach. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.” |
+| 2 · kwiecień–czerwiec, tytuł | „Sprzedaż w okresie wiosennym” (dosłownie z handoffu)                                                                                                                         | „Wiosenny sezon”                                                                                                                                       |
+| 2 · kwiecień–czerwiec, opis  | „Kwiaty balkonowe i rabatowe, rozsady oraz gotowe obsadzone skrzynki i doniczki. Kolory i odmiany oglądasz na miejscu, w tunelu.”                                             | „Kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje. Duży wybór kolorów i odmian czeka na miejscu, w naszym gospodarstwie.”                   |
+| 3 · jesień, tytuł            | „Chryzantemy wielkokwiatowe” (dosłownie z handoffu)                                                                                                                           | „Chryzantemy”                                                                                                                                          |
+| 3 · jesień, opis             | „Duży wybór kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada. Przed Wszystkimi Świętymi zamówienia najlepiej złożyć z tygodniowym wyprzedzeniem.” | „Jesienią oferujemy chryzantemy wielkokwiatowe w wielu kolorach i odmianach. Zamówienia na Wszystkich Świętych warto złożyć około tygodnia wcześniej.” |
+
+Nadkreślenia („Wczesna wiosna”, „Wiosna”, „Jesień”, a na zapalonej karcie „W trakcie”
+i „Wkrótce”) oraz podpisy pod zdjęciami **nie zostały ruszone** - podpisy dalej biorą się
+z `saleWindows[].months`, czyli z `src/data/season.ts`.
+
+### Co ta podmiana kosztuje
+
+- **Tytuły kart 1 i 3 są odtąd co do słowa nagłówkami kafli oferty** („Bratki i prymulki”,
+  „Chryzantemy” - `src/data/offer.ts`). Kafle stoją ekran niżej na tej samej stronie, a karty
+  celowo nie mają odnośnika, więc powstaje nagłówek, który wygląda jak te same drzwi, którymi
+  nie jest. Przyjęte świadomie: ta sama rzecz nazywa się na stronie tak samo, a kształt bloku
+  i tak się różni - nadkreślenie, inne zdjęcie, brak linku.
+- **Słowo „tunel” znika z całej sekcji sezonowej.** Karta 1 straciła „prosto z tunelu”,
+  karta 2 „w tunelu” na rzecz „w naszym gospodarstwie” - mimo że zdjęcie karty 2 to wnętrze
+  tunelu, co mówi jego własny `alt` („…wewnątrz tunelu foliowego”). Tekst przestał opisywać
+  obrazek, przy którym stoi. Słowo zostaje na `/faq/`, w historii gospodarstwa
+  i w `Directions.astro`.
+- **Karta 2 przez dziewięć miesięcy w roku czyta się „WIOSNA / Wiosenny sezon”.** Zapala się
+  tylko od kwietnia do czerwca i dopiero wtedy nadkreślenie mówi „W TRAKCIE”. Jako jedyna nie
+  może nazwać rzeczy, bo to okno sprzedaje balkonowe _i_ rabatowe, z dwóch stron naraz.
+- **„Chryzantemy wielkokwiatowe” schodzą z nagłówka do akapitu.** Fraza, po której stara
+  strona się pozycjonuje, zostaje w treści karty i nadal jest tytułem strony `/chryzantemy/`,
+  więc nie ginie z serwisu - ale na stronie głównej nie stoi już w `h3`.
+
+### Co zyskuje
+
+- **Opis karty 3 przestaje wpisywać daty ręcznie w prozę.** Zdanie „Sprzedaż zaczyna się od
+  początku października i trwa do 1 listopada” było drugim miejscem, w którym okno sprzedaży
+  stało słownie - dokładnie tym wzorcem, przez który `/bratki/` reklamowało okno, którego już
+  nie miało. Teraz daty stoją pod zdjęciem, z `season.ts`, i tylko tam.
+- **„Gotowe kompozycje” wchodzi w słownictwo, którego strona już używa**: `/kwiaty-balkonowe/`
+  mówi „kompozycje można oglądać w zakładce Inspiracje”, a sekcja inspiracji otwiera się
+  słowem „Kompozycje”. Karta robi więc miękki wskaźnik na `/inspiracje/`.
+
+### Czego nie zrobiono
+
+Pierwsza wersja opisu karty marcowej kończyła się zdaniem „W marcu pojawiają się też pierwsze
+kwiaty balkonowe i rabatowe”. To **nieprawda wobec okien sprzedaży** - balkonowe i rabatowe
+otwierają się 1 kwietnia - i byłby to powrót do dokładnie tej obietnicy, którą `/bratki/`
+składało przed wrześniową korektą. W marcu strona główna mówiłaby, że balkonowe już są,
+a `/kwiaty-balkonowe/` drukowałoby pod nagłówkiem samo „Kwiecień – czerwiec”. Zdanie wróciło
+więc do brzmienia „jeszcze zanim ruszą”.
+
+Nie da się tego zresztą uratować rozciągnięciem okna na marzec: `seasonOn()` szuka przez
+`saleWindows.find()`, czyli bierze **pierwsze** pasujące okno, więc marzec i tak trafiłby na
+bratki, a balkonowe dostałyby `null`. Nakładające się okna łamią ten model, nie tylko datę.
+
 ## Kalendarz - do przejrzenia z właścicielami
 
 | Rzecz                      | Pytanie                                                                                                                                                                                                                                                             |
@@ -621,7 +682,7 @@ strona. Grupa `Prymulki` i własny adres to decyzja na później, razem z treśc
 | „W trakcie"                | dotąd w kodzie i w handoffie stało „Trwa teraz"                                                                                                                                                                                                                     |
 | Nagłówek sekcji sezonu     | „Kiedy co sprzedajemy" zamiast „Sezon w gospodarstwie"                                                                                                                                                                                                              |
 | Podpisy kart               | „Marzec" (było „Marzec – kwiecień") i „Kwiecień – czerwiec · szczyt sezonu" (było „Maj – czerwiec · szczyt sezonu") - to **odejście od dosłownej treści handoffu** na karcie 2                                                                                      |
-| Tytuł karty 1              | „Bratki i prymulki na otwarcie sezonu"                                                                                                                                                                                                                              |
+| Tytuły i opisy kart        | wszystkie trzy przepisane we wrześniu 2026 - „Bratki i prymulki”, „Wiosenny sezon”, „Chryzantemy”. Szkic projektowy, nie słowa właścicieli; pełne _było → jest_ w sekcji „Teksty kart sezonowych” wyżej                                                             |
 | Karty bez odnośników       | do grupy prowadzi teraz wyłącznie kafel oferty                                                                                                                                                                                                                      |
 | Długość „Wkrótce"          | chryzantemy zapalają się 1 lipca (trzy miesiące wcześniej), bratki 2 listopada (cztery). Skrócenie to dołożenie granicy w tabeli okien, nie zmiana logiki                                                                                                           |
 | **Zima przestała milczeć** | od 2 listopada do końca lutego karta bratków jest ciemna i niesie „WKRÓTCE". CLAUDE.md mówi, że stan zimowy **nie jest zaprojektowany** i nic się w nim nie wymyśla; to jedno słowo, nie odrzucony baner „Sprzedaż wznawiamy w marcu", ale jest decyzją właścicieli |

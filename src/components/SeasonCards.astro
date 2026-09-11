@@ -9,7 +9,8 @@ import { compositionPhoto } from "../data/compositions";
  * windows, the one opening next - filled in dark.
  *
  * The section has a heading of its own and the cards sit under it as `h3`. Before, each card
- * title was an `h2`, so "Sprzedaż w okresie wiosennym" stood in the document outline at the
+ * title was an `h2`, so the middle card's heading of the day - "Sprzedaż w okresie
+ * wiosennym", a wording this file no longer carries - stood in the document outline at the
  * same level as the offer, the gallery and the contact section - the cards read as top-level
  * sections, and the block they belong to had no name at all.
  *
@@ -65,16 +66,16 @@ const cards = [
   {
     window: saleWindows[0]!,
     season: "Wczesna wiosna",
-    title: "Bratki i prymulki na otwarcie sezonu",
-    body: "Sezon otwierają bratki i prymulki - w skrzynkach i doniczkach, prosto z tunelu. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.",
+    title: "Bratki i prymulki",
+    body: "Zaczynamy sezon od kolorowych bratków i prymulek w skrzynkach i doniczkach. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.",
     meta: saleWindows[0]!.months,
     photo: pansyPhoto,
   },
   {
     window: saleWindows[1]!,
     season: "Wiosna",
-    title: "Sprzedaż w okresie wiosennym",
-    body: "Kwiaty balkonowe i rabatowe, rozsady oraz gotowe obsadzone skrzynki i doniczki. Kolory i odmiany oglądasz na miejscu, w tunelu.",
+    title: "Wiosenny sezon",
+    body: "Kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje. Duży wybór kolorów i odmian czeka na miejscu, w naszym gospodarstwie.",
     // "szczyt sezonu" is the handoff's own wording; only the months in front of it moved.
     meta: `${saleWindows[1]!.months} · szczyt sezonu`,
     photo: tunnelPhoto,
@@ -82,8 +83,8 @@ const cards = [
   {
     window: saleWindows[2]!,
     season: "Jesień",
-    title: "Chryzantemy wielkokwiatowe",
-    body: "Duży wybór kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada. Przed Wszystkimi Świętymi zamówienia najlepiej złożyć z tygodniowym wyprzedzeniem.",
+    title: "Chryzantemy",
+    body: "Jesienią oferujemy chryzantemy wielkokwiatowe w wielu kolorach i odmianach. Zamówienia na Wszystkich Świętych warto złożyć około tygodnia wcześniej.",
     meta: saleWindows[2]!.months,
     photo: chrysanthemumPhoto,
   },
