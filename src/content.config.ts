@@ -10,6 +10,8 @@ import { glob } from "astro/loaders";
 // Astro so the schema is validated by the same zod instance the content layer uses.
 import { z } from "astro/zod";
 import { plantGroups } from "./data/offer";
+import { compositionKinds } from "./data/compositions";
+import { plantSlugs } from "./data/plant-links";
 
 /** The plants in the offer. Each renders as one entry on its group's category page, with
  *  the Markdown body as the cultivation description.
@@ -101,4 +103,47 @@ const faq = defineCollection({
   }),
 });
 
-export const collections = { plants, pages, faq };
+/** The plantings shown on `/inspiracje/` - a basket, a box, a planter or a bed that the
+ *  holding put together and photographed.
+ *
+ *  They lived in `src/data/gallery.ts` as a field on each photograph, which was right while
+ *  a planting was a name and a list of plants. The owners' September 2026 pass gave every
+ *  one of them a paragraph of description and a paragraph of advice, and two thousand words
+ *  of Polish prose do not belong in a TypeScript file - the rule this very file opens with.
+ *  One `.md` per planting, the file name is the anchor, exactly as `plants` and `faq` work.
+ *
+ *  **`tip` is prose in the frontmatter, and that is a deliberate exception.** The body holds
+ *  the description; the advice is a second, separate paragraph that the panel prints under
+ *  its own label, and a body cannot carry two blocks without splitting rendered HTML on an
+ *  `<hr>`. It is unformatted, single-paragraph text, so it costs nothing to keep it in a
+ *  field - the same trade `faq` makes with `question`.
+ *
+ *  `image` and `imageAlt` are **required** here, unlike in `plants`: all 23 photographs
+ *  exist, so there is no "waiting for a picture" state to design for.
+ */
+const compositions = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/compositions" }),
+  schema: ({ image }) =>
+    z.object({
+      /** The panel's heading, and what a search engine gets. Every title names the plant it
+       *  is about - the three that did not were given it when the owners' titles came in. */
+      title: z.string(),
+      /** Sets the filter row and the panel's overline. Values from `src/data/compositions.ts`. */
+      kind: z.enum(compositionKinds),
+      /** Position in the strip, and in the rail under it. */
+      order: z.number().int().positive(),
+      image: image(),
+      imageAlt: z.string().min(10),
+      /** Keys of `plantLinks`, so a misspelt plant breaks the build.
+       *
+       *  **Only what the owners named.** Three plantings hold something they left unnamed -
+       *  the small white filler in 3 and 4, the silver-leaved trailer in 21. Those are
+       *  described in the prose and left out of this list rather than guessed at; the
+       *  questions are in docs/inwentaryzacja.md. */
+      plants: z.array(z.enum(plantSlugs)).default([]),
+      /** "Nasza podpowiedź" - how to build something like this, in one paragraph. */
+      tip: z.string().min(40),
+    }),
+});
+
+export const collections = { plants, pages, faq, compositions };

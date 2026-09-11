@@ -53,11 +53,13 @@ Read this before adding a file - most things already have a home.
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                          |
 | `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages`, `footerOfferLinks` and `allPages` (flattened, for the 404).                                                                                                                       |
 | `src/data/contact.ts`          | Four phone numbers, the address, the directions URL, the Facebook link. `email` and `openingHours` are `null` - see Open items.                                                                                                                                                                                                        |
-| `src/data/gallery.ts`          | The photograph registry: the `gallery` array for the slideshow, plus single frames pinned by name (`heroPhoto`, `tunnelPhoto`, `historyPhoto`, `chrysanthemumPhoto`, `pansyPhoto`) and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each entry is an import plus a Polish `alt`.                                               |
-| `src/data/plant-links.ts`      | Maps a plant named on a slideshow caption to its entry's anchor. `href: null` means "sold, but no entry to link to yet".                                                                                                                                                                                                               |
+| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                     |
+| `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                           |
 | `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                            |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                 |
-| `src/content.config.ts`        | The zod schemas for `plants`, `pages` and `faq`.                                                                                                                                                                                                                                                                                       |
+| `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the history block and the spring season card use instead of an array position.                                                                                                                   |
+| `src/content/compositions/`    | **The 23 plantings**, one `.md` each, the file name being the anchor. Body = the description, `tip` = "Nasza podpowiedź". Both are the owners' own words.                                                                                                                                                                              |
+| `src/content.config.ts`        | The zod schemas for `plants`, `pages`, `faq` and `compositions`.                                                                                                                                                                                                                                                                       |
 | `src/layouts/BaseLayout.astro` | The one layout: head, skip link, header, `<main>`, footer, JSON-LD.                                                                                                                                                                                                                                                                    |
 | `src/components/`              | 19 components. `SeasonCards`, `OfferOverview` (home tiles), `OfferSection` (a whole category page), `PlantEntry`, `PhotoSlot` (a pending photograph), `PhotoStrip`, `Compositions` (the slideshow), `Intro`, `Header`, `Nav`, `Footer`, `Contact`, `Directions`, `MapEmbed`, `ConsentBanner`, `History`, `FacebookNews`, `Faq`, `Seo`. |
 | `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the slideshow), `lightbox.ts` (the overlay preview), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                                                                   |
@@ -119,8 +121,8 @@ Deliberate exceptions, all of them because the name is an address:
 - `src/pages/*.astro` filenames - **they are the public URLs.**
 - `src/content/**` filenames - they become slugs and anchors.
 - `src/assets/plants/*.jpg` - each must carry the same name as its Markdown file.
-- Section `id`s and the composition ids in `gallery.ts` - published URL fragments.
-- The `plantGroups` values and `compositionKinds` in `gallery.ts` - displayed labels that are
+- Section `id`s and the file names in `src/content/compositions/` - published URL fragments.
+- The `plantGroups` values and `compositionKinds` in `compositions.ts` - displayed labels that are
   also keys.
 
 ## Stack and commands
@@ -184,9 +186,11 @@ plus manual viewport checks.
   focus, stops for good on the first interaction, and never runs under
   `prefers-reduced-motion`. It renders at **two addresses** - `/inspiracje/` with its
   defaults, and the home page with `level={2}` and the filter, the rail, the anchors and the
-  structured data switched off. Those four props are not styling; each one stops the two
-  copies from contradicting each other, and the component's header comment gives the reason
-  for each. `src/scripts/compositions.ts` drives one strip per `[data-comp]`, so scope every
+  structured data and the prose switched off. Those five props are not styling; each one stops
+  the two copies from contradicting each other, and the component's header comment gives the
+  reason for each. `prose` is the newest and the heaviest: the descriptions and the advice run
+  to ~2000 words, which on the home page would make the preview longer than the page it
+  previews. `src/scripts/compositions.ts` drives one strip per `[data-comp]`, so scope every
   query to the root if you touch it; a `document.querySelector` there would make the home
   page buttons move the wrong track.
 - **A plant entry is a component fed by data**, not hand-written markup:

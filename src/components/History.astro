@@ -1,7 +1,7 @@
 ---
 import { getEntry, render } from "astro:content";
 import { Picture } from "astro:assets";
-import { historyPhoto } from "../data/gallery";
+import { compositionPhoto } from "../data/compositions";
 
 /**
  * The dark block with the holding's own history - the text migrated from /o-nas/ on the
@@ -27,6 +27,15 @@ if (!entry) {
   throw new Error("Missing src/content/pages/historia.md - the history section has no text.");
 }
 const { Content } = await render(entry);
+
+/** The design brief here says "zdjecie archiwalne"; this frame is current, because nothing
+ *  archival exists yet - a better fit than an empty panel, and still worth replacing if the
+ *  owners find an old photograph.
+ *
+ *  Asked for **by name**. It used to be `gallery[16]`, an array position, so reordering a
+ *  single photograph in the registry would have changed this block without anyone saying so;
+ *  a name that stops resolving throws at build time instead. */
+const historyPhoto = await compositionPhoto("zielono-biala-kaskada-plektrantusa");
 ---
 
 <section id="historia" class="history" aria-labelledby="historia-title">

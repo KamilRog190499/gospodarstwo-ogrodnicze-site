@@ -1,6 +1,7 @@
 ---
 import { Picture, getImage } from "astro:assets";
-import { compositions, compositionKinds } from "../data/gallery";
+import { getCollection, render } from "astro:content";
+import { compositionKinds } from "../data/compositions";
 import { plantLinks } from "../data/plant-links";
 import { primaryPhone } from "../data/contact";
 
@@ -22,36 +23,39 @@ import { primaryPhone } from "../data/contact";
  * *planting*: a container type, a short name, its plants as links into the offer entries,
  * an anchor, and the phone number.
  *
- * What that buys, point by point against the review:
+ * ## Where a planting lives
  *
- * - **1.** Every panel links to its plants and offers the phone.
- * - **2, 6.** The rail underneath reaches any planting in one click - and it is a list of
- *   real anchors, so it reaches them without JavaScript too. The filter turns 23 into four
- *   or five.
- * - **3, 4.** With the consent bar gone from this page (patch 0001) the photograph is no
- *   longer capped at 52vh to keep the controls clear of it, and the panel is 980px rather
- *   than 460px: one photograph large, instead of three cropped in half.
- * - **5.** Each planting has an id and a name, and the page carries an `ItemList` of
- *   `ImageObject` - before, 23 described photographs sat at one address with nothing to
- *   index.
- * - **8.** The lightbox gets 2000px instead of 1200px, which is what the sources hold.
+ * In `src/content/compositions/`, one Markdown file each, the file name being the anchor.
+ * They were a field on the photograph registry while a planting was a name and a list of
+ * plants; the owners' September 2026 pass gave each one a paragraph of description and a
+ * paragraph of advice, and that much prose belongs in Markdown. The same pass named the
+ * species in the fifteen plantings that used to print "obsadzenie mieszane - gatunki do
+ * wpisania przez gospodarstwo", so **that caveat is gone**: the names on this page are the
+ * holding's own word now, not a reading of the photographs.
  *
  * Heading outline: `h1` for the page, then one `h2` per planting inside its own `figcaption`.
- * The image keeps `alt=""` and is described by that caption - as in `Slideshow`, so a screen
- * reader does not read the same sentence twice.
+ *
+ * **The photograph carries its own `alt` again.** It was `alt=""` while the caption printed
+ * the very same sentence, which would have made a screen reader read it twice. The caption
+ * now carries the editorial description - a different text with a different job - so the
+ * literal description of the frame goes back where it belongs.
  *
  * ## The home page variant
  *
  * The home page shows the same 23 plantings with `level={2}` and the navigation aids off.
- * Four of the props exist to keep two copies of one thing from lying about each other, and
+ * Five of the props exist to keep two copies of one thing from lying about each other, and
  * none of them is a matter of taste:
  *
- * - `structuredData` - the `ItemList` names `/inspiracje/#…` as the `@id` of every planting.
+ * - `prose` - the description and the advice are ~2000 words between them. On the home page
+ *   they would turn a preview into a second, longer copy of `/inspiracje/`, and leave that
+ *   page with no reason to exist. The strip up here says what the planting is and what is in
+ *   it; the words are what the click is for.
+ * - `structuredData` - the `ItemList` names `/inspiracje/#...` as the `@id` of every planting.
  *   Emitting it at a second address describes the same list twice, and `representativeOfPage`
  *   would be false on a page whose representative image is the hero.
- * - `ids` - `id={composition.id}` would put 23 anchors under `/#kosz-…` competing with the
- *   real ones under `/inspiracje/#kosz-…`. The home strip has no rail to jump with, so it
- *   needs none of them; `compositions.ts` is written to survive their absence.
+ * - `ids` - `id={entry.id}` would put 23 anchors under `/#kosz-...` competing with the real
+ *   ones under `/inspiracje/#kosz-...`. The home strip has no rail to jump with, so it needs
+ *   none of them; `compositions.ts` is written to survive their absence.
  * - `showRail`, `showFilters` - the reduced variant is the strip, the buttons and the
  *   counter. Filtering and browsing all 23 by thumbnail are what `/inspiracje/` is for, and
  *   the panel headings link there.
@@ -72,6 +76,8 @@ interface Props {
   structuredData?: boolean;
   /** Give each panel the planting's id as an anchor. One address only. */
   ids?: boolean;
+  /** Print the description and "Nasza podpowiedź". Off in the reduced variant. */
+  prose?: boolean;
   /** Add "Zobacz wszystkie obsadzenia" under the strip, pointing at `/inspiracje/`. */
   allLink?: boolean;
 }
@@ -82,34 +88,38 @@ const {
   showRail = true,
   structuredData = true,
   ids = true,
+  prose = true,
   allLink = false,
 } = Astro.props;
 
 const Heading = `h${level}` as "h1" | "h2";
 const PanelHeading = level === 1 ? "h2" : "h3";
 
-/** The lightbox target: the full frame, at what the sources actually hold. `Slideshow` asked
- *  for 1200px, which was smaller than the file on disk - a zoom that zoomed less than the
- *  original. */
-const previews = await Promise.all(
-  compositions.map((photo) => getImage({ src: photo.src, width: 2000, format: "webp" })),
+const entries = (await getCollection("compositions")).sort((a, b) => a.data.order - b.data.order);
+
+/** Everything one panel needs, resolved once.
+ *
+ *  The lightbox target is the full frame at what the sources actually hold. `Slideshow`
+ *  asked for 1200px, which was smaller than the file on disk - a zoom that zoomed less than
+ *  the original. The thumbnail is 2x of the 96px rail, and is only built where the rail is
+ *  rendered; the body is only rendered where the words are shown. */
+const panels = await Promise.all(
+  entries.map(async (entry) => ({
+    entry,
+    preview: await getImage({ src: entry.data.image, width: 2000, format: "webp" }),
+    thumbnail: showRail
+      ? await getImage({ src: entry.data.image, width: 192, format: "webp" })
+      : null,
+    Body: prose ? (await render(entry)).Content : null,
+  })),
 );
 
-/** 2x of the 96px rail. Only built where the rail is rendered. */
-const thumbnails = showRail
-  ? await Promise.all(
-      compositions.map((photo) => getImage({ src: photo.src, width: 192, format: "webp" })),
-    )
-  : [];
-
-const total = compositions.length;
+const total = panels.length;
 
 /** Only the kinds that actually occur, in registry order - a filter that matches nothing is
- *  a button that lies. This is also how the autumn shoot joins in later: add the frames, and
+ *  a button that lies. This is also how the autumn shoot joins in later: add the files, and
  *  the filter grows by itself. */
-const kinds = compositionKinds.filter((kind) =>
-  compositions.some((photo) => photo.composition.kind === kind),
-);
+const kinds = compositionKinds.filter((kind) => entries.some((entry) => entry.data.kind === kind));
 
 const imageList =
   structuredData && Astro.site
@@ -117,15 +127,17 @@ const imageList =
         "@context": "https://schema.org",
         "@type": "ItemList",
         name: "Obsadzenia z kwiatów Gospodarstwa Ogrodniczego „Saran”",
-        itemListElement: compositions.map((photo, index) => ({
+        itemListElement: panels.map(({ entry, preview }, index) => ({
           "@type": "ListItem",
           position: index + 1,
           item: {
             "@type": "ImageObject",
-            "@id": new URL(`/inspiracje/#${photo.composition.id}`, Astro.site).href,
-            name: photo.composition.title,
-            description: photo.alt,
-            contentUrl: new URL(previews[index]!.src, Astro.site).href,
+            "@id": new URL(`/inspiracje/#${entry.id}`, Astro.site).href,
+            name: entry.data.title,
+            /* The literal description of the frame, not the editorial paragraph: this field
+               describes the image, and the prose is in the page body anyway. */
+            description: entry.data.imageAlt,
+            contentUrl: new URL(preview.src, Astro.site).href,
             representativeOfPage: index === 0,
           },
         })),
@@ -139,8 +151,8 @@ const imageList =
   <div class="comp__head">
     <Heading class="comp__title" id="comp-title">Inspiracje</Heading>
     <p class="comp__lead">
-      Obsadzenia z naszej uprawy - kosze, skrzynki, donice i rabaty. Przy każdym piszemy, jakie
-      kwiaty w nim są i gdzie ich szukać w ofercie.
+      Kompozycje z kwiatów, które uprawiamy. Kosze, skrzynki, donice i rabaty pokazują różne sposoby
+      łączenia roślin, a przy każdej podpowiadamy, jakich kwiatów szukać w ofercie.
     </p>
   </div>
 
@@ -188,98 +200,110 @@ const imageList =
     aria-describedby="comp-hint"
   >
     {
-      compositions.map((photo, index) => (
-        <li
-          class="panel"
-          id={ids ? photo.composition.id : undefined}
-          data-panel
-          data-kind={photo.composition.kind}
-        >
-          <figure class="panel__figure">
-            <a
-              class="panel__link"
-              href={previews[index]!.src}
-              data-lightbox
-              aria-label={`Powiększ: ${photo.alt}`}
-            >
-              {/* Described by the figcaption below - see the note at the top - so the
-                  image's own alt is empty. */}
-              <Picture
-                src={photo.src}
-                formats={["avif", "webp"]}
-                fallbackFormat="jpg"
-                widths={[560, 1120]}
-                sizes="(min-width: 900px) 520px, 88vw"
-                width={480}
-                height={640}
-                alt=""
-                loading={level === 1 && index === 0 ? "eager" : "lazy"}
-              />
-            </a>
+      panels.map(({ entry, preview, Body }, index) => {
+        const { data } = entry;
+        return (
+          <li class="panel" id={ids ? entry.id : undefined} data-panel data-kind={data.kind}>
+            <figure class="panel__figure">
+              <a
+                class="panel__link"
+                href={preview.src}
+                data-lightbox
+                aria-label={`Powiększ: ${data.imageAlt}`}
+              >
+                <Picture
+                  src={data.image}
+                  formats={["avif", "webp"]}
+                  fallbackFormat="jpg"
+                  widths={[560, 1120]}
+                  sizes="(min-width: 900px) 520px, 88vw"
+                  width={480}
+                  height={640}
+                  alt={data.imageAlt}
+                  loading={level === 1 && index === 0 ? "eager" : "lazy"}
+                />
+              </a>
 
-            <figcaption class="panel__meta">
-              <p class="panel__kind">
-                {photo.composition.kind} · <span>{index + 1}</span> z {total}
-              </p>
-              <PanelHeading class="panel__name">
-                {/* On the home page the strip is a preview, so its heading is the way in to
-                    the planting's own address rather than a dead end. */}
-                {level === 1 ? (
-                  photo.composition.title
-                ) : (
-                  <a href={`/inspiracje/#${photo.composition.id}`}>{photo.composition.title}</a>
-                )}
-              </PanelHeading>
-              <p class="panel__desc">{photo.alt}</p>
-
-              <div class="panel__plants">
-                <p class="panel__plantsLabel">Kwiaty w tym obsadzeniu</p>
-                {photo.composition.plants.length > 0 ? (
-                  <ul class="chips">
-                    {photo.composition.plants.map((slug) => {
-                      const plant = plantLinks[slug];
-                      return (
-                        <li>
-                          {plant.href ? (
-                            <a class="chip" href={plant.href}>
-                              {plant.label}
-                            </a>
-                          ) : (
-                            <span class="chip chip--flat">{plant.label}</span>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : null}
-                <p class="panel__plantsNote">
-                  {photo.composition.plants.length > 0
-                    ? "Rozpoznane z opisu zdjęcia - do potwierdzenia przez gospodarstwo."
-                    : "Obsadzenie mieszane - gatunki do wpisania przez gospodarstwo."}
+              <figcaption class="panel__meta">
+                <p class="panel__kind">
+                  {data.kind} · <span>{index + 1}</span> z {total}
                 </p>
-              </div>
+                <PanelHeading class="panel__name">
+                  {/* On the home page the strip is a preview, so its heading is the way in to
+                      the planting's own address rather than a dead end. */}
+                  {level === 1 ? data.title : <a href={`/inspiracje/#${entry.id}`}>{data.title}</a>}
+                </PanelHeading>
 
-              <div class="panel__actions">
-                {/* The phone belongs to `/inspiracje/`, where a visitor who has just found a
-                    basket they like should not have to go looking for it. It must **not**
-                    appear in the reduced variant: 23 panels on the home page would print
-                    `602 518 401` twenty-three times, and with the Intro and the footer that
-                    is 25 times on the entrance page - the defect version 0.6 deleted
-                    `ContactStrip` to fix, eight times over. The way to the phone from here
-                    is the link beside it, one click away. */}
-                {level === 1 && (
-                  <a class="cta" href={primaryPhone.href}>
-                    Zapytaj: {primaryPhone.display}
-                  </a>
+                {Body && (
+                  <div class="panel__desc">
+                    <Body />
+                  </div>
                 )}
-                <a class="cta-line" href="/kontakt/">
-                  Kontakt i dojazd
-                </a>
-              </div>
-            </figcaption>
-          </figure>
-        </li>
-      ))
+
+                {data.plants.length > 0 && (
+                  <div class="panel__plants">
+                    <p class="panel__plantsLabel">Kwiaty w tym obsadzeniu</p>
+                    <ul class="chips">
+                      {data.plants.map((slug) => {
+                        const plant = plantLinks[slug];
+                        /* What the name alone will not tell a reader, and whether we sell it
+                           at all - see `plant-links.ts`. */
+                        const notes = [plant.qualifier, plant.companion ? "dodatek" : null].filter(
+                          (note): note is string => note !== null && note !== undefined,
+                        );
+                        return (
+                          <li>
+                            {plant.href ? (
+                              <a class="chip" href={plant.href}>
+                                {plant.label}
+                                {notes.map((note) => (
+                                  <span class="chip__note">· {note}</span>
+                                ))}
+                              </a>
+                            ) : (
+                              <span class="chip chip--flat">
+                                {plant.label}
+                                {notes.map((note) => (
+                                  <span class="chip__note">· {note}</span>
+                                ))}
+                              </span>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+
+                {prose && (
+                  <div class="panel__tip">
+                    <p class="panel__tipLabel">Nasza podpowiedź</p>
+                    <p class="panel__tipBody">{data.tip}</p>
+                  </div>
+                )}
+
+                <div class="panel__actions">
+                  {/* The phone belongs to `/inspiracje/`, where a visitor who has just found a
+                      basket they like should not have to go looking for it. It must **not**
+                      appear in the reduced variant: 23 panels on the home page would print
+                      `602 518 401` twenty-three times, and with the Intro and the footer that
+                      is 25 times on the entrance page - the defect version 0.6 deleted
+                      `ContactStrip` to fix, eight times over. The way to the phone from here
+                      is the link beside it, one click away. */}
+                  {level === 1 && (
+                    <a class="cta" href={primaryPhone.href}>
+                      Zapytaj: {primaryPhone.display}
+                    </a>
+                  )}
+                  <a class="cta-line" href="/kontakt/">
+                    Kontakt i dojazd
+                  </a>
+                </div>
+              </figcaption>
+            </figure>
+          </li>
+        );
+      })
     }
   </ul>
 
@@ -300,19 +324,19 @@ const imageList =
           Wszystkie obsadzenia
         </p>
         <ul aria-labelledby="rail-label">
-          {compositions.map((photo, index) => (
+          {panels.map(({ entry, thumbnail }, index) => (
             <li data-thumb-item>
               {/* An anchor, not a button: without JavaScript it still jumps to the panel. */}
               <a
                 class="thumb"
-                href={`#${photo.composition.id}`}
+                href={`#${entry.id}`}
                 data-thumb
-                data-kind={photo.composition.kind}
+                data-kind={entry.data.kind}
                 aria-current={index === 0 ? "true" : undefined}
               >
                 <img
-                  src={thumbnails[index]!.src}
-                  alt={photo.composition.title}
+                  src={thumbnail!.src}
+                  alt={entry.data.title}
                   width="96"
                   height="128"
                   loading="lazy"
@@ -325,7 +349,6 @@ const imageList =
     )
   }
 </section>
-
 <style>
   .comp {
     border-top: 1px solid var(--rule);
@@ -558,7 +581,11 @@ const imageList =
     border-bottom-color: var(--green);
   }
 
+  /* The editorial description, straight out of the planting's Markdown body - so it is a
+     block of paragraphs now, not the one literal sentence the `alt` used to supply. */
   .panel__desc {
+    display: grid;
+    gap: 0.6rem;
     font-size: 0.95rem;
     color: var(--ink-soft);
   }
@@ -610,9 +637,40 @@ const imageList =
     color: var(--ink-grey);
   }
 
-  .panel__plantsNote {
-    font-size: 0.85rem;
+  /* What a chip says after the plant's name: what kind of plant it is, and "dodatek" where
+     it grows in the plantings without being sold on its own. Lower case and quieter, so the
+     name still reads as the name - and inside the link, so a screen reader gets it too. */
+  .chip__note {
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: 0.02em;
     color: var(--ink-grey);
+    margin-inline-start: 0.4rem;
+  }
+  a.chip:hover .chip__note {
+    color: inherit;
+  }
+
+  /* "Nasza podpowiedź" - how to build something like this. Same 1px rule and same overline
+     as the plant list above it: one more block in the panel, not a new kind of thing. */
+  .panel__tip {
+    border-top: 1px solid var(--rule);
+    padding-top: 0.9rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .panel__tipLabel {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .panel__tipBody {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
   }
 
   .panel__actions {

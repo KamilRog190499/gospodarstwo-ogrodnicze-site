@@ -201,9 +201,12 @@ Uwagi do tej paczki:
 - Źródła przeskalowano z 4000 px do 2000 px dłuższego boku: 105 MB → 15,7 MB. Oryginały
   zostają poza repo.
 - **Opisy `alt` napisałem z tego, co widać na zdjęciu** - kolor, forma, otoczenie. Nazwę
-  gatunku wpisałem tylko tam, gdzie kwiat jest jednoznaczny (begonie, pelargonie,
-  petunie). To są rośliny właścicieli i **oni powinni te opisy przejrzeć**; kilka kadrów to
-  obsadzenia mieszane, których nie da się rozpisać bez ich wiedzy.
+  gatunku wpisywałem najpierw tylko tam, gdzie kwiat jest jednoznaczny (begonie, pelargonie,
+  petunie). **Od września 2026 to już nieaktualne dla galerii:** właściciele nazwali gatunki
+  we wszystkich 23 obsadzeniach, więc opisy `alt` zostały o nie uzupełnione, a kadr 13 -
+  opisany jako pelargonie - okazał się niecierpkami i został poprawiony. Patrz
+  [Obsadzenia](#obsadzenia--opisy-od-właścicieli-wrzesień-2026). Opisy `alt` pozostałych
+  paczek (chryzantemy, bratki, piąta paczka) dalej czekają na przejrzenie.
 - Zdjęcia **nie zostały przypisane do wpisów roślin**. To ujęcia zbiorowe, nie portrety
   pojedynczych gatunków, a zgadywanie gatunku na stronie ogrodnika byłoby gorsze niż
   placeholder. Właściciele mogą wskazać, co do czego pasuje.
@@ -461,8 +464,12 @@ wspólna dla całej witryny - kto zgodzi się na stronie głównej, ma mapę wcz
 ### Pokaz obsadzeń na dwóch adresach
 
 `Compositions.astro` renderuje ten sam zestaw 23 obsadzeń w dwóch wariantach. Na stronie
-głównej wyłączone są cztery rzeczy i żadna z nich nie jest kwestią gustu:
+głównej wyłączone jest pięć rzeczy i żadna z nich nie jest kwestią gustu:
 
+- **`prose`** - opis i porada to razem około dwóch tysięcy słów. Na stronie głównej zamieniłyby
+  zapowiedź w drugą, dłuższą kopię `/inspiracje/` i zostawiły tamtą stronę bez powodu, żeby
+  istnieć. Pasek na górze mówi, czym jest obsadzenie i co w nim rośnie; słowa są tym, po co
+  się klika.
 - **`structuredData`** - `ItemList` wskazuje `/inspiracje/#…` jako `@id` każdego obsadzenia;
   wyemitowany pod drugim adresem opisywałby tę samą listę dwa razy.
 - **`ids`** - kotwice `/#kosz-…` konkurowałyby z prawdziwymi pod `/inspiracje/#kosz-…`.
@@ -933,6 +940,103 @@ wiersze łamią się na dwie linie.
 Sprawdzone przy 400 px: pytania schodzą do 18,5 px, każdy wiersz ma co najmniej 58 px wysokości
 (próg dotykowy to 44 px), chevron nigdy nie wchodzi na tekst, brak przewijania w poziomie.
 
+## Obsadzenia - opisy od właścicieli, wrzesień 2026
+
+Właściciele przejrzeli wszystkie 23 obsadzenia i **podali gatunki oraz komplet tekstów**: do
+każdego kadru akapit opisu i akapit porady. To zamyka najstarszą lukę tej strony -
+piętnaście z 23 paneli drukowało dotąd „Obsadzenie mieszane - gatunki do wpisania przez
+gospodarstwo”, a pozostałe osiem „Rozpoznane z opisu zdjęcia - do potwierdzenia przez
+gospodarstwo”. **Oba te podpisy zniknęły**, bo oba przestały być prawdą.
+
+### Jeden błąd rzeczowy, który przy okazji wyszedł
+
+Kadr 13 był opisany jako `pelargonie-i-srebrne-liscie`, z chipem „Pelargonie rabatowe”
+i opisem `alt` „Rabata z pelargoniami i roślinami o srebrzystych liściach”. Komentarz
+w kodzie sam się przyznawał, że to odczyt, nie wiedza („to confirm with the owners - it could
+as well be the ivy-leaved ones”). Odpowiedź właścicieli jest przecząca: to **niecierpki
+nowogwinejskie**. Kotwica, tytuł, chip i `alt` zostały poprawione.
+
+### Gdzie teraz mieszkają obsadzenia
+
+W nowej kolekcji treści `src/content/compositions/` - jeden plik `.md` na obsadzenie, nazwa
+pliku jest kotwicą, dokładnie jak w `plants` i `faq`. Wcześniej były polem `composition` na
+rejestrze zdjęć w `src/data/gallery.ts`, co było w porządku, dopóki obsadzenie było nazwą
+i listą roślin. Dwa tysiące słów polskiej prozy w pliku TypeScript nie jest już w porządku -
+mówi o tym nagłówek `src/content.config.ts`.
+
+`tip` stoi we frontmatterze mimo reguły „proza w body”. To świadomy wyjątek: body niesie
+opis, a porada jest osobnym akapitem drukowanym pod własną etykietą, więc trzymanie obu
+w jednym body wymagałoby dzielenia wyrenderowanego HTML-a po `<hr>`. Ten sam kompromis, co
+`question` w `faq`.
+
+**Efekt uboczny, dla którego warto było:** blok historii i wiosenna karta sezonu sięgały po
+swoje zdjęcia **przez pozycję w tablicy** (`gallery[16]`, `gallery[17]`). Przestawienie
+jednego kadru w rejestrze po cichu zmieniłoby oba bloki. Teraz proszą o zdjęcie po nazwie
+(`compositionPhoto("zielono-biala-kaskada-plektrantusa")`), a nazwa, która przestaje się
+rozwiązywać, wywala build zamiast pokazać nie ten obrazek.
+
+### Trzy stany chipa zamiast dwóch
+
+`href: null` w `src/data/plant-links.ts` znaczyło dotąd jedno: „sprzedajemy, brak wpisu”.
+Właściciele nazwali w kadrach także rośliny, których **nie sprzedają osobno**, więc plik
+rozróżnia teraz trzy przypadki:
+
+| Stan                    | Wygląd chipa        | Rośliny                                                                                 |
+| ----------------------- | ------------------- | --------------------------------------------------------------------------------------- |
+| wpis istnieje           | odnośnik            | begonie, calibrachoa, goździki, niecierpki nowogwinejskie, pelargonie rabatowe, werbena |
+| sprzedajemy, brak wpisu | nazwa bez odnośnika | petunie i surfinie, hortensje, brachyscome, plektrantus, wilczomlecz, koleus, bidens    |
+| `companion: true`       | nazwa + `· dodatek` | gaura, pennisetum, lizymacja                                                            |
+
+`qualifier` dopisuje do nazwy to, czego sama nazwa nie mówi („trawa ozdobna”, „liście
+ozdobne”, „Euphorbia ‘Shades in Pink’”). Jest własnością rośliny, nie kadru - kolory, które
+akurat widać na danym zdjęciu, mówi opis tego obsadzenia.
+
+### Co zrobiliśmy z nadesłanym tekstem
+
+Opisy weszły **bez skracania**. Zmiany są trzy i wszystkie redakcyjne:
+
+1. **Tryb rozkazujący → rejestr bezosobowy.** „Posadź je gęsto” → „warto sadzić je gęsto”,
+   „jeśli zależy Ci na mocnym akcencie” → „dla mocnego akcentu kolorystycznego”, „Im więcej
+   miejsca dasz roślinom” → „Im więcej miejsca mają rośliny”. Tym samym głosem mówi reszta
+   strony: `calibrachoa.md` („Warto stosować nawozy”), `/faq/` („warto zadzwonić wcześniej”).
+2. **Zdania z domysłem wypadły.** Nadesłany tekst przy kadrze 17 pisał „wygląda na
+   plectrantusa”, a przy 20 „To bardzo prawdopodobnie odmiana Euphorbia ‘Shades in Pink’”.
+   Gatunki są potwierdzone, więc niepewność nie ma po co stać na stronie; sama nazwa odmiany
+   przeniosła się do `qualifier` chipa, a reszta akapitu o wilczomleczu została.
+3. **Jedna etykieta porady.** Tekst nazywał ten sam blok trzema nazwami („Pomysł do
+   wykorzystania”, „Do stworzenia podobnego efektu”, „Pomysł na własną kompozycję”). Na
+   stronie jest jedna: **„Nasza podpowiedź”**.
+
+Drobiazg: w poradach ujednolicono pisownię na `Calibrachoa`, bo tak nazywa się wpis
+w ofercie; „kalibrachoa” i „milion dzwonków” zostają w tytule i w treści tam, gdzie
+właściciele ich użyli.
+
+### Czego strona nadal nie mówi
+
+- **Kadry 3 i 4** mają „drobne białe kwiaty ozdobne”, **kadr 21** „roślinę o srebrzystych
+  liściach”, a **kadr 13** srebrzyste rośliny liściaste i trawy ozdobne - właściciele nie
+  nazwali ich z gatunku. Są opisane w prozie i **nie dostają chipa**: sekcja „Kwiaty w tym
+  obsadzeniu” wymienia to, co da się kupić i nazwać, a nie wszystko, co widać.
+- **Kadr 8 nie przyszedł z tekstem** - nadesłana lista przeskakuje z 7 na 9. Opis i porada do
+  „Biało-czerwonej ekspozycji begonii” są **napisane przez nas**, w rytmie sąsiednich paneli
+  begoniowych (6, 7, 9, 10). To jedyny tekst na `/inspiracje/`, którego autorem nie jest
+  gospodarstwo, i wymaga ich przejrzenia.
+
+### Dwa lidy - odejście od handoffu
+
+| Miejsce                                                           | Handoff                                                                                  | Teraz                                                                                                                   |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| „Kwiaty w naszej ofercie” (strona główna + dwie strony kategorii) | „Przy każdej roślinie piszemy, jak ją uprawiać i w jakich kolorach jest u nas dostępna.” | „Kwiaty z naszej uprawy. Przy każdej roślinie są najważniejsze informacje o jej uprawie i o kolorach dostępnych u nas.” |
+| „Inspiracje”                                                      | „Obsadzenia z naszej uprawy - kosze, skrzynki, donice i rabaty…”                         | „Kompozycje z kwiatów, które uprawiamy. Kosze, skrzynki, donice i rabaty pokazują różne sposoby łączenia roślin…”       |
+
+Pierwsze zdanie było przepisane słowo w słowo z `docs/design/README.md`. Oba nowe są
+w rejestrze bezosobowym - ta sama decyzja, co przy poradach.
+
+**Świadomie przyjęta nieścisłość:** na stronie głównej sekcja „Kwiaty w naszej ofercie”
+pokazuje cztery kafle kategorii, a nie listę roślin, więc zdanie o „każdej roślinie” jest tam
+nietrafione. Ta wada jest w projekcie od handoffu; utrzymana na wyraźną decyzję, żeby trzy
+miejsca mówiły jednym zdaniem, zamiast rozjeżdżać się na dwa warianty.
+
 ## Historia wersji
 
 Ta sekcja przyjęła narrację, która do września 2026 stała w `CLAUDE.md`. Tam była szkodliwa:
@@ -948,6 +1052,7 @@ się co wzięło.
 | 0.1–0.4 | Rusztowanie Astro, tokeny, komponenty, migracja treści ze starej strony WordPressa: 14 opisów roślin i historia gospodarstwa. Menu miało wtedy pięć pozycji celujących w kotwice na jednej stronie, a trzy z nich w **tę samą** kotwicę `#oferta`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | 0.5     | Przegląd kodu (13 znalezisk). Tagline przeniesiony z masztu do stopki - **cofnięte w 0.6**, patrz niżej.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | 2a      | Motyw „Poranek w tunelu”: Instrument Serif → Newsreader, Karla → Public Sans, zieleń rozdzielona na `--green` (tekst) i `--sage` (dekoracja ≥24px), papier i atrament przestrojone. Zastępuje tabelę kolorów i typografię z handoffu; źródłem prawdy jest `src/styles/tokens.css`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| 0.11    | Obsadzenia dostają opisy i porady od właścicieli i przenoszą się z `src/data/gallery.ts` do kolekcji `src/content/compositions/`. Gatunki potwierdzone we wszystkich 23 kadrach, więc podpisy „obsadzenie mieszane” i „do potwierdzenia” znikają; kadr 13 poprawiony z pelargonii na niecierpki. Chip ma trzy stany zamiast dwóch (`companion`). Nowy prop `prose` trzyma prozę poza stroną główną. Dwa lidy przepisane - odejście od handoffu.                                                                                                                                                                                                                                                                                                          |
 | 0.6     | Strona główna przestała być samą wizytówką. Tagline wrócił do masztu: w stopce lądował jedno zdanie nad blurbem, który jest jego nadzbiorem, a zmiana specyfikacji nie jest decyzją do podjęcia w komentarzu w kodzie. Usunięty powtarzający się `ContactStrip`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 0.7     | Oferta rozbita na cztery realne podstrony zamiast kotwic (patrz [`przekierowania.md`](przekierowania.md)). Strona główna stała się zapowiedzią całej witryny: kafle oferty otwierają się mozaiką własnych zdjęć grupy, a pokaz obsadzeń dostał drugi adres. Do 0.6 strona główna pokazywała cztery zdjęcia przy kilkudziesięciu w repozytorium. Szczegóły: [Strona główna jako witryna](#strona-główna-jako-witryna--wrzesień-2026) i [Pokaz obsadzeń na dwóch adresach](#pokaz-obsadzeń-na-dwóch-adresach).                                                                                                                                                                                                                                             |
 | 0.8     | Blok „Co u nas słychać” - jedyna rzecz na stronie, która zmienia się sama. Szczegóły i decyzje do przejrzenia: [Posty z Facebooka](#posty-z-facebooka--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -985,10 +1090,11 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
    z trzech nie znalazło się ani na starej stronie, ani w jej bibliotece mediów - Facebook
    gospodarstwa zostaje do sprawdzenia) oraz archiwalne zdjęcie gospodarstwa (3:2). Galeria,
    wszystkie trzy karty sezonowe, wszystkie trzy chryzantemy, bratek i pozostałe 10 roślin
-   balkonowych/rabatowych są obsadzone. Opisy `alt` - galerii, czterech zdjęć chryzantem,
-   sześciu bratków i dziesięciu z piątej paczki - czekają na przejrzenie przez właścicieli;
-   przy średniokwiatowej trzeba dodatkowo potwierdzić typ, a przy calibrachoi i niecierpku
-   z piątej paczki - gatunek (patrz [Zdjęcia](#zdjęcia)).
+   balkonowych/rabatowych są obsadzone. Opisy `alt` - czterech zdjęć chryzantem, sześciu
+   bratków i dziesięciu z piątej paczki - czekają na przejrzenie przez właścicieli; przy
+   średniokwiatowej trzeba dodatkowo potwierdzić typ, a przy calibrachoi i niecierpku
+   z piątej paczki - gatunek (patrz [Zdjęcia](#zdjęcia)). **Opisy `alt` galerii są już
+   potwierdzone** - patrz punkt 14.
 2. Kalendarz sprzedaży - cała tabela „Do przejrzenia z właścicielami"
    w [Kalendarzu sprzedaży](#kalendarz--do-przejrzenia-z-właścicielami): brzmienie
    „W trakcie", nagłówek „Kiedy co sprzedajemy", nowe podpisy kart (karta 2 odchodzi od
@@ -1024,3 +1130,18 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
     karty sezonowej i w zdaniu na `/bratki/`; bez treści nie zakładamy im wpisu ani grupy.
 13. `deploy.yml` z **codziennym** `schedule:`. Miesięczny przegapiłby 2 listopada i zostawiłby
     „CHRYZANTEMY · W TRAKCIE" na stronie głównej przez cały listopad.
+14. **Opisy uprawy siedmiu roślin sprzedawanych bez wpisu.** Właściciele potwierdzili we
+    wrześniu 2026, że sprzedają osobno petunie i surfinie, hortensje, brachyscome,
+    plektrantus, wilczomlecz, koleus i bidens. Żadna z nich nie ma pliku
+    w `src/content/plants/`, więc na `/inspiracje/` są nazwane, ale nie prowadzą nigdzie -
+    chip bez odnośnika. Do wpisu potrzeba od nich opisu uprawy (jak przy pozostałych 17),
+    kolorów i zdjęcia 4:3, plus decyzji, do której z czterech grup każda trafia; hortensja
+    jest krzewem i może potrzebować własnej. Nic z tego nie jest zmyślane po naszej stronie -
+    patrz [Obsadzenia](#obsadzenia--opisy-od-właścicieli-wrzesień-2026).
+15. **Cztery nienazwane składniki obsadzeń.** Kadr 3 i 4 - „drobne białe kwiaty ozdobne”;
+    kadr 21 - „roślina o srebrzystych liściach”; kadr 13 - srebrzyste rośliny liściaste
+    i trawy ozdobne w tle. Opisane w prozie, bez chipa. Jeśli właściciele je nazwą, chip
+    dopisuje się jednym wierszem w `plant-links.ts` i jedną nazwą w pliku obsadzenia.
+16. **Tekst kadru 8** („Biało-czerwona ekspozycja begonii”) - opis i porada napisane przez
+    nas, bo nadesłana lista przeskakuje z 7 na 9. Jedyny tekst na `/inspiracje/`, którego
+    autorem nie jest gospodarstwo; do przejrzenia albo do zastąpienia ich własnym.

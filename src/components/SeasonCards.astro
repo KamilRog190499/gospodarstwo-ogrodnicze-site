@@ -1,7 +1,8 @@
 ---
 import { Picture } from "astro:assets";
 import { currentSeason, saleWindows, type SaleWindow, type SaleState } from "../data/season";
-import { chrysanthemumPhoto, pansyPhoto, tunnelPhoto } from "../data/gallery";
+import { chrysanthemumPhoto, pansyPhoto } from "../data/gallery";
+import { compositionPhoto } from "../data/compositions";
 
 /**
  * The selling year, window by window, with the window that is running - or, between
@@ -48,6 +49,13 @@ import { chrysanthemumPhoto, pansyPhoto, tunnelPhoto } from "../data/gallery";
  * the category pages cannot end up quoting different dates - which is exactly what had
  * happened to `/bratki/`, still advertising a window the owners had changed.
  */
+/** The spring card's frame: the brief asks for "galeria - tunel z kwiatami balkonowymi".
+ *
+ *  Asked for **by name**, like the history block's photograph. It used to be `gallery[17]`,
+ *  an array position in the photograph registry - which meant the card silently depended on
+ *  the order of a list it has nothing to do with. */
+const tunnelPhoto = await compositionPhoto("rozowo-biala-wystawa-kalibrachoi");
+
 const stateFor = (window: SaleWindow): SaleState | null =>
   window === currentSeason.open ? "now" : window === currentSeason.soon ? "soon" : null;
 
