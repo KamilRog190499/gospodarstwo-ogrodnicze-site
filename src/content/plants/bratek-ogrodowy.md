@@ -1,7 +1,7 @@
 ---
 name: Bratek ogrodowy
 group: Bratki
-order: 17
+order: 18
 slot: zdjęcie - bratek ogrodowy, 4:3
 image: ../../assets/plants/bratek-ogrodowy.jpg
 imageAlt: Skrzynka bratków w wielu kolorach - żółte, bordowe, białe i liliowe, widziane z góry

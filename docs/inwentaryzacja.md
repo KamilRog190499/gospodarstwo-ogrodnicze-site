@@ -20,15 +20,21 @@ a nie kotwicami na stronie głównej. Mapa przekierowań: [`przekierowania.md`](
 ## Rośliny
 
 Handoff projektowy ostrzegał przed „kilkudziesięcioma” wpisami i zalecał zaprojektowanie
-filtrowania i paginacji. Faktycznie jest ich **17** i dzielą się na cztery strony po 11, 2, 1
-i 3 wpisy, więc nic takiego nie jest potrzebne.
+filtrowania i paginacji. Faktycznie jest ich **18** i dzielą się na cztery strony po 11, 2, 1
+i 4 wpisy, więc nic takiego nie jest potrzebne.
 
 Balkonowe (11): alstromeria, fuksja, pelargonie bluszczolistne, tunbergie, werbena, goździk,
 heliotrop, sundaville, dahlie, calibrachoa, begonia.
 Rabatowe (2): pelargonie rabatowe, niecierpek nowogwinejski.
 Bratki (1): bratek ogrodowy - nowa grupa i nowy adres `/bratki/`, wrzesień 2026; patrz niżej.
-Chryzantemy (3): chryzantema wielkokwiatowa, średniokwiatowa, igiełkowa - dopisane we
-wrześniu 2026 z tekstu właścicieli, patrz niżej.
+Chryzantemy (4): chryzantema wielkokwiatowa, średniokwiatowa, drobnokwiatowa, igiełkowa -
+wielkokwiatowa, średniokwiatowa i igiełkowa dopisane we wrześniu 2026 z tekstu
+właścicieli, patrz niżej.
+**Drobnokwiatowa jest wyjątkiem i jedynym na całej stronie:** jej opis powstał u nas, nie
+u właścicieli - patrz [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).
+Kolejność wpisów idzie malejącą wielkością kwiatu (wielko → średnio → drobno), a igiełkowa
+stoi na końcu, bo to już nie rozmiar, tylko kształt płatka; `order` jest globalny, więc
+dołożenie drobnokwiatowej przesunęło igiełkową na 17, a bratka na 18.
 
 ## Co zostało zmienione w treści
 
@@ -141,13 +147,22 @@ Wszędzie wygrała treść klienta. Do przejrzenia z właścicielami:
    w kolorach: …”. Wcześniej czwórka wisiała jako lista samej wielkokwiatowej, co było
    błędem migracji. **Nadal do zrobienia:** właściciele wybrali osobne listy dla każdego typu
    i ich nie podali, a na ich własnych zdjęciach widać pomarańczowy i różowy, których w tej
-   czwórce nie ma. Do czasu podania trzy wpisy pokazują identyczne chipy.
+   czwórce nie ma. Do czasu podania **cztery** wpisy pokazują identyczne chipy - od września
+   2026 razem z drobnokwiatową.
+   **Propozycja czekająca na potwierdzenie (wrzesień 2026):** przy drobnokwiatowej podano
+   siedem kolorów - biały, żółty, różowy, czerwony, fioletowy, brązowy, złoty. Nie weszły:
+   nie pochodzą od właścicieli, a lista kolorów na stronie hodowcy jest obietnicą składaną
+   klientowi przy telefonie. Wpis dostał tę samą czwórkę co trzy pozostałe, żeby jeden typ nie
+   wyglądał na udokumentowany lepiej niż reszta. Gdyby właściciele tę siódemkę potwierdzili,
+   dwie rzeczy do zrobienia: ujednolicić „fioletowy” do „fiolet” (tak brzmi chip w pozostałych
+   wpisach) i przy okazji zamknąć cały ten punkt dla wszystkich czterech typów naraz.
 3. **Opis chryzantemy wielkokwiatowej - zamknięte we wrześniu 2026.** Pochodził z handoffu,
    bo stara strona nie miała opisu uprawy chryzantem, tylko akapit o typach i cenach.
-   Właściciele podali własne opisy wszystkich trzech typów i tekst projektanta został
-   usunięty. „Fakty” (Forma „Doniczkowa”, Stanowisko „Słońce, osłonięte”, Sprzedaż
+   Właściciele podali własne opisy trzech typów (wielko-, średnio- i igiełkowej), a tekst
+   projektanta został usunięty. „Fakty” (Forma „Doniczkowa”, Stanowisko „Słońce, osłonięte”, Sprzedaż
    „1.10 – 1.11”) też były z handoffu - właściciele je potwierdzili i rozciągnęli na
-   wszystkie trzy typy, więc stoją przy każdym wpisie.
+   wszystkie trzy typy, więc stoją przy każdym wpisie; drobnokwiatowa dostała tę samą trójkę,
+   bo Forma i Stanowisko są dla całej grupy takie same, a Sprzedaż mówi okno z `season.ts`.
    Usunięty akapit, gdyby miał wrócić: „Uprawiana w doniczkach, z jednym dużym kwiatem na
    pędzie. Wymaga stanowiska słonecznego i osłoniętego od wiatru oraz regularnego podlewania
    - w chłodne noce warto ją okryć. Na cmentarz i pod dom kupowana najczęściej w ostatnim
@@ -156,12 +171,54 @@ Wszędzie wygrała treść klienta. Do przejrzenia z właścicielami:
      treści o samej uprawie chryzantem ani o tym, kto je kupuje - to strata dla wyszukiwarki.
 4. **Zdanie wprowadzające na `/chryzantemy/`** - „Duży wybór kolorów. Sprzedaż zaczyna się
    od początku października i trwa do 1 listopada.” - **usunięte na życzenie właścicieli**
-   (wrzesień 2026). Termin sprzedaży mówią teraz „fakty” przy każdym z trzech wpisów,
+   (wrzesień 2026). Termin sprzedaży mówią teraz „fakty” przy każdym z czterech wpisów,
    a kolory - chipy. Prop `lead` w `OfferSection` jest od tego czasu opcjonalny; dwie
    pozostałe strony oferty swoje zdanie zachowują. Opis strony (meta description) nadal
    podaje termin, więc dla wyszukiwarki nic nie przepadło.
 5. **Logo.** Handoff mówi, że logotypu nie ma. Stara strona ma go w
    `wp-content/uploads/2019/09/cropped-logo2-*.jpg`. Do decyzji, czy wraca.
+
+## Chryzantema drobnokwiatowa - wrzesień 2026
+
+Czwarty typ w grupie. **Jedyny wpis rośliny na całej stronie, którego opisu nie napisali
+właściciele** - szkic powstał u nas i został tylko lekko wygładzony pod konwencję trzech
+sąsiadów. To odstępstwo od reguły „nie przepisuj opisów roślin” z `CLAUDE.md` i jest tu
+zapisane, żeby nikt go później nie wziął za tekst właścicieli.
+
+**Co dokładnie zmieniono w szkicu.** Dwie rzeczy, obie stylistyczne, żadna rzeczowa:
+„dużą liczbą” / „w dużej liczbie” w sąsiednich zdaniach (powtórzenie) oraz zakończenie
+„Jest to typ szczególnie ceniony za…”, które jest dosłownie tą samą formułą, na której
+kończy się wpis igiełkowej. Sensu ani jednego zdania nie ruszono.
+
+**Czego świadomie nie dopisano.** Opis mówi wyłącznie o budowie kwiatu, tak jak trzy
+pozostałe. Kusiło, żeby przy okazji zamknąć lukę z punktu 3 w „Rozbieżnościach” - strona nie
+ma ani zdania o samej uprawie chryzantem, co jest stratą dla wyszukiwarki - ale treść
+o stanowisku, podlewaniu i okrywaniu przy przymrozkach byłaby wiedzą ogólną, a nie słowem
+gospodarstwa. Ta luka zostaje otwarta i domyka się dla **czterech typów naraz**, z tekstem od
+właścicieli, nie wpisem po wpisie.
+
+**Kolejność i `order`.** Wpis dostał `order: 16`, przed igiełkową, więc strona czyta się jako
+malejąca wielkość kwiatu: wielko → średnio → drobno, a igiełkowa na końcu, bo to kształt
+płatka, nie rozmiar. Sam opis średniokwiatowej to zakłada („w porównaniu z chryzantemą
+wielkokwiatową ma drobniejsze kwiaty”). `order` jest globalny i ciągły, więc kosztowało to dwie
+linijki: igiełkowa 16 → 17, bratek ogrodowy 17 → 18. Wielkokwiatowa zostaje pierwsza w grupie,
+więc znacznik `priority` (zdjęcie ładowane eagerly jako prawdopodobny LCP) się nie przeniósł.
+
+**Zdjęcie.** `src/assets/plants/chryzantema-drobnokwiatowa.jpg`, 1500×2000 - ta sama geometria
+co igiełkowa i średniokwiatowa. Źródło **z profilu Facebook gospodarstwa**, 1536×2048, bez
+flagi EXIF orientacji; jedyne, co z nim zrobiono, to zejście pod próg 2000 px (przekodowania
+nie dało się uniknąć, bo 2048 > 2000). Nie przycięto go: `PlantEntry` ma podłogę proporcji
+na 3:4, więc kadr 3:4 wchodzi w ramkę bez obcięcia. To pierwszy kadr w repo wzięty
+z Facebooka gospodarstwa, a nie nadesłany ani wydobyty z biblioteki mediów starej strony.
+
+**Opis `alt` nie nazywa typu** - mówi o kolorach i budowie. Wpis wielkokwiatowej robi inaczej,
+ale dwa pozostałe nie, a nagłówek nad zdjęciem i tak brzmi „Chryzantema drobnokwiatowa”, więc
+czytnik ekranu usłyszałby nazwę dwa razy pod rząd. Reguła jest ta sama co przy
+`chrysanthemumStrip` i `historyPhoto`: kolory tak, gatunek ze zdjęcia nie.
+
+**Do potwierdzenia przez właścicieli:** cały opis, `alt`, oraz lista kolorów - patrz punkt
+2 w [Rozbieżnościach](#rozbieżności-między-handoffem-a-treścią-klienta), gdzie leży
+propozycja siedmiu kolorów, która nie weszła.
 
 ## Podpisy pod zdjęciami - usunięte
 
@@ -170,9 +227,18 @@ rośliny, a pole `caption` zniknęło ze schematu (`src/content.config.ts`), z `
 i z 14 plików treści. **To odstępstwo od handoffu**, który przewidywał jednozdaniowy podpis
 przy każdej roślinie (`<figcaption>` `0.8rem`, `#5B6153`) - świadome i na życzenie klienta.
 
-Nie dotyczy to **pokazu slajdów**: tam każdy slajd nadal ma swój `<figcaption>`, bo to on
-opisuje zdjęcie czytnikom ekranu (obrazek ma `alt=""` i jest opisany własnym podpisem).
-To samo w lightboxie. Usunięcie tamtych byłoby regresją dostępności.
+Nie dotyczy to **pokazu slajdów**: tam każdy slajd nadal ma swój `<figcaption>` i jest to
+treść redakcyjna, a nie powtórzenie `alt` - rodzaj obsadzenia, nazwa, opis i lista roślin.
+Usunięcie tamtych byłoby stratą treści.
+
+**Podgląd na wierzchu strony podpisu już nie ma - wrzesień 2026, na polecenie właściciela.**
+Zdanie, które tu stało („to samo w lightboxie"), było niepoprawne: `lightbox.ts` ustawiał
+`image.alt` **i** `caption.textContent` na ten sam tekst zdjęcia-miniatury, więc czytnik
+ekranu czytał go dwa razy, a widzący dostawali pod fotografią zdanie, które opisuje to, na co
+właśnie patrzą. Usunięcie samego `<figcaption>` nie jest więc regresją dostępności - opis
+został tam, gdzie jest potrzebny, czyli w `alt` obrazka w podglądzie. `<figure>` bez podpisu
+przestał mieć rolę i jest teraz zwykłym `<div>`; `.lightbox__caption` zniknęło z
+`global.css`.
 
 **Jeden podpis wrócił - wrzesień 2026, na polecenie właścicieli.** Zdjęcie w bloku historii
 na `/o-nas/` ma `<figcaption>` „Na wystawie kwiatów w Końskowoli”. To nie jest cofnięcie
@@ -242,7 +308,12 @@ wybrali właściciele:
   właścicieli, gdy doszly dwa nowe wpisy. **Przypisanie typu jest odczytane ze zdjęcia,
   nie potwierdzone przez właścicieli.** Igiełkowa (`565`) jest pewna - płatki długie,
   rurkowate, z podwiniętymi końcami. Średniokwiatowa (`558`) to odczyt z wielkości kwiatu
-  względem liści i jest **najsłabszym ogniwem - do potwierdzenia**.
+  względem liści i jest **najsłabszym ogniwem - do potwierdzenia**. **Od września 2026 to
+  ogniwo jest jeszcze słabsze**, bo doszedł czwarty typ: dopóki grupa miała trzy wpisy,
+  „nie wielkokwiatowa i nie igiełkowa” zostawiało jedną możliwość, a teraz zostawia dwie -
+  `558` może równie dobrze przedstawiać drobnokwiatową. Zdjęcia **nie podmieniono**: wybór
+  między dwoma typami na oko to dokładnie to zgadywanie, którego to repo nie robi na stronie
+  hodowcy. Punkt idzie do właścicieli razem z resztą opisów `alt`.
   `366` odrzucone jako igiełkowa mimo pozorów: płatki są wąskie, ale płaskie i gęsto
   ułożone w pełny kwiat, nie rurkowate.
 - Źródło karty miało `orientation=6`, więc i tu obrót jest wypalony. Trzy pozostałe zdjęcia
@@ -256,7 +327,11 @@ zamówień, jako komponent `PhotoStrip.astro`.
 
 - To ujęcia **mieszane** - rzędy kul w tunelu, doniczki przy drodze, wielobarwna ekspozycja -
   więc świadomie **nie są przypisane do żadnego typu** i opisy `alt` wymieniają kolory,
-  a nie formę kwiatu. Trzy zdjęcia przy wpisach pokazują kwiat, ten pas pokazuje ofertę.
+  a nie formę kwiatu. Zdjęcia przy wpisach pokazują kwiat, ten pas pokazuje ofertę. Liczby
+  typów ten pas też nie podaje - komentarz przy `chrysanthemumStrip` mówił „all three types”,
+  dopóki grupa miała trzy wpisy, i po dojściu czwartego został przeformułowany, żeby nie
+  zamienić nieaktualnej liczby w twierdzenie o czterech kadrach, których nikt nie przejrzał
+  na nowo.
 - **Pliki mają 736×1000 px**, bo przyszły już przeskalowane przez Facebooka - poniżej
   progu 2000 px, którego trzyma się reszta repo. Skopiowane bajt w bajt: przeskalowanie
   byłoby pustym przebiegiem, a ponowna kompresja tylko zabrałaby jakość. Dlatego
@@ -264,6 +339,67 @@ zamówień, jako komponent `PhotoStrip.astro`.
 - **Te zdjęcia obalają listę kolorów.** Widać na nich czerwony, bordowy, pomarańczowy,
   różowy, amarantowy, liliowy i kremowy - a chipy nad nimi mówią „biały, żółty, fiolet,
   złoty”. Sprzeczność jest teraz widoczna gołym okiem na jednym ekranie.
+
+**Wrzesień 2026, ósma paczka: 18 zdjęć chryzantem z Facebooka gospodarstwa** - największa
+dostawa od czasu obsadzeń i pierwsza, w której trzeba było **sprawdzać powtórzenia**.
+
+- **Trzy z osiemnastu już były w repozytorium**, w innym rozmiarze, więc nie wyłapałby ich
+  żaden hash pliku. Porównanie po `dHash` 8×8 na przeskalowanej skali szarości (odporne na
+  zmianę rozmiaru i ponowną kompresję) wskazało trzy pary, a każda została jeszcze obejrzana
+  bok w bok: `480710280` = `chryzantema-sredniokwiatowa.jpg` (odległość 2),
+  `481457192` = `chryzantema-igielkowa.jpg` (7) i `482005092 (1)` = kopia pliku użytego
+  chwilę wcześniej do drobnokwiatowej (3). Weszło **15**.
+- **Pas rośnie z 4 do 19 kadrów.** Najpierw `offer-01..04` (mieszane, wiele kolorów naraz),
+  potem `rows-01..11` - jednolite kolorystycznie rzędy w tunelu, ułożone jako paleta: biel →
+  krem → miedź → żółć → róż - a na końcu `pots-01..04`, cztery gotowe doniczki sfotografowane
+  od frontu. Wszystkie cztery doniczki to drobnokwiatowe z tej samej sesji co zdjęcie wpisu,
+  ale **opisy `alt` nie nazywają typu**: mówią, co widać.
+- **Doniczki miały przez jedną iterację własny pas** - eksport `chrysanthemumPotStrip`,
+  etykieta „Gotowe doniczki”, a `OfferSection` przyjmował wtedy listę par „etykieta +
+  zdjęcia” zamiast jednej tablicy. Argument za podziałem: rzędy to uprawa, doniczka to
+  produkt, który klient zabiera, więc odpowiadają na różne pytania, a zlane w jedno czytają
+  się jak jedna długa ściana chryzantem. **Właściciel obejrzał i kazał drugi pas usunąć**;
+  kadry przeszły na koniec pierwszego, a prop wrócił do jednej tablicy z etykietą zaszytą
+  w komponencie - uogólnienie odeszło razem z pasem, dla którego powstało. Argument zostaje
+  tutaj, nie jest skasowany: to po niego sięgnąć, gdyby dziewiętnaście kadrów zaczęło się
+  jednak czytać jak ściana, a odpowiedzią jest wtedy drugi pas, a nie krótszy pierwszy.
+- **Źródła 1536–1946 × 2048**, przeskalowane do progu 2000 px; bez flagi EXIF orientacji,
+  więc nie było czego wypalać. Są wyraźnie ostrzejsze od `offer-01..04` (736×1000) i ta
+  różnica jest widoczna w tym samym pasie - świadomie, bo usuwanie tamtych byłoby usuwaniem
+  treści od właścicieli.
+- **Cztery kadry nie są 3:4** (`rows-01`, `rows-02`, `rows-05`, `rows-08`), a ramka
+  `PhotoStrip` jest sztywno 3:4 z `object-fit: cover`. Najwięcej traci `rows-08` (1900×2000,
+  prawie kwadrat). To jest bezpośredni powód, dla którego pas dostał lupę - patrz niżej.
+- **Znowu obalają listę kolorów, tym razem pojedynczo.** Cztery mieszane kadry pokazywały
+  sprzeczność jako tłum; jedenaście bloków po jednym kolorze pokazuje ją jako spis: róż,
+  miedź dwubarwna, nasycony pomarańcz. Chipy nadal mówią „biały, żółty, fiolet, złoty”.
+- **Piętnaście nowych opisów `alt` to nasze słowa** i idą na listę do przejrzenia przez
+  właścicieli, razem z opisami z paczek 2–7. Etykieta pasa się nie zmieniła: nadal brzmi
+  „Zdjęcia z gospodarstwa”.
+
+### Lupa w pasach zdjęć - wrzesień 2026
+
+Kadry w `PhotoStrip` powiększają się po kliknięciu. Komentarz w tym komponencie mówił wprost
+„no lightbox” i został odwrócony na prośbę właściciela; **powód, dla którego to nie jest
+kaprys, jest w punkcie wyżej**: ramka jest sztywno 3:4, więc kadru, który 3:4 nie jest, nie
+dało się na stronie zobaczyć w całości w żaden sposób.
+
+- **Nic nowego nie powstało.** `src/scripts/lightbox.ts` jest wpięty globalnie w
+  `BaseLayout` i łapie każdy `a[data-lightbox]` - do tej pory używał go wyłącznie pokaz
+  obsadzeń. Pas dokłada taki sam odnośnik wokół miniatury. Overlay buduje się raz i dopiero
+  gdy na stronie jest choć jeden taki odnośnik.
+- **Bez JavaScriptu odnośnik nadal działa** i otwiera pełne zdjęcie - tak samo jak w pokazie.
+  To jest cała różnica między „lupa” a „karuzela”: pas nadal nie jest karuzelą i `/inspiracje/`
+  zostaje jedynym sankcjonowanym wyjątkiem od „nie dodawaj karuzel”.
+- **Cel odnośnika to źródło w swoim rozmiarze, przycięte do 2000 px.** `offer-01..04` mają
+  736 px, więc żądanie 2000 podałoby klientowi powiększenie małego pliku. Stąd
+  `Math.min(2000, photo.src.width)` w komponencie.
+- **Wpisy roślin lupy nie dostały**, i to jest decyzja, nie przeoczenie: `PlantEntry` od
+  września 2026 dopasowuje ramkę do zdjęcia (patrz [Kadr zdjęć we wpisach](#kadr-zdjęć-we-wpisach--wrzesień-2026)),
+  więc tam nie ma czego odzyskiwać. Koszt jest realny i warto go pilnować: na
+  `/chryzantemy/` zdjęcia w pasach klikają się, a zdjęcia przy wpisach nie, i nic tego nie
+  zapowiada. Gdyby to zaczęło mylić, tańszą poprawką jest dodać lupę wpisom niż odebrać ją
+  pasom.
 
 **Wrzesień 2026: `heroPhoto` podmienione na obraz wygenerowany przez AI**, na wyraźne
 polecenie, nie zdjęcie gospodarstwa. Plik: `src/assets/hero/hero-glasshouse.jpg` (1448×1086,
@@ -296,8 +432,8 @@ za źródło, patrz piąta paczka niżej.
 
 Do zrobienia zdjęć: każdy pozostały placeholder na stronie ma wypisany wymagany kadr.
 Obie ramki 16:9 (tunel z kwiatami balkonowymi, chryzantemy przed 1 listopada) są już
-obsadzone, tak samo cała grupa chryzantem i bratek. Z 17 wpisów zdjęcie ma teraz
-czternaście, więc zostały po jednym kadrze 4:3 na dahlię, pelargonię bluszczolistną
+obsadzone, tak samo cała grupa chryzantem i bratek. Z 18 wpisów zdjęcie ma teraz
+piętnaście, więc zostały po jednym kadrze 4:3 na dahlię, pelargonię bluszczolistną
 i sundaville, oraz 3:2 archiwalnego zdjęcia gospodarstwa - ta ostatnia ramka jest już czymś
 wypełniona (`historyPhoto`, stoisko na wystawie w Końskowoli), więc to prośba, a nie luka.
 
@@ -1667,28 +1803,30 @@ Tutaj jest na swoim miejscu, bo ten plik jest kroniką projektu.
 Szczegóły każdej zmiany są w sekcjach wyżej; poniżej sam przebieg, żeby dało się dojść, skąd
 się co wzięło.
 
-| Wersja  | Co przyniosła                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0.1–0.4 | Rusztowanie Astro, tokeny, komponenty, migracja treści ze starej strony WordPressa: 14 opisów roślin i historia gospodarstwa. Menu miało wtedy pięć pozycji celujących w kotwice na jednej stronie, a trzy z nich w **tę samą** kotwicę `#oferta`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| 0.5     | Przegląd kodu (13 znalezisk). Tagline przeniesiony z masztu do stopki - **cofnięte w 0.6**, patrz niżej.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| 2a      | Motyw „Poranek w tunelu”: Instrument Serif → Newsreader, Karla → Public Sans, zieleń rozdzielona na `--green` (tekst) i `--sage` (dekoracja ≥24px), papier i atrament przestrojone. Zastępuje tabelę kolorów i typografię z handoffu; źródłem prawdy jest `src/styles/tokens.css`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| 0.11    | Obsadzenia dostają opisy i porady od właścicieli i przenoszą się z `src/data/gallery.ts` do kolekcji `src/content/compositions/`. Gatunki potwierdzone we wszystkich 23 kadrach, więc podpisy „obsadzenie mieszane” i „do potwierdzenia” znikają; kadr 13 poprawiony z pelargonii na niecierpki. Chip ma trzy stany zamiast dwóch (`companion`). Nowy prop `prose` trzyma prozę poza stroną główną. Dwa lidy przepisane - odejście od handoffu.                                                                                                                                                                                                                                                                                                          |
-| 0.6     | Strona główna przestała być samą wizytówką. Tagline wrócił do masztu: w stopce lądował jedno zdanie nad blurbem, który jest jego nadzbiorem, a zmiana specyfikacji nie jest decyzją do podjęcia w komentarzu w kodzie. Usunięty powtarzający się `ContactStrip`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| 0.7     | Oferta rozbita na cztery realne podstrony zamiast kotwic (patrz [`przekierowania.md`](przekierowania.md)). Strona główna stała się zapowiedzią całej witryny: kafle oferty otwierają się mozaiką własnych zdjęć grupy, a pokaz obsadzeń dostał drugi adres. Do 0.6 strona główna pokazywała cztery zdjęcia przy kilkudziesięciu w repozytorium. Szczegóły: [Strona główna jako witryna](#strona-główna-jako-witryna--wrzesień-2026) i [Pokaz obsadzeń na dwóch adresach](#pokaz-obsadzeń-na-dwóch-adresach).                                                                                                                                                                                                                                             |
-| 0.8     | Blok „Co u nas słychać” - jedyna rzecz na stronie, która zmienia się sama. Szczegóły i decyzje do przejrzenia: [Posty z Facebooka](#posty-z-facebooka--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| 0.9     | Przebudowa kalendarza sprzedaży pod okna podane przez właścicieli. Znacznik stanu trafił na jedną iterację na kafle oferty i **został z nich zdjęty** - kafle to cztery równe drzwi do czterech stron. Karty sezonowe straciły natomiast odnośnik. Szczegóły: [Kalendarz sprzedaży](#kalendarz-sprzedaży--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| 0.9.1   | Zmniejszony stopień telefonu i adresu oraz brakująca spacja w adresie: [Stopień telefonu i adresu](#stopień-telefonu-i-adresu--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| 0.10.0  | Przebudowa menu po audycie UX/SEO: cztery kategorie zeszły do panelu „Oferta” na natywnym `<details>`, menu urosło z 12,5 do 13,8–15,7 px, „Historia gospodarstwa” nazywa się w menu „O nas”. Doszła dziewiąta strona, `/faq/`, z sześcioma pytaniami, których odpowiedzi w całości pochodzą z danych już w repozytorium. Do tego cztery poprawki po pierwszym pokazaniu wersji właścicielom: odstęp pod paskiem menu (podkreślenia bieżącej pozycji nie było widać), lżejszy i mniejszy `h1` na zdjęciu, zwijane pytania w FAQ oraz lżejsze pytania w tym akordeonie. Szczegóły: [Przebudowa menu](#przebudowa-menu--wrzesień-2026), [FAQ](#faq--wrzesień-2026) i [Zgłoszenia właścicieli](#zgłoszenia-właścicieli-po-przebudowie-menu--wrzesień-2026). |
-| 0.12.0  | Rozdzielenie sekcji strony głównej i zmiana kroju szeryfowego, po zgłoszeniu właściciela „wszystko się zlewa”. Newsreader → **Fraunces**; trzeci jasny grunt `--paper-sage`, ciemny pas pod „Inspiracjami”, odstęp sekcji w górę o jedną trzecią; **ochra** jako pierwszy kolor spoza rodziny zieleni, tylko w nadtytułach i licznikach. Hero przebudowane na dwie kolumny z kadrem 4:5, przez co znika `--hero-scrim` (jedyny gradient tonalny) i **jedyna media query w projekcie**. Chip sezonowy **wraca** na kafle oferty, a stopień w pasku menu **wraca** do wartości z handoffu - dwa cofnięcia decyzji z 0.9 i 0.10. Szczegóły: [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                       |
-| 0.12.1  | Drugie podejście do rytmu tła, po obejrzeniu kandydatów bok w bok. Cztery ciepłe jasne grunty zamiast dwóch (`--paper-linen`, `--paper-clay`, `--paper-blush` przy `--paper`), trzy ciemne płyty zamiast jednej, wszystkie na `--green-band` `#38442F`. `--paper-sage` usunięty, bo nic już na nim nie stało. Karta sezonu, której sezon trwa, **odwrócona**: na ciemnej płycie to ona jest jasna. `FacebookNews` renderuje się teraz zawsze, bo jest jasnym pasmem między dwiema ciemnymi płytami, a te nie dają się od siebie odróżnić. Szczegóły w [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                                                                                                          |
-| 0.12.2  | Dopracowanie kafli oferty: kadry z 4:3 na **4:5**, bo sześć z ośmiu zdjęć, z których kafle korzystają, jest pionowych i ramka 4:3 wyrzucała z nich 47%; pasek rośnie ze 225×82 do 225×136 px. Lista nazw przycięta do czterech plus ogon „i 7 innych” - jedenaście nazw szło na pięć linii i robiło dziurę w trzech kaflach na cztery. Tytuły dostają `text-wrap: balance`. Szczegóły: [Mozaika w kaflu](#mozaika-w-kaflu---dwa-kadry-zawsze).                                                                                                                                                                                                                                                                                                           |
-| 0.13.1  | Obramowanie kafli oferty z `--rule` na `--rule-dim`. Kreska była tam od początku i względem wypełnienia daje 1,27:1, tyle co każda inna na stronie - ale od zewnątrz ma teraz glinę zamiast papieru, gdzie `--rule` spada do 1,18:1, a samo wypełnienie unosi się nad gruntem o 1,079:1. Miękka z obu stron naraz. `--rule-dim` daje 1,35:1 i 1,25:1: nadal włoskowata, ale z krawędzią. Cały kafel reaguje też teraz na najechanie, nie tylko kadry w środku. **Tabela nie ma wierszy dla 0.13.0 ani dla commita przed nim** - obie zmiany powstały w innych sesjach i nie dopisały się tutaj.                                                                                                                                                          |
-| 0.13.3  | Zdjęcie w bloku historii dostaje podpis „Na wystawie kwiatów w Końskowoli” - pierwszy `<figcaption>` poza pokazem slajdów i poza decyzją o usunięciu podpisów przy roślinach - i zaczyna się równo z `h1` zamiast z nadtytułem (przesunięcie liczone z wysokości wiersza nadtytułu, nie dobrane). Przy okazji **poprawka rzeczowa**: zdjęcie nie przedstawia stoiska na terenie gospodarstwa, tylko stoisko na wystawie kwiatów w Końskowoli; plik, `alt` i opisy w dokumentacji zmienione. Układ dwóch kolumn zostaje - dwa inne warianty pokazano i odrzucono. Szczegóły: [Blok historii](#blok-historii-dostaje-własne-zdjęcie-i-jedyny-podpis-na-stronie).                                                                                           |
-| 0.13.2  | `/o-nas/` przechodzi na jasny grunt - była to jedyna ciemna podstrona, a naprzemienne tła są urządzeniem strony głównej. Znika przy tym styk ciemnej płyty ze stopką `--ink` (1,44:1), którego na stronie długiej na jeden blok nie dało się niczym przedzielić. `--green-deep` przestaje być gruntem jakiejkolwiek sekcji i zostaje wypełnieniem. Blok historii dostaje własne zdjęcie (`historyPhoto`, stoisko gospodarstwa z tablicą) zamiast obsadzenia pożyczanego z `/inspiracje/`. Szczegóły: [Strona „O nas” na jasnym gruncie](#strona-o-nas-na-jasnym-gruncie--wrzesień-2026).                                                                                                                                                                 |
+| Wersja  | Co przyniosła                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0.1–0.4 | Rusztowanie Astro, tokeny, komponenty, migracja treści ze starej strony WordPressa: 14 opisów roślin i historia gospodarstwa. Menu miało wtedy pięć pozycji celujących w kotwice na jednej stronie, a trzy z nich w **tę samą** kotwicę `#oferta`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 0.5     | Przegląd kodu (13 znalezisk). Tagline przeniesiony z masztu do stopki - **cofnięte w 0.6**, patrz niżej.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 2a      | Motyw „Poranek w tunelu”: Instrument Serif → Newsreader, Karla → Public Sans, zieleń rozdzielona na `--green` (tekst) i `--sage` (dekoracja ≥24px), papier i atrament przestrojone. Zastępuje tabelę kolorów i typografię z handoffu; źródłem prawdy jest `src/styles/tokens.css`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 0.11    | Obsadzenia dostają opisy i porady od właścicieli i przenoszą się z `src/data/gallery.ts` do kolekcji `src/content/compositions/`. Gatunki potwierdzone we wszystkich 23 kadrach, więc podpisy „obsadzenie mieszane” i „do potwierdzenia” znikają; kadr 13 poprawiony z pelargonii na niecierpki. Chip ma trzy stany zamiast dwóch (`companion`). Nowy prop `prose` trzyma prozę poza stroną główną. Dwa lidy przepisane - odejście od handoffu.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 0.6     | Strona główna przestała być samą wizytówką. Tagline wrócił do masztu: w stopce lądował jedno zdanie nad blurbem, który jest jego nadzbiorem, a zmiana specyfikacji nie jest decyzją do podjęcia w komentarzu w kodzie. Usunięty powtarzający się `ContactStrip`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| 0.7     | Oferta rozbita na cztery realne podstrony zamiast kotwic (patrz [`przekierowania.md`](przekierowania.md)). Strona główna stała się zapowiedzią całej witryny: kafle oferty otwierają się mozaiką własnych zdjęć grupy, a pokaz obsadzeń dostał drugi adres. Do 0.6 strona główna pokazywała cztery zdjęcia przy kilkudziesięciu w repozytorium. Szczegóły: [Strona główna jako witryna](#strona-główna-jako-witryna--wrzesień-2026) i [Pokaz obsadzeń na dwóch adresach](#pokaz-obsadzeń-na-dwóch-adresach).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| 0.8     | Blok „Co u nas słychać” - jedyna rzecz na stronie, która zmienia się sama. Szczegóły i decyzje do przejrzenia: [Posty z Facebooka](#posty-z-facebooka--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 0.9     | Przebudowa kalendarza sprzedaży pod okna podane przez właścicieli. Znacznik stanu trafił na jedną iterację na kafle oferty i **został z nich zdjęty** - kafle to cztery równe drzwi do czterech stron. Karty sezonowe straciły natomiast odnośnik. Szczegóły: [Kalendarz sprzedaży](#kalendarz-sprzedaży--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| 0.9.1   | Zmniejszony stopień telefonu i adresu oraz brakująca spacja w adresie: [Stopień telefonu i adresu](#stopień-telefonu-i-adresu--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 0.10.0  | Przebudowa menu po audycie UX/SEO: cztery kategorie zeszły do panelu „Oferta” na natywnym `<details>`, menu urosło z 12,5 do 13,8–15,7 px, „Historia gospodarstwa” nazywa się w menu „O nas”. Doszła dziewiąta strona, `/faq/`, z sześcioma pytaniami, których odpowiedzi w całości pochodzą z danych już w repozytorium. Do tego cztery poprawki po pierwszym pokazaniu wersji właścicielom: odstęp pod paskiem menu (podkreślenia bieżącej pozycji nie było widać), lżejszy i mniejszy `h1` na zdjęciu, zwijane pytania w FAQ oraz lżejsze pytania w tym akordeonie. Szczegóły: [Przebudowa menu](#przebudowa-menu--wrzesień-2026), [FAQ](#faq--wrzesień-2026) i [Zgłoszenia właścicieli](#zgłoszenia-właścicieli-po-przebudowie-menu--wrzesień-2026).                                                                                                                                                                                                                                                               |
+| 0.12.0  | Rozdzielenie sekcji strony głównej i zmiana kroju szeryfowego, po zgłoszeniu właściciela „wszystko się zlewa”. Newsreader → **Fraunces**; trzeci jasny grunt `--paper-sage`, ciemny pas pod „Inspiracjami”, odstęp sekcji w górę o jedną trzecią; **ochra** jako pierwszy kolor spoza rodziny zieleni, tylko w nadtytułach i licznikach. Hero przebudowane na dwie kolumny z kadrem 4:5, przez co znika `--hero-scrim` (jedyny gradient tonalny) i **jedyna media query w projekcie**. Chip sezonowy **wraca** na kafle oferty, a stopień w pasku menu **wraca** do wartości z handoffu - dwa cofnięcia decyzji z 0.9 i 0.10. Szczegóły: [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                                                                                                                                                                                                                                                                                     |
+| 0.12.1  | Drugie podejście do rytmu tła, po obejrzeniu kandydatów bok w bok. Cztery ciepłe jasne grunty zamiast dwóch (`--paper-linen`, `--paper-clay`, `--paper-blush` przy `--paper`), trzy ciemne płyty zamiast jednej, wszystkie na `--green-band` `#38442F`. `--paper-sage` usunięty, bo nic już na nim nie stało. Karta sezonu, której sezon trwa, **odwrócona**: na ciemnej płycie to ona jest jasna. `FacebookNews` renderuje się teraz zawsze, bo jest jasnym pasmem między dwiema ciemnymi płytami, a te nie dają się od siebie odróżnić. Szczegóły w [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                        |
+| 0.12.2  | Dopracowanie kafli oferty: kadry z 4:3 na **4:5**, bo sześć z ośmiu zdjęć, z których kafle korzystają, jest pionowych i ramka 4:3 wyrzucała z nich 47%; pasek rośnie ze 225×82 do 225×136 px. Lista nazw przycięta do czterech plus ogon „i 7 innych” - jedenaście nazw szło na pięć linii i robiło dziurę w trzech kaflach na cztery. Tytuły dostają `text-wrap: balance`. Szczegóły: [Mozaika w kaflu](#mozaika-w-kaflu---dwa-kadry-zawsze).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 0.13.1  | Obramowanie kafli oferty z `--rule` na `--rule-dim`. Kreska była tam od początku i względem wypełnienia daje 1,27:1, tyle co każda inna na stronie - ale od zewnątrz ma teraz glinę zamiast papieru, gdzie `--rule` spada do 1,18:1, a samo wypełnienie unosi się nad gruntem o 1,079:1. Miękka z obu stron naraz. `--rule-dim` daje 1,35:1 i 1,25:1: nadal włoskowata, ale z krawędzią. Cały kafel reaguje też teraz na najechanie, nie tylko kadry w środku. **Tabela nie ma wierszy dla 0.13.0 ani dla commita przed nim** - obie zmiany powstały w innych sesjach i nie dopisały się tutaj.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 0.13.3  | Zdjęcie w bloku historii dostaje podpis „Na wystawie kwiatów w Końskowoli” - pierwszy `<figcaption>` poza pokazem slajdów i poza decyzją o usunięciu podpisów przy roślinach - i zaczyna się równo z `h1` zamiast z nadtytułem (przesunięcie liczone z wysokości wiersza nadtytułu, nie dobrane). Przy okazji **poprawka rzeczowa**: zdjęcie nie przedstawia stoiska na terenie gospodarstwa, tylko stoisko na wystawie kwiatów w Końskowoli; plik, `alt` i opisy w dokumentacji zmienione. Układ dwóch kolumn zostaje - dwa inne warianty pokazano i odrzucono. Szczegóły: [Blok historii](#blok-historii-dostaje-własne-zdjęcie-i-jedyny-podpis-na-stronie).                                                                                                                                                                                                                                                                                                                                                         |
+| 0.13.2  | `/o-nas/` przechodzi na jasny grunt - była to jedyna ciemna podstrona, a naprzemienne tła są urządzeniem strony głównej. Znika przy tym styk ciemnej płyty ze stopką `--ink` (1,44:1), którego na stronie długiej na jeden blok nie dało się niczym przedzielić. `--green-deep` przestaje być gruntem jakiejkolwiek sekcji i zostaje wypełnieniem. Blok historii dostaje własne zdjęcie (`historyPhoto`, stoisko gospodarstwa z tablicą) zamiast obsadzenia pożyczanego z `/inspiracje/`. Szczegóły: [Strona „O nas” na jasnym gruncie](#strona-o-nas-na-jasnym-gruncie--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 0.14.0  | _Weszło do repozytorium jednym commitem razem z 0.15.0._ Czwarty typ chryzantemy - **drobnokwiatowa**. Grupa rośnie z trzech wpisów do czterech, a repozytorium z 17 roślin do 18 i z 49 zdjęć do 50. Wpis wchodzi na `order: 16`, przed igiełkową, żeby strona czytała się malejącą wielkością kwiatu; igiełkowa i bratek przesuwają się o jeden. **Jedyny opis rośliny na stronie, którego nie napisali właściciele** - i jedyne zdjęcie wzięte z profilu Facebook gospodarstwa. Chipy kolorów celowo te same co u trzech pozostałych; siódemka zaproponowana przy wpisie leży w [Rozbieżnościach](#rozbieżności-między-handoffem-a-treścią-klienta) i czeka na potwierdzenie. Szczegóły: [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).                                                                                                                                                                                                                                                  |
+| 0.15.0  | Ósma paczka zdjęć - 18 kadrów chryzantem z Facebooka gospodarstwa, z czego **trzy były powtórzeniami** wykrytymi porównaniem percepcyjnym, nie hashem pliku. Repozytorium rośnie z 50 zdjęć do 65, a pas pod listą na `/chryzantemy/` z 4 do **19** kadrów: cztery mieszane, jedenaście rzędów ułożonych jako paleta kolorów i cztery gotowe doniczki. Doniczki stały przez jedną iterację w **drugim pasie** („Gotowe doniczki”) i właściciel kazał go usunąć, więc `OfferSection` wrócił do jednej tablicy zdjęć z etykietą zaszytą w komponencie. Kadry w pasie **powiększają się po kliknięciu**, na tym samym globalnym `lightbox.ts`, którego używa pokaz obsadzeń; komentarz w `PhotoStrip` mówił dotąd „no lightbox” i to jest świadome odwrócenie. Sam podgląd traci przy okazji **podpis pod zdjęciem** - powtarzał `alt` obrazka, który podgląd i tak nosi, więc czytnik ekranu czytał ten sam tekst dwa razy. Szczegóły: [Zdjęcia](#zdjęcia) i [Lupa w pasach zdjęć](#lupa-w-pasach-zdjęć--wrzesień-2026). |
 
 ### Paczki materiału od właścicieli
 
-Sześć dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
+Osiem dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
 i w [Wymianie opisów](#wymiana-opisów--wrzesień-2026); tutaj sam spis, bo kolejność bywa
 potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
 
@@ -1709,6 +1847,15 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
    właścicieli: zapytanie do `wp-json/wp/v2/media` starej strony wydobyło 58 fotografii
    z lat 2019–2020, wgranych do biblioteki mediów, ale nigdy nieumieszczonych na żadnej
    żywej podstronie.
+7. **1 zdjęcie chryzantemy drobnokwiatowej** - z profilu Facebook gospodarstwa, pierwszy kadr
+   z tego źródła. Przyszło razem z czwartym wpisem w grupie, ale **tekst do niego nie pochodzi
+   od właścicieli**, w odróżnieniu od paczki 3. Patrz
+   [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).
+8. **18 zdjęć chryzantem z Facebooka gospodarstwa** - weszło 15, bo **trzy okazały się
+   powtórzeniami** kadrów już w repozytorium (w innym rozmiarze, więc nie do wyłapania po
+   hashu pliku). Największa dostawa od czasu obsadzeń: pas na `/chryzantemy/` rośnie z 4 do
+   19 kadrów - rzędy uprawy i cztery gotowe doniczki - a kadry w pasie dostają lupę.
+   Patrz [Zdjęcia](#zdjęcia).
 
 ## Polityka prywatności - wrzesień 2026
 
@@ -1735,7 +1882,7 @@ działalność to inne cele przetwarzania i inny zestaw usług zewnętrznych.
 
 ### Czego dokument świadomie nie mówi
 
-- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 49 zdjęć to
+- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 65 zdjęć to
   rośliny, obsadzenia i - od września 2026 - puste stoisko gospodarstwa. Jeśli do bloku
   historii trafi archiwalne zdjęcie z ludźmi (punkt 1 poniżej), paragraf wraca - z art. 6
   ust. 1 lit. a RODO i art. 81 prawa autorskiego. **Sprawdzone przy podmianie zdjęcia w bloku
@@ -1779,15 +1926,17 @@ widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba parag
    z trzech nie znalazło się ani na starej stronie, ani w jej bibliotece mediów - Facebook
    gospodarstwa zostaje do sprawdzenia) oraz archiwalne zdjęcie gospodarstwa (3:2; ramka jest
    obsadzona zdjęciem z wystawy w Końskowoli, więc to prośba, a nie pusty kadr). Galeria,
-   wszystkie trzy karty sezonowe, wszystkie trzy chryzantemy, bratek i pozostałe 10 roślin
+   wszystkie trzy karty sezonowe, wszystkie cztery chryzantemy, bratek i pozostałe 10 roślin
    balkonowych/rabatowych są obsadzone. Opisy `alt` - czterech zdjęć chryzantem, sześciu
-   bratków, dziesięciu z piątej paczki i zdjęcia z Końskowoli w bloku historii
-   (`historyPhoto`) - czekają na przejrzenie przez właścicieli, a razem z nimi **brzmienie
+   bratków, dziesięciu z piątej paczki, zdjęcia z Końskowoli w bloku historii
+   (`historyPhoto`) i zdjęcia chryzantemy drobnokwiatowej - czekają na przejrzenie przez
+   właścicieli, a razem z nimi **brzmienie
    jedynego podpisu na stronie**: właściciele podali „Wystawie kwiatów w Końskowoli”, a idzie
    „Na wystawie kwiatów w Końskowoli” (dołożony przyimek, żeby miejscownik miał czym rządzić).
    Przy
-   średniokwiatowej trzeba dodatkowo potwierdzić typ, a przy calibrachoi i niecierpku
-   z piątej paczki - gatunek (patrz [Zdjęcia](#zdjęcia)). **Opisy `alt` galerii są już
+   średniokwiatowej trzeba dodatkowo potwierdzić typ - **i to pytanie stało się trudniejsze**,
+   odkąd w grupie są cztery typy, bo ten kadr może być drobnokwiatową - a przy calibrachoi
+   i niecierpku z piątej paczki - gatunek (patrz [Zdjęcia](#zdjęcia)). **Opisy `alt` galerii są już
    potwierdzone** - patrz punkt 14.
 2. Kalendarz sprzedaży - cała tabela „Do przejrzenia z właścicielami"
    w [Kalendarzu sprzedaży](#kalendarz--do-przejrzenia-z-właścicielami): brzmienie
@@ -1796,12 +1945,18 @@ widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba parag
    „Wkrótce" i to, że **zima przestała milczeć**. (Opis uprawy bratka i jego kolory są już
    podane i potwierdzone przez właścicieli - patrz
    [Wymiana opisów](#wymiana-opisów--wrzesień-2026).)
-3. Treść chryzantem - **pilne: osobne listy kolorów dla trzech typów.** Cztery ogólne
-   zdjęcia w pasie pokazują czerwień, pomarańcz, róż i liliowy tuż pod chipami
-   „biały / żółty / fiolet / złoty” (dziś wszystkie trzy wpisy mają tę samą czwórkę
+3. Treść chryzantem - **pilne: osobne listy kolorów dla czterech typów.** Od ósmej paczki
+   (wrzesień 2026) pas ma piętnaście kadrów, a jedenaście z nich to bloki jednego koloru -
+   róż, dwubarwna miedź, nasycony pomarańcz - więc sprzeczność da się teraz wyliczyć z jednej
+   strony. Cztery ogólne zdjęcia w pasie pokazują czerwień, pomarańcz, róż i liliowy tuż pod chipami
+   „biały / żółty / fiolet / złoty” (dziś wszystkie cztery wpisy mają tę samą czwórkę
    ze starej strony) i cokolwiek o **samej uprawie**: stanowisko,
    podlewanie, okrywanie przy przymrozkach, kto i po co kupuje. Opisy od właścicieli
    mówią wyłącznie o budowie kwiatu.
+   Od września 2026 dochodzi do tego **opis samej drobnokwiatowej**: jest nasz, nie ich, i jest
+   jedynym takim wpisem na stronie. Razem z nim do potwierdzenia idzie propozycja siedmiu
+   kolorów dla tego typu, która nie weszła - patrz
+   [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).
 4. Godziny sprzedaży w sezonie - klient nie podał; bez nich JSON-LD nie ma
    `openingHoursSpecification`.
 5. Adres e-mail - jak wyżej.

@@ -29,6 +29,21 @@ import offer01 from "../assets/chrysanthemums/offer-01.jpg";
 import offer02 from "../assets/chrysanthemums/offer-02.jpg";
 import offer03 from "../assets/chrysanthemums/offer-03.jpg";
 import offer04 from "../assets/chrysanthemums/offer-04.jpg";
+import chrysRows01 from "../assets/chrysanthemums/rows-01.jpg";
+import chrysRows02 from "../assets/chrysanthemums/rows-02.jpg";
+import chrysRows03 from "../assets/chrysanthemums/rows-03.jpg";
+import chrysRows04 from "../assets/chrysanthemums/rows-04.jpg";
+import chrysRows05 from "../assets/chrysanthemums/rows-05.jpg";
+import chrysRows06 from "../assets/chrysanthemums/rows-06.jpg";
+import chrysRows07 from "../assets/chrysanthemums/rows-07.jpg";
+import chrysRows08 from "../assets/chrysanthemums/rows-08.jpg";
+import chrysRows09 from "../assets/chrysanthemums/rows-09.jpg";
+import chrysRows10 from "../assets/chrysanthemums/rows-10.jpg";
+import chrysRows11 from "../assets/chrysanthemums/rows-11.jpg";
+import chrysPot01 from "../assets/chrysanthemums/pots-01.jpg";
+import chrysPot02 from "../assets/chrysanthemums/pots-02.jpg";
+import chrysPot03 from "../assets/chrysanthemums/pots-03.jpg";
+import chrysPot04 from "../assets/chrysanthemums/pots-04.jpg";
 import pansy01 from "../assets/pansies/offer-01.jpg";
 import pansy02 from "../assets/pansies/offer-02.jpg";
 import pansy03 from "../assets/pansies/offer-03.jpg";
@@ -142,16 +157,47 @@ export const historyPhoto: GalleryPhoto = {
   alt: "Stoisko gospodarstwa pod dachem hali - regały i skrzynki pełne kwiatów balkonowych w czerwieni, różu, żółci i bieli, pośrodku tablica z nazwą gospodarstwa",
 };
 
-/** The strip under the plant list on `/chryzantemy/`: the whole autumn offer in one row.
+/** The strip under the plant list on `/chryzantemy/`: the autumn offer, and since September
+ *  2026 its colours.
  *
- *  These are mixed plantings - many colours and all three types in one frame - so unlike the
- *  three entry photographs they are **not** attributed to a type, and the `alt` texts name
- *  colours rather than a form. Order here is the order on the page.
+ *  None of these is attributed to a type and the `alt` texts name colours rather than a form.
+ *  The count of types deliberately is not given: this said "all three types" while the group
+ *  had three entries, and the fourth (drobnokwiatowa) would have turned a stale number into a
+ *  claim about photographs nobody has re-read. Reading a type off a frame is the guess this
+ *  repository does not make - see the open item in docs/inwentaryzacja.md.
  *
- *  They arrived already downscaled by Facebook to 736x1000, under the 2000px the rest of the
- *  repo holds to, so they are committed byte-for-byte: the resize step would be a no-op and
- *  re-encoding would only cost quality. That ceiling is why `PhotoStrip` asks for 720px at
- *  most - the originals off a phone would be worth having. */
+ *  **The strip does three jobs now and the order says which is which.** `offer-01..04` come
+ *  first: mixed frames, many colours at once, "this is what the season looks like".
+ *  `rows-01..11` follow, one solid block of colour each, running white -> cream -> copper ->
+ *  yellow -> pink. That sequence is the closest thing the site has to an answer for the
+ *  open item on colour lists: the chips say four colours, and this row shows that the crop
+ *  holds pink, copper and deep orange besides. It is a picture, not a list, so it corrects
+ *  nothing by itself - but nobody reading the page can now come away thinking four.
+ *  `pots-01..04` close it: a single finished pot from the front, which is what a customer
+ *  carries away rather than what is standing in the tunnel.
+ *
+ *  **Those four spent one iteration in a strip of their own**, labelled "Gotowe doniczki",
+ *  on the argument that the crop and the product answer different questions and that merging
+ *  them reads as one long undifferentiated wall of chrysanthemums. The owner saw it and had
+ *  the second strip removed; the four frames moved here, at the end, and `OfferSection` went
+ *  back to taking one row of photographs rather than a list of labelled rows. The argument is
+ *  kept rather than deleted, because it is the one to reach for if this row ever does start
+ *  reading as a wall - the answer then is a second strip, not a shorter first one.
+ *
+ *  All four are small-flowered mounds from the same album as
+ *  `plants/chryzantema-drobnokwiatowa.jpg`, and none of them says so: reading a type off a
+ *  photograph is the guess this repository does not make on a grower's own site.
+ *
+ *  Two source generations, and they do not match. `offer-01..04` arrived already downscaled
+ *  by Facebook to 736x1000 and are committed byte-for-byte, because a resize would be a no-op
+ *  and re-encoding would only cost quality. `rows-01..11` came off the holding's Facebook page
+ *  at 1536-1946 x 2048 and were scaled to the 2000px ceiling like everything else, so they are
+ *  visibly sharper than the four above them; `pots-01..04` came the same way and are 1500x2000.
+ *  Nine of the eleven rows are 3:4; `rows-01`, `rows-02`, `rows-05` and `rows-08` are not, and
+ *  `PhotoStrip`'s fixed 3:4 frame crops them - `rows-08` at 1900x2000 loses the most. The
+ *  lightbox is what makes that acceptable: the whole frame is one click away.
+ *
+ *  **The alt texts are read off the pictures, not confirmed by the owners** (docs/inwentaryzacja.md). */
 export const chrysanthemumStrip: GalleryPhoto[] = [
   {
     src: offer01,
@@ -168,6 +214,60 @@ export const chrysanthemumStrip: GalleryPhoto[] = [
   {
     src: offer04,
     alt: "Ekspozycja chryzantem - żółte, amarantowe i liliowe obok białych o wąskich płatkach",
+  },
+  {
+    src: chrysRows01,
+    alt: "Rzędy białych chryzantem o kulistych, gęsto ułożonych płatkach i żółtych środkach",
+  },
+  {
+    src: chrysRows02,
+    alt: "Białe kuliste chryzantemy ciasnym rzędem, od pierwszego planu w głąb tunelu",
+  },
+  {
+    src: chrysRows03,
+    alt: "Białe chryzantemy o długich, wąskich i rurkowatych płatkach, rzędy doniczek w tunelu",
+  },
+  { src: chrysRows04, alt: "Kremowobiałe chryzantemy z żółtym środkiem, rzędy doniczek w uprawie" },
+  {
+    src: chrysRows05,
+    alt: "Kremowożółte kuliste chryzantemy z jaśniejszymi brzegami płatków, rzędy w tunelu",
+  },
+  {
+    src: chrysRows06,
+    alt: "Dwubarwne chryzantemy - kremowe płatki z rdzawomiedzianym spodem, rzędy doniczek",
+  },
+  {
+    src: chrysRows07,
+    alt: "Żółte chryzantemy o wąskich, szpiczastych płatkach, w kilku odcieniach żółci",
+  },
+  { src: chrysRows08, alt: "Gęsty rząd żółtych chryzantem o kulistych kwiatach, widziany z góry" },
+  {
+    src: chrysRows09,
+    alt: "Nasycone żółtopomarańczowe chryzantemy o dużych kulistych kwiatach, rzędy w tunelu",
+  },
+  {
+    src: chrysRows10,
+    alt: "Duże kuliste chryzantemy w intensywnej żółci, pierwszy plan ostry, rzędy w głębi",
+  },
+  {
+    src: chrysRows11,
+    alt: "Różowe chryzantemy o kulistych, gęsto ułożonych płatkach, długie rzędy w tunelu",
+  },
+  {
+    src: chrysPot01,
+    alt: "Doniczka białych chryzantem o drobnych kwiatach, zwarta kulista kępa, w tle żółte i amarantowe",
+  },
+  {
+    src: chrysPot02,
+    alt: "Doniczka żółtych chryzantem o drobnych kwiatach na ciemnym tle, w głębi kolejne żółte",
+  },
+  {
+    src: chrysPot03,
+    alt: "Biała kępa drobnych chryzantem w doniczce, w tle rzędy żółtych i białych",
+  },
+  {
+    src: chrysPot04,
+    alt: "Doniczka amarantowych chryzantem o drobnych kwiatach z jaśniejszym środkiem, w tle żółte i białe",
   },
 ];
 

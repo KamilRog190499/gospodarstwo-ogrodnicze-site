@@ -39,7 +39,15 @@ interface Props {
   /** Optional sentence under the list - what the group covers beyond the entries. */
   note?: string;
   /** Photographs of the group as a whole, shown under the list and above the order block.
-   *  Mixed frames that belong to no single entry - see `PhotoStrip`. */
+   *  Frames that belong to no single entry - see `PhotoStrip`.
+   *
+   *  **One row per page, and the overline is written here rather than passed in.** This was
+   *  briefly a list of labelled rows, when `/chryzantemy/` carried a second strip of finished
+   *  pots beside the crop; the owner had that strip removed in September 2026 and its frames
+   *  moved into `chrysanthemumStrip`, so the list had exactly one element on every page that
+   *  used it. The generality went with the strip it was added for. If a page ever needs two
+   *  rows again, this is the prop that grows - see the note on `chrysanthemumStrip` in
+   *  src/data/gallery.ts for the argument that would bring it back. */
   photos?: GalleryPhoto[];
 }
 

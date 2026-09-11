@@ -1,24 +1,37 @@
 ---
-import { Picture } from "astro:assets";
+import { Picture, getImage } from "astro:assets";
 import type { GalleryPhoto } from "../data/gallery";
 
 /**
  * A row of photographs that belong to the page as a whole rather than to one entry.
  *
- * `/chryzantemy/` uses it under the plant list: the three entries show what each type's
- * flower looks like, and this shows the offer - the colours, the scale, the rows. The
- * pictures are mixed plantings, so nothing here claims to be one type; that distinction is
- * the whole reason the strip exists instead of more entry photographs.
+ * `/chryzantemy/` uses it under the plant list: the entries show what each type's flower looks
+ * like, and this shows the offer - the colours, the scale, the rows, and at the end a finished
+ * pot. Nothing here claims to be one type; that distinction is the whole reason the strip
+ * exists instead of more entry photographs.
  *
  * The label is a `<p>`, not a heading, and deliberately so: the page outline is `h1` then one
  * `h2` per plant, and a heading here would put a row of pictures on the same level as a
  * plant. It follows the same uppercase-overline pattern as "Pozostałe grupy".
  *
- * No lightbox and no carousel - it is a static row. The slideshow on `/inspiracje/` is the
- * one sanctioned exception to "nie dodawaj karuzel" and this is not a second one.
+ * **Still no carousel** - it is a static row, and the slideshow on `/inspiracje/` remains the
+ * one sanctioned exception to "nie dodawaj karuzel".
  *
- * `widths` tops out at 720 because the chrysanthemum sources are 736px wide - anything more
- * would be an upscale. See the note on `chrysanthemumStrip` in src/data/gallery.ts.
+ * **It does have a lightbox now**, asked for by the owner in September 2026; this comment used
+ * to say it did not. The reason it can is the reason it had to: the frame is a fixed 3:4 and
+ * `object-fit: cover`, so a source that is not 3:4 is cropped on the page, and four of the
+ * nineteen chrysanthemum frames are not. Without a way to open the whole picture, the crop was
+ * the only thing a visitor could ever see. It reuses `src/scripts/lightbox.ts` exactly as the
+ * slideshow does: an `<a>` around the thumbnail whose `href` is the full frame, so with
+ * scripting off the link still opens the photograph on its own. Nothing is built per page -
+ * the overlay is created once, lazily, by the global script.
+ *
+ * The lightbox target is the source at its own size, capped at 2000px: `offer-01..04` are only
+ * 736px wide, and asking for 2000 would hand the visitor an upscale of a small file.
+ *
+ * `widths` tops out at 720 because that is what the frame can use - 285px at the 1200px cap,
+ * doubled for a dense screen. The newer sources are 1500px+, so this is now a choice rather
+ * than a limit. See the note on `chrysanthemumStrip` in src/data/gallery.ts.
  */
 interface Props {
   photos: GalleryPhoto[];
@@ -27,26 +40,41 @@ interface Props {
 }
 
 const { photos, label } = Astro.props;
+
+/** One full-size target per frame, resolved at build time. `withoutEnlargement` is not a
+ *  `getImage` option, so the cap is applied here instead. */
+const previews = await Promise.all(
+  photos.map((photo) =>
+    getImage({ src: photo.src, width: Math.min(2000, photo.src.width), format: "webp" }),
+  ),
+);
 ---
 
 <section class="strip" aria-label={label}>
   <p class="strip__label">{label}</p>
   <ul class="strip__grid">
     {
-      photos.map((photo) => (
+      photos.map((photo, index) => (
         <li>
-          <Picture
-            class="strip__photo"
-            src={photo.src}
-            formats={["avif", "webp"]}
-            fallbackFormat="jpg"
-            widths={[360, 720]}
-            sizes="(min-width: 1200px) 285px, (min-width: 640px) 30vw, 45vw"
-            width={360}
-            height={480}
-            alt={photo.alt}
-            loading="lazy"
-          />
+          <a
+            class="strip__link"
+            href={previews[index].src}
+            data-lightbox
+            aria-label={`Powiększ: ${photo.alt}`}
+          >
+            <Picture
+              class="strip__photo"
+              src={photo.src}
+              formats={["avif", "webp"]}
+              fallbackFormat="jpg"
+              widths={[360, 720]}
+              sizes="(min-width: 1200px) 285px, (min-width: 640px) 30vw, 45vw"
+              width={360}
+              height={480}
+              alt={photo.alt}
+              loading="lazy"
+            />
+          </a>
         </li>
       ))
     }
@@ -78,8 +106,16 @@ const { photos, label } = Astro.props;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   }
 
-  /* The sources are 3:4; the frame keeps that ratio so nothing is cropped, and takes the
-     same 1px rule every other photograph on the site has. */
+  /* The link is the frame: block-level so the 1px rule below sits where the photograph does,
+     and so the focus ring drawn by the global :focus-visible rule wraps the picture rather
+     than a zero-height inline box. */
+  .strip__link {
+    display: block;
+  }
+
+  /* Most sources are 3:4 and the frame keeps that ratio, so nothing is cropped; the four that
+     are not (see `chrysanthemumStrip`) lose their edges to `cover`, and the lightbox is where
+     the whole frame lives. The 1px rule is the one every other photograph on the site has. */
   .strip__photo {
     display: block;
     width: 100%;
@@ -87,5 +123,11 @@ const { photos, label } = Astro.props;
     aspect-ratio: 3 / 4;
     object-fit: cover;
     border: 1px solid var(--rule);
+  }
+
+  /* The same acknowledgement the offer tiles make: the frame is a control, so it answers the
+     pointer. No transform and no shadow - this design has neither. */
+  .strip__link:hover .strip__photo {
+    border-color: var(--green);
   }
 </style>

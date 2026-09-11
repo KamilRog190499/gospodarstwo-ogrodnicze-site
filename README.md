@@ -54,7 +54,7 @@ src/
 ├── assets/       zdjęcia źródłowe: gallery/ (23 kadry), plants/, chrysanthemums/,
 │              pansies/, hero/, facebook/ - wszystko maks. 2000 px
 ├── components/   komponenty .astro
-├── content/      treść redakcyjna: plants/ (17 roślin), pages/ (historia)
+├── content/      treść redakcyjna: plants/ (18 roślin), pages/ (historia)
 ├── data/         dane nieredakcyjne w TypeScripcie: offer, season, navigation,
 │              contact, gallery, plant-links, facebook, version
 ├── layouts/      BaseLayout.astro
@@ -118,8 +118,10 @@ to kolejność slajdów, a każdy wpis to import zdjęcia plus polski `alt`. Typ
 zdjęcie bez opisu nie przejdzie kompilacji. Ten sam plik trzyma zdjęcia przypisane
 pojedynczo: `heroPhoto` (pas na górze strony głównej), `tunnelPhoto` (karta wiosenna),
 `historyPhoto` (sekcja Historia), `pansyPhoto` i `chrysanthemumPhoto` (karty sezonowe) oraz
-dwa pasy zdjęć pod listami roślin: `chrysanthemumStrip` (cztery ujęcia na `/chryzantemy/`)
-i `pansyStrip` (cztery skrzynki z bratkami na `/bratki/`). Wszystkie te eksporty leżą
+dwa pasy zdjęć pod listami roślin: `chrysanthemumStrip` (dziewiętnaście ujęć uprawy
+i gotowych doniczek na `/chryzantemy/`) i `pansyStrip` (cztery skrzynki z bratkami na
+`/bratki/`). Kadry w pasach **powiększają się po kliknięciu** (`src/scripts/lightbox.ts`);
+bez JavaScriptu odnośnik nadal otwiera pełne zdjęcie. Wszystkie te eksporty leżą
 **poza** tablicą pokazu - slajdy są z wiosennej prezentacji gotowych obsadzeń i ujęcie
 sprzedażowe w ich środku czytałoby się jak pomyłka.
 
@@ -133,7 +135,7 @@ node -e "import('sharp').then(({default:s})=>s('IMG.jpg').rotate().resize({width
 
 Oryginałów nie commitujemy - do repo trafia dopiero wersja przeskalowana.
 
-**Zdjęcia roślin**: ma je **czternaście z siedemnastu** roślin; brakuje dalii, pelargonii
+**Zdjęcia roślin**: ma je **piętnaście z osiemnastu** roślin; brakuje dalii, pelargonii
 bluszczolistnej i sundaville, a ich placeholdery wypisują kadr, którego brakuje. Dodanie
 kolejnego to dwa kroki: przeskaluj plik jak wyżej do `src/assets/plants/` - nazwa taka sama
 jak nazwa pliku rośliny w `src/content/plants/` - i dopisz we frontmatterze:

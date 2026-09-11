@@ -33,11 +33,15 @@ and `linkinator` finds no dead internal link.
   predecessor. The last of them is also **the only page not in the menu** - it is reached from
   the footer, the consent bar and the map placeholder, and deliberately not from
   `navigation.ts`, which also feeds the 404's list of real destinations.
-- **17 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
-  extra chrysanthemum types and the pansy, all three written by the owners. By group:
-  Balkonowe 11, Rabatowe 2, Bratki 1, Chryzantemy 3.
-- **49 photographs** in `src/assets/`. 14 of the 17 entries have their own frame; **dahlia,
-  pelargonia bluszczolistna and sundaville are still placeholders**.
+- **18 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
+  extra chrysanthemum types and the pansy written by the owners, plus a fourth chrysanthemum
+  type (drobnokwiatowa, September 2026) whose description is **ours and not theirs** - the one
+  entry on the site not in the owners' own words, and on their list to replace. By group:
+  Balkonowe 11, Rabatowe 2, Bratki 1, Chryzantemy 4.
+- **65 photographs** in `src/assets/`. 15 of the 18 entries have their own frame; **dahlia,
+  pelargonia bluszczolistna and sundaville are still placeholders**. Fifteen of the sixty-five
+  arrived in September 2026 off the holding's Facebook page and all of them are chrysanthemums:
+  `/chryzantemy/` carries a strip of nineteen, by some way the longest on the site.
 - `/` is a preview of the whole site: intro, season cards, four offer tiles opening with a
   mosaic of that group's photographs, the plantings slideshow in a reduced variant, the
   Facebook block and a map block. What each home page block may and may not repeat is argued
@@ -252,7 +256,26 @@ plus manual viewport checks.
 - **Do not shorten or rewrite the plant descriptions.** The long, concrete cultivation copy
   is the strongest thing on the current site and the reason people find it in search. The
   owners may replace their own text, but then whatever the new version drops goes on the list
-  in `docs/inwentaryzacja.md` for them to review, never silently.
+  in `docs/inwentaryzacja.md` for them to review, never silently. **One entry is not theirs:**
+  `chryzantema-drobnokwiatowa.md` was drafted here in September 2026 and lightly edited into
+  the house style, so it is the single description the owners have not written and the only
+  one waiting to be replaced rather than protected.
+- **A page gets one photo strip, and the overline lives in `OfferSection`.** It briefly took a
+  list of labelled rows, when `/chryzantemy/` carried a second strip of finished pots beside the
+  crop; the owner had that strip removed in September 2026 and its four frames moved to the end
+  of `chrysanthemumStrip`, so the list was one element everywhere and the generality went with
+  the strip it was added for. The argument for splitting is kept at `chrysanthemumStrip` in
+  `src/data/gallery.ts`, not deleted - it is the one to reach for if nineteen frames ever start
+  reading as an undifferentiated wall, and the answer then is a second strip rather than a
+  shorter first one.
+  - **The strip is lightboxed, and the entries deliberately are not.** Every frame in a
+    `PhotoStrip` is an `<a data-lightbox>` around the thumbnail, reusing the same global
+    `src/scripts/lightbox.ts` the slideshow uses - so with scripting off the link still opens the
+    photograph. It earns this where a plant entry does not: the strip frame is a fixed 3:4 with
+    `object-fit: cover`, so four of the nineteen chrysanthemum sources are cropped on the page and
+    the full frame is otherwise unreachable, whereas `PlantEntry` already fits the box to the
+    photograph. The href is the source at its own width **capped at 2000px** - `offer-01..04` are
+    736px files and asking for more would serve an upscale.
 - **Non-editorial data goes in typed `src/data/*.ts`**, imported directly - one place per
   fact, so a phone number changes once and updates the intro CTA, the contact list, the
   footer and the JSON-LD together. See the repository map above for which file owns what.

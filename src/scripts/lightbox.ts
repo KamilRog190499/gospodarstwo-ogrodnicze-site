@@ -21,16 +21,18 @@ if (tiles.length > 0) {
   // is not the subject any more, which is what the visual dimming says to everyone else.
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
+  // No caption. It used to print the same sentence the `<img>` already carries in its `alt`,
+  // which a screen reader then read twice and everyone else read once too many - the point of
+  // opening a photograph is to look at the photograph. Removed in September 2026 at the
+  // owner's request; the description is not lost, it is on the image where it belongs.
   overlay.innerHTML = `
     <button type="button" class="lightbox__close" aria-label="Zamknij podgląd">Zamknij</button>
-    <figure class="lightbox__figure">
+    <div class="lightbox__figure">
       <img class="lightbox__image" alt="" />
-      <figcaption class="lightbox__caption"></figcaption>
-    </figure>`;
+    </div>`;
   document.body.append(overlay);
 
   const image = overlay.querySelector<HTMLImageElement>(".lightbox__image")!;
-  const caption = overlay.querySelector<HTMLElement>(".lightbox__caption")!;
   const closeButton = overlay.querySelector<HTMLButtonElement>(".lightbox__close")!;
 
   function open(tile: HTMLAnchorElement): void {
@@ -38,13 +40,12 @@ if (tiles.length > 0) {
     opener = tile;
     image.src = tile.href;
     image.alt = description;
-    caption.textContent = description;
     overlay.hidden = false;
     // The page behind must not scroll under the overlay. `scrollbar-gutter: stable` in
     // global.css is what keeps this from shifting the layout sideways.
     document.body.style.overflow = "hidden";
     // The consent bar is fixed to the bottom of the viewport and would otherwise show
-    // through the backdrop and collide with the caption. global.css hides it on this flag.
+    // through the backdrop and sit on top of the photograph. global.css hides it on this flag.
     document.documentElement.classList.add("lightbox-open");
     closeButton.focus();
   }
