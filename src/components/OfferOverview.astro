@@ -59,6 +59,13 @@ import { currentSeason } from "../data/season";
  * reads as the product this business sells. The two landscape sources pay for it, keeping 45%
  * and 53%. The ratio is written in two places that must agree; the CSS says which and why.
  *
+ * **`PlantEntry` reached the same diagnosis and a different answer, and the difference is
+ * deliberate.** It now gives each photograph its own ratio, capped at 3:4, so nothing is
+ * cropped unless it is taller than that. These tiles cannot do the same: four of them stand in
+ * one row and the whole history above is about what happens when the frame shape is allowed to
+ * vary - it was tried twice and failed twice. An entry is one photograph on its own; a tile is
+ * one of four that have to match. Do not harmonise them.
+ *
  * Two is also the number the content can actually guarantee. `Rabatowe` has exactly two
  * entries with a photograph and no `PhotoStrip` to borrow from, so it can never reach three;
  * a design needing three would be permanently broken on one of the four tiles.
@@ -227,7 +234,13 @@ const tiles = offer
     flex-direction: column;
     gap: 0.6rem;
     padding: clamp(1.25rem, 3vw, 1.75rem);
-    border: 1px solid var(--rule);
+    /* --rule-dim, not --rule, and this is the one border on the site that needs the darker one.
+       Every other 1px line here sits on --paper and gets 1.27:1 out of --rule. This one has
+       --paper-clay on its outside, where --rule falls to 1.18:1, while the tile fill lifts off
+       that ground by only 1.079:1 - a faint plate inside a faint line, and the edge went soft
+       from both directions at once. --rule-dim reads 1.35:1 against the fill and 1.25:1 against
+       the ground: still a hairline, but one with an edge. */
+    border: 1px solid var(--rule-dim);
     /* --paper, not --paper-dim. The ground under these tiles is --paper-clay, and a dimmed
        tile on clay is 1.003:1 - the fill would be drawn and seen by nobody. --paper gives
        1.08:1, which is the faint but real lift every card on this site uses. */
@@ -281,6 +294,10 @@ const tiles = offer
     border: 1px solid var(--rule);
   }
   .tile:hover .tile__photo {
+    border-color: var(--green);
+  }
+  /* The whole door answers, not only the frames inside it. */
+  .tile:hover {
     border-color: var(--green);
   }
 

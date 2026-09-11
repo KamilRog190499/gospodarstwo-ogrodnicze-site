@@ -103,7 +103,10 @@
 
   /* rules */
   --rule: #e2ddce; /* Rule - every 1px line, card and photo borders */
-  --rule-dim: #dcd7c4; /* Darker rule - chips, and lines on --paper-dim */
+  /* Darker rule - chips, lines on --paper-dim, and the offer tiles, whose border has the clay
+     ground on its outside. --rule is tuned against --paper and loses too much of its edge on
+     the warm grounds; OfferOverview.astro carries the numbers. */
+  --rule-dim: #dcd7c4;
   --rule-link: #cfcbb8; /* Link rule - the phone number's underline at rest */
 
   /* text */
