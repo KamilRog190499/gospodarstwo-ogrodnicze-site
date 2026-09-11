@@ -72,3 +72,22 @@ export const email: string | null = null;
  *  `openingHoursSpecification` entirely, which is the right thing: guessed hours are the
  *  version search engines quote back at a visitor standing at a closed gate. */
 export const openingHours: string | null = null;
+
+/** The people who run the holding, written out as one sentence - "Imię Nazwisko i Imię
+ *  Nazwisko" - for the controller clause of the privacy policy.
+ *
+ *  `null`, because nobody has given the surnames. `phones` carries two first names, and a
+ *  first name is not an identification: the two people who answer the phone need not be the
+ *  two who run the holding, and guessing which is which on a legal document is the one place
+ *  on this site where a guess is quoted back as the holding's own word.
+ *
+ *  While this is null the policy names the holding itself - "Gospodarstwo Ogrodnicze „Saran”,
+ *  Cholewianka 36, 24-120 Kazimierz Dolny" - which is a complete identification of the
+ *  controller under art. 13 RODO, not a placeholder. Filling this in turns that sentence into
+ *  the joint-controller one of art. 26 RODO and costs nothing else. */
+export const administrators: string | null = null;
+
+/** NIP of the holding, for the same clause. `null` - not in the old site, not in the handoff,
+ *  not given. A horticultural holding that is registered has one and it belongs in § 1; an
+ *  unregistered one does not, and the policy simply omits the line. Do not invent it. */
+export const taxId: string | null = null;

@@ -43,10 +43,16 @@ być wygodą, a stały się częścią tej mapy. Nie usuwać ich.
 | `/feed/`, `/comments/feed/`                                 | -                    | 410 albo 301 na `/`; kanałów RSS nowa strona nie ma |
 | `/xmlrpc.php`, `/wp-json/`, `/wp-includes/*`, `/wp-admin/*` | -                    | 410; to endpointy WordPressa, których już nie ma    |
 
-Nowe adresy bez odpowiednika po starej stronie: `/inspiracje/`, `/kontakt/`, `/bratki/`
-i `/faq/`. Żaden z nich nie potrzebuje przekierowania - nie istniały. `/bratki/` doszło we
-wrześniu 2026 wraz z całą grupą; stara strona nie sprzedawała bratków w żadnym miejscu.
-`/faq/` doszło przy przebudowie menu - stara strona nie miała żadnej strony z pytaniami.
+Nowe adresy bez odpowiednika po starej stronie: `/inspiracje/`, `/kontakt/`, `/bratki/`,
+`/faq/` i `/polityka-prywatnosci/`. Żaden z nich nie potrzebuje przekierowania - nie
+istniały. `/bratki/` doszło we wrześniu 2026 wraz z całą grupą; stara strona nie sprzedawała
+bratków w żadnym miejscu. `/faq/` doszło przy przebudowie menu - stara strona nie miała żadnej
+strony z pytaniami. `/polityka-prywatnosci/` doszło jako ostatnie i stara strona nie miała
+polityki prywatności w ogóle, pod żadnym adresem.
+
+`/polityka-prywatnosci/` jest przy okazji jedynym adresem serwisu, którego **nie ma w menu** -
+prowadzi do niego stopka, pasek zgody i zastępnik mapy. Dla przekierowań to bez znaczenia,
+ale dla indeksowania już nie: odnośnik ze stopki stoi w HTML-u każdej strony.
 
 `/wp-content/uploads/*` - stare pliki graficzne. Żaden nie jest używany na nowej stronie
 (patrz `inwentaryzacja.md`), ale część może być podlinkowana z zewnątrz. Najbezpieczniej

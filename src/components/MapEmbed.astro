@@ -12,9 +12,15 @@ import { addressOneLine, directionsUrl } from "../data/contact";
  * Without JavaScript the placeholder is hidden rather than shown with a dead button: the
  * "Wyznacz trasę" link answers the same question and requests nothing until it is followed.
  *
- * The consent bar would normally point at a privacy policy here. There is not one yet, so
- * nothing links to a page that does not exist - add the link in both places at once when
- * the policy is written.
+ * The placeholder points at the privacy policy, which is where the question is answered at
+ * length. The link is `.map__fine` and not part of `.map__lead`: the lead is --mono, uppercase
+ * and 0.66rem, and a link set in it would read as an uppercase mono link, which is nothing
+ * else on this site.
+ *
+ * This component renders on two grounds - paper on `/kontakt/` and the `--green-band` plate in
+ * `Directions.astro`, which remaps the colour tokens on its container. The link inherits from
+ * that remapping rather than restating a colour, which is why there is no colour here; check
+ * both when touching it.
  */
 const query = encodeURIComponent(addressOneLine);
 const embedUrl = `https://maps.google.com/maps?q=${query}&z=14&output=embed&hl=pl`;
@@ -25,6 +31,9 @@ const embedUrl = `https://maps.google.com/maps?q=${query}&z=14&output=embed&hl=p
     <div class="map__ask">
       <p class="map__lead">Mapa Google wyświetli się po wyrażeniu zgody.</p>
       <button type="button">Pokaż mapę Google</button>
+      <p class="map__fine">
+        Co to oznacza - <a href="/polityka-prywatnosci/">polityka prywatności</a>.
+      </p>
     </div>
     <iframe
       data-src={embedUrl}
@@ -104,6 +113,27 @@ const embedUrl = `https://maps.google.com/maps?q=${query}&z=14&output=embed&hl=p
   }
   .map__ask button:hover {
     background: var(--ink);
+  }
+
+  /* Sentence case and the sans, unlike the lead above it: this is a footnote rather than a
+     label, and an uppercase mono link is a shape nothing else on the site uses. Both colours
+     are tokens `Directions.astro` remaps on its plate, so the line reads on paper and on the
+     dark band without a second rule. */
+  .map__fine {
+    font-size: 0.82rem;
+    color: var(--ink-grey);
+    max-width: 34ch;
+  }
+
+  .map__fine a {
+    color: var(--green);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .map__fine a:hover {
+    text-decoration-thickness: 2px;
   }
 
   /* The iframe carries no `src` until it is asked for; showing an empty one would be a

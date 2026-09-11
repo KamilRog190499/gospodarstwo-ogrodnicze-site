@@ -198,6 +198,8 @@ Stopka pokazuje sam numer, a `commit … · build … UTC` chowa w atrybucie `ti
 ## Czego brakuje przed wdrożeniem
 
 Pełna lista jest w [`docs/inwentaryzacja.md`](docs/inwentaryzacja.md). Najważniejsze:
-trzy brakujące zdjęcia roślin, godziny sprzedaży, e-mail, polityka prywatności, token
-do Facebooka, plik `deploy.yml` i certyfikat HTTPS na serwerze.
+trzy brakujące zdjęcia roślin, godziny sprzedaży, e-mail, token do Facebooka, plik
+`deploy.yml` i certyfikat HTTPS na serwerze. Polityka prywatności jest już napisana, ale
+czeka na potwierdzenie danych administratora - i na `logrotate` ustawiony zgodnie z podanym
+w niej okresem przechowywania logów.
 Mapa przekierowań ze starych adresów: [`docs/przekierowania.md`](docs/przekierowania.md).

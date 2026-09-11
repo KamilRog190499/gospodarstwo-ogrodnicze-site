@@ -26,10 +26,13 @@ plus an informational catalogue. Do not add a cart, checkout, forms, accounts or
 The site is built and the content is migrated. `npm run lint` and `npm run build` are clean
 and `linkinator` finds no dead internal link.
 
-- **Nine pages**, plus a 404: `/`, `/kwiaty-balkonowe/`, `/rabatowe/`, `/bratki/`,
-  `/chryzantemy/`, `/inspiracje/`, `/o-nas/`, `/faq/`, `/kontakt/`. All three of the old
-  WordPress offer addresses are kept unchanged; `/bratki/` and `/faq/` are the two addresses
-  with no predecessor.
+- **Ten pages**, plus a 404: `/`, `/kwiaty-balkonowe/`, `/rabatowe/`, `/bratki/`,
+  `/chryzantemy/`, `/inspiracje/`, `/o-nas/`, `/faq/`, `/kontakt/`,
+  `/polityka-prywatnosci/`. All three of the old WordPress offer addresses are kept
+  unchanged; `/bratki/`, `/faq/` and `/polityka-prywatnosci/` are the three addresses with no
+  predecessor. The last of them is also **the only page not in the menu** - it is reached from
+  the footer, the consent bar and the map placeholder, and deliberately not from
+  `navigation.ts`, which also feeds the 404's list of real destinations.
 - **17 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
   extra chrysanthemum types and the pansy, all three written by the owners. By group:
   Balkonowe 11, Rabatowe 2, Bratki 1, Chryzantemy 3.
@@ -40,7 +43,7 @@ and `linkinator` finds no dead internal link.
   Facebook block and a map block. What each home page block may and may not repeat is argued
   out in `docs/inwentaryzacja.md` under "Strona główna jako witryna".
 
-**Not done:** the privacy policy, `deploy.yml`, the Facebook token, and everything in
+**Not done:** `deploy.yml`, the Facebook token, and everything in
 `docs/inwentaryzacja.md` under "Czego nadal brakuje".
 
 ## Repository map
@@ -51,8 +54,8 @@ Read this before adding a file - most things already have a home.
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/data/offer.ts`            | **The four groups and the four category pages, in one table.** Exports `plantGroups`, which `src/content.config.ts` turns into the schema's `z.enum` and `navigation.ts` turns into menu entries. A new group starts here, never in the schema. Also holds `plantCount()`, the Polish three-form plural.                               |
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                          |
-| `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages`, `footerOfferLinks` and `allPages` (flattened, for the 404).                                                                                                                       |
-| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email` and `openingHours` are `null` - see Open items.                                                                                                                       |
+| `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages` and `allPages` (flattened, for the 404). `/polityka-prywatnosci/` is deliberately absent from all three.                                                                           |
+| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                      |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                     |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                           |
 | `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                            |
@@ -401,9 +404,19 @@ that shape code decisions:
    an e-mail - are listed in `docs/inwentaryzacja.md` for the owners, not guessed at on the
    page. A FAQ is the one place where a guess is quoted straight back at a visitor as the
    holding's own word.
-3. **A privacy policy** - does not exist and must be written; required, because the site
-   embeds the Google map and links Facebook. Until it exists nothing links to it: not the
-   footer, not the map's consent placeholder. Add the link in both places at once.
+3. **The privacy policy exists** - `/polityka-prywatnosci/`, eleven paragraphs on the sibling
+   site's model, linked from the footer, the consent bar and the map placeholder. What is
+   still the owners' to settle is inside it: **the controller's forenames and surnames**
+   (`administrators` in `src/data/contact.ts`, `null`; § 1 names the holding and its address
+   instead, which is a complete identification, not a placeholder), **the NIP** (`taxId`,
+   likewise `null`), the e-mail from item 2, and the wording of the whole document, which is
+   ours rather than theirs. One line in it is a promise about a machine: **"3 miesiące" for
+   the server log** has to be matched by `logrotate` when `deploy.yml` is written, or the
+   sentence changed. The full table is in `docs/inwentaryzacja.md` under "Polityka
+   prywatności". **§ 5 is the paragraph to watch**: it states that the Facebook block never
+   contacts Meta, which is true only while the snapshot is downloaded and self-hosted - any
+   move to a plugin, an iframe or a hotlinked image makes the policy false, not just the
+   component different.
 4. **A logo** - the handoff says there is none, but the old site has one (`cropped-logo2`).
    `public/favicon.svg` is a provisional typographic stand-in, and it still carries the
    pre-2a colours.

@@ -1,0 +1,428 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { phones, addressOneLine, administrators, taxId } from "../data/contact";
+
+/**
+ * `/polityka-prywatnosci/` - a new address with no predecessor on WordPress, so nothing in
+ * docs/przekierowania.md points at it and no 301 is needed.
+ *
+ * ## Why this page has its own markup
+ *
+ * Every other page in src/pages/ is a BaseLayout wrapping one component, and `404.astro` is
+ * the only precedent for a page that draws itself. This one joins it, for two reasons that are
+ * specific to a legal document:
+ *
+ * 1. **The text makes claims about the code.** § 3 names the localStorage key and promises
+ *    that no font and no photograph is fetched from anyone else's server; § 5 promises that
+ *    the Facebook block never contacts Meta. Each of those is true only as long as the code
+ *    keeps it true, so the sentence has to sit where a change to the code will be read beside
+ *    it. In a Markdown collection it would drift silently, and nobody diffing `consent.ts`
+ *    would ever see it.
+ * 2. It would be a component used exactly once, at exactly one address.
+ *
+ * ## Where the wording comes from
+ *
+ * The structure and the tone are the sibling site's, alpaki-kazimierzdolny.pl - same owner,
+ * same stack, same consent gate - but the content is not transferable: different business,
+ * different processing, a different set of third parties. One paragraph of theirs is
+ * deliberately absent and one here has no counterpart there (§ 5).
+ *
+ * ## What this document deliberately does not say
+ *
+ * - **Nothing about likenesses.** Their § 2.3 covers photographs of visitors; all 48
+ *   photographs here are plants and plantings. If an archival photograph with people in it
+ *   ever lands in the history block (docs/inwentaryzacja.md), that paragraph comes back, with
+ *   art. 6 ust. 1 lit. a RODO and art. 81 pr. aut.
+ * - **No e-mail.** `email` in src/data/contact.ts is null, so § 1 offers the telephone and the
+ *   post, and § 6 drops their clause about a mail provider. Add both back together.
+ * - **No "do uzupełnienia" box**, although the surnames are missing. The holding's name and
+ *   address are a complete identification of the controller; filling in `administrators` turns
+ *   that sentence into the joint-controller one and changes nothing else. What is missing is
+ *   tracked in src/data/contact.ts and docs/inwentaryzacja.md, not published on a legal page.
+ *
+ * ## Two editorial conventions, both load-bearing
+ *
+ * - **Cross-references name a paragraph ("w § 1"), never a point number.** Point numbers shift
+ *   the moment a point is inserted, and they shift silently.
+ * - **A source line must not break immediately before a link or a `{}` expression.** The Astro
+ *   compiler drops the whitespace between two expressions and the words glue together in the
+ *   rendered page. Prettier reflows this file, so check the output rather than the source.
+ */
+
+/** The date of the last change to the text. Content, not a build stamp: `versionLabel` in the
+ *  footer moves on every push, and a legal document that claims to have changed when only a
+ *  colour token did is worse than one carrying no date at all. Edit by hand, and only when the
+ *  wording below actually changes. */
+const updated = "11 września 2026";
+
+/** How long the web server keeps its access log.
+ *
+ *  A promise about a machine rather than a fact about this repository - `deploy.yml` does not
+ *  exist yet and the log rotation belongs to the host. The value matches the sibling site,
+ *  which runs on the same server. **Whoever writes the deployment must set logrotate to agree
+ *  with this line**, or change this line. */
+const logRetention = "3 miesiące";
+
+const googlePrivacy = "https://policies.google.com/privacy?hl=pl";
+const metaPrivacy = "https://www.facebook.com/privacy/policy/";
+const external = { target: "_blank", rel: "noopener" } as const;
+
+const holding = "Gospodarstwo Ogrodnicze „Saran”";
+
+/** Art. 26 RODO when the owners are named, the art. 13 RODO identification of the business
+ *  when they are not. Both are finished sentences; neither is a placeholder. */
+const administratorLine = administrators
+  ? `Współadministratorami danych osobowych są ${administrators}, prowadzący ${holding}, ${addressOneLine}, zwani dalej łącznie Administratorem (art. 26 RODO).`
+  : `Administratorem danych osobowych jest ${holding}, ${addressOneLine}, zwane dalej Administratorem.`;
+
+const phoneLine = phones.map((phone) => `${phone.person} ${phone.display}`).join(", ");
+---
+
+<BaseLayout
+  title="Polityka prywatności"
+  description="Zasady przetwarzania danych osobowych w serwisie gospodarstwa Saran: administrator, cele i podstawy prawne, pliki cookie, mapa Google i prawa osób."
+  canonical="/polityka-prywatnosci/"
+  breadcrumb="Polityka prywatności"
+>
+  <section class="policy" aria-labelledby="policy-title">
+    <div class="policy__head">
+      <p class="eyebrow policy__eyebrow">Dokument</p>
+      <h1 class="policy__title" id="policy-title">Polityka prywatności</h1>
+      <p class="policy__lead">
+        Zasady przetwarzania danych osobowych w serwisie gospodarstwo-saran.pl oraz w kontaktach z
+        gospodarstwem ogrodniczym „Saran”.
+      </p>
+    </div>
+
+    <div class="policy__body copy">
+      <p>
+        Niniejsza Polityka prywatności określa zasady przetwarzania danych osobowych osób
+        odwiedzających serwis internetowy gospodarstwo-saran.pl oraz osób kontaktujących się z
+        gospodarstwem ogrodniczym „Saran”. Została sporządzona zgodnie z rozporządzeniem Parlamentu
+        Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób
+        fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu
+        takich danych oraz uchylenia dyrektywy 95/46/WE, zwanym dalej RODO.
+      </p>
+
+      <h2>§ 1. Administrator danych osobowych</h2>
+      <ol class="policy__list">
+        <li>{administratorLine}</li>
+        {taxId && <li>NIP: {taxId}.</li>}
+        <li>
+          Kontakt: telefonicznie {phoneLine}, listownie - na adres podany powyżej. Dotyczy to
+          również wszystkich spraw związanych z przetwarzaniem danych osobowych. Gospodarstwo nie
+          udostępnia adresu poczty elektronicznej.
+        </li>
+        <li>
+          Administrator nie wyznaczył inspektora ochrony danych. Zgłoszenia w sprawach danych
+          osobowych przyjmowane są pod danymi kontaktowymi wskazanymi powyżej.
+        </li>
+        <li>
+          Na stronie <a href="/kontakt/">Kontakt</a> oraz w niniejszym paragrafie podano dane identyfikujące
+          Administratora i dane kontaktowe wymagane przepisami prawa.
+        </li>
+      </ol>
+
+      <h2>§ 2. Zakres, cele i podstawy prawne przetwarzania</h2>
+      <p>
+        Serwis nie prowadzi sprzedaży internetowej: nie ma w nim formularzy, koszyka, płatności ani
+        kont użytkowników. Zamówienia przyjmowane są wyłącznie telefonicznie oraz na miejscu w
+        gospodarstwie.
+      </p>
+
+      <h3>2.1. Zamówienia telefoniczne i sprzedaż na miejscu</h3>
+      <ul class="policy__list">
+        <li>
+          <strong>Zakres danych:</strong> imię, numer telefonu oraz treść zamówienia - rodzaj i liczba
+          roślin, uzgodniony termin odbioru, a także pozostałe informacje przekazane dobrowolnie w trakcie
+          rozmowy. Administrator nie prosi o dane wykraczające poza to, co niezbędne do przyjęcia i wydania
+          zamówienia.
+        </li>
+        <li>
+          <strong>Cel przetwarzania:</strong> udzielenie odpowiedzi na zapytanie, przyjęcie i potwierdzenie
+          zamówienia oraz jego wydanie i rozliczenie.
+        </li>
+        <li>
+          <strong>Podstawa prawna:</strong> art. 6 ust. 1 lit. b RODO - podjęcie działań na żądanie osoby,
+          której dane dotyczą, przed zawarciem umowy oraz wykonanie umowy; w zakresie zapytań niezakończonych
+          zamówieniem - art. 6 ust. 1 lit. f RODO, tj. prawnie uzasadniony interes Administratora polegający
+          na prowadzeniu korespondencji.
+        </li>
+        <li>
+          <strong>Okres przechowywania:</strong> zapytania niezakończone zamówieniem - przez czas potrzebny
+          do zakończenia sprawy, a następnie przez okres niezbędny do obrony przed ewentualnymi roszczeniami;
+          dane związane z przyjętym zamówieniem - do czasu jego wydania, a następnie do upływu terminu
+          przedawnienia roszczeń; dokumentacja księgowa - przez okres wymagany przepisami prawa podatkowego.
+        </li>
+      </ul>
+
+      <h3>2.2. Dane eksploatacyjne (logi serwera)</h3>
+      <ul class="policy__list">
+        <li>
+          <strong>Zakres danych:</strong> adres IP urządzenia, data i godzina zapytania, adres żądanego
+          zasobu, oznaczenie przeglądarki i systemu operacyjnego.
+        </li>
+        <li>
+          <strong>Cel przetwarzania:</strong> zapewnienie bezpieczeństwa i prawidłowego działania serwisu
+          oraz diagnostyka błędów.
+        </li>
+        <li>
+          <strong>Podstawa prawna:</strong> art. 6 ust. 1 lit. f RODO - prawnie uzasadniony interes Administratora
+          polegający na utrzymaniu i ochronie serwisu.
+        </li>
+        <li><strong>Okres przechowywania:</strong> {logRetention} od zapisania wpisu.</li>
+      </ul>
+
+      <h2>§ 3. Pliki cookie i pamięć przeglądarki</h2>
+      <ol class="policy__list">
+        <li>
+          Serwis nie stosuje własnych plików cookie, nie prowadzi statystyk odwiedzin, nie korzysta
+          z narzędzi analitycznych ani reklamowych i nie osadza wtyczek serwisów społecznościowych.
+          Kroje pisma oraz wszystkie pliki graficzne - w tym zdjęcia towarzyszące wpisom, o których
+          mowa w § 5 - udostępniane są wyłącznie z serwera Administratora.
+        </li>
+        <li>
+          W pamięci lokalnej przeglądarki (localStorage) zapisywana jest wyłącznie informacja o
+          decyzji dotyczącej mapy Google, o której mowa w § 4. Zapis następuje dopiero po dokonaniu
+          wyboru, nie zawiera danych identyfikujących użytkownika i nie jest przekazywany
+          Administratorowi ani podmiotom trzecim; służy wyłącznie temu, aby pytanie nie powtarzało
+          się przy kolejnych odwiedzinach.
+        </li>
+        <li>
+          Zapis, o którym mowa powyżej, można w każdej chwili usunąć - odnośnikiem „Ustawienia mapy”
+          w stopce serwisu albo czyszcząc dane witryny w ustawieniach przeglądarki.
+        </li>
+        <li>
+          Zasady przechowywania informacji i uzyskiwania dostępu do informacji już przechowywanej w
+          urządzeniu końcowym użytkownika określa art. 399 ustawy z dnia 12 lipca 2024 r. - Prawo
+          komunikacji elektronicznej.
+        </li>
+      </ol>
+
+      <h2>§ 4. Mapa Google</h2>
+      <ol class="policy__list">
+        <li>
+          Na stronie głównej oraz na stronie <a href="/kontakt/">Kontakt</a> osadzona jest mapa dojazdu
+          udostępniana w ramach usługi Google Maps przez Google Ireland Limited, Gordon House, Barrow
+          Street, Dublin 4, Irlandia.
+        </li>
+        <li>
+          Mapa nie jest wczytywana automatycznie. Do chwili wyrażenia zgody - w pasku zgody albo
+          przyciskiem umieszczonym w miejscu mapy - przeglądarka nie nawiązuje połączenia z
+          serwerami Google i żadne dane nie są tej firmie przekazywane.
+        </li>
+        <li>
+          Wyświetlenie mapy powoduje przekazanie Google adresu IP urządzenia oraz informacji o
+          przeglądarce, a także umożliwia zapisanie w urządzeniu plików cookie Google. W zakresie
+          własnego przetwarzania danych Google występuje jako odrębny administrator.
+        </li>
+        <li>
+          <a href={googlePrivacy} {...external}>Polityka prywatności Google</a> opisuje zasady, na jakich
+          firma ta przetwarza dane pozyskane w związku z wyświetleniem mapy.
+        </li>
+        <li>
+          Podstawą przetwarzania jest zgoda - art. 6 ust. 1 lit. a RODO. Zgoda jest dobrowolna, a
+          odmowa nie ogranicza dostępu do żadnej treści serwisu: adres gospodarstwa podany jest w
+          postaci tekstowej, a odnośnik „Wyznacz trasę” otwiera mapy dopiero po jego wybraniu.
+        </li>
+        <li>
+          Zgodę można wycofać w każdej chwili odnośnikiem „Ustawienia mapy” w stopce serwisu.
+          Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania dokonanego przed jej
+          wycofaniem.
+        </li>
+      </ol>
+
+      <h2>§ 5. Wpisy z profilu na Facebooku</h2>
+      <ol class="policy__list">
+        <li>
+          Na stronie głównej prezentowane są ostatnie wpisy z profilu gospodarstwa w serwisie
+          Facebook. Ich treść i zdjęcia pobierane są raz dziennie po stronie Administratora i
+          zapisywane na jego serwerze.
+        </li>
+        <li>
+          Blok ten nie jest wtyczką Facebooka ani ramką osadzoną z serwerów tej firmy. Przeglądarka
+          odwiedzającego wczytuje wyłącznie pliki z serwera Administratora i nie nawiązuje
+          połączenia z Meta Platforms Ireland Limited. Dlatego prezentacja wpisów nie wymaga zgody i
+          nie wiąże się z przekazaniem tej firmie jakichkolwiek danych odwiedzającego.
+        </li>
+        <li>
+          Odnośniki do profilu gospodarstwa są zwykłymi odnośnikami wychodzącymi. Dopiero ich
+          wybranie powoduje przejście do serwisu Facebook, gdzie dane odwiedzającego przetwarza Meta
+          Platforms Ireland Limited jako odrębny administrator, na zasadach opisanych w jej <a
+            href={metaPrivacy}
+            {...external}>zasadach ochrony prywatności</a
+          >.
+        </li>
+      </ol>
+
+      <h2>§ 6. Odbiorcy danych</h2>
+      <ol class="policy__list">
+        <li>
+          Dane mogą być udostępniane podmiotom świadczącym na rzecz Administratora usługi księgowe
+          oraz usługi utrzymania infrastruktury teleinformatycznej. Udostępnienie następuje
+          wyłącznie w zakresie niezbędnym do wykonania tych usług.
+        </li>
+        <li>
+          Dane mogą zostać udostępnione organom publicznym, jeżeli obowiązek taki wynika z przepisów
+          prawa.
+        </li>
+        <li>
+          Google może być odrębnym administratorem danych w zakresie określonym w § 4, wyłącznie w
+          przypadku wyrażenia zgody na wyświetlenie mapy.
+        </li>
+        <li>
+          Administrator nie sprzedaje danych osobowych ani nie udostępnia ich w celach
+          marketingowych.
+        </li>
+      </ol>
+
+      <h2>§ 7. Przekazywanie danych poza Europejski Obszar Gospodarczy</h2>
+      <p>
+        Przekazanie danych poza Europejski Obszar Gospodarczy może nastąpić wyłącznie w przypadku
+        opisanym w § 4, w związku z korzystaniem z usługi Google Maps. Jeżeli w związku z tą usługą
+        dochodzi do przekazania danych do Stanów Zjednoczonych, podstawą przekazania może być
+        decyzja wykonawcza Komisji Europejskiej z dnia 10 lipca 2023 r. w sprawie odpowiedniego
+        stopnia ochrony danych osobowych zapewnianego w ramach EU-U.S. Data Privacy Framework - o
+        ile odbiorca danych jest objęty tym mechanizmem. W pozostałym zakresie dane nie są
+        przekazywane poza Europejski Obszar Gospodarczy.
+      </p>
+
+      <h2>§ 8. Prawa osób, których dane dotyczą</h2>
+      <ol class="policy__list">
+        <li>
+          Osobie, której dane dotyczą, przysługuje prawo dostępu do danych (art. 15 RODO), ich
+          sprostowania (art. 16 RODO), usunięcia (art. 17 RODO), ograniczenia przetwarzania (art. 18
+          RODO), przenoszenia danych (art. 20 RODO) oraz wniesienia sprzeciwu wobec przetwarzania
+          opartego na prawnie uzasadnionym interesie Administratora (art. 21 RODO).
+        </li>
+        <li>
+          W zakresie przetwarzania opartego na zgodzie przysługuje prawo do jej wycofania w dowolnym
+          momencie (art. 7 ust. 3 RODO), bez wpływu na zgodność z prawem przetwarzania dokonanego
+          przed wycofaniem.
+        </li>
+        <li>
+          Realizacja praw następuje na wniosek złożony pod danymi kontaktowymi wskazanymi w § 1.
+        </li>
+        <li>
+          Administrator udziela odpowiedzi na żądanie bez zbędnej zwłoki, nie później niż w terminie
+          miesiąca od jego otrzymania, na zasadach określonych w art. 12 RODO.
+        </li>
+        <li>
+          Przysługuje również prawo wniesienia skargi do organu nadzorczego - Prezesa Urzędu Ochrony
+          Danych Osobowych, ul. Stawki 2, 00-193 Warszawa (art. 77 RODO).
+        </li>
+      </ol>
+
+      <h2>§ 9. Dobrowolność podania danych</h2>
+      <p>
+        Podanie danych osobowych jest dobrowolne i nie jest wymogiem ustawowym. Podanie imienia i
+        numeru telefonu jest jednak niezbędne do przyjęcia i potwierdzenia zamówienia; ich
+        niepodanie uniemożliwia udzielenie odpowiedzi lub przyjęcie zamówienia. Zakup na miejscu w
+        gospodarstwie nie wymaga podania żadnych danych.
+      </p>
+
+      <h2>§ 10. Zautomatyzowane podejmowanie decyzji</h2>
+      <p>
+        Dane osobowe nie są wykorzystywane do zautomatyzowanego podejmowania decyzji, w tym do
+        profilowania, o którym mowa w art. 22 RODO.
+      </p>
+
+      <h2>§ 11. Zmiany Polityki prywatności</h2>
+      <p>
+        Polityka prywatności jest aktualizowana każdorazowo wraz ze zmianą sposobu przetwarzania
+        danych w serwisie. Data poniżej wskazuje dzień ostatniej zmiany.
+      </p>
+      <p class="policy__stamp">Ostatnia aktualizacja: {updated}.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* The section shell is `.faq`'s - the site's other single-column page of running text. */
+  .policy {
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: var(--gap-columns);
+  }
+
+  .policy__head {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+  }
+
+  .policy__eyebrow {
+    font-size: 0.72rem;
+  }
+
+  /* --text-h2-wide, like every other subpage `h1`. --text-h1 is the home page's alone. */
+  .policy__title {
+    font-size: var(--text-h2-wide);
+    line-height: 1.06;
+    max-width: 20ch;
+  }
+
+  .policy__lead {
+    max-width: 58ch;
+    color: var(--ink-soft);
+  }
+
+  /* `.copy` on the container gives the paragraph rhythm and the green prose links, and gives
+     nothing else: global.css zeroes every heading margin and strips every list marker. A legal
+     document is almost nothing but headings and lists, so the rest is here. */
+  .policy__body {
+    max-width: 62ch;
+  }
+
+  /* Its own step rather than --text-h3, for the reason the FAQ rows have one: eleven stacked
+     --text-h3 lines are a wall of ink rather than a list that can be scanned. The 1px rule
+     above each one is how the document is divided - there is no other device available. */
+  .policy__body h2 {
+    font-size: var(--text-question);
+    font-weight: 375;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+    margin-block: 2.5rem 0.9rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* The first heading follows the lede, which already separates it from what is above. */
+  .policy__body > h2:first-of-type {
+    margin-block-start: 1.75rem;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .policy__body h3 {
+    font-size: 1.12rem;
+    line-height: 1.3;
+    margin-block: 1.75rem 0.7rem;
+  }
+
+  /* Markers come back. `ul` is `list-style: none` site-wide, which is right for the menus and
+     card grids that make up the rest of the site and wrong here: the numbers are how a
+     cross-reference such as "w § 1" finds anything. */
+  .policy__list {
+    list-style: decimal;
+    padding-inline-start: 1.6rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .policy__body ul.policy__list {
+    list-style: disc;
+  }
+
+  .policy__list li::marker {
+    color: var(--ink-grey);
+  }
+
+  .policy__stamp {
+    margin-block-start: 1.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.88rem;
+    color: var(--ink-grey);
+  }
+</style>

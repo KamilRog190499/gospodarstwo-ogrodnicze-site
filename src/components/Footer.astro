@@ -29,10 +29,16 @@ import { versionLabel, buildStamp } from "../data/version";
  *
  * Two departures from the prototype, both deliberate and both kept:
  *
- * - "Polityka prywatności" is not here. The prototype links it to `#`; there is no policy
- *   yet, and a menu entry that goes nowhere is worse than one that is not there. Add it
- *   with the page - it is the one item on docs/inwentaryzacja.md that the consent bar
- *   makes urgent, because the bar asks about data processing and links to nothing.
+ * - "Polityka prywatności" is here, and the prototype's dead `#` is not what put it here.
+ *   It stood empty until the page existed, because an entry that goes nowhere is worse than
+ *   one that is absent; `/polityka-prywatnosci/` arrived in September 2026 and the link went
+ *   in at the same moment, together with the two in `ConsentBanner` and `MapEmbed`. All three
+ *   belong together: the consent bar asks about data processing, and this is the document it
+ *   is asking on behalf of.
+ *   **It is also the only page on the site that is not in the menu.** That is deliberate -
+ *   `navigation.ts` feeds `allPages`, and a legal document does not belong in the 404's list
+ *   of "where you were probably going" - so this column is the only route to it from most of
+ *   the site. Do not trim it away as a duplicate of the menu; it is not in the menu.
  * - "Ustawienia mapy" is here and is not in the design. Withdrawing consent has to be as
  *   easy as giving it, and this is the only place a visitor can reach it from. It is
  *   hidden without JavaScript, where there was never any consent to withdraw.
@@ -88,6 +94,9 @@ const year = new Date().getFullYear();
         <li><a class="footer__link" href="/kontakt/">Kontakt i dojazd</a></li>
         <li>
           <a class="footer__link" href={facebook} target="_blank" rel="noopener">Facebook</a>
+        </li>
+        <li>
+          <a class="footer__link" href="/polityka-prywatnosci/">Polityka prywatności</a>
         </li>
         <li class="footer__resetRow">
           <button class="footer__link footer__reset" type="button" data-consent-reset>

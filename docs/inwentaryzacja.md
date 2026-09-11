@@ -1578,6 +1578,66 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
    z lat 2019–2020, wgranych do biblioteki mediów, ale nigdy nieumieszczonych na żadnej
    żywej podstronie.
 
+## Polityka prywatności - wrzesień 2026
+
+Strona dostała dziesiątą podstronę, `/polityka-prywatnosci/`. Powstała, bo musiała: serwis
+osadza mapę Google i pokazuje wpisy z Facebooka, a pasek zgody pytał odwiedzającego
+o przetwarzanie danych i nie prowadził do żadnego dokumentu. Trzy komentarze w kodzie
+(`Footer.astro`, `MapEmbed.astro`) i `CLAUDE.md` nazywały to jedną, tą samą dziurą.
+
+Wzorem jest polityka bliźniaczej strony **alpaki-kazimierzdolny.pl** - ten sam właściciel,
+ten sam stos, ta sama bramka na mapę. Przeniesiona jest **struktura i ton**, nie treść: inna
+działalność to inne cele przetwarzania i inny zestaw usług zewnętrznych.
+
+### Co dokument mówi, czego u alpak nie ma
+
+- **§ 5 o wpisach z Facebooka** - paragraf bez odpowiednika we wzorze. Opisuje to, co
+  [blok „Co u nas słychać”](#posty-z-facebooka--wrzesień-2026) robi naprawdę: tekst i zdjęcia
+  są pobierane raz dziennie na nasz serwer i z niego serwowane, więc przeglądarka
+  odwiedzającego nie łączy się z Meta i blok nie potrzebuje zgody. **To zdanie przestaje być
+  prawdziwe w dniu, w którym ktoś zamieni blok na wtyczkę Facebooka albo na linkowane
+  zdjęcie** - wtedy zmienia się polityka, nie tylko komponent.
+- **§ 2 zaczyna się od zdania, że sprzedaży internetowej nie ma** - żadnych formularzy,
+  koszyka, płatności ani kont. To najkrótsza odpowiedź na połowę pytań, jakie taki dokument
+  wywołuje.
+
+### Czego dokument świadomie nie mówi
+
+- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 48 zdjęć to
+  rośliny i obsadzenia. Jeśli do bloku historii trafi archiwalne zdjęcie z ludźmi (punkt 1
+  poniżej), paragraf wraca - z art. 6 ust. 1 lit. a RODO i art. 81 prawa autorskiego.
+- **Nie podaje adresu e-mail**, bo go nie ma (punkt 5). § 1 wskazuje dwa telefony i adres
+  pocztowy, a § 6 nie ma klauzuli o dostawcy poczty. Jedno i drugie dochodzi razem z adresem.
+- **Nie ma na stronie żadnej ramki „do uzupełnienia”**, choć nazwisk brakuje. § 1 podaje nazwę
+  i adres gospodarstwa, co jest pełną identyfikacją administratora, a nie zapchajdziurą.
+  Wpisanie nazwisk do `administrators` w `src/data/contact.ts` zamienia to zdanie na wersję
+  o współadministratorach z art. 26 RODO i nie zmienia nic poza tym.
+
+### Do przejrzenia i potwierdzenia przez właścicieli
+
+| Rzecz                            | Stan                                                                                                                                                                                                                    |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Imiona i nazwiska administratora | `administrators` = `null`. Telefony podają dwa imiona, ale imię to nie identyfikacja, a osoby odbierające telefon to niekoniecznie osoby prowadzące gospodarstwo. Nie zgadujemy.                                        |
+| NIP                              | `taxId` = `null`. Nie było go na starej stronie ani w handoffie. Jeśli gospodarstwo jest zarejestrowane, numer należy do § 1.                                                                                           |
+| Adres e-mail do spraw RODO       | Jak punkt 5 poniżej.                                                                                                                                                                                                    |
+| Całe brzmienie dokumentu         | Napisane przez nas na wzorze alpak. Właściciele mogą je zastąpić własnym albo cudzym.                                                                                                                                   |
+| „3 miesiące” na logi serwera     | **Obietnica o maszynie, nie fakt o repozytorium.** `deploy.yml` nie istnieje (punkt 13), a rotacja logów należy do serwera. Kto pisze wdrożenie, musi ustawić `logrotate` zgodnie z tym zdaniem albo zmienić to zdanie. |
+
+### Trzy odnośniki, jeden moment
+
+Polityka jest linkowana ze **stopki** (kolumna „Informacje”), z **paska zgody** i spod
+**zastępnika mapy**. Trzeciego dołożono wbrew wcześniejszej notatce, że wystarczą dwa: pasek
+zgody widuje się raz, a zastępnik mapy stoi dokładnie tam, gdzie pytanie wraca.
+
+**Polityka jest jedyną stroną serwisu spoza menu.** `navigation.ts` zasila też `allPages`,
+czyli listę „Strony na tej witrynie” na 404, a dokument prawny nie jest miejscem, do którego
+ktoś chciał trafić, myląc adres. Stopka jest więc jedyną drogą do niej z większości stron -
+nie da się jej stamtąd usunąć jako „powtórzenia menu”, bo w menu jej nie ma.
+
+Przycisku „Ustawienia prywatności” ze wzoru **nie dodano**: stopka ma już „Ustawienia mapy”,
+które robi dokładnie to samo, a § 3 i § 4 cytują tę etykietę dosłownie. Zmiana napisu byłaby
+widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba paragrafy.
+
 ## Czego nadal brakuje
 
 1. Zdjęcia - po jednym na dahlię, pelargonię bluszczolistną i sundaville (4:3, żadne
@@ -1605,8 +1665,9 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
 4. Godziny sprzedaży w sezonie - klient nie podał; bez nich JSON-LD nie ma
    `openingHoursSpecification`.
 5. Adres e-mail - jak wyżej.
-6. Polityka prywatności - nie istnieje, a strona osadza mapę Google i linkuje Facebooka.
-   Do czasu napisania stopka nie linkuje do niej wcale.
+6. Polityka prywatności - **napisana i podlinkowana**, ale trzy rzeczy w niej są nasze,
+   nie wasze: imiona i nazwiska administratora, NIP oraz całe brzmienie dokumentu.
+   Szczegóły w [Polityce prywatności](#polityka-prywatności--wrzesień-2026).
 7. Współrzędne gospodarstwa - „Wyznacz trasę” szuka po adresie, bo nikt nie potwierdził
    pinezki.
 8. Okno sprzedaży tunbergii i werbeny - stara strona pisała „wiosna”, nadesłane opisy tego

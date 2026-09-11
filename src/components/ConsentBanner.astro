@@ -15,7 +15,9 @@
 <aside id="consent" class="consent" hidden aria-label="Zgoda na mapę Google">
   <p class="consent__text">
     Mapa dojazdu pochodzi z Google. Jej wyświetlenie przekazuje Google Twój adres IP i pozwala na
-    zapisanie plików cookies. Bez zgody mapa się nie wczyta.
+    zapisanie plików cookies. Bez zgody mapa się nie wczyta. Szczegóły opisuje <a
+      href="/polityka-prywatnosci/">polityka prywatności</a
+    >.
   </p>
   <div class="consent__actions">
     <button type="button" data-consent="accept">Zgadzam się</button>
@@ -25,6 +27,10 @@
 
 <style>
   .consent {
+    /* The bar holds the site's only link on this ground, and the default --green is 2.63:1
+       against it - under the 3:1 WCAG 1.4.11 asks of a focus indicator. --green-lit gives
+       9.49:1. `.footer`, `.history` and `.lightbox` each raise it in the same one line. */
+    --focus-ring: var(--green-lit);
     position: fixed;
     inset-inline: 0;
     bottom: 0;
@@ -39,11 +45,34 @@
     gap: 0.75rem 1.5rem;
   }
 
+  /* `display: flex` above is an author style, and any author `display` beats the
+     `display: none` the browser attaches to [hidden] - so without this rule the bar ignored
+     its own `hidden` attribute entirely: it stood on all ten pages, including the seven that
+     embed nothing, and it did not go away when either button was pressed, because
+     `hideBanner()` in src/scripts/consent.ts hides it by setting exactly that attribute.
+     `.lightbox` in global.css and three selectors in Compositions.astro carry the same rule
+     for the same reason; this component was the one that did not. */
+  .consent[hidden] {
+    display: none;
+  }
+
   .consent__text {
     font-size: 0.88rem;
     max-width: 72ch;
     flex: 1 1 22rem;
     color: var(--footer-body);
+  }
+
+  /* Not the prose green of `.copy a`: this ground is dark, and --green-lit is the accent the
+     rest of the dark plates use. */
+  .consent__text a {
+    color: var(--green-lit);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .consent__text a:hover {
+    text-decoration-thickness: 2px;
   }
 
   .consent__actions {
