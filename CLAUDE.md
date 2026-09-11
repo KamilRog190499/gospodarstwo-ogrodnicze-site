@@ -33,15 +33,16 @@ and `linkinator` finds no dead internal link.
   predecessor. The last of them is also **the only page not in the menu** - it is reached from
   the footer, the consent bar and the map placeholder, and deliberately not from
   `navigation.ts`, which also feeds the 404's list of real destinations.
-- **18 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
-  extra chrysanthemum types and the pansy written by the owners, plus a fourth chrysanthemum
-  type (drobnokwiatowa, September 2026) whose description is **ours and not theirs** - the one
-  entry on the site not in the owners' own words, and on their list to replace. By group:
-  Balkonowe 11, Rabatowe 2, Bratki 1, Chryzantemy 4.
-- **65 photographs** in `src/assets/`. 15 of the 18 entries have their own frame; **dahlia,
-  pelargonia bluszczolistna and sundaville are still placeholders**. Fifteen of the sixty-five
-  arrived in September 2026 off the holding's Facebook page and all of them are chrysanthemums:
-  `/chryzantemy/` carries a strip of nineteen, by some way the longest on the site.
+- **19 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
+  extra chrysanthemum types and the pansy written by the owners, plus two whose descriptions
+  are **ours and not theirs** (chryzantema drobnokwiatowa and prymulka, both September 2026):
+  the only entries on the site not in the owners' own words, and on their list to replace. By
+  group: Balkonowe 11, Rabatowe 2, Bratki 2, Chryzantemy 4.
+- **69 photographs** in `src/assets/`. 16 of the 19 entries have their own frame; **dahlia,
+  pelargonia bluszczolistna and sundaville are still placeholders**. Nineteen of the
+  sixty-nine arrived in September 2026 off the holding's Facebook page: fifteen chrysanthemums,
+  so `/chryzantemy/` carries a strip of nineteen frames, by some way the longest on the site,
+  and four pansies and primroses, which took `/bratki/` from four to seven.
 - `/` is a preview of the whole site: intro, season cards, four offer tiles opening with a
   mosaic of that group's photographs, the plantings slideshow in a reduced variant, the
   Facebook block and a map block. What each home page block may and may not repeat is argued
@@ -256,10 +257,10 @@ plus manual viewport checks.
 - **Do not shorten or rewrite the plant descriptions.** The long, concrete cultivation copy
   is the strongest thing on the current site and the reason people find it in search. The
   owners may replace their own text, but then whatever the new version drops goes on the list
-  in `docs/inwentaryzacja.md` for them to review, never silently. **One entry is not theirs:**
-  `chryzantema-drobnokwiatowa.md` was drafted here in September 2026 and lightly edited into
-  the house style, so it is the single description the owners have not written and the only
-  one waiting to be replaced rather than protected.
+  in `docs/inwentaryzacja.md` for them to review, never silently. **Two entries are not
+  theirs:** `chryzantema-drobnokwiatowa.md` and `prymulka.md` were both drafted here in
+  September 2026 and lightly edited into the house style, so they are the two descriptions the
+  owners have not written and the only ones waiting to be replaced rather than protected.
 - **A page gets one photo strip, and the overline lives in `OfferSection`.** It briefly took a
   list of labelled rows, when `/chryzantemy/` carried a second strip of finished pots beside the
   crop; the owner had that strip removed in September 2026 and its four frames moved to the end
@@ -468,8 +469,14 @@ that shape code decisions:
    of the handoff's own headings and leave two cards named exactly like the offer tiles a
    screen below them - how early "Wkrótce" should light up, and the fact that **winter is
    no longer silent**.
-   Primroses are on the site as a word only: they sell in the March window but no description
-   or photograph exists, so no entry and no group were invented.
+   Primroses are **no longer a word only** - `prymulka.md` and a photograph arrived in
+   September 2026, so `/bratki/` holds two entries and its `h1` is "Bratki i prymulki" (the
+   `<title>` stays "Bratki"). No separate group and no separate address: the owners say they
+   sell primroses exactly when they sell pansies, "mostly March, sometimes the start of April",
+   so `src/data/season.ts` is untouched. **What is still open is the wording of that window in
+   three places at once** - `season.ts` commits to March, and both entries' `Sprzedaż` facts say
+   "Marzec – kwiecień". The two are not the same claim and the owners have not been asked which
+   they want printed.
 6. **What the new descriptions dropped.** Replacing the WordPress copy cost a handful of
    concrete details, tunbergia's and werbena's spring selling window among them. The full
    table is in `docs/inwentaryzacja.md` under "Wymiana opisów"; nothing goes back in without

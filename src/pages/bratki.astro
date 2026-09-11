@@ -13,10 +13,16 @@ import { pansyStrip } from "../data/gallery";
  *  and moved the balcony flowers up to April. Nothing here noticed, because the dates were
  *  typed in by hand.
  *
- *  The page is also where primroses appear, as a word rather than as an entry: the owners
- *  sell them in the same March window, but no description and no photograph of one exists
- *  yet, and a placeholder entry would promise a page that cannot deliver. See
- *  docs/inwentaryzacja.md. */
+ *  **Primroses have their own entry since September 2026.** They were a word on this page for
+ *  as long as nothing existed to make an entry out of; the owners then supplied a photograph
+ *  and a description, and `prymulka.md` closed that open item. They share the pansies' selling
+ *  window - "mostly March, sometimes the start of April" in the owners' own words - so nothing
+ *  changed in `src/data/season.ts` and the entry carries the same `Sprzedaż` fact its
+ *  group-mate does.
+ *
+ *  The `h1` moved with it: "Bratki i prymulki", which is what `navigation.ts` and the home
+ *  page tile have called this page all along. The `<title>`, the canonical and the breadcrumb
+ *  stay "Bratki" - that is the word the page has to rank on. */
 ---
 
 <BaseLayout
@@ -27,7 +33,7 @@ import { pansyStrip } from "../data/gallery";
 >
   <OfferSection
     group="Bratki"
-    title="Bratki"
+    title="Bratki i prymulki"
     note="Bratkami i prymulkami otwieramy sezon - są w sprzedaży najwcześniej ze wszystkiego, co uprawiamy, zanim ruszą kwiaty balkonowe i rabatowe."
     photos={pansyStrip}
   />

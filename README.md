@@ -54,7 +54,7 @@ src/
 ├── assets/       zdjęcia źródłowe: gallery/ (23 kadry), plants/, chrysanthemums/,
 │              pansies/, hero/, facebook/ - wszystko maks. 2000 px
 ├── components/   komponenty .astro
-├── content/      treść redakcyjna: plants/ (18 roślin), pages/ (historia)
+├── content/      treść redakcyjna: plants/ (19 roślin), pages/ (historia)
 ├── data/         dane nieredakcyjne w TypeScripcie: offer, season, navigation,
 │              contact, gallery, plant-links, facebook, version
 ├── layouts/      BaseLayout.astro
@@ -119,7 +119,7 @@ zdjęcie bez opisu nie przejdzie kompilacji. Ten sam plik trzyma zdjęcia przypi
 pojedynczo: `heroPhoto` (pas na górze strony głównej), `tunnelPhoto` (karta wiosenna),
 `historyPhoto` (sekcja Historia), `pansyPhoto` i `chrysanthemumPhoto` (karty sezonowe) oraz
 dwa pasy zdjęć pod listami roślin: `chrysanthemumStrip` (dziewiętnaście ujęć uprawy
-i gotowych doniczek na `/chryzantemy/`) i `pansyStrip` (cztery skrzynki z bratkami na
+i gotowych doniczek na `/chryzantemy/`) i `pansyStrip` (siedem skrzynek bratków i prymulek na
 `/bratki/`). Kadry w pasach **powiększają się po kliknięciu** (`src/scripts/lightbox.ts`);
 bez JavaScriptu odnośnik nadal otwiera pełne zdjęcie. Wszystkie te eksporty leżą
 **poza** tablicą pokazu - slajdy są z wiosennej prezentacji gotowych obsadzeń i ujęcie
@@ -135,7 +135,7 @@ node -e "import('sharp').then(({default:s})=>s('IMG.jpg').rotate().resize({width
 
 Oryginałów nie commitujemy - do repo trafia dopiero wersja przeskalowana.
 
-**Zdjęcia roślin**: ma je **piętnaście z osiemnastu** roślin; brakuje dalii, pelargonii
+**Zdjęcia roślin**: ma je **szesnaście z dziewiętnastu** roślin; brakuje dalii, pelargonii
 bluszczolistnej i sundaville, a ich placeholdery wypisują kadr, którego brakuje. Dodanie
 kolejnego to dwa kroki: przeskaluj plik jak wyżej do `src/assets/plants/` - nazwa taka sama
 jak nazwa pliku rośliny w `src/content/plants/` - i dopisz we frontmatterze:

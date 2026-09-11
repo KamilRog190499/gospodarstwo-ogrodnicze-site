@@ -20,21 +20,24 @@ a nie kotwicami na stronie głównej. Mapa przekierowań: [`przekierowania.md`](
 ## Rośliny
 
 Handoff projektowy ostrzegał przed „kilkudziesięcioma” wpisami i zalecał zaprojektowanie
-filtrowania i paginacji. Faktycznie jest ich **18** i dzielą się na cztery strony po 11, 2, 1
+filtrowania i paginacji. Faktycznie jest ich **19** i dzielą się na cztery strony po 11, 2, 2
 i 4 wpisy, więc nic takiego nie jest potrzebne.
 
 Balkonowe (11): alstromeria, fuksja, pelargonie bluszczolistne, tunbergie, werbena, goździk,
 heliotrop, sundaville, dahlie, calibrachoa, begonia.
 Rabatowe (2): pelargonie rabatowe, niecierpek nowogwinejski.
-Bratki (1): bratek ogrodowy - nowa grupa i nowy adres `/bratki/`, wrzesień 2026; patrz niżej.
-Chryzantemy (4): chryzantema wielkokwiatowa, średniokwiatowa, drobnokwiatowa, igiełkowa -
-wielkokwiatowa, średniokwiatowa i igiełkowa dopisane we wrześniu 2026 z tekstu
-właścicieli, patrz niżej.
-**Drobnokwiatowa jest wyjątkiem i jedynym na całej stronie:** jej opis powstał u nas, nie
-u właścicieli - patrz [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).
-Kolejność wpisów idzie malejącą wielkością kwiatu (wielko → średnio → drobno), a igiełkowa
-stoi na końcu, bo to już nie rozmiar, tylko kształt płatka; `order` jest globalny, więc
-dołożenie drobnokwiatowej przesunęło igiełkową na 17, a bratka na 18.
+Bratki (2): bratek ogrodowy i prymulka - nowa grupa i nowy adres `/bratki/`, wrzesień 2026;
+patrz niżej. **Opis prymulki, tak jak opis drobnokwiatowej, powstał u nas, nie u właścicieli**
+
+- patrz [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).
+  Chryzantemy (4): chryzantema wielkokwiatowa, średniokwiatowa, drobnokwiatowa, igiełkowa -
+  wielkokwiatowa, średniokwiatowa i igiełkowa dopisane we wrześniu 2026 z tekstu
+  właścicieli, patrz niżej.
+  **Drobnokwiatowa jest wyjątkiem i jedynym na całej stronie:** jej opis powstał u nas, nie
+  u właścicieli - patrz [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).
+  Kolejność wpisów idzie malejącą wielkością kwiatu (wielko → średnio → drobno), a igiełkowa
+  stoi na końcu, bo to już nie rozmiar, tylko kształt płatka; `order` jest globalny, więc
+  dołożenie drobnokwiatowej przesunęło igiełkową na 17, a bratka na 18.
 
 ## Co zostało zmienione w treści
 
@@ -432,8 +435,8 @@ za źródło, patrz piąta paczka niżej.
 
 Do zrobienia zdjęć: każdy pozostały placeholder na stronie ma wypisany wymagany kadr.
 Obie ramki 16:9 (tunel z kwiatami balkonowymi, chryzantemy przed 1 listopada) są już
-obsadzone, tak samo cała grupa chryzantem i bratek. Z 18 wpisów zdjęcie ma teraz
-piętnaście, więc zostały po jednym kadrze 4:3 na dahlię, pelargonię bluszczolistną
+obsadzone, tak samo cała grupa chryzantem oraz bratek i prymulka. Z 19 wpisów zdjęcie ma teraz
+szesnaście, więc zostały po jednym kadrze 4:3 na dahlię, pelargonię bluszczolistną
 i sundaville, oraz 3:2 archiwalnego zdjęcia gospodarstwa - ta ostatnia ramka jest już czymś
 wypełniona (`historyPhoto`, stoisko na wystawie w Końskowoli), więc to prośba, a nie luka.
 
@@ -854,13 +857,57 @@ w proporcji 8:5, żeby pasek zachował wysokość - dziś żadna nie jest w tym 
 - Odmiana licznika roślin liczy się teraz po polsku w trzech formach; poprzednia reguła
   (`< 5`) dawała „22 roślin" przy dwucyfrowych końcówkach 2–4.
 
-## Prymulki
+## Prymulki - zamknięte we wrześniu 2026
 
-Właściciele sprzedają je w marcu razem z bratkami, ale **nie ma opisu ani zdjęcia**, więc nie
-ma wpisu w kolekcji: byłaby to zaślepka obiecująca stronę, która nie ma czego pokazać.
-Prymulki wchodzą **jako słowo** - w tytule kafla („Bratki i prymulki"), w tytule karty
-sezonowej i w zdaniu pod listą na `/bratki/`. Licznik nadal mówi „1 roślina", bo tyle liczy
-strona. Grupa `Prymulki` i własny adres to decyzja na później, razem z treścią.
+**Do września 2026 prymulki były na stronie samym słowem.** Nie było opisu ani zdjęcia, więc
+nie było wpisu w kolekcji: byłaby to zaślepka obiecująca stronę, która nie ma czego pokazać.
+Wchodziły w tytule kafla („Bratki i prymulki"), w tytule karty sezonowej i w zdaniu pod listą
+na `/bratki/`, a licznik mówił „1 roślina", bo tyle liczyła strona.
+
+Przyszło zdjęcie i opis, więc `prymulka.md` istnieje, `/bratki/` ma dwa wpisy, licznik mówi
+„2 rośliny", a spis „Na tej stronie" i odnośniki „Wróć do spisu roślin" pojawiły się same -
+`OfferSection` rysuje je dopiero od dwóch wpisów.
+
+- **Żadnej osobnej grupy i żadnego osobnego adresu.** Wpis siedzi w grupie `Bratki`.
+  Właściciele mówią, że sprzedają prymulki dokładnie wtedy co bratki - „bardziej marzec
+  i czasami początek kwietnia" - więc `src/data/season.ts` jest **nietknięty** i nadal ma
+  jedno okno `03-01 → 03-31` dla całej grupy.
+- **`h1` strony to teraz „Bratki i prymulki”**, czyli to, jak tę stronę od początku nazywa
+  `navigation.ts` i kafel na stronie głównej. `<title>`, `canonical` i okruszek zostają
+  „Bratki”: to jest słowo, na które strona ma się pozycjonować, a `h1` ma opisywać to, co
+  na stronie faktycznie stoi.
+- **Opis jest nasz, nie właścicieli** - drugi taki wpis na stronie, po chryzantemie
+  drobnokwiatowej. Poprawki wobec szkicu były wyłącznie stylistyczne: „Występuje w wielu
+  intensywnych kolorach” → „Kwitnie w wielu intensywnych barwach” (słowo „kolory” padało
+  w sąsiednim zdaniu, a chipy pod spodem i tak je wyliczają) oraz „Jest ceniona za” → „Ceni
+  się ją za”, bo pierwsza wersja kończyła się tą samą formułą co wpis drobnokwiatowej.
+- **Trzy zdjęcia do pasa** - `offer-05..07` w `src/assets/pansies/`. Dwa pierwsze to bratki
+  (karmin z ciemną plamką, ciemne bordo), trzecie to skrzynka prymulek; idą po czterech
+  dotychczasowych, prymulki na końcu, tak jak wpisy nad nimi. Czwarte zdjęcie z tej dostawy
+  poszło do wpisu (`plants/prymulka.jpg`) i **nie powtarza się w pasie**, choć było na liście
+  dwa razy: plik `(1)` okazał się bajt w bajt tym samym plikiem (identyczny md5).
+
+### Okno sprzedaży bratków i prymulek - do rozstrzygnięcia przez właścicieli
+
+Strona podaje ten termin w **dwóch różnych brzmieniach** i nikt tego nie zamówił:
+
+| Gdzie                                      | Co mówi           |
+| ------------------------------------------ | ----------------- |
+| `src/data/season.ts` (okno grupy `Bratki`) | `03-01 → 03-31`   |
+| `bratek-ogrodowy.md`, fakt `Sprzedaż`      | Marzec – kwiecień |
+| `prymulka.md`, fakt `Sprzedaż`             | Marzec – kwiecień |
+
+Rozjazd **jest zastany** - fakt przy bratku stał tak od dołożenia grupy i nie zmienił się,
+gdy właściciele skrócili okno do samego marca. Prymulka dostała tę samą wartość co bratek
+świadomie: dwa wpisy w jednej grupie nie mogą podawać dwóch różnych terminów, a wybór między
+„Marzec” a „Marzec – kwiecień” nie należy do nas. Szkic prymulki podawał jeszcze trzecią
+wersję, `1.2–30.4`, i **nie wszedł** - właściciele doprecyzowali, że to „bardziej marzec
+i czasami początek kwietnia”, czyli nie okno sprzedaży, tylko ogon.
+
+Do zapytania: czy `season.ts` ma zostać przy marcu (wtedy fakty przy obu wpisach powinny
+brzmieć „Marzec”), czy okno ma sięgać kwietnia (wtedy zmienia się też to, kiedy w całej
+witrynie zapala się chip „W sprzedaży”). Dopóki to nie jest rozstrzygnięte, automat trzyma
+się marca, bo obiecanie towaru, którego może już nie być, jest gorsze niż milczenie.
 
 ## Teksty kart sezonowych - wrzesień 2026
 
@@ -1823,10 +1870,11 @@ się co wzięło.
 | 0.13.2  | `/o-nas/` przechodzi na jasny grunt - była to jedyna ciemna podstrona, a naprzemienne tła są urządzeniem strony głównej. Znika przy tym styk ciemnej płyty ze stopką `--ink` (1,44:1), którego na stronie długiej na jeden blok nie dało się niczym przedzielić. `--green-deep` przestaje być gruntem jakiejkolwiek sekcji i zostaje wypełnieniem. Blok historii dostaje własne zdjęcie (`historyPhoto`, stoisko gospodarstwa z tablicą) zamiast obsadzenia pożyczanego z `/inspiracje/`. Szczegóły: [Strona „O nas” na jasnym gruncie](#strona-o-nas-na-jasnym-gruncie--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | 0.14.0  | _Weszło do repozytorium jednym commitem razem z 0.15.0._ Czwarty typ chryzantemy - **drobnokwiatowa**. Grupa rośnie z trzech wpisów do czterech, a repozytorium z 17 roślin do 18 i z 49 zdjęć do 50. Wpis wchodzi na `order: 16`, przed igiełkową, żeby strona czytała się malejącą wielkością kwiatu; igiełkowa i bratek przesuwają się o jeden. **Jedyny opis rośliny na stronie, którego nie napisali właściciele** - i jedyne zdjęcie wzięte z profilu Facebook gospodarstwa. Chipy kolorów celowo te same co u trzech pozostałych; siódemka zaproponowana przy wpisie leży w [Rozbieżnościach](#rozbieżności-między-handoffem-a-treścią-klienta) i czeka na potwierdzenie. Szczegóły: [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).                                                                                                                                                                                                                                                  |
 | 0.15.0  | Ósma paczka zdjęć - 18 kadrów chryzantem z Facebooka gospodarstwa, z czego **trzy były powtórzeniami** wykrytymi porównaniem percepcyjnym, nie hashem pliku. Repozytorium rośnie z 50 zdjęć do 65, a pas pod listą na `/chryzantemy/` z 4 do **19** kadrów: cztery mieszane, jedenaście rzędów ułożonych jako paleta kolorów i cztery gotowe doniczki. Doniczki stały przez jedną iterację w **drugim pasie** („Gotowe doniczki”) i właściciel kazał go usunąć, więc `OfferSection` wrócił do jednej tablicy zdjęć z etykietą zaszytą w komponencie. Kadry w pasie **powiększają się po kliknięciu**, na tym samym globalnym `lightbox.ts`, którego używa pokaz obsadzeń; komentarz w `PhotoStrip` mówił dotąd „no lightbox” i to jest świadome odwrócenie. Sam podgląd traci przy okazji **podpis pod zdjęciem** - powtarzał `alt` obrazka, który podgląd i tak nosi, więc czytnik ekranu czytał ten sam tekst dwa razy. Szczegóły: [Zdjęcia](#zdjęcia) i [Lupa w pasach zdjęć](#lupa-w-pasach-zdjęć--wrzesień-2026). |
+| 0.16.0  | **Prymulka dostaje wpis** - dziewiętnasta roślina i druga w grupie `Bratki`, która była jednoroślinna od powstania. Zamyka to otwarty punkt stojący od jej dołożenia: prymulki były na stronie samym słowem, bo nie było opisu ani zdjęcia. Żadnej nowej grupy i żadnego nowego adresu - właściciele sprzedają je dokładnie wtedy co bratki, więc `season.ts` jest nietknięty, a `h1` strony to teraz „Bratki i prymulki”, jak w menu i na kaflu (`<title>` zostaje „Bratki”). Pas na `/bratki/` rośnie z 4 do 7 kadrów. **Opis jest nasz, nie właścicieli** - drugi taki wpis po chryzantemie drobnokwiatowej. Przy okazji zapisany rozjazd terminu sprzedaży: `season.ts` mówi marzec, a fakty przy obu wpisach „Marzec – kwiecień”. Szczegóły: [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).                                                                                                                                                                                                                   |
 
 ### Paczki materiału od właścicieli
 
-Osiem dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
+Dziewięć dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
 i w [Wymianie opisów](#wymiana-opisów--wrzesień-2026); tutaj sam spis, bo kolejność bywa
 potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
 
@@ -1856,6 +1904,10 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
    hashu pliku). Największa dostawa od czasu obsadzeń: pas na `/chryzantemy/` rośnie z 4 do
    19 kadrów - rzędy uprawy i cztery gotowe doniczki - a kadry w pasie dostają lupę.
    Patrz [Zdjęcia](#zdjęcia).
+9. **4 zdjęcia bratków i prymulek z Facebooka gospodarstwa** - jedno poszło do nowego wpisu
+   `prymulka.md`, trzy do pasa na `/bratki/` (`offer-05..07`). Piąty plik na liście okazał się
+   bajt w bajt kopią pierwszego. Ta paczka **zamyka otwarty punkt o prymulkach**, który stał
+   od dołożenia grupy `Bratki`. Patrz [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).
 
 ## Polityka prywatności - wrzesień 2026
 
@@ -1882,7 +1934,7 @@ działalność to inne cele przetwarzania i inny zestaw usług zewnętrznych.
 
 ### Czego dokument świadomie nie mówi
 
-- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 65 zdjęć to
+- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 69 zdjęć to
   rośliny, obsadzenia i - od września 2026 - puste stoisko gospodarstwa. Jeśli do bloku
   historii trafi archiwalne zdjęcie z ludźmi (punkt 1 poniżej), paragraf wraca - z art. 6
   ust. 1 lit. a RODO i art. 81 prawa autorskiego. **Sprawdzone przy podmianie zdjęcia w bloku

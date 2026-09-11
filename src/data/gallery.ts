@@ -48,6 +48,9 @@ import pansy01 from "../assets/pansies/offer-01.jpg";
 import pansy02 from "../assets/pansies/offer-02.jpg";
 import pansy03 from "../assets/pansies/offer-03.jpg";
 import pansy04 from "../assets/pansies/offer-04.jpg";
+import pansy05 from "../assets/pansies/offer-05.jpg";
+import pansy06 from "../assets/pansies/offer-06.jpg";
+import pansy07 from "../assets/pansies/offer-07.jpg";
 import pansyCrate from "../assets/pansies/crate-yellow.jpg";
 import heroGlasshouse from "../assets/hero/hero-glasshouse.jpg";
 import konskowolaStand from "../assets/farm/konskowola-stand.jpg";
@@ -273,19 +276,22 @@ export const chrysanthemumStrip: GalleryPhoto[] = [
 
 /** The strip under the plant list on `/bratki/`: what a March crate actually looks like.
  *
- *  Same reasoning as `chrysanthemumStrip` and the same deliberate restraint: the entry's own
- *  photograph shows the flower, this row shows the offer. The frames are crates rather than
+ *  Same reasoning as `chrysanthemumStrip` and the same deliberate restraint: the entries' own
+ *  photographs show the flower, this row shows the offer. The frames are crates rather than
  *  single-variety portraits, so nothing here is attributed to a variety and the `alt` texts
- *  name colours instead. Order here is the order on the page.
+ *  name colours instead. Order here is the order on the page, and it follows the order of the
+ *  entries above it: pansies first, then the primrose crate, because `/bratki/` has held two
+ *  entries since September 2026 rather than one.
  *
  *  Also kept out of the plantings for the reason `chrysanthemumPhoto` is: the slideshow is the
  *  spring presentation of finished baskets and boxes, and a sales crate in the middle of it
  *  would read as a mistake.
  *
  *  These arrived without EXIF and already upright, unlike the gallery batch - no rotation had
- *  to be baked in. Three of the four are 1080x1920 and are committed byte-for-byte: they are
- *  under the 2000px ceiling, so a resize would be a no-op and re-encoding would only cost
- *  quality. `offer-01` came in at 1484x2048 and was scaled to 2000px like everything else.
+ *  to be baked in. Three of the first four are 1080x1920 and are committed byte-for-byte: they
+ *  are under the 2000px ceiling, so a resize would be a no-op and re-encoding would only cost
+ *  quality. `offer-01` came in at 1484x2048 and `offer-05..07` off the holding's Facebook page
+ *  at 1389-1508 x 2048; all four were scaled to 2000px like everything else.
  *
  *  **The alt texts are read off the pictures, not confirmed by the owners** (docs/inwentaryzacja.md). */
 export const pansyStrip: GalleryPhoto[] = [
@@ -296,4 +302,16 @@ export const pansyStrip: GalleryPhoto[] = [
   { src: pansy02, alt: "Skrzynka jednolicie żółtych bratków bez ciemnej plamki, widziana z góry" },
   { src: pansy03, alt: "Białe i kremowe bratki z ciemnofioletową plamką pośrodku kwiatu" },
   { src: pansy04, alt: "Fioletowe bratki z białym obrzeżem płatków i żółtym oczkiem" },
+  {
+    src: pansy05,
+    alt: "Skrzynka bratków w odcieniach różu, karminu i bordo, każdy kwiat z ciemną plamką",
+  },
+  {
+    src: pansy06,
+    alt: "Skrzynka ciemnobordowych bratków o aksamitnych płatkach, wśród jasnozielonych liści",
+  },
+  {
+    src: pansy07,
+    alt: "Skrzynka prymulek - białe, żółte, czerwone, różowe i fioletowe nad rozetami pomarszczonych liści",
+  },
 ];
