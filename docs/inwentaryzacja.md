@@ -378,6 +378,87 @@ bluszczolistna, sundaville.** Ani żywe strony, ani biblioteka mediów WordPress
 mają. Facebook gospodarstwa jest kolejnym miejscem do sprawdzenia, ale wymaga zalogowanej
 przeglądarki - nieosiągalny przez samo pobieranie stron.
 
+## Kadr zdjęć we wpisach - wrzesień 2026
+
+Właściciel zgłosił, że zdjęcia na stronach ofertowych stoją „w niedokońca poprawnej,
+nienaturalnej pozycji”, i wymienił alstromerię. Zgłoszenie było trafne, ale dotyczyło
+**wszystkich czternastu** zdjęć, nie jednego.
+
+### Co było źle
+
+`PlantEntry.astro` wtłaczał każde zdjęcie w sztywne pudełko **4:3** z `object-fit: cover`
+i **bez** `object-position`, więc przeglądarka zostawiała środkowy pas i wyrzucała resztę.
+Tymczasem **jedenaście z czternastu plików to kadry pionowe**, a cztery z nich mają proporcję
+telefonu 9:16. Ginęło od 39% do 59% zdjęcia, a to, co zostawało, było wycięte na ślepo:
+alstromeria, fuksja i niecierpek miały płatki obcięte krawędzią ramki, bratek tracił dolny
+rząd fioletowych kwiatów, begonia - żółty.
+
+**Rotacja nie miała z tym nic wspólnego.** Żaden z czternastu plików nie niesie już flagi
+EXIF `orientation`, więc obrót jest wypalony, tak jak wymaga tego punkt o zdjęciach wyżej.
+Sprawdzone, zanim cokolwiek zmieniono - „nienaturalna pozycja” brzmi jak przekręcony kadr
+i nim nie była.
+
+### Dlaczego samo wycelowanie kadru nie wystarczyło
+
+Pierwszym odruchem było powtórzenie wzorca z `Intro.astro`, gdzie ten sam problem rozwiązuje
+celowany `object-position: center 42%`. **To nie działa tutaj** i warto wiedzieć dlaczego:
+celowanie przesuwa pas, ale nie poszerza go. Przy alstromerii, fuksji i niecierpku kwiat jest
+po prostu **wyższy niż okno 4:3** - przy każdej wartości `object-position` płatki są obcięte,
+tylko z innej strony. Pomaga wyłącznie wyższa ramka.
+
+### Ile zostaje ze zdjęcia przy każdym wariancie
+
+| Plik                        | Źródło    | 4:3 (było) | 1:1 | 3:4  | własna, max 3:4 (jest) |
+| --------------------------- | --------- | ---------- | --- | ---- | ---------------------- |
+| alstromeria                 | 1278×1810 | 53%        | 71% | 94%  | **94%**                |
+| begonia                     | 528×960   | 41%        | 55% | 73%  | **73%**                |
+| bratek-ogrodowy             | 1622×2000 | 61%        | 81% | 92%  | **100%**               |
+| calibrachoa                 | 720×960   | 56%        | 75% | 100% | **100%**               |
+| chryzantema-igielkowa       | 1500×2000 | 56%        | 75% | 100% | **100%**               |
+| chryzantema-sredniokwiatowa | 1500×2000 | 56%        | 75% | 100% | **100%**               |
+| chryzantema-wielkokwiatowa  | 2000×1329 | 89%        | 66% | 50%  | **100%**               |
+| fuksja                      | 1268×1810 | 53%        | 70% | 93%  | **93%**                |
+| gozdzik                     | 528×960   | 41%        | 55% | 73%  | **73%**                |
+| heliotrop                   | 528×960   | 41%        | 55% | 73%  | **73%**                |
+| niecierpek-nowogwinejski    | 720×960   | 56%        | 75% | 100% | **100%**               |
+| pelargonia-rabatowa         | 960×540   | 75%        | 56% | 42%  | **100%**               |
+| tunbergia                   | 528×960   | 41%        | 55% | 73%  | **73%**                |
+| werbena                     | 960×720   | 100%       | 75% | 56%  | **100%**               |
+
+Żadna **jedna** proporcja nie obsługuje obu grup: 3:4 ratuje jedenaście kadrów pionowych
+i psuje trzy poziome (pelargonia spada do 42%), 1:1 nie psuje niczego do końca, ale też
+niczego nie pokazuje w całości, a 4:3 z handoffu jest dobre wyłącznie dla werbeny.
+
+### Co wybrano
+
+**Ramka bierze proporcję z samego pliku i jest ograniczona do 3:4** - nic nie jest kadrowane,
+dopóki zdjęcie nie jest wyższe niż 3:4, a wtedy `object-fit: cover` bierze środek. Decyzja
+właściciela, podjęta na oczy, na porównaniu czterech wariantów.
+
+Skutki: dziesięć zdjęć widać w całości, alstromeria i fuksja po 93-94%, a cztery kadry
+telefoniczne idą z 41% na 73%. Nic się nie pogorszyło - werbena, pelargonia i chryzantema
+wielkokwiatowa, dotąd kadrowane do 4:3, też są teraz całe.
+
+To jest **odejście od handoffu**, który prosi o „po jednym zdjęciu na każdą roślinę (4:3)”
+(`docs/design/README.md`, linia 388) i wymienia alstromerię imiennie w linii 282. Handoff
+zostaje bez adnotacji, tak jak przy kartach sezonowych - zapis idzie tutaj.
+
+### Jak to działa w kodzie
+
+`PlantEntry.astro` liczy `photoRatio` z `image.width / image.height`, podnosi do 3/4, jeśli
+plik jest wyższy, i podaje wynik do CSS jako `--entry-ratio` na elemencie. `aspect-ratio`
+czyta tę zmienną z zapasowym `4 / 3`. `width`/`height` opisują **pudełko, nie plik**, bo
+inaczej przeglądarka rezerwuje złą wysokość i tekst podskakuje przy wczytaniu zdjęcia.
+
+Dwie rzeczy, które to umożliwiły i o których łatwo zapomnieć:
+
+- **Wpisy stoją jeden pod drugim jako osobne wiersze**, nie w siatce (`article.entry` ma
+  własną dwukolumnową siatkę i `align-items: start`). Zdjęcia nie muszą więc mieć równej
+  wysokości - gdyby wpisy były kaflami, ten wariant byłby wykluczony.
+- **`PhotoSlot` dalej prosi o 4:3** i tak zostaje. Przy tej regule plik 4:3 ląduje w pudełku
+  4:3 nietknięty, więc zaślepka nadal pokazuje dokładnie ten kadr, o który prosimy
+  właścicieli dla dalii, pelargonii bluszczolistnej i sundaville.
+
 ## Trzecia karta sezonowa - wrzesień 2026
 
 Handoff rysuje **dwie** karty sezonowe (`docs/design/README.md`, sekcja 3); na stronie stoją
@@ -693,6 +774,104 @@ więc do brzmienia „jeszcze zanim ruszą”.
 Nie da się tego zresztą uratować rozciągnięciem okna na marzec: `seasonOn()` szuka przez
 `saleWindows.find()`, czyli bierze **pierwsze** pasujące okno, więc marzec i tak trafiłby na
 bratki, a balkonowe dostałyby `null`. Nakładające się okna łamią ten model, nie tylko datę.
+
+## Zgłoszenia właścicieli - wrzesień 2026, druga tura
+
+Pięć uwag po obejrzeniu strony na telefonie. Dwie okazały się usterkami z policzalną
+przyczyną, trzy były decyzjami treściowymi.
+
+### 1. Pokaz obsadzeń ścinał napisy z lewej po przełączeniu slajdu
+
+`.panel` miał `flex: 0 0 min(92vw, 980px)`. Na telefonie 92% _okna_ to 354 px, a ścieżka,
+w której panel się przewija, ma szerokość okna **minus `--edge` z obu stron**, czyli 345 px.
+Panel był więc o 9 px szerszy od swojego pojemnika, a przy `scroll-snap-align: center`
+przeglądarka wyśrodkowywała go i wystawał po 4,5 px z każdej strony - ścinając nadkreślenie
+i tytuł przy lewej krawędzi. Pierwszy panel wyglądał dobrze wyłącznie dlatego, że nie da się
+przewinąć przed początek ścieżki, więc przylegał do lewej i wystawał tylko w prawo.
+
+Naprawa to `min(100%, 980px)`: procent liczy się od pudełka treści ścieżki, więc panel mieści
+się w niej dokładnie przy każdej szerokości. Na desktopie `padding-inline` ścieżki i tak
+ogranicza to pudełko do 980 px, więc szeroki układ się nie zmienił - zmierzone: panel 980 px
+przed i po.
+
+### 2. Pozycje roślin zlewały się na telefonie
+
+`.entry` miał `border-bottom: 1px solid var(--rule)`, a `.facts` - `border-top: 1px solid
+var(--rule)`. **Handoff rysuje obie identycznie** (`1px #E0DDCE`, linie 260 i 271), co działa
+w dwóch kolumnach: kreska cech biegnie przez kolumnę tekstu, kreska wpisu przez całą stronę.
+W jednej kolumnie obie mają tę samą szerokość - zmierzone 345 px i 345 px, ten sam kolor,
+ta sama grubość - i przestają się różnić czymkolwiek. Czytelnik nie odróżnia "zaraz będą
+cechy" od "tu zaczyna się inna roślina".
+
+Nie ma breakpointu, w którym dałoby się to rozdzielić, więc jedna z dwóch kresek musiała
+zniknąć - i zniknęła ta, która niesie mniej znaczenia. **`.facts` nie ma już `border-top`**;
+separację przejmuje `padding-top: 1.4rem`. `.entry` zostaje przy `1px solid var(--rule)`.
+Na stronie ofertowej linia mówi odtąd dokładnie jedno: tu zaczyna się inna roślina.
+
+To odejście od handoffu, który dla bloku faktów specyfikuje `border-top: 1px solid #E0DDCE`
+i `padding-top: 0.85rem` wprost (`docs/design/README.md`, linia 271). Blok nic na tym nie
+traci: wersalikowe etykiety `dt` i tak zapowiadają, że zaczyna się inny rodzaj treści.
+
+### Co odrzucono i dlaczego
+
+Pierwszą próbą było **pogrubienie separatora wpisu** do `2px solid var(--rule-dim)`, z
+uzasadnieniem, że handoff używa `2px` dla aktywnej pozycji menu. Właściciel odrzucił: grubsza
+kreska jest znakiem, którego ten projekt nigdzie indziej na stronie nie stawia, i było to po
+prostu widać.
+
+Wybór padł z makiety czterech wariantów, obejrzanych obok siebie przy 400 px:
+
+| Wariant                         | Na czym polegał                                                    | Dlaczego nie                                                                                         |
+| ------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| **A - bez kreski nad cechami**  | kreska cech znika, zostaje odstęp                                  | **wybrany**                                                                                          |
+| B - krótka kreska nad cechami   | kreska cech skrócona do czterech znaków przy lewej krawędzi        | dokłada do projektu nowy element - krótką kreskę, której nigdzie indziej nie ma                      |
+| C - obie 1 px, więcej powietrza | rośnie tylko odstęp wokół końca wpisu, z 28 na 54 px               | jedyny wariant zgodny z handoffem, ale obie kreski nadal wyglądają tak samo - zarzut zostaje         |
+| D - nazwa nad zdjęciem          | obie kreski bez zmian, po kresce pada nazwa rośliny, a nie zdjęcie | rozwiązuje problem u źródła, ale wymaga zmiany układu wpisu, a nie jednej reguły - kandydat na potem |
+
+**Wariant D warto zapamiętać.** Dziś na telefonie po kresce idzie 460 px zdjęcia, a nazwa
+rośliny pojawia się dopiero pod nim, więc kreska niczego nie zapowiada. Gdyby granicę ogłaszał
+nagłówek, podobieństwo kresek przestałoby mieć znaczenie. Przeszkoda jest taka, że na desktopie
+nazwa ma zostać w prawej kolumnie, a projekt nie ma breakpointów - więc to zmiana układu
+`.entry`, nie jednej linijki CSS.
+
+### 3. FAQ: lista okresów wypadła z "Kiedy co jest w sprzedaży?"
+
+Z frontmattera zniknęło `data: season`. Odpowiedź zostaje, znika spod niej wyliczanka
+terminów. Właściciele uznali okresy za źle zrobione, a te same daty stoją już na kartach
+sezonowych i pod nagłówkiem każdej strony ofertowej - FAQ drukowało je w trzeciej, gorszej
+formie.
+
+**Mechanizm zostaje**: `data: "season"` nadal jest w schemacie, `Faq.astro` nadal umie ten
+blok narysować, a kalendarz nadal pochodzi z `season.ts`. Nic go dziś nie używa. Zostały też
+nieużywane reguły `.faq__row` i `.faq__months` w stylach komponentu.
+
+**Do rozważenia przy okazji:** odpowiedź nadal zaczyna się od "Sprzedajemy sezonowo, w trzech
+oknach w ciągu roku", a teraz już nie mówi, w których. Treść jest właścicieli i nie została
+przepisana; zdanie warto im pokazać.
+
+### 4. Zostają dwa telefony
+
+Tadeusz 602 518 401 i Jolanta 662 760 375 są nieaktualne i wypadły z `contact.ts`. Zostają
+Mateusz 722 238 987 i Łukasz 514 505 431. Ponieważ wszystko czyta z jednego miejsca, numery
+zniknęły naraz z: przycisku w intro, listy na `/kontakt/`, stopki, bloku `phones` na `/faq/`,
+przycisków na stronach ofertowych i w pokazie, strony 404 oraz pola `telephone` w JSON-LD.
+
+`primaryPhone` to nadal po prostu pierwszy z listy - czyli od teraz Mateusz, bo stara strona
+prowadziła numerem Tadeusza.
+
+### 5. Inspiracje wypadły ze stopki
+
+Właściciele uznali, że inspiracje nie są ofertą. Wypadły z kolumny "Oferta" **i ze stopki
+w ogóle** - wybrano usunięcie, nie przeniesienie do kolumny "Informacje".
+
+To **łamie regułę z CLAUDE.md**, wedle której stopka niesie płaską listę każdej strony i nie
+wolno jej przycinać. Reguła nie była kaprysem: stopka płaci za schowanie czterech kategorii
+za panelem "Oferta". Cztery kategorie zostają, więc ten rachunek nadal się zgadza; ubyła
+jedna pozycja spoza oferty. `/inspiracje/` jest dostępne z menu górnego i ze strony głównej.
+Zapisane w CLAUDE.md przy tamtej regule, żeby nikt nie "naprawił" tego z powrotem.
+
+`footerOfferLinks` przestało istnieć - stopka bierze wprost `offerPages`, bo alias nie wnosił
+już nic.
 
 ## Kalendarz - do przejrzenia z właścicielami
 

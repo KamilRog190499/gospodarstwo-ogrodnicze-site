@@ -97,8 +97,14 @@ const faq = defineCollection({
   schema: z.object({
     question: z.string(),
     order: z.number().int().positive(),
-    /** Which live block to render under the prose, if any. `phones` prints the four numbers
-     *  from `contact.ts`; `season` prints the windows from `season.ts`. */
+    /** Which live block to render under the prose, if any. `phones` prints the numbers from
+     *  `contact.ts`; `season` prints the windows from `season.ts`.
+     *
+     *  **Nothing sets `season` any more.** The owners had the window list taken off "Kiedy co
+     *  jest w sprzedaży?" in September 2026 - the dates live on the season cards and under
+     *  every category page's heading, and the FAQ was printing them in a third, worse form.
+     *  The value is kept because the block still works and the calendar is still the one in
+     *  `season.ts`; see docs/inwentaryzacja.md. */
     data: z.enum(["phones", "season"]).optional(),
   }),
 });

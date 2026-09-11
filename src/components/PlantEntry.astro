@@ -46,6 +46,32 @@ const { entry, level = 2, showGroup = false, priority = false, backToIndex = fal
 const { name, group, slot, image, imageAlt, facts, colors } = entry.data;
 const { Content } = await render(entry);
 
+/**
+ * The frame follows the photograph instead of forcing one ratio on all of them.
+ *
+ * The handoff asks for 4:3 per plant (docs/design/README.md), but eleven of the fourteen
+ * photographs the owners supplied are portrait and four of those are 9:16 phone frames. A 4:3
+ * window kept only 41-61% of them and took that band from the middle, so on alstromeria,
+ * fuksja and niecierpek - where the bloom is simply taller than the window - it clipped the
+ * petals at the frame edge. **`object-position` cannot fix that**: aiming moves the band, and
+ * no position helps when the subject does not fit in it. Only a taller box does.
+ *
+ * So the box is the file's own ratio, capped at 3:4: nothing is cropped unless the photograph
+ * is taller than that, and then `object-fit: cover` takes the middle. The four phone frames go
+ * from 41% to 73% and every other photograph is shown whole. A 4:3 file still lands in a 4:3
+ * box untouched, which is why `PhotoSlot` beside it keeps asking for 4:3.
+ *
+ * Chosen by the owner in September 2026 over a flat 3:4 and a flat 1:1, both of which fixed
+ * the portrait frames by breaking the three landscape ones. docs/inwentaryzacja.md has the
+ * measurements.
+ */
+const PHOTO_MIN_RATIO = 3 / 4;
+const photoRatio = image ? Math.max(image.width / image.height, PHOTO_MIN_RATIO) : null;
+
+/** `width`/`height` describe the **box**, not the file - otherwise the browser reserves the
+ *  file's height and the text under the photograph jumps when it loads. */
+const PHOTO_WIDTH = 560;
+
 const Heading = `h${level}` as "h2" | "h3" | "h4";
 ---
 
@@ -60,8 +86,9 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
           fallbackFormat="jpg"
           widths={[560, 1120]}
           sizes="(min-width: 1200px) 578px, (min-width: 700px) 45vw, 90vw"
-          width={560}
-          height={420}
+          width={PHOTO_WIDTH}
+          height={Math.round(PHOTO_WIDTH / photoRatio!)}
+          style={`--entry-ratio: ${photoRatio}`}
           alt={imageAlt}
           loading={priority ? "eager" : "lazy"}
           fetchpriority={priority ? "high" : undefined}
@@ -121,6 +148,15 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
 </article>
 
 <style>
+  /* **The only rule inside an entry, and that is what makes it readable.** The handoff draws
+     this separator and the one above `.facts` identically (1px `#E0DDCE`). In two columns that
+     works, because the facts rule spans the text column while this one spans the page. In one
+     column they collapse onto the same width and become the same mark, and the reader cannot
+     tell "the facts follow" from "a different plant starts here" - which the owners reported.
+     There is no breakpoint to fix it in, so one of the two had to go, and the one that carries
+     less meaning went: see `.facts`. A line on a category page now says exactly one thing.
+     Thickening this one instead was tried and rejected - a 2px rule is a mark this design does
+     not otherwise make on a page. */
   .entry {
     border-bottom: 1px solid var(--rule);
     padding-block: clamp(1.75rem, 4vw, 3rem);
@@ -136,15 +172,19 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
     gap: 0.6rem;
   }
 
-  /* The same box the placeholder holds - 4:3 and a 1px rule - so an entry with a photograph
-     and an entry still waiting for one line up in the same grid. 578px in `sizes` is the
-     photograph column at full width: --edge caps the content at 1200px, .entry splits it in
-     two, and --gap-entry takes at most 2.75rem out of the middle. */
+  /* The ratio comes from `--entry-ratio` on the element - the photograph's own, capped at 3:4;
+     the note beside `PHOTO_MIN_RATIO` above argues why. The fallback is the 4:3 the placeholder
+     holds, which is what an entry renders at if the custom property ever fails to land.
+     `object-fit: cover` only bites on the four frames taller than 3:4; for every other
+     photograph the box already matches the file and it crops nothing. The entries stack as
+     rows rather than sitting in a grid, so they do not have to share a height. 578px in
+     `sizes` is the photograph column at full width: --edge caps the content at 1200px, .entry
+     splits it in two, and --gap-entry takes at most 2.75rem out of the middle. */
   .entry__photo {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: var(--entry-ratio, 4 / 3);
     object-fit: cover;
     border: 1px solid var(--rule);
   }
@@ -188,12 +228,18 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
     color: var(--ink-soft);
   }
 
+  /* **Space, not a line** - a departure from the handoff, which gives this block
+     `border-top: 1px solid #E0DDCE` and `padding-top: 0.85rem` (docs/design/README.md). The
+     rule is what collided with the entry separator once the columns stacked; the block loses
+     nothing by it, because the uppercase `dt` labels already announce that a different kind of
+     content starts here. The padding grows to carry the separation the line used to. Chosen by
+     the owner in September 2026 from a mock-up of four alternatives; docs/inwentaryzacja.md
+     records what the other three were and why this one won. */
   .facts {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
     gap: 0.75rem 1.5rem;
-    border-top: 1px solid var(--rule);
-    padding-top: 0.85rem;
+    padding-top: 1.4rem;
   }
 
   /* `start`, not the default stretch: the item box is stretched to the tallest fact in the

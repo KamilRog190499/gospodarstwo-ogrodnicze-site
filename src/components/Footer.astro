@@ -1,6 +1,6 @@
 ---
 import { phones, address, facebook } from "../data/contact";
-import { footerOfferLinks } from "../data/navigation";
+import { offerPages } from "../data/navigation";
 import { versionLabel, buildStamp } from "../data/version";
 
 /**
@@ -14,12 +14,18 @@ import { versionLabel, buildStamp } from "../data/version";
  * The site name is a paragraph, not a heading: the footer repeats the masthead, and the
  * masthead is identity rather than a section of the document.
  *
- * Since 1.0 this is the only **flat** list of every page on the site: the menu moved the four
- * categories into an "Oferta" panel, which put them one click further from every page. The
- * offer column here is not decoration, and it is not a shorter version of the menu - it is
- * what pays that cost back, together with the "Pozostałe grupy" nav at the foot of every
- * category page. Do not trim it to save a line, and keep it derived from `footerOfferLinks`
- * so it cannot fall out of step with the panel.
+ * Since 1.0 this is the flat list the menu no longer offers: the four categories moved into an
+ * "Oferta" panel, which put them one click further from every page. The offer column here is
+ * not decoration, and it is not a shorter version of the menu - it is what pays that cost
+ * back, together with the "Pozostałe grupy" nav at the foot of every category page. Do not
+ * trim it to save a line, and keep it derived from `offerPages` so it cannot fall out of step
+ * with the panel.
+ *
+ * **It is no longer a list of every page.** "Inspiracje" stood in this column until September
+ * 2026, when the owners said that inspirations are not part of the offer and asked for it to
+ * come out of the footer rather than move to another column. So the slideshow is now reachable
+ * from the menu and the home page, and from nowhere down here - see `navigation.ts` and
+ * docs/inwentaryzacja.md. Everything above about the four categories still holds.
  *
  * Two departures from the prototype, both deliberate and both kept:
  *
@@ -47,7 +53,7 @@ const year = new Date().getFullYear();
       <h2 class="footer__label" id="footer-oferta">Oferta</h2>
       <ul class="footer__list">
         {
-          footerOfferLinks.map((item) => (
+          offerPages.map((item) => (
             <li>
               <a class="footer__link" href={item.href}>
                 {item.label}

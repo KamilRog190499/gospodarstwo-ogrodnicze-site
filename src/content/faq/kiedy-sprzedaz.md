@@ -1,7 +1,6 @@
 ---
 question: Kiedy co jest w sprzedaży?
 order: 3
-data: season
 ---
 
 Sprzedajemy sezonowo, w trzech oknach w ciągu roku. Wszystko pochodzi z własnej uprawy, więc

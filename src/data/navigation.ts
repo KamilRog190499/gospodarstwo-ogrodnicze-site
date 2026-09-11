@@ -83,13 +83,16 @@ export const offerPages: NavItem[] = offer.map((page) => ({
   href: page.href,
 }));
 
-/** Written once because it appears twice: beside the offer in the footer's first column, and
- *  as its own top-level menu entry. It is not inside the "Oferta" group - the slideshow is
- *  plantings, not a category of plants for sale. */
+/** Its own top-level menu entry, and deliberately not inside the "Oferta" group - the
+ *  slideshow is plantings, not a category of plants for sale.
+ *
+ *  It used to be exported to the footer as well, in the column headed "Oferta". The owners
+ *  said in September 2026 that inspirations are not part of the offer, and took the entry out
+ *  of the footer rather than moving it to another column - so the footer's list is no longer
+ *  every page on the site. That is a departure from the rule in CLAUDE.md and is written down
+ *  in docs/inwentaryzacja.md; the menu entry above is now the only way there besides the home
+ *  page. */
 const compositions: NavItem = { label: "Inspiracje", href: "/inspiracje/" };
-
-/** The offer plus the gallery - the pages someone in the footer is most likely looking for. */
-export const footerOfferLinks: NavItem[] = [...offerPages, compositions];
 
 export const navigation: NavEntry[] = [
   home,

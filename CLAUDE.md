@@ -52,7 +52,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/offer.ts`            | **The four groups and the four category pages, in one table.** Exports `plantGroups`, which `src/content.config.ts` turns into the schema's `z.enum` and `navigation.ts` turns into menu entries. A new group starts here, never in the schema. Also holds `plantCount()`, the Polish three-form plural.                               |
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                          |
 | `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages`, `footerOfferLinks` and `allPages` (flattened, for the 404).                                                                                                                       |
-| `src/data/contact.ts`          | Four phone numbers, the address, the directions URL, the Facebook link. `email` and `openingHours` are `null` - see Open items.                                                                                                                       |
+| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email` and `openingHours` are `null` - see Open items.                                                                                                                       |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                     |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                           |
 | `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                            |
@@ -320,8 +320,13 @@ plus manual viewport checks.
     answers may be open at once. Both use the same 1px chevron - one site, one mark for "this
     opens".
   - **The footer pays for the panel.** Hiding four ranking addresses behind a summary costs
-    them a click from every page. What pays it back is the footer's flat list of every page
-    and the "Pozostałe grupy" nav at the foot of every category page. Do not trim either.
+    them a click from every page. What pays it back is the footer's list of the four category
+    pages and the "Pozostałe grupy" nav at the foot of every category page. Do not trim either.
+    **It is no longer a flat list of every page**, and that is the owners' call, not a
+    regression: they said in September 2026 that "Inspiracje" is not part of the offer and had
+    it taken out of the footer rather than moved to another column, so `/inspiracje/` is now
+    reached from the menu and the home page only. Anything else that leaves the footer still
+    has to be argued - this one item was.
 - **The header tagline** "Sprzedaż kwiatów balkonowych, rabatowych i chryzantem" is the exact
   tagline from the current site - do not reword it, and **do not move it.** It was once
   relocated to the footer, where it landed one line above the footer blurb, which is a

@@ -586,8 +586,18 @@ const imageList =
     display: none;
   }
 
+  /* **The width is the track's, not the viewport's, and that is the whole point.** It used to
+     be `min(92vw, 980px)`: on a phone that is 92% of the *viewport*, while the track is the
+     viewport minus `--edge` on both sides, so every panel was about 9px wider than the box it
+     scrolls in. With `scroll-snap-align: center` the browser then centred that oversized panel
+     and it overhung by half of the difference at each end - which clipped the overline and the
+     title on the left of every panel after the first. The first looked fine only because a
+     scrollport cannot scroll past its own start, so panel one sat flush left and spilled to
+     the right alone. `100%` resolves against the track's content box, so a panel now fits it
+     exactly at every width; on a desk the track's `padding-inline` caps that box at 980px, so
+     nothing about the wide layout changes. */
   .panel {
-    flex: 0 0 min(92vw, 980px);
+    flex: 0 0 min(100%, 980px);
     scroll-snap-align: center;
     /* Anchors land under nothing - the masthead does not stick - but a jump to a panel
        should not put it flush against the viewport edge. */

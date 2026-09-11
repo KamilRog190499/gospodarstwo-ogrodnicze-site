@@ -2,7 +2,8 @@
  *  section, the footer and the LocalBusiness JSON-LD all read from here, so a number
  *  changes in one place.
  *
- *  Taken from http://gospodarstwo-saran.pl/kontakt-2/ and confirmed by the design handoff.
+ *  Taken from http://gospodarstwo-saran.pl/kontakt-2/ and confirmed by the design handoff -
+ *  except the phone list, which the owners cut in September 2026. See `phones`.
  */
 
 export interface Phone {
@@ -14,14 +15,20 @@ export interface Phone {
   href: string;
 }
 
+/** The numbers still in use.
+ *
+ *  The old site listed four. In September 2026 the owners said that Tadeusz's 602 518 401 and
+ *  Jolanta's 662 760 375 are no longer current, so both are gone. Everything that prints a
+ *  number reads from here - the intro CTA, the contact list, the footer, the `phones` block on
+ *  `/faq/` and the JSON-LD `telephone` - so they disappeared from all of them at once. Two
+ *  numbers on a page that used to show four is the owners' decision, not an omission. */
 export const phones: Phone[] = [
-  { person: "Tadeusz", display: "602 518 401", href: "tel:+48602518401" },
   { person: "Mateusz", display: "722 238 987", href: "tel:+48722238987" },
   { person: "Łukasz", display: "514 505 431", href: "tel:+48514505431" },
-  { person: "Jolanta", display: "662 760 375", href: "tel:+48662760375" },
 ];
 
-/** The number shown where only one fits - the intro CTA. First on the old site's list. */
+/** The number shown where only one fits - the intro CTA. Still simply the first on the list,
+ *  which is now Mateusz: the old site led with Tadeusz and that number was withdrawn. */
 export const primaryPhone = phones[0]!;
 
 export const address = {
