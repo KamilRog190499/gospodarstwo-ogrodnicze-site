@@ -33,8 +33,9 @@ interface Props {
   /** The `group` value in the plants' frontmatter. */
   group: PlantGroup;
   title: string;
-  /** Optional sentence beside the heading. `/chryzantemy/` ships without one - everything it
-   *  said (colours, selling dates) is now in the entries' own chips and facts. */
+  /** Sentence beside the heading. Defaults to `OFFER_LEAD` below, which is what all four
+   *  category pages want; pass a different one only for a page that genuinely says something
+   *  else, and `""` for a page that should say nothing. */
   lead?: string;
   /** Optional sentence under the list - what the group covers beyond the entries. */
   note?: string;
@@ -51,7 +52,23 @@ interface Props {
   photos?: GalleryPhoto[];
 }
 
-const { group, title, lead, note, photos } = Astro.props;
+/** The sentence every category page opens with.
+ *
+ *  **It lives here rather than in the four page files**, which is where `title`, `note` and the
+ *  meta description live. Those are page copy and differ page to page; this one is deliberately
+ *  identical on all four, and keeping four copies of it is what let them drift: by September
+ *  2026 `/kwiaty-balkonowe/` and `/rabatowe/` carried it and `/bratki/` and `/chryzantemy/` did
+ *  not, which is the defect the owner reported. One copy cannot drift.
+ *
+ *  `/chryzantemy/` is the page that dropped it, and the reason does not apply any more. What
+ *  the owners had removed there in September 2026 was a **different** sentence - "Duży wybór
+ *  kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada." - because it
+ *  repeated the selling dates and the colours that the entries' own facts and chips already
+ *  carry. This one claims neither; it says where to look. docs/inwentaryzacja.md has both. */
+const OFFER_LEAD =
+  "Kwiaty z naszej uprawy. Przy każdej roślinie są najważniejsze informacje o jej uprawie i o kolorach dostępnych u nas.";
+
+const { group, title, lead = OFFER_LEAD, note, photos } = Astro.props;
 
 const entries = (await getCollection("plants"))
   .filter((plant) => plant.data.group === group)

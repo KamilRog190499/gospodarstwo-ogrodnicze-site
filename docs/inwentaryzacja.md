@@ -175,9 +175,12 @@ Wszędzie wygrała treść klienta. Do przejrzenia z właścicielami:
 4. **Zdanie wprowadzające na `/chryzantemy/`** - „Duży wybór kolorów. Sprzedaż zaczyna się
    od początku października i trwa do 1 listopada.” - **usunięte na życzenie właścicieli**
    (wrzesień 2026). Termin sprzedaży mówią teraz „fakty” przy każdym z czterech wpisów,
-   a kolory - chipy. Prop `lead` w `OfferSection` jest od tego czasu opcjonalny; dwie
-   pozostałe strony oferty swoje zdanie zachowują. Opis strony (meta description) nadal
-   podaje termin, więc dla wyszukiwarki nic nie przepadło.
+   a kolory - chipy. Opis strony (meta description) nadal podaje termin, więc dla
+   wyszukiwarki nic nie przepadło.
+   **Uwaga, żeby tego nie przeczytać za szeroko:** usunięte zostało **konkretne zdanie**,
+   bo powtarzało daty i kolory, a nie sama idea zdania wprowadzającego. Od
+   [wyrównania lidów](#wyrównanie-lidów---wrzesień-2026) `/chryzantemy/` znowu ma lid - ten
+   wspólny, który nie podaje ani terminu, ani kolorów.
 5. **Logo.** Handoff mówi, że logotypu nie ma. Stara strona ma go w
    `wp-content/uploads/2019/09/cropped-logo2-*.jpg`. Do decyzji, czy wraca.
 
@@ -1487,10 +1490,40 @@ właściciele ich użyli.
 Pierwsze zdanie było przepisane słowo w słowo z `docs/design/README.md`. Oba nowe są
 w rejestrze bezosobowym - ta sama decyzja, co przy poradach.
 
-**Świadomie przyjęta nieścisłość:** na stronie głównej sekcja „Kwiaty w naszej ofercie”
-pokazuje cztery kafle kategorii, a nie listę roślin, więc zdanie o „każdej roślinie” jest tam
-nietrafione. Ta wada jest w projekcie od handoffu; utrzymana na wyraźną decyzję, żeby trzy
-miejsca mówiły jednym zdaniem, zamiast rozjeżdżać się na dwa warianty.
+**Świadomie przyjęta nieścisłość - zamknięta we wrześniu 2026.** Na stronie głównej sekcja
+„Kwiaty w naszej ofercie” pokazuje cztery kafle kategorii, a nie listę roślin, więc zdanie
+o „każdej roślinie” było tam nietrafione. Wada szła od handoffu i była utrzymywana świadomie,
+żeby trzy miejsca mówiły jednym zdaniem zamiast rozjechać się na dwa warianty. Właściciel
+podał osobny tekst dla strony głównej i ten kompromis się skończył - patrz
+[Wyrównanie lidów](#wyrównanie-lidów---wrzesień-2026).
+
+## Wyrównanie lidów - wrzesień 2026
+
+Zgłoszenie właściciela: „wyrównaj nagłówki”. Cztery strony kategorii miały mówić jedno zdanie,
+a mówiły dwa - `/kwiaty-balkonowe/` i `/rabatowe/` miały lid, `/bratki/` i `/chryzantemy/` nie.
+
+- **Zdanie zeszło z czterech plików stron do `OfferSection.astro`**, jako stała `OFFER_LEAD`
+  i domyślna wartość propa `lead`. Żadna strona już go nie przekazuje. To odstępstwo od reguły,
+  że tekst strony mieszka w pliku strony (`title`, `note`, `description` mieszkają tam nadal)
+  - uzasadnione tym, że **to jedyne zdanie, które ma być identyczne na wszystkich czterech**,
+    a cztery kopie jednego zdania to dokładnie ten mechanizm, który doprowadził do zgłoszenia.
+    Jedna kopia nie ma jak się rozjechać. Strona, która chciałaby powiedzieć co innego, nadal
+    może podać własny `lead`, a `lead=""` wyłącza go zupełnie.
+- **`/chryzantemy/` odzyskało lid i to nie jest cofnięcie decyzji właścicieli.** We wrześniu
+  2026 kazali usunąć stamtąd **inne** zdanie - „Duży wybór kolorów. Sprzedaż zaczyna się od
+  początku października i trwa do 1 listopada.” - bo powtarzało termin i kolory, które niosą
+  już fakty i chipy przy wpisach. Wspólny lid nie podaje ani jednego, ani drugiego; mówi, gdzie
+  czego szukać.
+- **Strona główna dostała własny tekst**, podany przez właściciela: „Nasza oferta obejmuje
+  różnorodne gatunki i odmiany kwiatów, dopasowane do różnych potrzeb i warunków uprawy.
+  Różnorodność kolorów, form i terminów kwitnienia pozwala wybrać rośliny odpowiednie na każdy
+  sezon.” Tym samym **domyka nieścisłość opisaną wyżej**: sekcja pokazuje cztery kafle
+  kategorii, więc zdanie o „każdej roślinie” opisywało tam coś, czego na ekranie nie ma. Teraz
+  kafle mówią o ofercie jako całości, a cztery strony o tym, co stoi przy każdej roślinie.
+- **Zgłoszenie zawierało literówkę** - polecenie brzmiało „zamień X na X”, dwa razy to samo
+  zdanie. Przyjęto odczytanie wynikające z reszty zgłoszenia: zdanie zostaje na stronach
+  kategorii i ma być na wszystkich czterech, a nowy tekst dotyczy strony głównej. Do
+  potwierdzenia, gdyby intencja była inna.
 
 ## Rozdzielenie sekcji i zmiana kroju - wrzesień 2026
 
@@ -1871,6 +1904,7 @@ się co wzięło.
 | 0.14.0  | _Weszło do repozytorium jednym commitem razem z 0.15.0._ Czwarty typ chryzantemy - **drobnokwiatowa**. Grupa rośnie z trzech wpisów do czterech, a repozytorium z 17 roślin do 18 i z 49 zdjęć do 50. Wpis wchodzi na `order: 16`, przed igiełkową, żeby strona czytała się malejącą wielkością kwiatu; igiełkowa i bratek przesuwają się o jeden. **Jedyny opis rośliny na stronie, którego nie napisali właściciele** - i jedyne zdjęcie wzięte z profilu Facebook gospodarstwa. Chipy kolorów celowo te same co u trzech pozostałych; siódemka zaproponowana przy wpisie leży w [Rozbieżnościach](#rozbieżności-między-handoffem-a-treścią-klienta) i czeka na potwierdzenie. Szczegóły: [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).                                                                                                                                                                                                                                                  |
 | 0.15.0  | Ósma paczka zdjęć - 18 kadrów chryzantem z Facebooka gospodarstwa, z czego **trzy były powtórzeniami** wykrytymi porównaniem percepcyjnym, nie hashem pliku. Repozytorium rośnie z 50 zdjęć do 65, a pas pod listą na `/chryzantemy/` z 4 do **19** kadrów: cztery mieszane, jedenaście rzędów ułożonych jako paleta kolorów i cztery gotowe doniczki. Doniczki stały przez jedną iterację w **drugim pasie** („Gotowe doniczki”) i właściciel kazał go usunąć, więc `OfferSection` wrócił do jednej tablicy zdjęć z etykietą zaszytą w komponencie. Kadry w pasie **powiększają się po kliknięciu**, na tym samym globalnym `lightbox.ts`, którego używa pokaz obsadzeń; komentarz w `PhotoStrip` mówił dotąd „no lightbox” i to jest świadome odwrócenie. Sam podgląd traci przy okazji **podpis pod zdjęciem** - powtarzał `alt` obrazka, który podgląd i tak nosi, więc czytnik ekranu czytał ten sam tekst dwa razy. Szczegóły: [Zdjęcia](#zdjęcia) i [Lupa w pasach zdjęć](#lupa-w-pasach-zdjęć--wrzesień-2026). |
 | 0.16.0  | **Prymulka dostaje wpis** - dziewiętnasta roślina i druga w grupie `Bratki`, która była jednoroślinna od powstania. Zamyka to otwarty punkt stojący od jej dołożenia: prymulki były na stronie samym słowem, bo nie było opisu ani zdjęcia. Żadnej nowej grupy i żadnego nowego adresu - właściciele sprzedają je dokładnie wtedy co bratki, więc `season.ts` jest nietknięty, a `h1` strony to teraz „Bratki i prymulki”, jak w menu i na kaflu (`<title>` zostaje „Bratki”). Pas na `/bratki/` rośnie z 4 do 7 kadrów. **Opis jest nasz, nie właścicieli** - drugi taki wpis po chryzantemie drobnokwiatowej. Przy okazji zapisany rozjazd terminu sprzedaży: `season.ts` mówi marzec, a fakty przy obu wpisach „Marzec – kwiecień”. Szczegóły: [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).                                                                                                                                                                                                                   |
+| 0.16.1  | Wyrównanie lidów na zgłoszenie właściciela. Zdanie otwierające strony kategorii schodzi z czterech plików stron do `OfferSection` jako `OFFER_LEAD` i domyślna wartość propa - dwie strony je miały, dwie nie. `/chryzantemy/` odzyskuje lid; to **nie** jest cofnięcie decyzji z września 2026, bo usunięte tam było inne zdanie, powtarzające termin i kolory. Sekcja „Kwiaty w naszej ofercie” na stronie głównej dostaje własny tekst od właściciela i **zamyka świadomie przyjętą nieścisłość** ciągnącą się od handoffu: pokazuje cztery kafle kategorii, a mówiła o „każdej roślinie”. Szczegóły: [Wyrównanie lidów](#wyrównanie-lidów---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                        |
 
 ### Paczki materiału od właścicieli
 
