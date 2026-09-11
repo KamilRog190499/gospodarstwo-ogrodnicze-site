@@ -62,6 +62,38 @@ nagłówkiem leżącym na zdjęciu na stronie głównej. Nie używać go nigdzie
 Tagline w nagłówku (sekcja 1 niżej) obowiązuje i stoi w nagłówku. Wersja 0.5 przeniosła go
 do stopki; 0.6 cofa tę zmianę, bo nie była z nikim ustalona.
 
+## ⚠️ Rewizja z września 2026 - co jeszcze przestało obowiązywać
+
+Motyw 2a zastąpił paletę i kroje; ta rewizja idzie dalej i dotyka **układu strony głównej,
+kroju szeryfowego, tła sekcji i odstępów**. Źródłem prawdy pozostaje `src/styles/tokens.css`.
+Powód był jeden i zgłosił go właściciel: strona główna „wszystko się zlewa".
+
+| Element             | Stan wcześniejszy (nieaktualny)                               | Po rewizji (obowiązuje)                                                                                                                                                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Krój szeryfowy      | Newsreader                                                    | **Fraunces** - plik `opsz` z Fontsource (osie `opsz` + `wght`; `SOFT` i `WONK` świadomie niewczytane). Powód i rachunek wagi: nagłówek `src/styles/fonts.css`                                                                                                                                 |
+| Skala display       | wartości motywu 2a                                            | wszystkie stopnie **w dół o 4%** - Fraunces ma wyraźnie większą wysokość x niż Newsreader. `--text-body` bez zmian, bo niesie je Public Sans                                                                                                                                                  |
+| `--text-h1`         | `clamp(1.95rem, 1.3rem + 2.6vw, 3.05rem)`, waga 350 lokalnie  | `clamp(2.1rem, 1.35rem + 3.8vw, 3.75rem)`; lokalna korekta wagi usunięta - nagłówek nie leży już na zdjęciu. Renderuje się nadal w 350, bo tyle ustawia `global.css` dla wszystkich nagłówków                                                                                                 |
+| `--text-nav`        | `clamp(0.86rem, 0.8rem + 0.28vw, 0.98rem)`, tracking `0.08em` | **powrót do handoffu: `0.78rem`, tracking `0.1em`.** Odejściem od handoffu jest teraz `--nav-pad-block: 3px` (pasek 54 px zamiast 48)                                                                                                                                                         |
+| Tła stron           | maks. dwa jasne (`--paper`, `--paper-dim`)                    | **cztery ciepłe jasne** - `--paper`, `--paper-linen` `#F7F3EA`, `--paper-clay` `#F4EEE4`, `--paper-blush` `#F5EDE6` - różniące się odcieniem, nie jasnością. Ciemne: `--green-deep` (historia na `/o-nas/`), `--green-band` `#38442F` (wszystkie trzy płyty strony głównej), `--ink` (stopka) |
+| `--pad-section`     | `clamp(2.5rem, 6vw, 4.5rem)`                                  | `clamp(3rem, 8vw, 6rem)` - wartość z projektu alpak. Bez tego same pasy nie rozdzielają sekcji                                                                                                                                                                                                |
+| Akcent              | wyłącznie zieleń                                              | dochodzi **ochra** `--ochre` `#875B0C` / `--ochre-lit` `#E8B75C`, wyłącznie w nadtytułach i licznikach. Ten sam token co na stronie alpaki-kazimierzdolny.pl                                                                                                                                  |
+| Hero strony głównej | panorama 3:1 ze scrimem, `h1` na zdjęciu                      | **dwie kolumny**: tekst + kadr 4:5. Znika `--hero-scrim` (jedyny gradient tonalny) i jedyna media query w projekcie                                                                                                                                                                           |
+| Kafle oferty        | bez znacznika daty                                            | **chip sezonowy** w trzech stanach: „W sprzedaży" / „Wkrótce" / „Poza sezonem"                                                                                                                                                                                                                |
+
+Sekcja „Rytm roku" i numerowane tablice I–IV z wariantu „zielnik" **nadal nie są wdrożone** -
+z tamtej makiety weszło wyłącznie hero.
+
+Kontrasty (kolor na kolorze liczy się arytmetycznie, więc to nie są szacunki). Etykiety
+wersalikami `--ink-grey` na czterech jasnych gruntach: 4,99 / 4,82 / 4,62 / 4,61:1 - próg 4,5.
+Na płycie `--green-band` `#38442F`: `--bone` 8,96:1, `--green-body` 7,80:1, `--green-lit`
+6,58:1, `--ochre-lit` 5,58:1, `--paper` 9,64:1.
+
+**Dwie granice, które wyznaczają całą paletę, a nie gust:** jasny grunt musi mieć luminancję
+co najmniej 0,8353, inaczej etykiety schodzą poniżej AA - dlatego jasne grunty różnią się
+odcieniem, a nie ciemnością. Ciemna płyta musi mieć najwyżej 0,076, inaczej gaśnie na niej
+ochra - dlatego cały używalny zakres ciemnych zieleni to 1,80:1 od końca do końca i **dwie
+sąsiadujące ciemne płyty nigdy nie przeczytają się jako dwie.**
+
 ## Design Tokens
 
 ### Kolory

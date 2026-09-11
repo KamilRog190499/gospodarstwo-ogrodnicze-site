@@ -1,13 +1,22 @@
-/* Design tokens - the "Poranek w tunelu" (2a) theme, approved September 2026.
- * It supersedes the palette and the typefaces in docs/design/README.md. The rest of this
- * file's doctrine is unchanged: no component hardcodes a colour, a size or a spacing, and
- * there is still no border radius, no shadow and no gradient - with one exception, below.
+/* Design tokens - the "Poranek w tunelu" (2a) theme, approved September 2026, with the
+ * September 2026 revision that follows it. Together they supersede the palette and the
+ * typefaces in docs/design/README.md; that document keeps the pre-2a values as a record of
+ * the original handoff and is not a source to copy from.
  *
- * What changed against the previous version:
+ * The doctrine that has not changed: no component hardcodes a colour, a size or a spacing,
+ * and there is no border radius and no shadow. **The one tonal gradient in the design is gone**
+ * as of the revision below - it went out with the thing it existed for.
  *
- * - typefaces: Instrument Serif -> Newsreader (a softer stroke, optical axes, a complete
- *   set of Polish glyphs), Karla -> Public Sans (wider fit, easier to read in the small
- *   uppercase labels this design uses a lot of).
+ * `grep -rn "gradient" src/` still finds two, and both are fine: `PhotoSlot` and `MapEmbed`
+ * hatch their "nothing here yet" boxes with a `repeating-linear-gradient` whose stops are
+ * hard-edged (0 12px, 12px 24px), so it draws a stripe pattern and never a blend. That is the
+ * prototype's own device for a pending frame and it is not what the no-gradients rule was
+ * ever about.
+ *
+ * ## Theme 2a (the first pass)
+ *
+ * - typefaces: Instrument Serif -> Newsreader, Karla -> Public Sans (wider fit, easier to
+ *   read in the small uppercase labels this design uses a lot of).
  * - the green split in two. The old --green served as both link text and decoration; one
  *   shade cannot be light enough to lift the page and dark enough to pass AA as text at
  *   the same time. Now --green (#5A6D46, 4.95:1 on paper) is the text green and --sage
@@ -19,10 +28,32 @@
  * - --ink-grey lifted from #5B6153 to #656E5B. The old value gave 4.3:1 on the new paper,
  *   and it carries every uppercase label and every photo caption.
  *
- * The only gradient in the design: --hero-scrim, the darkening under the heading that lies
- * on the photograph in Intro.astro. It is not decoration - without it the white text over
- * the tunnel photograph drops to 2:1 in places. Do not copy it anywhere else.
- */
+ * ## The revision, on the owner's report that the home page "all blends together"
+ *
+ * The complaint was about separation, and it had three answers rather than one - none of
+ * which works on its own:
+ *
+ * - **More light grounds and dark plates on the home page.** This reverses the "at most two
+ *   page backgrounds" rule that this file used to state. It landed in two passes: first a
+ *   third, cool ground and one dark band, then - after seeing it - four warm grounds and three
+ *   dark plates, which is what ships. Recorded, with the reason, in docs/inwentaryzacja.md.
+ * - **A third more air between sections** (--pad-section). A painted background at the old
+ *   spacing colours sections instead of parting them.
+ * - **A warm accent** (--ochre), the first colour here from outside the green family, and
+ *   the one that does most of the work. Its boundary is written at the token.
+ *
+ * In the same pass: Newsreader -> **Fraunces**, on the owner's choice (see fonts.css for
+ * which of the six Fontsource files is loaded and what that trade costs); the whole display
+ * scale came down 4%, because Fraunces has a markedly larger x-height and the old values read
+ * a step too large in it; and the menu step went back to the handoff's 0.78rem.
+ *
+ * **--hero-scrim is gone.** It was the only tonal gradient in the design and the only place on the
+ * site where contrast had to be measured in a browser rather than computed, because its
+ * background was a photograph. The home page hero no longer puts text on an image, so the
+ * gradient, its four hand-tuned stops and the whole measuring procedure went with it. The
+ * procedure is written up in docs/inwentaryzacja.md in case text ever lands on a photograph
+ * again - do not reinvent it, and do not estimate it offline.
+  */
 
 :root {
   /* ---------- colour ---------- */
@@ -30,6 +61,45 @@
   /* grounds */
   --paper: #faf7f0; /* Paper - the page ground, and text on dark */
   --paper-dim: #f2efe4; /* Dimmed paper - the season strip, chips, section grounds */
+  /* Clay, linen and blush - the warm light grounds of the home page, September 2026. They
+     replaced a single alternating pair and reversed the "at most two page backgrounds" rule
+     this file used to state, on the owner's report that the home page all blended together.
+     The reversal and its reason are in docs/inwentaryzacja.md; do not revert it on the
+     strength of the old sentence alone.
+
+     **They differ in hue, not in lightness, and that is forced rather than chosen.**
+     --ink-grey carries every uppercase label and every photo caption on the site, and it needs
+     a ground of at least L 0.8353 to hold 4.5:1 against it. A fourth ground half a step darker
+     would take every label on the page under AA at once. So the room that is left is sideways:
+
+       --paper        L 0.931   4.99:1    the masthead, and light plates on the dark bands
+       --paper-linen  L 0.876   4.82:1    the menu bar
+       --paper-clay   L 0.860   4.62:1    the offer tiles and the news block
+       --paper-blush  L 0.855   4.61:1    the hero, the warmest of the four
+
+     A fifth ground, --paper-sage #EBEEE1, lived here between September's two revisions at
+     4.54:1 - the floor itself. It went when the calendar and the directions block became dark
+     plates and nothing was left standing on it. If a cool ground is ever wanted again, that
+     value is the darkest one that still works.
+
+     Careful where cards sit on these: a --paper-dim card on clay is 1.003:1, which is no card
+     at all. Anything that must read as a plate on a warm ground uses --paper - 1.08:1, faint
+     but real, and the register every card on this site already uses. */
+  --paper-clay: #f4eee4;
+  /* Two more light grounds, September 2026. All four warm papers now sit within one step of
+     each other in lightness and differ in hue instead - which is not a stylistic preference
+     but the only room left: --ink-grey carries every uppercase label and every photo caption,
+     and it needs a ground of at least L 0.8353 to hold 4.5:1. Sage, the darkest ground this
+     site ever had, is at 4.54:1. There is no second step downwards.
+
+       --paper        4.99:1    --paper-linen  4.82:1
+       --paper-clay   4.62:1    --paper-blush  4.61:1
+
+     Linen is the masthead bar's ground and blush the hero's; the two differ from the paper
+     above them by 1.03 and 1.05 to one, which is why the header's rules do the separating
+     there and the colour only warms the band. */
+  --paper-linen: #f7f3ea;
+  --paper-blush: #f5ede6;
 
   /* rules */
   --rule: #e2ddce; /* Rule - every 1px line, card and photo borders */
@@ -46,10 +116,72 @@
   --sage: #6b7f55; /* Decorative green - type >=24px ONLY (3.9:1) */
   --green-deep: #3d4a33; /* Deep green - buttons, the lit card, the skip link */
   --green-slot: #33402b; /* Tunnel green - photo placeholders on dark */
+  /* The three dark plates on the home page - the season calendar, the plantings strip and the
+     directions block - and the only user of this token. It is not --green-deep, which stays
+     what it always was: the history block on /o-nas/, the buttons, the chips.
+
+     The value took four tries and each rejection is worth keeping, because two of them pointed
+     the wrong way:
+
+       #3D4A33  --green-deep, the first attempt      "za ciemne"
+       #556848  roughly twice its luminance          "nie ten kolor"
+       #2E3A2B  darker than both                     "ten kolor super"
+       #38442F  this one, chosen for all three plates
+
+     The lesson in the middle of that list: "too dark" turned out to mean "wrong hue", and the
+     answer lay in the opposite direction from the one the first note suggested. Do not act on
+     a one-word colour note without showing alternatives side by side.
+
+     Every text colour clears AA on it with room, so nothing had to be given up:
+
+       --bone         8.96:1   headings
+       --green-body   7.80:1   paragraphs
+       --green-lit    6.58:1   labels and captions
+       --ochre-lit    5.58:1   overlines
+       --paper        9.64:1   type on a light fill, and the lit season card
+
+     What it still costs is two fills, unchanged from the darker version: a chip or a button
+     filled with --green-slot or --green-deep is 1.13:1 and 1.06:1 against this ground - a
+     plate you cannot see. On these plates chips are outline-only and pressed states invert to
+     a light fill with dark type. SeasonCards.astro, Compositions.astro and Directions.astro
+     each say so at the point where they do it.
+
+     **The plates must not touch each other.** Above L 0.076 the ochre overline fails and above
+     L 0.098 the labels do, so the whole usable range of dark greens spans 1.80:1 end to end -
+     two adjacent plates can never read as two. On the home page they are always parted by a
+     light section, and that is a constraint on section order, not a preference. */
+  --green-band: #38442f; /* Plate green - the three dark bands on the home page */
   --green-lit: #c6d3b6; /* Lit green - uppercase labels on dark */
   --green-slot-text: #d3dcc6;
   --green-body: #dde2d2; /* Paragraphs on --green-deep */
   --bone: #eef0e6; /* Headings on --green-deep and on --ink */
+
+  /* ---------- ochre ---------- */
+
+  /* The first colour in this project from outside the green family, added September 2026
+     together with the three grounds and for the same reason: the sections needed telling
+     apart, and a warm accent does more of that work than a third background does.
+     Deliberately the same value the sibling site alpaki-kazimierzdolny.pl uses, so the two
+     sites read as one family rather than as two designs that happen to share an owner.
+
+     **The boundary is part of the decision, not an implementation detail:** ochre goes in
+     overlines and in counters ("11 roślin"). It never goes in body text, in buttons, in prose
+     links, in the menu underline or in the season chips - all of those stay green. Without
+     that line written down, an accent spreads until it is no longer an accent.
+
+     Contrast is arithmetic on flat colour, so these are computed rather than measured - the
+     one thing on this site that ever needed a browser to measure it was text lying on a
+     photograph, and that is gone:
+
+       --ochre     on --paper        5.56:1
+       --ochre     on --paper-linen  5.37:1
+       --ochre     on --paper-clay   5.15:1
+       --ochre     on --paper-blush  5.14:1
+       --ochre-lit on --green-band   5.58:1
+       --ochre-lit on --green-deep   5.10:1
+       --ochre-lit on --ink          8.05:1 */
+  --ochre: #875b0c; /* Ochre - overlines and counters on the light grounds */
+  --ochre-lit: #e8b75c; /* Lit ochre - the same job on --green-deep and --ink */
 
   /* focus */
   /* The :focus-visible outline colour, kept as a variable because this one value has to
@@ -69,37 +201,6 @@
      the ring, not what lies under it. */
   --focus-ring: var(--green);
 
-  /* hero */
-  /* Under the heading that lies on the photograph. Four stops, because two left a visible
-     edge across the middle of the frame, and three - the first version of this theme - had
-     their density judged by eye, which landed the text in the 30-40% alpha band: the
-     heading came out at 2.4:1 and the eyebrow above it at 1.5:1 over the bright band of
-     petunias in the tunnel photograph. Measured on the pixels, not judged by eye.
-
-     The second version densified the heading's band alone and let the eyebrow above it
-     slip through: the heading reached 7.2:1 and the eyebrow only 3.1:1, because it is the
-     highest element in the scrim and was already sitting on the falling slope. The element
-     that decides this is the higher one, not the larger one.
-
-     Recomputed for the 3:1 panorama: the scrim is shorter than it was in the 21:9 version
-     (2.75rem of top padding instead of 5.5rem, so the gradient fits the frame and leaves a
-     visible band of photograph), so the eyebrow sits higher on the slope. That is why the
-     slope is denser and shorter: 72% alpha reaches 92% of the height and the fade is
-     closed into the top 8%. The eyebrow falls in a band of ~0.77 alpha - about 5.2:1, with
-     the heading at about 7:1 over the brightest part of the frame. This is the lower bound
-     for the darkening: any lighter and the 10.5px eyebrow drops below 4.5:1.
-
-     If you change the scrim's padding or the length of the heading, measure this again -
-     together those two decide how high up the gradient the text sits. Measure the
-     eyebrow. */
-  --hero-scrim: linear-gradient(
-    to top,
-    rgb(18 27 19 / 88%) 0%,
-    rgb(18 27 19 / 84%) 55%,
-    rgb(18 27 19 / 72%) 92%,
-    rgb(18 27 19 / 0%) 100%
-  );
-
   /* footer */
   --footer-body: #c3cbb8;
   --footer-label: #96a188;
@@ -108,41 +209,46 @@
 
   /* ---------- type ---------- */
 
-  --serif: "Newsreader Variable", Newsreader, Georgia, serif;
+  --serif: "Fraunces Variable", Fraunces, Georgia, serif;
   --sans: "Public Sans Variable", "Public Sans", system-ui, sans-serif;
   --mono: ui-monospace, Menlo, monospace;
 
   /* `auto` is the property's own initial value, so this is belt-and-braces rather than a
-     behaviour change - see src/styles/fonts.css for why the loaded Newsreader files vary
-     `opsz` at all. Inherited, so one declaration here covers every element. */
+     behaviour change - see src/styles/fonts.css for why the loaded Fraunces file carries an
+     `opsz` axis at all, and what was given up to keep it. Inherited, so one declaration here
+     covers every element. */
   font-optical-sizing: auto;
 
   --text-body: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
-  /* The `h1` on the home page photograph, and the only user of this token in the project -
-     every other page's `h1` is drawn at --text-h2-wide. So this step can be tuned for that
-     one heading without touching anything else, which is what happened in September 2026.
+  /* The home page `h1`, and the only user of this token in the project - every other page's
+     `h1` is drawn at --text-h2-wide. So this step can be tuned for that one heading without
+     touching anything else, which is what happened twice in September 2026.
 
-     It was clamp(2.1rem, 1.35rem + 3.4vw, 3.9rem), reasoned as "it has to hold up against
-     the 3:1 panorama on a 1400px monitor". At 1440px that came out at 62.4px of Newsreader
-     over the scrim, and the owners called it too large and too heavy. Both halves of that
-     are right, and they have different causes:
+     **Its job changed in the second pass, and that is why it grew again.** Up to then the
+     heading lay on the photograph, white on --hero-scrim, and both of the owners' September
+     complaints - "too large and too heavy" at 62.4px - were about that arrangement: a stroke
+     reads heavier in white on dark than in ink on paper, so the step came down to 3.05rem and
+     `Intro.astro` thinned the weight to 350 as an optical correction. Neither reason survives
+     the rebuild. The heading is now ink on paper in the left column of a two-column hero,
+     beside a 4:5 photograph rather than across a panorama, and it carries a measure of about
+     20ch instead of the full width of the screen.
 
-     - **Size.** 62.4px against a masthead capped at 37.6px is a ratio of 1.66. The heading
-       should be the largest type on screen (see --text-masthead), but it does not have to
-       win by that much; 48.8px keeps it comfortably first at 1.30.
-     - **Weight.** The heading is white on a dark scrim, where a stroke reads heavier than
-       the same stroke in ink on paper. Newsreader's wght axis is live in the loaded file
-       (measured: 400, 350 and 300 render at different widths), so `Intro.astro` sets 350 on
-       this one element as an optical correction. Do not push it below 300.
+     So: 3.75rem (60px at 1440px), the size the owners approved on the comparison mockup. The
+     local weight override in Intro.astro goes with the scrim it was correcting for; the
+     heading still renders at 350, because that is what global.css sets for every heading on
+     the site. **The ratio against the masthead is back to 1.66**, which is the number
+     they objected to in September; it is here deliberately, because the objection was to the
+     weight on dark and not to the ratio itself. If it reads too large in the built page, this
+     is the first token to try, and 3.4rem is the sensible next stop.
 
-     Checked across the range, not only at the ends: it stays above --text-masthead
-     everywhere, and it never drops below the --text-h2-wide the subpage headings use. */
-  --text-h1: clamp(1.95rem, 1.3rem + 2.6vw, 3.05rem);
-  --text-h2: clamp(1.8rem, 1.35rem + 1.9vw, 2.7rem);
-  --text-h2-wide: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);
-  --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem);
-  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
-  --text-lead: clamp(1.5rem, 1.1rem + 1.8vw, 2.35rem);
+     Checked across the range, not only at the ends: it stays above --text-masthead everywhere,
+     and it never drops below the --text-h2-wide the subpage headings use. */
+  --text-h1: clamp(2.1rem, 1.35rem + 3.8vw, 3.75rem);
+  --text-h2: clamp(1.73rem, 1.3rem + 1.82vw, 2.59rem);
+  --text-h2-wide: clamp(1.82rem, 1.34rem + 2.11vw, 2.78rem);
+  --text-h2-card: clamp(1.63rem, 1.25rem + 1.63vw, 2.4rem);
+  --text-h3: clamp(1.44rem, 1.2rem + 0.96vw, 1.92rem);
+  --text-lead: clamp(1.44rem, 1.06rem + 1.73vw, 2.26rem);
   /* The phone number and the address. The one step in this scale that departs from the
      handoff - the table in docs/design/README.md draws clamp(1.35rem, 1.15rem + 0.6vw,
      1.7rem) here, and that value must not be restored "because the spec says so"; the
@@ -157,28 +263,34 @@
 
      If you change this again, remember that font-optical-sizing: auto above ties the opsz
      axis to the size: shrinking this token makes the letter smaller and its stroke
-     slightly stronger. The other lever is font-weight - the Newsreader file that is loaded
-     does carry a wght axis, contrary to what the comment in fonts.css claimed until
-     September 2026. */
-  --text-tel: clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem);
-  /* The menu bar, and the second step in this scale that departs from the handoff - the
-     table in docs/design/README.md draws `0.78rem` (12.5px) flat for a menu link, and that
-     value must not be restored "because the spec says so"; the departure is recorded in the
-     2a theme block in that same file.
+     slightly stronger. The other lever is font-weight - the Fraunces file that is loaded
+     carries a wght axis of 100-900, so weight is genuinely available here. (The same was true
+     of Newsreader before it, contrary to what fonts.css claimed until September 2026.) */
+  --text-tel: clamp(1.15rem, 1.01rem + 0.43vw, 1.39rem);
+  /* The menu bar. This step spent one release departing from the handoff and is now back on
+     it, so the record has to run in both directions or someone will helpfully "fix" it again.
 
-     12.5px in uppercase with 0.1em of tracking is small for the primary navigation of a
-     site whose visitors are buying flowers rather than reading interfaces, and an external
-     UX review said so. The bar also lost two items in the same release - the four categories
-     moved into the "Oferta" panel - so six shorter labels now have the room eight long ones
-     did not.
+     Version 0.10 raised it to clamp(0.86rem, 0.8rem + 0.28vw, 0.98rem) - 13.8px to 15.7px -
+     because an external UX review called the eight-item menu flat and small, and 12.5px of
+     uppercase is indeed small for the primary navigation of a site whose visitors are buying
+     flowers rather than reading interfaces. The bar also lost two items in the same release,
+     so six shorter labels had room eight long ones did not.
 
-     Fluid, like everything else in this scale, which is why there is still exactly one media
-     query in the project. 13.8px on a phone, 15.7px on a wide screen. The tracking drops with
-     it, in Nav.astro: 0.1em -> 0.08em, because a larger letter needs less.
+     The owner reversed it in September 2026, having seen it: too much height, too much size.
+     **A UX review is not the client.** The grouping under the "Oferta" panel - the other half
+     of that release and the part that answered "flat" - stays; only the size comes back.
 
-     The panel step is separate and is NOT uppercase. Those four are names of things -
-     "Kwiaty balkonowe" - not labels, and a column of uppercase reads worse than a row of it. */
-  --text-nav: clamp(0.86rem, 0.8rem + 0.28vw, 0.98rem);
+     Two things go with it. The tracking returns to 0.1em in Nav.astro, because it only went
+     down to 0.08em to compensate for the larger letter - those two values are one decision.
+     And --nav-pad-block, the vertical padding of the bar, is now the departure from the
+     handoff in this component: it drops from clamp(0.4rem, 1vw, 0.7rem) to a flat 3px, which
+     is the least that still gives the current-page underline somewhere to sit. That padding
+     was not decoration - it answered a reported defect, and Nav.astro carries the reason.
+
+     The panel step below is separate and is NOT uppercase. Those four are names of things -
+     "Kwiaty balkonowe" - not labels, and a column of uppercase reads worse than a row of it.
+     It was not part of the reversal and does not move. */
+  --text-nav: 0.78rem;
   --text-nav-panel: clamp(0.95rem, 0.92rem + 0.14vw, 1.02rem);
 
   /* A question in the /faq/ accordion. It used to draw at --text-h3 (32px at 1280px) and the
@@ -194,23 +306,29 @@
 
      22.5px at 1280px - 1.29x the body text, where it had been 1.83x, and clearly under the
      page's own h1 at --text-h2-wide. Weight 375 and -0.005em of tracking finish it, the same
-     optical correction as --text-h1 and for the same reason: Newsreader has a stronger stroke
-     than the Instrument Serif the handoff drew, and it shows most at display sizes. */
-  --text-question: clamp(1.15rem, 1.05rem + 0.45vw, 1.45rem);
+     optical correction --text-h1 used to carry, and for the same reason: both Newsreader and
+     the Fraunces that replaced it have a markedly stronger stroke than the Instrument Serif
+     the handoff drew, and it shows most at display sizes. */
+  --text-question: clamp(1.1rem, 1.01rem + 0.43vw, 1.39rem);
 
   /* The holding's name in the masthead. Centred and at full scale, above the tagline and
      the menu bar - three storeys. It stays below --text-h1 so that the title of the page
      being read is still the largest type on screen; checked across the whole range of both
      clamps, not only at their ends. */
-  --text-masthead: clamp(1.55rem, 1.15rem + 1.7vw, 2.35rem);
+  --text-masthead: clamp(1.49rem, 1.1rem + 1.63vw, 2.26rem);
 
   /* ---------- layout ---------- */
 
   --edge: max(clamp(1.25rem, 5vw, 5rem), (100% - 1200px) / 2);
   --edge-nav: max(clamp(1rem, 4vw, 5rem), (100% - 1200px) / 2);
 
-  --pad-section: clamp(2.5rem, 6vw, 4.5rem);
-  --pad-section-wide: clamp(2.75rem, 7vw, 5rem);
+  /* Section padding. Raised September 2026 from clamp(2.5rem, 6vw, 4.5rem) - about a third -
+     as one half of the answer to "everything blends together"; the three grounds are the other
+     half, and neither works alone. A painted background with the old spacing separates nothing:
+     it colours the sections instead of parting them. The value is the one the sibling site uses,
+     where the same rhythm was already working. */
+  --pad-section: clamp(3rem, 8vw, 6rem);
+  --pad-section-wide: clamp(3.25rem, 8.5vw, 6.5rem);
   --pad-footer: clamp(2.25rem, 5vw, 3.5rem);
 
   --gap-columns: clamp(1.75rem, 5vw, 3.5rem);

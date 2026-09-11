@@ -37,9 +37,18 @@ import { facebook } from "../data/contact";
  *   guessing a species from a photograph is not done anywhere on this site, so the text says
  *   what the picture *is* - a photograph from a post of that date - and claims nothing about
  *   what is in it. Flagged in docs/inwentaryzacja.md for the owners.
- * - **An empty snapshot renders nothing at all**, not an empty section. Until the first
- *   successful refresh, and on any day the workflow has not run, the page is simply the page
- *   it was before this block existed.
+ * - **An empty snapshot still renders the section**, with a different lead and no cards. That
+ *   reverses how this block worked until September 2026, when it disappeared entirely rather
+ *   than show an empty panel - a good rule in general, and the one the sibling site follows.
+ *   It changed because the home page rhythm came to depend on this section: it is the light
+ *   band between two dark plates, and dark plates cannot be adjacent (see --green-band in
+ *   tokens.css). With the block gone the two plates merged into one, which is a worse failure
+ *   than a section that says where the news lives.
+ *
+ *   The empty state says only what is true - that the owners post on Facebook and that new
+ *   posts land here - and keeps the link that the populated state also carries. It invents no
+ *   news. **Both the heading and the two leads are our words, not the owners'**, and are on
+ *   their review list in docs/inwentaryzacja.md together.
  */
 
 /** Long enough for the seasonal announcements the owners actually write, short enough that
@@ -75,18 +84,20 @@ const posts = facebookPosts.map((post) => {
 });
 ---
 
-{
-  posts.length > 0 && (
-    <section id="aktualnosci" class="news" aria-labelledby="aktualnosci-title">
-      <div class="news__head">
-        <h2 class="news__title" id="aktualnosci-title">
-          Co u nas słychać
-        </h2>
-        <p class="news__lead">
-          Ostatnie wpisy z naszego profilu na Facebooku - co właśnie kwitnie i co jest w sprzedaży.
-        </p>
-      </div>
+<section id="aktualnosci" class="news" aria-labelledby="aktualnosci-title">
+  <div class="news__head">
+    <h2 class="news__title" id="aktualnosci-title">Co u nas słychać</h2>
+    <p class="news__lead">
+      {
+        posts.length > 0
+          ? "Ostatnie wpisy z naszego profilu na Facebooku - co właśnie kwitnie i co jest w sprzedaży."
+          : "Najświeższe wiadomości piszemy na naszym profilu na Facebooku - co właśnie kwitnie i co jest w sprzedaży. Gdy pojawi się tam nowy wpis, trafia także tutaj."
+      }
+    </p>
+  </div>
 
+  {
+    posts.length > 0 && (
       <ul class="news__grid">
         {posts.map((post) => (
           <li class="news__item">
@@ -119,18 +130,19 @@ const posts = facebookPosts.map((post) => {
           </li>
         ))}
       </ul>
+    )
+  }
 
-      <p>
-        <a class="cta-line" href={facebook} target="_blank" rel="noopener">
-          Nasz profil na Facebooku
-        </a>
-      </p>
-    </section>
-  )
-}
+  <p>
+    <a class="cta-line" href={facebook} target="_blank" rel="noopener">
+      Nasz profil na Facebooku
+    </a>
+  </p>
+</section>
 
 <style>
   .news {
+    background: var(--paper-clay);
     border-top: 1px solid var(--rule);
     padding: var(--pad-section) var(--edge);
     display: grid;
@@ -175,8 +187,11 @@ const posts = facebookPosts.map((post) => {
     border: 1px solid var(--rule);
   }
 
+  /* Borrows .eyebrow for the lettering, but it is a timestamp on a post and not an overline
+     above a heading - so it stays out of the accent's territory and keeps the grey. */
   .news__date {
     font-size: 0.66rem;
+    color: var(--ink-grey);
   }
 
   /* Left in the owners' own words; only the length is ours. */

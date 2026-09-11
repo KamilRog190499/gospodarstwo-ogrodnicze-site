@@ -1,6 +1,6 @@
 {
   "name": "gospodarstwo-ogrodnicze-site",
-  "version": "0.11.1",
+  "version": "0.12.2",
   "private": true,
   "type": "module",
   "engines": {
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
-    "@fontsource-variable/newsreader": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/public-sans": "^5.3.0",
     "astro": "^7.2.10",
     "sharp": "^0.35.4"

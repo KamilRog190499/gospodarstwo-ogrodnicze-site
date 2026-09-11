@@ -1,8 +1,9 @@
 ---
 import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
-import { offer, plantCount, type PlantGroup } from "../data/offer";
+import { offer, otherPlants, plantCount, type PlantGroup } from "../data/offer";
 import { chrysanthemumStrip, pansyStrip, type GalleryPhoto } from "../data/gallery";
+import { currentSeason } from "../data/season";
 
 /**
  * The offer on the home page: one card per category page, each opening with two of that
@@ -16,10 +17,27 @@ import { chrysanthemumStrip, pansyStrip, type GalleryPhoto } from "../data/galle
  * The four pages come from `src/data/offer.ts` and no longer from a list in this file - the
  * same four addresses used to be written out both here and in `navigation.ts`.
  *
- * **Nothing here says what month it is.** For one release the "W trakcie" marker lived on
- * these tiles; it belongs to `SeasonCards`, which is the block whose subject is the year.
- * Four equal doors to four pages is what this block is for, and a door that changes colour
- * with the date is a worse door.
+ * ## The season chip, which this block spent two releases without
+ *
+ * Every tile carries one, in three states: "W sprzedaży", "Wkrótce", "Poza sezonem". That is
+ * a deliberate reversal of what stood here, and the argument it reverses was not a bad one,
+ * so it is kept rather than deleted: the marker lived on these tiles for one release and was
+ * taken off because the year is `SeasonCards`' subject, not this block's, and because four
+ * equal doors to four pages is what this block is for - a door that changes colour with the
+ * date being a worse door.
+ *
+ * The owner asked for it back in September 2026, having seen both. The reasoning that lost:
+ * someone arriving here in July and clicking "Chryzantemy" meets a full catalogue with no
+ * hint that nothing in it is for sale for another three months, and the season strip a screen
+ * above does not travel with them.
+ *
+ * **The cost is real and is worth watching.** Three of the four groups are out of season for
+ * most of the year, so most of the time this section shows three greyed doors and one lit
+ * one. If that turns out to tell too gloomy a story, the cheap fix is not to remove the chip
+ * but to print it only where there is something to say - `currentSeason.groups[group]` is
+ * already `"now" | "soon" | null`, so it is one condition in the template below.
+ *
+ * Recorded in docs/inwentaryzacja.md with both halves of the argument.
  *
  * ## The mosaic: two frames, always
  *
@@ -31,13 +49,26 @@ import { chrysanthemumStrip, pansyStrip, type GalleryPhoto } from "../data/galle
  * broke the frames instead: three came out nearly square, two came out as 110x57 letterboxes
  * on `Rabatowe i wieloletnie`.
  *
- * Two frames at 4:3 in two fixed columns has neither failure, because there is no longer a
- * variable to fail on. Every tile is the same height and every frame is the same shape, and
- * at ~110x82 they are bigger than the three ~70x53 slivers they replace.
+ * Two frames in two fixed columns has neither failure, because there is no longer a variable
+ * to fail on. Every tile is the same height and every frame is the same shape.
+ *
+ * **The frames are 4:5, not the 4:3 they were until September 2026.** That is a decision
+ * about the sources, not about the look: six of the eight photographs these tiles can draw on
+ * are portrait, and a 4:3 frame was throwing away 47% of them. At 4:5 it keeps 89%, and the
+ * strip goes from 225x82 to 225x136 at 1200px - from two postage stamps to something that
+ * reads as the product this business sells. The two landscape sources pay for it, keeping 45%
+ * and 53%. The ratio is written in two places that must agree; the CSS says which and why.
  *
  * Two is also the number the content can actually guarantee. `Rabatowe` has exactly two
  * entries with a photograph and no `PhotoStrip` to borrow from, so it can never reach three;
  * a design needing three would be permanently broken on one of the four tiles.
+ *
+ * **The name list is capped at four.** It is still generated from the collection and still
+ * cannot drift from the offer, but it no longer prints all of it: eleven balcony plants ran to
+ * five lines while the pansy tile ran to one, and because the tiles share a height that
+ * difference came out as a hole in three tiles out of four. Four names and a tail - `i 7
+ * innych` - say what the wall of eleven was saying badly. The full list is one click away, on
+ * the page the tile is a door to.
  *
  * Which two: **the collection chooses, not a list here.** The group's entries in `order` that
  * have an `image`, then, if that is fewer than two, the group's own `PhotoStrip` - the same
@@ -71,10 +102,30 @@ const tiles = offer
       .flatMap((group) => stripFallback[group] ?? [])
       .map((photo) => photo.src);
 
+    /* A page can cover more than one group (none does today, but the type allows it), so the
+       chip takes the most advanced state any of its groups is in: selling beats coming up
+       beats out of season. A tile that said "Poza sezonem" while one of its groups was on
+       sale would be plainly wrong. */
+    const states = page.groups.map((group) => currentSeason.groups[group]);
+    const state = states.includes("now") ? "now" : states.includes("soon") ? "soon" : null;
+
+    /* The names are the tile description and they come from the collection, so they can never
+       drift from the offer. What they could not do was stay the same length: eleven balcony
+       plants ran to five lines while the pansy tile ran to one, and since the tiles are the
+       same height that difference came out as a hole in three tiles out of four. Four names
+       and a tail say "there are more of these", which is what the wall of eleven was saying
+       badly. The full list is on the category page, one click away. */
+    const allNames = members.map((plant) => plant.data.name);
+    const shownNames = allNames.slice(0, 4);
+
     return {
       ...page,
-      names: members.map((plant) => plant.data.name),
+      names: allNames,
+      shownNames,
+      rest: allNames.length - shownNames.length,
       photos: [...fromEntries, ...fromStrips].slice(0, 2),
+      state,
+      stateLabel: state === "now" ? "W sprzedaży" : state === "soon" ? "Wkrótce" : "Poza sezonem",
     };
   })
   // A card for an empty group would lead to a page with a heading and no list.
@@ -106,7 +157,7 @@ const tiles = offer
                     widths={[240, 480]}
                     sizes="(min-width: 1200px) 110px, (min-width: 700px) 16vw, 45vw"
                     width={240}
-                    height={180}
+                    height={300}
                     alt=""
                     loading="lazy"
                   />
@@ -114,8 +165,16 @@ const tiles = offer
               </span>
             )}
             <h3 class="tile__title">{tile.tileTitle}</h3>
-            <p class="tile__names">{tile.names.join(" · ")}</p>
-            <p class="tile__more">{plantCount(tile.names.length)}</p>
+            <p class="tile__names">
+              {tile.shownNames.join(" · ")}
+              {tile.rest > 0 && <span class="tile__rest"> {otherPlants(tile.rest)}</span>}
+            </p>
+            <div class="tile__foot">
+              <p class="tile__more">{plantCount(tile.names.length)}</p>
+              <span class:list={["tile__tag", tile.state && "tile__tag--lit"]}>
+                {tile.stateLabel}
+              </span>
+            </div>
           </a>
         </li>
       ))
@@ -125,6 +184,7 @@ const tiles = offer
 
 <style>
   .overview {
+    background: var(--paper-clay);
     border-top: 1px solid var(--rule);
     padding: var(--pad-section) var(--edge);
     display: grid;
@@ -157,14 +217,21 @@ const tiles = offer
   }
 
   /* The whole card is the link, so the target is the card and not a word inside it. */
+  /* Flex column rather than grid, for one reason: `margin-top: auto` on the foot. The four
+     tiles hold two, three and four lines of plant names, and with the rows packed to the top
+     the counter and the season chip sat at four different heights across one row of cards.
+     A repeated element belongs in the same place on every copy of the card. */
   .tile {
     height: 100%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.6rem;
-    align-content: start;
     padding: clamp(1.25rem, 3vw, 1.75rem);
     border: 1px solid var(--rule);
-    background: var(--paper-dim);
+    /* --paper, not --paper-dim. The ground under these tiles is --paper-clay, and a dimmed
+       tile on clay is 1.003:1 - the fill would be drawn and seen by nobody. --paper gives
+       1.08:1, which is the faint but real lift every card on this site uses. */
+    background: var(--paper);
     color: inherit;
     text-decoration: none;
   }
@@ -191,14 +258,25 @@ const tiles = offer
     grid-template-columns: 1fr;
   }
   .tile__photos--one .tile__photo {
-    aspect-ratio: 8 / 3;
+    aspect-ratio: 8 / 5;
   }
 
+  /* 4:5, not the 4:3 these frames had until September 2026, and the reason is in the sources
+     rather than in taste: six of the eight photographs these tiles draw on are portrait, and a
+     4:3 frame was keeping 53% of them. At 4:5 it keeps 89%, and the strip grows from 82px tall
+     to 137px at 1200px - from two postage stamps to something that reads as the product. The
+     two landscape sources (pelargonia rabatowa, chryzantema wielkokwiatowa) pay for it: they
+     keep 45% and 53%. Every crop here is centred and none of them is aimed.
+
+     **The ratio is written twice and the two must move together** - here, and as width/height
+     on the <Picture> above. That pair is what makes Astro emit a 4:5 file; if CSS asks for one
+     ratio while Astro was told another, the photograph is cropped twice and the second crop
+     cannot be aimed. */
   .tile__photo {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
     border: 1px solid var(--rule);
   }
@@ -206,7 +284,43 @@ const tiles = offer
     border-color: var(--green);
   }
 
+  /* Counter and chip share the foot of the tile. They were first drawn beside the title, which
+     is where the mockup put them - but four tiles across 1200px leaves each one about 180px
+     wide, and an 85px chip on that row squeezed "Rabatowe i wieloletnie" onto three lines. The
+     two are the same kind of thing anyway: small uppercase metadata about the group, as
+     against the title and the plant names, which are the group. */
+  .tile__foot {
+    margin-top: auto;
+    padding-top: 0.15rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.75rem;
+  }
+
+  /* Lit or not, with the three labels doing the rest - the same arrangement as the season
+     cards, and it works here for the same reason: the calendar marks at most one window at a
+     time, so at most one tile is ever lit and there is nothing for a second fill to mean. */
+  .tile__tag {
+    margin-inline-start: auto;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink-grey);
+    border: 1px solid var(--rule-dim);
+    padding: 0.2rem 0.45rem;
+  }
+
+  .tile__tag--lit {
+    color: var(--paper);
+    background: var(--green-deep);
+    border-color: var(--green-deep);
+  }
+
   .tile__title {
+    text-wrap: balance;
     font-size: var(--text-h3);
     line-height: 1.1;
   }
@@ -216,14 +330,23 @@ const tiles = offer
     color: var(--ink-soft);
   }
 
+  /* The tail is not one of the names, so it does not read as one: same size, grey rather than
+     soft ink, and it always closes the list. */
+  .tile__rest {
+    color: var(--ink-grey);
+  }
+
+  /* A counter, and counters are the accent's other half - see .eyebrow in global.css. */
   .tile__more {
     font-size: 0.66rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--ink-grey);
+    color: var(--ochre);
   }
+  /* Hover goes to ink rather than to green: the resting state is already the accent, and
+     swapping one colour for another reads as a state change nobody asked for. */
   .tile:hover .tile__more {
-    color: var(--green);
+    color: var(--ink);
   }
 </style>

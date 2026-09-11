@@ -4,67 +4,57 @@ import { heroPhoto } from "../data/gallery";
 import { directionsUrl, primaryPhone } from "../data/contact";
 
 /**
- * The entrance to the home page: a full-width photograph, the `h1` on it, and under that a
- * welcoming sentence and three things to do.
+ * The entrance to the home page: the heading and what to do, beside a portrait of the
+ * holding.
  *
- * Up to version 0.5 this was a centred column of text on a cream ground. The holding
- * supplied its own photographs in September, and the home page showed not one of them above
- * the fold - the first photograph on it was the thumbnail in a season card.
+ * ## What this replaced, and what went out with it
  *
- * ## Why this photograph in particular
+ * Until September 2026 this was a full-bleed panorama with the `h1` lying on it over
+ * `--hero-scrim`. That arrangement is gone, and three things went with it that are worth
+ * knowing about, because each one used to be a rule somewhere:
  *
- * Because it is landscape. That is the only criterion this frame has to meet, and the only
- * one no amount of code can make up for. The first version of this band took `tunnelPhoto` -
- * a portrait 1500x2000 frame, like 22 of the 23 photographs from the session. At
- * `sizes="100vw"` that put a ceiling of 1500px of real detail on a photograph that needs
- * 2800px on a 1400px monitor at 2x, and cropped the middle quarter out of its height along
- * the way. Up to version 0.7 `heroPhoto` was gallery-19 (2000x1500), the only landscape
- * frame in the holding's photo session; in September 2026 it was replaced, on an explicit
- * instruction, with a generated image (1448x1086, the same 4:3) - see the comment beside
- * `heroPhoto` in `src/data/gallery.ts` for why that is out of keeping with the rest of that
- * file. The rule for the future is short: **only a landscape frame goes in this band**, and
- * if the owners ever shoot a real panorama, `heroPhoto` is swapped and nothing else.
+ * - **The scrim.** It was the only gradient in the design, and the only place on the site
+ *   where contrast had to be measured in a browser rather than computed, because the
+ *   background of the text was a photograph and the worst case was its brightest pixel. Text
+ *   no longer lies on an image anywhere here. The measuring procedure is written up in
+ *   `docs/inwentaryzacja.md` in case that ever changes - do not reinvent it, and do not
+ *   estimate it offline.
+ * - **The project's only media query.** The band switched 3:2 -> 3:1 at 700px because a
+ *   panorama on a phone leaves a strip of photograph about as tall as a finger. A figure in a
+ *   column has no such problem: `auto-fit` stacks it under the text and it keeps one ratio at
+ *   every width. The project now has zero breakpoints.
+ * - **The local `font-weight: 350` on the heading.** It was an optical correction for white
+ *   type on a dark scrim, where a stroke reads heavier than the same stroke in ink on paper.
+ *   On paper there is nothing to correct, so the override is gone - but the rendered weight
+ *   does not change, because `global.css` sets 350 on every h1/h2/h3 anyway, on the owner's
+ *   own instruction. What went away is a local exception that no longer had a reason, not a
+ *   weight.
  *
- * The width ceiling in `widths` tracks the actual file behind `heroPhoto.src` - deliberately,
- * rather than `2400px that do not exist`: Astro trims the list to the file's width anyway, so
- * a larger value adds nothing but an illusion. With the current file that is 1448px.
+ * ## The photograph, and why it is the wrong one
  *
- * ## One crop, not two
+ * **This frame is a placeholder for a photograph that does not exist yet, and it is the most
+ * visible gap left on the site.** The figure is 4:5, and the holding has no free portrait
+ * frame to put in it:
  *
- * `width`/`height` **must** match the original's ratio. When they did not (1600x686 against
- * a 3:4 file), Astro cropped the photograph to 2.33:1 while generating the variants, and
- * `cover` in CSS cropped that result a second time to 3:1 - two crops, neither of which
- * could be aimed. Now Astro only scales, all the cropping is done by `object-fit`, and
- * `object-position` aims it.
+ * - the 23 frames in `src/assets/gallery/` are all portrait and all sharp, but every one of
+ *   them is a planting in the `compositions` collection, and that strip runs three sections
+ *   below this one - the hero would reappear as a slide on the same page;
+ * - `chrysanthemums/offer-0*` are portrait but only 736px wide, which is under one device
+ *   pixel of this box on any modern screen;
+ * - `pansies/offer-0*` are portrait and large, but they show March crates of pansies, and a
+ *   year-round hero for a holding whose main season is April to June cannot be one product
+ *   photographed in the wrong month.
  *
- * ## The scrim
+ * So `heroPhoto` stays, and it is cropped: it is 1448x1086 (4:3), a generated image rather
+ * than a photograph from the session, and a 4:5 box shows about 60% of its width. The crop is
+ * done once, by `object-fit` in CSS, and aimed by `object-position` - `width`/`height` below
+ * carry the file's real ratio so that Astro only scales. Effective resolution across this box
+ * is about 1.6x on a wide screen rather than 2x.
  *
- * The `h1` lies on the photograph, so legibility depends on the darkening (--hero-scrim)
- * rather than on luck in the frame. The scrim's top padding is part of that calculation, not
- * a spacing, and it works the opposite way round to intuition: the scrim is anchored to the
- * bottom, so **more** padding makes it taller and pushes the text onto a lower fraction of
- * its height, which is denser alpha. In the 3:1 frame the padding is shorter (2.75rem rather
- * than 5.5rem) so the gradient fits inside the photograph - and that is why the slope in
- * --hero-scrim is denser to compensate. Those two numbers are one calculation spread across
- * two files: changing either one requires recomputing the other.
- *
- * The critical element is the eyebrow above the heading, not the heading: it sits highest, so
- * it gets the thinnest part of the gradient, and at 10.5px it needs 4.5:1 where the heading
- * at 46px needs 3:1. Two versions running passed on the heading and failed on the eyebrow.
- *
- * Computed for gallery-19 against the brightest pixel it contained - pure white
- * (255,255,255) in a gap in the glasshouse, which is the worst case there is: the eyebrow at
- * 5.3:1 with an alpha of 0.77, the heading at 7.8-11.6:1 lower down the slope. Changing the
- * photograph, the scrim's padding or the length of the heading calls for measuring the
- * **eyebrow** again.
- *
- * September's swap to a generated image was not measured in a real browser - the screenshot
- * tool was unavailable in that session. An offline estimate (a 3:1 crop at
- * `object-position: center 42%`, the same four-stop gradient, a scrim box of ~237px at a
- * width of ~1440px) came out at ~5.1:1 for the eyebrow and ~8.4:1 for the heading - the same
- * neighbourhood as the old numbers, so nothing points to a regression, but it is an
- * approximation at one screen width, not a measurement. **Confirm it in a browser**,
- * especially at the widths where the band is 3:2 rather than 3:1.
+ * **What to do when a portrait frame arrives:** swap `heroPhoto` in `src/data/gallery.ts`,
+ * put the file's real dimensions in `width`/`height` here, and delete this section of the
+ * comment. Nothing else changes. The request is on the owners' list in
+ * `docs/inwentaryzacja.md`.
  *
  * `loading="eager"` and `fetchpriority="high"` - this is the home page's LCP and there is no
  * point pretending otherwise.
@@ -72,27 +62,11 @@ import { directionsUrl, primaryPhone } from "../data/contact";
 ---
 
 <section class="intro">
-  <div class="intro__hero">
-    <Picture
-      class="intro__photo"
-      src={heroPhoto.src}
-      formats={["avif", "webp"]}
-      fallbackFormat="jpg"
-      widths={[960, 1400]}
-      sizes="100vw"
-      width={1448}
-      height={1086}
-      alt={heroPhoto.alt}
-      loading="eager"
-      fetchpriority="high"
-    />
-    <div class="intro__scrim">
-      <p class="intro__place">Cholewianka pod Kazimierzem Dolnym</p>
-      <h1 class="intro__title">Kwiaty balkonowe, rabatowe i chryzantemy z własnej uprawy</h1>
-    </div>
-  </div>
-
-  <div class="intro__below">
+  <div class="intro__text">
+    <p class="eyebrow intro__place">Cholewianka pod Kazimierzem Dolnym</p>
+    <h1 class="intro__title">
+      Kwiaty balkonowe, rabatowe i chryzantemy <em>z własnej uprawy</em>
+    </h1>
     <p class="intro__body">
       Zachęcamy do zapoznania się z naszą ofertą. Zamówienia można składać telefonicznie lub na
       terenie naszego gospodarstwa w Cholewiance pod Kazimierzem Dolnym. Wszystko, co sprzedajemy,
@@ -103,138 +77,91 @@ import { directionsUrl, primaryPhone } from "../data/contact";
       <a class="cta-line" href="/kwiaty-balkonowe/">Zobacz ofertę</a>
       <a class="cta-line" href={directionsUrl} target="_blank" rel="noopener">Wyznacz trasę</a>
     </div>
+    {
+      /* Three facts, each one a restatement of a sentence this site already says elsewhere -
+        nothing here is new information, which is the point: it is the paragraph above made
+        scannable for someone who will not read it. */
+    }
+    <dl class="intro__facts">
+      <div>
+        <dt>Uprawa</dt>
+        <dd>Własna</dd>
+      </div>
+      <div>
+        <dt>Sprzedaż</dt>
+        <dd>Na miejscu</dd>
+      </div>
+      <div>
+        <dt>Zamówienia</dt>
+        <dd>Telefonicznie</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="intro__figure">
+    <Picture
+      class="intro__photo"
+      src={heroPhoto.src}
+      formats={["avif", "webp"]}
+      fallbackFormat="jpg"
+      widths={[720, 1448]}
+      sizes="(min-width: 1200px) 950px, (min-width: 700px) 48vw, 92vw"
+      width={1448}
+      height={1086}
+      alt={heroPhoto.alt}
+      loading="eager"
+      fetchpriority="high"
+    />
   </div>
 </section>
 
 <style>
+  /* `auto-fit` with a 320px floor, like every other two-column block here: one column on a
+     phone, two as soon as there is room. No breakpoint, and none needed - which column order
+     results is decided by source order, so the text comes first on a narrow screen. */
   .intro {
+    background: var(--paper-blush);
     border-bottom: 1px solid var(--rule);
-  }
-
-  /* The photograph and the scrim lie in one grid cell, both as grid items - the scrim is
-     not absolutely positioned. That is a correctness condition, not a style: the scrim is
-     anchored to the bottom and its height comes from the length of the heading, not from
-     the frame. Below ~390px the heading breaks onto enough lines that the scrim is taller
-     than the 3:2 frame and - as an absolute element - escaped above the photograph, laying
-     a grey smear on the paper over it (11px at 360px, 91px at 320px). Clipping it with
-     `overflow: hidden` is a trap here: it then cuts off the eyebrow and the top of the
-     heading. As a grid item the scrim helps determine the band's height, so the frame grows
-     to fit the text instead of the text escaping the frame. The gradient's density and the
-     scrim's padding are untouched - the eyebrow and heading measurements are the same. */
-  .intro__hero {
+    padding: var(--pad-section) var(--edge);
     display: grid;
-    /* An explicit column rather than the default `auto`: an `auto` track measures the
-       max-content of its items, and since the scrim became a grid item its max-content (an
-       unbroken heading plus the eyebrow) pushed the band out to 520px on a 320px screen and
-       gave the whole page a horizontal scrollbar. `minmax(0, 1fr)` pins the column to the
-       container's width and lets the content break. */
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--gap-columns);
+    align-items: center;
   }
 
-  /* <Picture> renders <picture><img>; the grid item is the wrapper, so the frame sits on
-     it. `min-height: 100%` grows to the row when the scrim turns out taller than the frame;
-     `align-self: stretch` alone does not work here, because an element with `aspect-ratio`
-     does not stretch, and `height: 100%` would push the width out by the ratio. */
-  .intro__hero > :global(picture) {
-    grid-area: 1 / 1;
-    display: block;
-    width: 100%;
-    min-height: 100%;
-    /* On a phone, 3:1 leaves a band of photograph about as tall as a finger; 3:2 gives a
-       frame there in which you can see what is in the tunnel. The only media query in the
-       project, and a deliberate one: this is a choice of crop, not of layout, so auto-fit
-       cannot settle it. */
-    aspect-ratio: 3 / 2;
-  }
-
-  @media (min-width: 700px) {
-    .intro__hero > :global(picture) {
-      aspect-ratio: 3 / 1;
-      /* A 3:1 panorama drops below the height the scrim needs for the eyebrow and the h1 all
-         by itself - without this lower bound the gradient fills the whole frame and nothing
-         is left of the photograph. The bound is computed against the tallest content of the
-         scrim, not against "the look". `max(100%, ...)` rather than the bound alone, so
-         growing to the row stays in force.
-
-         A side effect of the bound: between 700px and ~1150px the band is wider than the
-         3:1 the ratio calls for (at 700px it works out at ~1.75:1), because the bound holds
-         the height. That is deliberate - below 400px the scrim eats the whole photograph -
-         but it means that in this range *more* of the photograph is visible, not less, so
-         `object-position` does not run away downwards. */
-      min-height: max(100%, clamp(400px, 34vw, 560px));
-    }
-  }
-
-  .intro__photo {
-    display: block;
-    width: 100%;
-    /* Beats the `height: auto` that global.css puts on every img. */
-    height: 100%;
-    object-fit: cover;
-    /* The only crop of the photograph in this band, so it is aimed rather than left in the
-       middle. The scrim is anchored to the bottom and at 3:1 takes most of the height, so
-       the photograph reads mainly through the top of the frame - 42% pulls the hanging
-       baskets and the variety labels up into that visible band instead of leaving the
-       glasshouse roof there. At 3:2 on a phone the frame is almost complete (4:3 -> 3:2 is
-       88% of the height) and the value moves nothing that matters. */
-    object-position: center 42%;
-  }
-
-  .intro__scrim {
-    grid-area: 1 / 1;
-    align-self: end;
-    padding: clamp(1.5rem, 4vw, 2.75rem) var(--edge) clamp(1.25rem, 3vw, 2.25rem);
-    background: var(--hero-scrim);
+  .intro__text {
     display: grid;
-    gap: 0.6rem;
+    gap: 1.15rem;
+    justify-items: start;
   }
 
-  /* A label for the place, not a substitute for the address in the text: the name of the
-     village also stands in the paragraph below, because 10.5px of uppercase on a photograph
-     is a poor sole hiding place for the most important fact on the site of a holding people
-     drive to - and text on an image weighs less in a search engine than a sentence in
-     prose. */
+  /* The village is named here *and* in the paragraph below, on purpose: an uppercase label is
+     a poor sole hiding place for the most important fact on the site of a holding people drive
+     to, and a label weighs less in a search engine than a sentence in prose. */
   .intro__place {
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--green-lit);
+    font-size: 0.68rem;
   }
 
-  /* The one place on the site that departs from `h1 { font-weight: 400 }`, and it is an
-     optical correction rather than a style choice: this heading is the only white type on a
-     dark ground at display size, where a stroke reads heavier than the same stroke in ink on
-     paper. The owners reported it as too heavy in September 2026. Newsreader's wght axis is
-     live in the file that is loaded, so 350 genuinely thins the stroke instead of being
-     rounded back to 400 - measured, not assumed. The negative tracking is the other half of
-     the same correction; the masthead already carries -0.01em for the same reason.
-
-     The size came down in the same pass - see --text-h1 in tokens.css, which nothing else
-     uses. Between them the heading dropped from 62.4px/400 to 48.8px/350 at 1440px.
-
-     Shortening the heading changes the height of the scrim, and the scrim's height is what
-     decides where the *eyebrow* sits on the gradient. It was re-measured after this change:
-     the eyebrow gained a little contrast rather than losing it, because a shorter scrim puts
-     it lower down a denser part of the slope. Measure it again if this changes. */
   .intro__title {
     font-size: var(--text-h1);
-    font-weight: 350;
     letter-spacing: -0.015em;
-    line-height: 1.08;
-    color: var(--paper);
-    max-width: 20ch;
+    line-height: 1.04;
+    max-width: 18ch;
+    /* Without this the last two words - the italic ones - break as "z własnej / uprawy" and
+       the phrase that carries the whole claim is split across a very short last line. */
     text-wrap: balance;
   }
 
-  .intro__below {
-    padding: clamp(1.75rem, 4vw, 2.5rem) var(--edge) clamp(2rem, 4vw, 3rem);
-    display: grid;
-    gap: 1.15rem;
+  /* The one italic on the site besides the masthead. --green rather than --sage: this runs at
+     display size, but it is a fragment of a heading and not the heading, so it is held to the
+     text green's 4.95:1 rather than to the large-type exception. */
+  .intro__title em {
+    font-style: italic;
+    color: var(--green);
   }
 
   .intro__body {
-    max-width: 56ch;
+    max-width: 52ch;
     color: var(--ink-soft);
   }
 
@@ -243,5 +170,59 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     flex-wrap: wrap;
     gap: 0.7rem 1.4rem;
     align-items: center;
+  }
+
+  .intro__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+    gap: 0.9rem 1.75rem;
+    width: 100%;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.1rem;
+    margin-top: 0.35rem;
+  }
+
+  .intro__facts > div {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .intro__facts dt {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .intro__facts dd {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  /* The frame. `<Picture>` renders `<picture><img>`, so the ratio sits on this wrapper and the
+     image fills it - putting `aspect-ratio` on the `img` alone leaves the wrapper at the
+     intrinsic height and opens a gap under the photograph. */
+  .intro__figure {
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--rule);
+  }
+
+  .intro__figure > :global(picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The only crop of this photograph, so it is aimed rather than left in the middle. The file
+     is 4:3 and the box is 4:5, so about 40% of its width is outside the frame; 42% pulls the
+     hanging baskets up into it instead of leaving the glasshouse roof there. Beats the
+     `height: auto` that global.css puts on every img. */
+  .intro__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
   }
 </style>

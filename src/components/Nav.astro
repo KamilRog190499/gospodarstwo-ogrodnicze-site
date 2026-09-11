@@ -38,7 +38,8 @@ import { navigation, isNavGroup } from "../data/navigation";
  * fix with a breakpoint. `overflow` must stay visible all the way up, or the panel is clipped
  * by the bar it hangs from.
  *
- * The 2a theme does not change this file: the bar keeps its faint `--paper-dim` ground, the
+ * The 2a theme does not change this file: the bar keeps its faint ground (`--paper-linen`
+ * since the home page went to warm grounds in September 2026), the
  * rule above it and its own `padding-inline`. The condition sits in `Header.astro` -
  * `<Nav />` has to stand outside the name's padding, as a separate row of the header grid,
  * or the side margins are added twice and the bar drifts out of line with the name.
@@ -88,23 +89,43 @@ const path = Astro.url.pathname;
   nav {
     /* Declared once and read twice: the bar's vertical padding, and the offset that drops
        the panel to the *bottom edge of the bar* rather than to the bottom of its own link.
-       Written as one custom property so the two cannot drift apart. */
-    --nav-pad-block: clamp(0.4rem, 1vw, 0.7rem);
+       Written as one custom property so the two cannot drift apart - changing this one value
+       moves the panel with the bar and there is nothing to keep in step by hand.
+
+       **3px, down from clamp(0.4rem, 1vw, 0.7rem) in September 2026.** The owner reversed the
+       size this bar grew to in 0.10 - see --text-nav in tokens.css for that half - and the
+       height went with it: 70.4px at 1440px back to 54px. It did not go to zero, and the
+       reason is below, on .bar. */
+    --nav-pad-block: 3px;
     border-top: 1px solid var(--rule);
-    background: var(--paper-dim);
+    /* The bar is bounded by a rule on both sides and always has been: this border-top above
+       it, and the header's own border-bottom below it. That matters more than it used to -
+       against the masthead above (1.03:1) and the hero below (1.05:1) the ground alone does
+       not part this band, it only warms it. Removing either rule leaves the menu floating in
+       one continuous warm field. */
+    background: var(--paper-linen);
     /* The panel hangs below the bar. Anything that clips here clips it. */
     overflow: visible;
   }
 
   .bar {
     padding-inline: var(--edge-nav);
-    /* The band is taller than its items, and the reason is the 2px underline under the
-       current page. With the items flush to the band, that underline landed 1px above the
+    /* The band is a little taller than its items, and the reason is the 2px underline under
+       the current page. With the items flush to the band, that underline landed 1px above the
        header's own bottom rule - and on the home page, 1px above the top of the hero
        photograph, which is where the owners reported they could not see it at all. It was
-       not a colour problem: there was simply nowhere for it to sit. This also answers the
-       second half of that report, "move the photograph away from the menu", without adding
-       a gap element or breaking the full-bleed frame. */
+       never a colour problem: there was simply nowhere for it to sit.
+
+       **Half of that cause is gone**, and that is why 3px is now enough where clamp(0.4rem,
+       1vw, 0.7rem) was chosen before. The hero stopped being a full-bleed photograph directly
+       under this bar in September 2026 (see Intro.astro); what remains to clear is the
+       header's own 1px rule, and a few pixels do that. The second half of the original
+       report - "move the photograph away from the menu" - was answered by the hero rebuild
+       rather than by this padding.
+
+       Do not take it to zero: that is the state the owners reported as a defect. If 3px turns
+       out to be too tight to see, raise it a pixel at a time rather than restoring the
+       clamp - the clamp is what made the bar 70px tall. */
     padding-block: var(--nav-pad-block);
     display: flex;
     flex-wrap: wrap;
@@ -126,7 +147,10 @@ const path = Astro.url.pathname;
   summary {
     font-size: var(--text-nav);
     font-weight: 600;
-    letter-spacing: 0.08em;
+    /* Back to the handoff's 0.1em together with the step. It only went down to 0.08em to
+       compensate for the larger letter - the two values are one decision, and reverting one
+       without the other leaves 12.5px of uppercase set too tight. */
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--green-deep);

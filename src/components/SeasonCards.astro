@@ -127,19 +127,29 @@ const cards = [
 </section>
 
 <style>
+  /* A dark plate since September 2026, and the first of three on the home page. It needs no
+     border of its own: the hero closes with a rule above it and the offer tiles open with one
+     below it, and on a ground this different from both neighbours a line would add nothing.
+
+     Colours are named rule by rule rather than remapped on the container - the .history and
+     .footer way. This block holds five kinds of element; remapping is what Compositions does
+     and it is worth its weight only where a second copy of 250 lines of CSS would rot. */
   .seasons {
+    background: var(--green-band);
+    color: var(--bone);
+    /* Dark ground: the default ring is 1.67:1 here. See tokens.css. */
+    --focus-ring: var(--green-lit);
     padding: var(--pad-section) var(--edge);
     display: grid;
     gap: 1.75rem;
   }
-
   .seasons__head {
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid rgb(238 240 230 / 22%);
     padding-bottom: 0.9rem;
   }
-
   .seasons__title {
     font-size: var(--text-h2);
+    color: var(--bone);
   }
 
   .seasons__grid {
@@ -151,55 +161,63 @@ const cards = [
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   }
 
+  /* Flex column rather than grid, and for the same reason as the offer tiles: `margin-top:
+     auto` on the photograph. The three bodies run to different lengths - the pansy card is
+     two lines longer than the chrysanthemum one - and with the rows packed to the top the
+     three photographs and the three date lines sat at three different heights across one row.
+     The cards were always the same height; it was their insides that were irregular. */
   .card {
     padding: clamp(1.5rem, 4vw, 2.5rem);
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.7rem;
-    align-content: start;
-    border: 1px solid var(--rule);
-    background: var(--paper-dim);
+    /* Outline only. A filled card on this plate would need a fourth green, and the border is
+       already how every other card on the site is bounded. */
+    border: 1px solid rgb(238 240 230 / 30%);
+    background: transparent;
   }
-
-  /* The card the season is happening on - "W trakcie" while its window is open, "Wkrótce"
-     while it is the one opening next. Both light the same ground, and only one card is ever
-     lit, so the page still shows a single dark panel here or none at all. Nothing inside is
-     focusable, so it needs no `--focus-ring` raise - the card carried a link until 0.9 and
-     that is why it used to. */
+  /* **The lit card is the light one, and that is the whole of the inversion.** On the old
+     cream band this card was the dark panel; on a dark band a dark panel is invisible - it was
+     --green-deep on a --green-deep ground, 1.00:1, a card that renders and cannot be seen.
+     Turning it into the light plate keeps the word honest: the card whose season is running is
+     the one that is lit. Everything inside it goes back to the ink palette, because it is now
+     a piece of paper lying on the plate. Nothing in it is focusable, so it needs no
+     --focus-ring raise; it carried a link until 0.9 and that is why it used to. */
   .card--lit {
-    border-color: var(--green-deep);
-    background: var(--green-deep);
+    border-color: var(--paper);
+    background: var(--paper);
   }
-
   .card__eyebrow {
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--green);
+    color: var(--ochre-lit);
   }
   .card--lit .card__eyebrow {
-    color: var(--green-lit);
+    color: var(--ochre);
   }
-
   .card__title {
     font-size: var(--text-h2-card);
     line-height: 1.1;
-    color: var(--ink);
+    color: var(--bone);
   }
   .card--lit .card__title {
-    color: var(--paper);
+    color: var(--ink);
   }
 
   .card__body {
     max-width: 46ch;
-    color: var(--ink-soft);
-  }
-  .card--lit .card__body {
     color: var(--green-body);
   }
+  .card--lit .card__body {
+    color: var(--ink-soft);
+  }
 
+  /* Pushes itself and the date line below it to the foot of the card, so all three line up. */
   .card__slot {
-    margin-top: 0.35rem;
+    margin-top: auto;
+    padding-top: 0.35rem;
   }
 
   /* All three cards hold a real photograph, and each keeps the 16:9 box the placeholders had -
@@ -212,18 +230,18 @@ const cards = [
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
-    border: 1px solid var(--rule);
+    border: 1px solid rgb(238 240 230 / 30%);
   }
   .card--lit .card__slot :global(img) {
-    border-color: rgb(238 240 230 / 30%);
+    border-color: var(--rule);
   }
 
   .card__meta {
     font-size: 0.85rem;
     font-weight: 400;
-    color: var(--ink-grey);
+    color: var(--green-lit);
   }
   .card--lit .card__meta {
-    color: var(--green-lit);
+    color: var(--ink-grey);
   }
 </style>

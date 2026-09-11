@@ -82,13 +82,19 @@ h3 {
 
 /* ---------- shared pieces ---------- */
 
-/* The uppercase label above a heading or beside a fact. Three sizes appear in the
-   design; the size is set where it is used, everything else is the same everywhere. */
+/* The uppercase label above a heading. Three sizes appear in the design; the size is set
+   where it is used, everything else is the same everywhere.
+
+   Ochre since September 2026, and this is the whole of the accent's territory together with
+   the counters ("11 roślin"). It does not go in body text, buttons, prose links, the menu
+   underline or the season chips - those stay green. The boundary is the decision, not a
+   detail of it: an accent with no written limit spreads until it is no longer an accent.
+   On the dark blocks it becomes --ochre-lit, raised there in one line like --focus-ring. */
 .eyebrow {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--ink-grey);
+  color: var(--ochre);
 }
 
 /* The horizontal padding shared by every section: the gutter until the content reaches

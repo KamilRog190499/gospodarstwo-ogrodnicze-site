@@ -52,7 +52,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/offer.ts`            | **The four groups and the four category pages, in one table.** Exports `plantGroups`, which `src/content.config.ts` turns into the schema's `z.enum` and `navigation.ts` turns into menu entries. A new group starts here, never in the schema. Also holds `plantCount()`, the Polish three-form plural.                               |
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                          |
 | `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages`, `footerOfferLinks` and `allPages` (flattened, for the 404).                                                                                                                       |
-| `src/data/contact.ts`          | Four phone numbers, the address, the directions URL, the Facebook link. `email` and `openingHours` are `null` - see Open items.                                                                                                                                                                                                        |
+| `src/data/contact.ts`          | Four phone numbers, the address, the directions URL, the Facebook link. `email` and `openingHours` are `null` - see Open items.                                                                                                                       |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                     |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                           |
 | `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                            |
@@ -154,29 +154,60 @@ plus manual viewport checks.
 
 - **The design is deliberately austere.** No border radius, no shadows, no counters, no
   testimonials, no animations, no icons, no emoji. Hierarchy comes from 1px lines, type size
-  and spacing. Two page backgrounds at most (`--paper`, `--paper-dim`) plus two dark blocks
-  (`--green-deep` history, `--ink` footer). **One sanctioned gradient exists:**
-  `--hero-scrim`, the scrim under the home page `h1` where it lies on the photograph. It is a
-  legibility device with measured contrast, not decoration - do not use it anywhere else, and
-  re-measure the _eyebrow_ (not the heading - it sits highest, in the thinnest part of the
-  gradient) if the photograph, the scrim padding, or the heading's length **or size** changes.
-  The scrim's height comes from its content, so shrinking the heading moves the eyebrow along
-  the gradient just as surely as rewording it does. Measured in a browser in September 2026
-  after `--text-h1` came down: eyebrow 5.00:1 and heading 8.43:1 at 1440px, 4.90:1 and 9.36:1
-  at 400px, taken against the brightest pixel actually in the frame. The method - compositing
-  the photograph with the gradient in a canvas and sweeping the text's band for the worst
-  pixel - is written out in `docs/inwentaryzacja.md`; an offline estimate is not a measurement.
-- **The layout is fluid, and there is exactly one breakpoint.** Everything is `clamp()`,
-  `auto-fit` and `minmax()`. The single media query in the project is `Intro.astro`, where the
-  hero switches from 3:2 to 3:1 at 700px - a choice of crop, not of layout, and its own
-  comment says so. Do not add breakpoints to fix a layout; fix the `minmax()` value.
-  (`prefers-reduced-motion` in `global.css` is not a breakpoint.)
+  and spacing.
+- **Three light grounds and two dark ones, and that is the whole palette of backgrounds.**
+  four warm papers - `--paper`, `--paper-linen`, `--paper-clay`, `--paper-blush` - on the light
+  side; `--green-deep` (the history block on `/o-nas/`), `--green-band` (**all three** dark
+  plates on the home page) and `--ink` (the footer) on the dark.
+  - **The light grounds differ in hue, not in lightness, and that is forced rather than
+    chosen.** `--ink-grey` carries every uppercase label and every photo caption, and it needs a
+    ground of at least L 0.8353 to hold 4.5:1 against it. The four sit between 4.99:1 and
+    4.61:1, so there is no room for a fifth, darker one. A cool ground, `--paper-sage`
+    `#EBEEE1`, existed between the two September revisions at 4.54:1 - the floor itself - and
+    was removed once the calendar and the directions block became dark plates and nothing was
+    left standing on it.
+  - **The dark plates must never touch each other.** Above L 0.076 the ochre overline fails and
+    above L 0.098 the labels do, so the entire usable range of dark greens spans 1.80:1 end to
+    end - two adjacent plates cannot read as two. On the home page a light section always parts
+    them, which makes the order of sections a correctness constraint and not a preference. The
+    one join that cannot be fixed is the last: `--green-band` against the `--ink` footer is
+    1.44:1, and the footer colour is not up for negotiation.
+    The third light ground arrived in September 2026 and reversed the "at most two backgrounds"
+    rule that stood here, on the owner's report that the home page all blended together - the
+    reversal and its reason are in `docs/inwentaryzacja.md`. **The grounds only work with the
+    spacing that came with them:** `--pad-section` went up by a third in the same change, and a
+    band repainted at the old spacing colours a section instead of parting it.
+- **There is one accent outside the green family, and its territory is written down.**
+  `--ochre` / `--ochre-lit` goes in overlines (`.eyebrow`) and in counters ("11 roślin"). It
+  does **not** go in body text, buttons, prose links, the menu underline or the season chips.
+  The value is the same token the sibling site alpaki-kazimierzdolny.pl uses, deliberately.
+- **There is no tonal gradient in the design.** `--hero-scrim` existed until September 2026,
+  under the home page `h1` where it lay on a photograph; the hero was rebuilt as two columns
+  and the gradient went with it. `grep -rn "gradient" src/` still finds `PhotoSlot` and
+  `MapEmbed`, and both are fine - hard-edged `repeating-linear-gradient` stripes hatching a
+  pending frame, which draw a pattern and never a blend. **Nothing on this site now puts text
+  on a photograph**, which is why no contrast here needs a browser to measure it any more;
+  colour on colour is arithmetic. The scrim's measuring method is kept in
+  `docs/inwentaryzacja.md` in case that ever changes - do not reinvent it, and never estimate
+  it offline.
+- **The layout is fluid, and there are now zero breakpoints.** Everything is `clamp()`,
+  `auto-fit` and `minmax()`. The project's single media query lived in `Intro.astro`, where
+  the hero switched from 3:2 to 3:1 at 700px; the rebuilt two-column hero keeps one ratio at
+  every width and does not need it. Do not add breakpoints to fix a layout; fix the
+  `minmax()` value. (`prefers-reduced-motion` in `global.css` is not a breakpoint, and it is
+  the only `@media` left - `grep -rn "@media" src/` should return exactly one line.)
 - **Design tokens go in `src/styles/tokens.css`**; components must not hardcode colours or
   spacing.
-- **Fonts are self-hosted**, as `@fontsource-variable/newsreader` (serif, with its italic -
-  the masthead needs it) and `@fontsource-variable/public-sans` (sans). Nothing is fetched
-  from a Google CDN at runtime; see the header of `src/styles/fonts.css` for which axis files
-  are loaded and why.
+- **Fonts are self-hosted**, as `@fontsource-variable/fraunces` (serif, with its italic - the
+  masthead needs it) and `@fontsource-variable/public-sans` (sans). Nothing is fetched from a
+  Google CDN at runtime. Fraunces replaced Newsreader in September 2026 on the owner's choice,
+  and **which of the six Fontsource files is imported is a decision with a price** - the header
+  of `src/styles/fonts.css` weighs it out and records how it was settled. The short version:
+  `opsz` is loaded, so the optical-size axis this design leans on is live and the two
+  decorative axes (`SOFT`, `WONK`) are not; that is 175 kB lighter than the Newsreader it
+  replaced, where `full` would have been 46 kB heavier. On mobile the bottleneck is the
+  typefaces, not the photographs - the sibling project measured a jump from 79 to 87 on
+  Lighthouse mobile from dropping a single face.
 - **The one sanctioned exception to "no carousels" is the "Inspiracje" slideshow**
   (`Compositions.astro`): a slide is a planting with a name, a container type, its plants as
   links into the offer, an anchor and the phone. The handoff says "nie dodawaj karuzel"; the
@@ -188,7 +219,12 @@ plus manual viewport checks.
   defaults, and the home page with `level={2}` and the filter, the rail, the anchors and the
   structured data and the prose switched off. Those five props are not styling; each one stops
   the two copies from contradicting each other, and the component's header comment gives the
-  reason for each. `prose` is the newest and the heaviest: the descriptions and the advice run
+  reason for each. **`ground="dark"` is the sixth and the odd one out** - it _is_ styling, and
+  it is the home page copy alone, where this band is the page's one dark plate. It works by
+  remapping the colour tokens on the container rather than by restating every rule, which is a
+  deliberate departure from how `.history` and `.footer` do it and is argued in the component;
+  the one thing that mechanism cannot reach is inherited `color`, which is why the block sets
+  that explicitly. `prose` is the newest and the heaviest: the descriptions and the advice run
   to ~2000 words, which on the home page would make the preview longer than the page it
   previews. `src/scripts/compositions.ts` drives one strip per `[data-comp]`, so scope every
   query to the root if you touch it; a `document.querySelector` there would make the home
@@ -226,11 +262,18 @@ plus manual viewport checks.
     one card is ever lit. `OfferSection.astro` prints a line under the heading on each
     category page - "Sprzedaż trwa: …", "Sprzedaż wkrótce: …", or the bare dates - because
     someone arriving from a search never sees the home page.
-  - **The home page offer tiles say nothing about the date.** They are four equal doors to
-    four pages, and a door that changes colour with the month is a worse door. The marker was
-    put on them for one release and taken off again; `OfferOverview.astro` says so in its own
-    header. The season cards carry no link either - the tiles are the one way to a category
-    page.
+  - **The home page offer tiles carry a season chip**, in three states: "W sprzedaży",
+    "Wkrótce", "Poza sezonem". This reverses what stood here - the marker was put on the tiles
+    for one release, taken off on the argument that four equal doors to four pages is what that
+    block is for and that a door changing colour with the month is a worse door, and put back
+    in September 2026 on the owner's instruction after seeing both. The argument that lost is
+    kept in the header of `OfferOverview.astro`, not deleted, together with the one that won:
+    someone arriving in July and opening "Chryzantemy" meets a full catalogue with no hint that
+    none of it is for sale for three months. **What to watch:** three groups are out of season
+    for most of the year, so most of the time three tiles read "Poza sezonem" and one is lit.
+    If that turns out to tell too gloomy a story, print the chip only where there is something
+    to say - `currentSeason.groups[group]` is already `"now" | "soon" | null`. The season cards
+    carry no link - the tiles are the one way to a category page.
   - The handoff's 1.12–28.02 "Sprzedaż wznawiamy w marcu" message is **not designed** and is
     not shipped; what does appear in winter is the one word "WKRÓTCE" on the pansy card,
     which is on the owners' list to confirm. All of this is argued out in
@@ -253,8 +296,13 @@ plus manual viewport checks.
   `Oferta` is a `NavGroup` in `src/data/navigation.ts` rather than a destination - there is no
   `/oferta/` page and there should not be one, because it would be a second copy of the home
   page tiles. The eight flat items were called out as flat and small by a UX review in
-  September 2026; the rebuild answers both, and `--text-nav` records the departure from the
-  handoff's `0.78rem`.
+  September 2026. **The rebuild answered "flat" and the grouping stays; the answer to "small"
+  was reversed by the owner later that month and the bar is back on the handoff's `0.78rem`
+  with `0.1em` of tracking.** A UX review is not the client. What remains of that release in
+  this component is `--nav-pad-block`, now a flat `3px` instead of a clamp that made the bar
+  70px tall: it is the least that still gives the current-page underline somewhere to sit, and
+  it answers a defect the owners reported, so do not take it to zero. Both halves of the
+  argument are kept at `--text-nav` in `tokens.css`.
   - **`src/scripts/nav.ts` is an enhancement, not a dependency.** Every handler in it only
     ever sets `open = false` - Escape, a click outside, focus leaving the group. With the
     script absent, blocked or thrown, the panel still opens, closes and announces its state,
@@ -298,8 +346,12 @@ plus manual viewport checks.
      picture here.
 
   Do not move the refresh to the browser, to the web server, or to a Meta embed. The secrets
-  are not set yet, so the block renders nothing - that is its designed empty state, not a
-  fault.
+  are not set yet, so there are no posts - and since September 2026 the block **still renders**,
+  with a different lead and no cards. It used to disappear instead, which is the better rule in
+  general; it changed because the home page rhythm now needs a light band between the plantings
+  plate and the directions plate, and two dark plates cannot be parted from each other. The
+  empty state claims no news, only that the owners post on Facebook and that new posts land
+  here. Both leads and the heading are our words and are on the owners' review list.
 
 - **SEO:** the current site ranks on plant names. Preserve the old URLs or set up 301
   redirects, and record the mapping in `docs/przekierowania.md` as the reference project does.
@@ -318,7 +370,14 @@ that shape code decisions:
    the remaining place to look, and needs a logged-in browser. Each remaining `PhotoSlot`
    names the crop it wants. A plant photograph goes in `src/assets/plants/` under the same
    name as its Markdown file, with `image` and `imageAlt` in the frontmatter - the schema
-   requires the pair. Two rules for anything new: downscale to 2000px and **bake in the EXIF
+   requires the pair. **A fourth photograph is now wanted and it is the most visible gap on
+   the site: a portrait frame for the home page hero.** The rebuilt hero is a 4:5 figure, and
+   the old rule that "only a landscape frame goes in this band" is reversed with it. Nothing
+   in the repository fits - all 23 portrait frames in `src/assets/gallery/` are plantings that
+   appear on the same page, the chrysanthemum strip is 736px wide, and the pansy strip is a
+   March product. `heroPhoto` is therefore a 4:3 generated image cropped to 4:5, at about 1.6x
+   rather than 2x; `Intro.astro` says what to do when a real frame arrives.
+   Two rules for anything new: downscale to 2000px and **bake in the EXIF
    rotation** - many of the supplied files arrived as portrait frames flagged sideways, and
    `<Picture>` does not honour that flag.
    **Wanting owner confirmation:** the Polish `alt` texts throughout; which chrysanthemum

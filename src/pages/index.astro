@@ -49,9 +49,14 @@ import Directions from "../components/Directions.astro";
  * **Aktualności** (`FacebookNews`) stands between the plantings and the map, and it is the one
  * thing on this page that has no subpage behind it. The catalogue changes once a season; this
  * is where "chryzantemy są już w sprzedaży" can appear on a Tuesday, because the owners write
- * it on Facebook and a workflow carries it here. It disappears entirely when the snapshot is
- * empty, so the page has to read correctly without it - it does, because it is the newest and
- * least structural thing here, not because anything was arranged around it.
+ * it on Facebook and a workflow carries it here.
+ *
+ * **It is now load-bearing, which it was not before.** Until September 2026 this block vanished
+ * when the snapshot was empty and the page had to read correctly without it. Since the home
+ * page went to alternating grounds it is the light band between the plantings plate and the
+ * directions plate, and two dark plates cannot be told apart from each other (--green-band in
+ * tokens.css explains why the usable range is that narrow). So the block renders whether or not
+ * there are posts, and moving it, or letting it disappear again, merges two sections into one.
  *
  * The map is consent-gated, and the Facebook block needs no gate because it embeds nothing -
  * its pictures are our own files. So the home page still contacts nothing but our own server
@@ -75,6 +80,7 @@ import Directions from "../components/Directions.astro";
     ids={false}
     prose={false}
     allLink
+    ground="dark"
   />
   <FacebookNews />
   <Directions />

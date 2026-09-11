@@ -92,6 +92,17 @@ export const offer: OfferPage[] = [
  * It lives here rather than in a module of its own because both callers - the home page tile
  * and the category page's count line - already import this file.
  */
+/** "i 7 innych" - the tail of a truncated name list on the home page tiles. Three Polish
+ *  forms like plantCount, and a fourth case for one, where the numeral reads worse than the
+ *  word: "i jeszcze jedna" rather than "i 1 inna". */
+export function otherPlants(n: number): string {
+  if (n === 1) return "i jeszcze jedna";
+  const lastTwo = n % 100;
+  const last = n % 10;
+  const few = last >= 2 && last <= 4 && !(lastTwo >= 12 && lastTwo <= 14);
+  return `i ${n} ${few ? "inne" : "innych"}`;
+}
+
 export function plantCount(n: number): string {
   if (n === 1) return "1 roślina";
   const lastTwo = n % 100;

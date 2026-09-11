@@ -1,35 +1,58 @@
-/* The two typefaces of the 2a theme, self-hosted - the same rules as before.
+/* The two typefaces, self-hosted. Nothing is fetched from a Google CDN at runtime: no
+ * visitor's IP may reach Google without consent, which is the same rule that gates the map.
  *
- * Instrument Serif and Karla are out; Newsreader and Public Sans are in. Both are OFL and
- * both have a variable cut on Fontsource, so one file per family ships instead of three.
+ * Newsreader is out; Fraunces is in (September 2026, on the owner's choice). Public Sans is
+ * untouched - it carries every uppercase label and the whole of the body copy, and none of
+ * the reasons it was picked changed.
  *
- * Newsreader italic is loaded on purpose: the word "Saran" in the masthead is italic, and a
- * browser forced to synthesise that italic makes a different letter out of it.
+ * ## Which Fraunces file, and how that was decided
+ *
+ * Fraunces has four axes: `opsz` 9-144, `wght` 100-900, `SOFT` 0-100 and `WONK` 0-1.
+ * Fontsource does not ship one variable file with all of them - it ships six, one per axis
+ * grouping, and the names do not say which is which. Settled the same way the Newsreader
+ * question was settled, by weighing the files and comparing their checksums rather than
+ * trusting the names:
+ *
+ *   fraunces-latin-opsz-normal.woff2      069cb90e11a337bf264eadfb15ad00f5    67304 B
+ *   fraunces-latin-standard-normal.woff2  069cb90e11a337bf264eadfb15ad00f5    67304 B   <- same file
+ *   fraunces-latin-full-normal.woff2      9a18143814559c6670ec34a76bddd118   121016 B
+ *   fraunces-latin-soft-normal.woff2      ef1a44e95ac2805a6045c11a68fa804d    62432 B
+ *   fraunces-latin-wght-normal.woff2      eb2486760f752e516255a61404d00f65    36620 B
+ *   fraunces-latin-wonk-normal.woff2      76bfce7a0411395feaa3fcab7f745128    36616 B
+ *
+ * So `opsz` and `standard` are byte for byte the same file - as with Newsreader - but unlike
+ * Newsreader, **neither of them is the complete font**. `full` is a different, much larger
+ * file, and it is the only one carrying `SOFT` and `WONK`.
+ *
+ * `opsz.css` is what is imported, and that is a deliberate trade with a measured price
+ * (latin + latin-ext, normal + italic):
+ *
+ *   Newsreader opsz, what this replaces   448 kB
+ *   Fraunces   opsz, imported here        273 kB   -175 kB
+ *   Fraunces   full, all four axes        494 kB    +46 kB
+ *
+ * The design leans on the optical-size axis harder than on anything else: display type here
+ * runs from 12.5px in the menu to about 47px in a heading, and `font-optical-sizing: auto`
+ * in tokens.css ties the axis to the size for every element on the site. Without `opsz`,
+ * large text renders in a cut tuned for body copy and stretched up. `SOFT` and `WONK` change
+ * the terminals and a handful of alternate glyphs - character, not legibility - and `full`
+ * costs 221 kB more than `opsz` to get them.
+ *
+ * If the owners ever want the wonk back, it is one word in the two imports below
+ * (`opsz` -> `full`) and nothing else - no token, no component changes.
+ *
+ * ## Why the italic is loaded
+ *
+ * The word "Saran" in the masthead is italic, and a browser forced to synthesise that italic
+ * makes a different letter out of it by slanting the roman. Fraunces' italic is a drawn
+ * italic, not a slant. It is the only italic on the site.
  *
  * Public Sans italic is not imported - the design never slants the sans.
  *
- * `opsz.css` is the file that matters here, because the optical-size axis is what this
- * design leans on: without it, large text (the h1, the phone number, the holding's name in
- * the masthead) renders in a cut tuned for ~16px body copy and stretched up to display
- * size, instead of the cut Newsreader actually has for large sizes.
- *
- * A correction, September 2026. An earlier version of this comment claimed that Fontsource
- * splits Newsreader into one file per axis, that `opsz.css` freezes `wght` at 400, and that
- * `wght` "would never be useful anyway". None of that is true, and it is worth knowing
- * before anyone reaches for a weight: `files/newsreader-latin-opsz-normal.woff2` is byte for
- * byte the same file as `newsreader-latin-standard-normal.woff2`
- * (md5 f94a697b16502ea4c1ea76b541b93b30) - the full variable font with both axes, `opsz`
- * 6-72 and `wght` 200-800. That is why the `@font-face` declares `font-weight: 200 800`.
- * The separately instanced file is `wght.css` (a different checksum), and that is the one
- * we do not need.
- *
- * The whole site still draws the serif at weight 400 only - deliberately, not for want of
- * the axis (checked: no component sets another). If a lighter cut is ever wanted,
- * `font-weight` on the serif works and costs not one extra byte.
- *
- * Still nothing from a Google CDN: no visitor's IP may reach Google without consent, which
- * is the same rule that gates the map.
+ * One caveat worth carrying forward from the alpaki project, which measured it: on mobile
+ * the bottleneck is the typefaces, not the photographs. Dropping a single face there moved
+ * Lighthouse mobile from 79 to 87. Do not add a third family without weighing it first.
  */
-@import "@fontsource-variable/newsreader/opsz.css";
-@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/fraunces/opsz-italic.css";
 @import "@fontsource-variable/public-sans/wght.css";

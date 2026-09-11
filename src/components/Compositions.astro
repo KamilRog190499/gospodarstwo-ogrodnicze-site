@@ -80,6 +80,8 @@ interface Props {
   prose?: boolean;
   /** Add "Zobacz wszystkie obsadzenia" under the strip, pointing at `/inspiracje/`. */
   allLink?: boolean;
+  /** Which ground the band sits on. `"dark"` is the home page only - see the note above. */
+  ground?: "paper" | "dark";
 }
 
 const {
@@ -90,6 +92,7 @@ const {
   ids = true,
   prose = true,
   allLink = false,
+  ground = "paper",
 } = Astro.props;
 
 const Heading = `h${level}` as "h1" | "h2";
@@ -147,7 +150,11 @@ const imageList =
 
 {imageList && <script type="application/ld+json" set:html={JSON.stringify(imageList)} is:inline />}
 
-<section class="comp" data-comp aria-labelledby="comp-title">
+<section
+  class:list={["comp", ground === "dark" && "comp--dark"]}
+  data-comp
+  aria-labelledby="comp-title"
+>
   <div class="comp__head">
     <Heading class="comp__title" id="comp-title">Inspiracje</Heading>
     <p class="comp__lead">
@@ -355,6 +362,76 @@ const imageList =
     padding: var(--pad-section) var(--edge);
     display: grid;
     gap: 1.25rem;
+  }
+
+  /* ---------- the green band (home page only) ---------- */
+
+  /* Unlike `.history` and `.footer`, which name their dark colours rule by rule, this block
+     remaps the tokens and lets every rule below it keep the name it already used. That is a
+     deliberate difference and it is about size: those two blocks hold five elements each,
+     this one holds a heading, a lead, a strip, controls, captions and chips across ~250 lines
+     of CSS, and a second copy of all of it would rot the moment either copy was edited.
+     Custom properties inherit, so one block turns the whole section over - the same mechanism
+     the project already uses for --focus-ring, applied to the rest of the palette.
+
+     The band took three tries: --green-deep ("too dark"), a much lighter #556848 ("not the
+     right colour"), and this one - darker than both, picked off a side-by-side comparison. See that token for what this ground gives
+     back - on it every text colour clears AA with room, which the light version did not.
+
+     **--green-band must not be remapped here.** It is the ground of this band, so
+     `background: var(--green-band)` on this very element would resolve through its own
+     remapping and the element would paint itself in whatever the token had been pointed at.
+     --green-deep is free for exactly that reason - it is no longer the ground - but on a band
+     this dark it is no longer *usable* as a fill either, which is what the inversion below is
+     for. */
+  .comp--dark {
+    background: var(--green-band);
+    /* The colour change is the edge; a rule on top of it would draw a seam. */
+    border-top-color: var(--green-band);
+    /* Set explicitly, and this is the one thing the token remapping below cannot do for it.
+       `color` is inherited: by the time it reaches this section it has already been resolved
+       on `body` from the page-level --ink, so pointing --ink somewhere else here changes
+       nothing for any element that does not name a colour of its own. The heading was dark
+       green on dark green until this line existed. */
+    color: var(--bone);
+
+    --ink: var(--bone);
+    --ink-soft: var(--green-body);
+    --ink-grey: var(--green-lit);
+    --green: var(--green-lit);
+    /* Latent: nothing in this band is an overline today. It is remapped anyway so that adding
+       one is a one-line change rather than a contrast investigation - 6.47:1 here. */
+    --ochre: var(--ochre-lit);
+    /* The chip loses its plate and keeps its border. --green-slot, which fills it everywhere
+       else, is 1.09:1 against this ground: a background nobody can see, drawn anyway. An
+       outline is what the controls beside it already use, so the band gains consistency
+       rather than losing a shape. */
+    --paper-dim: transparent;
+    --rule: rgb(238 240 230 / 22%);
+    --rule-dim: rgb(238 240 230 / 30%);
+    --rule-link: rgb(238 240 230 / 35%);
+    /* Dark ground: the default ring is 1.67:1 here. See tokens.css. */
+    --focus-ring: var(--green-lit);
+  }
+
+  /* The pair "fill with --green-deep, write in --paper" appears four times below. Against this
+     ground that fill is 1.27:1 - a pressed button indistinguishable from the band it sits on -
+     so the pair is inverted rather than recoloured: a light fill with dark type, 6.02:1 either
+     way round. */
+  .comp--dark
+    :is(
+      .filters button:hover,
+      .filters button[aria-pressed="true"],
+      .controls button:hover,
+      a.chip:hover
+    ) {
+    color: var(--green-deep);
+    background: var(--green-lit);
+    border-color: var(--green-lit);
+  }
+
+  .comp--dark .thumb[aria-current="true"] {
+    border-color: var(--green-lit);
   }
 
   .comp__head {

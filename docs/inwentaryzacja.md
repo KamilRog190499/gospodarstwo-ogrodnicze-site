@@ -566,7 +566,7 @@ już 1 kwietnia, a klient patrzy na swój kalendarz.
 
 ## Mozaika w kaflu - dwa kadry, zawsze
 
-Kafle oferty pokazują **po dwa zdjęcia, każde 4:3, w dwóch stałych kolumnach**. Liczba kadrów
+Kafle oferty pokazują **po dwa zdjęcia, każde 4:5, w dwóch stałych kolumnach**. Liczba kadrów
 jest stałą, nie zmienną - i to jest cała ta poprawka, bo każdy problem tego bloku brał się
 z tego, że liczba się ruszała.
 
@@ -579,9 +579,28 @@ wyrównały, ale kształt kadru zaczął zależeć od tego, ile ich jest: trzy w
 kwadratowe (~70×57 px), a dwa na kaflu „Rabatowe i wieloletnie" robiły się listwami 110×57.
 Jedna nierówność zamieniona na drugą.
 
-**Wersja trzecia, obecna: dwa kadry 4:3 w `repeat(2, 1fr)`.** Nie ma na czym się wyłożyć, bo nie
-ma już zmiennej: każdy kafel ma tę samą wysokość paska i ten sam kształt kadru, a przy ~110×82 px
-kadr jest **większy i czytelniejszy** niż trzy po ~70×53 px, które zastąpił.
+**Wersja trzecia: dwa kadry 4:3 w `repeat(2, 1fr)`.** Nie ma na czym się wyłożyć, bo nie ma już
+zmiennej: każdy kafel ma tę samą wysokość paska i ten sam kształt kadru.
+
+**Wersja czwarta, obecna: te same dwa kadry, ale 4:5.** Zmiana o źródłach, nie o guście.
+**Sześć z ośmiu zdjęć, z których te kafle mogą korzystać, to kadry pionowe** - ramka 4:3
+wyrzucała z nich 47%. Przy 4:5 zostaje 89%, a pasek rośnie ze 225×82 do 225×136 px przy
+1200 px, czyli z dwóch znaczków pocztowych w coś, co czyta się jako produkt. Płacą za to dwa
+kadry poziome - pelargonia rabatowa i chryzantema wielkokwiatowa - z których zostaje 45%
+i 53%. Kadrowanie jest wyśrodkowane i nigdzie nie jest celowane.
+
+**Proporcja jest zapisana w dwóch miejscach i muszą się zgadzać:** w CSS oraz jako
+`width`/`height` na `<Picture>`. Ta para każe Astro wyprodukować plik 4:5; gdyby CSS prosił
+o jedną proporcję, a Astro dostało inną, zdjęcie byłoby przycięte dwa razy, a drugiego
+przycięcia nie da się wycelować.
+
+**Lista nazw jest przycięta do czterech.** Nadal generuje się z kolekcji i nadal nie może
+rozjechać się z ofertą, ale nie wypisuje już wszystkiego: jedenaście roślin balkonowych szło
+na pięć linii, a kafel bratków na jedną, i skoro kafle mają wspólną wysokość, ta różnica
+wychodziła dziurą w trzech kaflach na cztery. Cztery nazwy i ogon - `i 7 innych` - mówią to,
+co ściana jedenastu mówiła źle. Pełna lista jest o jedno kliknięcie dalej, na stronie, do
+której ten kafel jest drzwiami. Liczebnik ma trzy formy polskie i czwarty przypadek dla
+jedynki, gdzie liczba czyta się gorzej niż słowo: "i jeszcze jedna", nie "i 1 inna".
 
 Dwa to też jedyna liczba, którą treść potrafi zagwarantować: `Rabatowe` mają dokładnie dwa wpisy
 ze zdjęciem i nie mają własnego `PhotoStrip`, więc trzeciego kadru nie będą miały nigdy - projekt
@@ -590,7 +609,7 @@ wymagający trzech byłby trwale zepsuty na jednym z czterech kafli.
 Które dwa - wybiera **kolekcja, nie lista w komponencie**: wpisy grupy wg `order`, które mają
 `image`, a jeśli to mniej niż dwa, to `PhotoStrip` grupy (dziś dotyczy tylko bratków: jeden wpis,
 cztery zdjęcia w pasie). Grupa, która nie uzbiera dwóch, rozciąga swój jedyny kadr na obie kolumny
-w proporcji 8:3, żeby pasek zachował wysokość - dziś żadna nie jest w tym stanie.
+w proporcji 8:5, żeby pasek zachował wysokość - dziś żadna nie jest w tym stanie.
 
 ## Co jeszcze przy okazji
 
@@ -1098,6 +1117,238 @@ pokazuje cztery kafle kategorii, a nie listę roślin, więc zdanie o „każdej
 nietrafione. Ta wada jest w projekcie od handoffu; utrzymana na wyraźną decyzję, żeby trzy
 miejsca mówiły jednym zdaniem, zamiast rozjeżdżać się na dwa warianty.
 
+## Rozdzielenie sekcji i zmiana kroju - wrzesień 2026
+
+Zgłoszenie właściciela było jednozdaniowe: „brakuje mi rozdzielenia kolorami sekcji na
+stronie głównej, na razie się wszystko zlewa", ze wskazaniem na
+<https://alpaki-kazimierzdolny.pl/> - drugą stronę tego samego właściciela - jako wzór.
+
+Decyzje zapadły na makiecie porównawczej z przełącznikami (krój, układ, nagłówek, pasy tła,
+akcent, paleta), nie z opisu. To jest warte zapamiętania jako sposób pracy: właściciel
+powiedział wprost, że nie jest w stanie ocenić tych rzeczy z tekstu.
+
+### Co zostało wybrane
+
+| Decyzja         | Wybór                                                    |
+| --------------- | -------------------------------------------------------- |
+| Krój szeryfowy  | Fraunces zamiast Newsreadera; Public Sans bez zmian      |
+| Nagłówek strony | bez zmian - trzy piętra, tagline zostaje na miejscu      |
+| Hero            | dwie kolumny, kadr 4:5; panorama ze scrimem odpada       |
+| Reszta układu   | bez zmian - karty sezonowe i cztery kafle oferty zostają |
+| Pasy tła        | trzy jasne grunty + ciemny pas „Inspiracje" + stopka     |
+| Akcent          | ochra, wyłącznie w nadtytułach i licznikach              |
+| Chip sezonowy   | wraca na kafle oferty, w trzech stanach                  |
+| Pasek menu      | stopień cofnięty do wartości z handoffu                  |
+| Paleta 2a       | bez zmian                                                |
+
+Z odrzuconej makiety „zielnik" weszło **wyłącznie hero**. „Rytm roku" i numerowane tablice
+I–IV nadal nie są wdrożone.
+
+### Cztery cofnięcia wcześniejszych decyzji
+
+Każde z nich cofa coś, co miało w kodzie zapisane uzasadnienie. Uzasadnienia zostały
+**przepisane, nie skasowane** - bo argument, który przegrał, zwykle nie był zły, tylko
+przegrał z innym, i bez niego ktoś za pół roku cofnie cofnięcie.
+
+1. **„Kafle oferty nic nie mówią o dacie."** Chip wrócił. Argument, który przegrał: cztery
+   równe drzwi do czterech stron, a drzwi zmieniające kolor z miesiącem to gorsze drzwi.
+   Argument, który wygrał: ktoś, kto trafia tu w lipcu i otwiera „Chryzantemy", dostaje pełny
+   katalog bez śladu informacji, że nic z niego nie jest w sprzedaży przez najbliższe trzy
+   miesiące, a pasmo sezonu ekran wyżej z nim nie podróżuje.
+2. **„Maksymalnie dwa tła."** Doszedł trzeci jasny grunt, `--paper-sage` `#EBEEE1`, z zielonym
+   podbiciem - żeby trzy grunty różniły się odcieniem, a nie tylko jasnością; `#FAF7F0`
+   i `#F2EFE4` dzieli ćwierć kroku i trzecia wartość na tej samej linii czytałaby się jak
+   wada druku, nie jak podział sekcji.
+3. **Zieleń jako jedyna rodzina koloru.** Ochra `#875B0C` / `#E8B75C` to pierwszy kolor spoza
+   niej. Granica jest częścią decyzji: nadtytuły i liczniki, nigdy tekst bieżący, przyciski,
+   linki w prozie, podkreślenie w menu ani chipy sezonowe. Wartość jest dosłownie tym samym
+   tokenem, którego używa strona alpak - obie strony mają czytać się jak jedna rodzina.
+4. **Powiększony stopień w menu.** Wprowadzony w 0.10 na zgłoszenie zewnętrznego przeglądu
+   UX („menu jest płaskie i drobne"), cofnięty przez właściciela po obejrzeniu. Grupowanie
+   pod panelem „Oferta" - czyli odpowiedź na „płaskie" - zostaje; cofnięty jest sam rozmiar.
+   Przegląd UX nie jest klientem.
+
+### Co zniknęło razem z hero
+
+**`--hero-scrim` - jedyny gradient tonalny w projekcie** i jedyne miejsce na stronie, gdzie
+kontrast trzeba było mierzyć w przeglądarce, bo tłem tekstu było zdjęcie i przypadkiem
+najgorszym był najjaśniejszy piksel kadru. Nic na tej stronie nie kładzie już tekstu na
+fotografii. **Metoda pomiaru zostaje zapisana** w sekcji
+[Zgłoszenia właścicieli po przebudowie menu](#zgłoszenia-właścicieli-po-przebudowie-menu--wrzesień-2026)
+
+- złożenie zdjęcia z gradientem w canvasie i przemiecenie pasma tekstu w poszukiwaniu
+  najgorszego piksela. Gdyby tekst kiedykolwiek wrócił na zdjęcie: nie wymyślać tego od nowa
+  i nie szacować offline.
+
+Przy okazji zniknęła **jedyna media query w projekcie** (hero przełączał kadr 3:2 → 3:1 przy
+700 px). Projekt ma teraz zero punktów łamania; `grep -rn "@media" src/` zwraca wyłącznie
+`prefers-reduced-motion`.
+
+### Kroje: który plik Fraunces i ile to kosztuje
+
+Fontsource rozbija Fraunces na sześć plików i nazwy nie mówią, który co niesie. Rozstrzygnięte
+tą samą metodą, którą rozstrzygnięto kiedyś Newsreadera - ważeniem plików i porównaniem sum
+kontrolnych. Wynik: `opsz` i `standard` są bajt w bajt tym samym plikiem, ale - inaczej niż
+przy Newsreaderze - **żaden z nich nie jest pełnym krojem**; osie `SOFT` i `WONK` niesie
+dopiero `full`.
+
+Waga, latin + latin-ext, odmiana prosta i kursywa razem:
+
+| Wariant                               | Waga       | Względem stanu sprzed zmiany   |
+| ------------------------------------- | ---------- | ------------------------------ |
+| Newsreader `opsz` - to, co zastąpiono | 448 kB     | —                              |
+| **Fraunces `opsz` - wczytywany**      | **273 kB** | −175 kB                        |
+| Fraunces `soft`                       | 258 kB     | −190 kB, ale bez osi optycznej |
+| Fraunces `full` (cztery osie)         | 494 kB     | +46 kB                         |
+
+Wybrano `opsz`, bo cała doktryna typograficzna tego projektu stoi na osi optycznej:
+`font-optical-sizing: auto` w `tokens.css` wiąże ją z rozmiarem dla każdego elementu, a typ
+display chodzi tu od 12,5 px w menu do 60 px w nagłówku. `SOFT` i `WONK` zmieniają zakończenia
+kresek i garść wariantów glifów - charakter, nie czytelność - i kosztują 221 kB.
+**Gdyby właściciele chcieli je jednak mieć, to jedno słowo w dwóch importach** (`opsz` →
+`full`) i nic poza tym: żadnego tokenu, żadnego komponentu.
+
+Cała skala display zeszła przy okazji o 4%: Fraunces ma wyraźnie większą wysokość x niż
+Newsreader i przy tych samych wartościach czyta się o stopień za duży.
+
+### Pasy tła na stronie głównej
+
+Układ ustalony w drugim podejściu, po obejrzeniu kandydatów bok w bok. Nagłówek liczy się
+jako dwie osobne płaszczyzny, bo nią jest.
+
+| Sekcja           | Grunt                            | Styk z poprzednią |
+| ---------------- | -------------------------------- | ----------------- |
+| `Header` (nazwa) | `--paper` `#FAF7F0`              | —                 |
+| `Nav` (pasek)    | `--paper-linen` `#F7F3EA`        | 1,04:1            |
+| `Intro`          | `--paper-blush` `#F5EDE6`        | 1,05:1            |
+| `SeasonCards`    | `--green-band` `#38442F` (płyta) | 8,91:1            |
+| `OfferOverview`  | `--paper-clay` `#F4EEE4`         | 8,94:1            |
+| `Compositions`   | `--green-band` (płyta)           | 8,94:1            |
+| `FacebookNews`   | `--paper-clay`                   | 8,94:1            |
+| `Directions`     | `--green-band` (płyta)           | 8,94:1            |
+| `Footer`         | `--ink` `#1F2A21`                | 1,44:1            |
+
+**Pasek menu rozdzielają kreski, nie kolor.** Trzy ciepłe grunty u góry dzieli 1,04 i 1,05
+do jednego, czyli praktycznie nic - pasmo menu wyodrębnia `border-top` na `nav` i
+`border-bottom` na `header`. Obie istniały od początku; usunięcie którejkolwiek zostawia menu
+pływające w jednym ciepłym polu. Kolor tam tylko ociepla pasmo, nie dzieli.
+
+**`FacebookNews` renderuje się teraz zawsze** - i to jest zmiana, którą wymusił ten układ,
+a nie estetyka. Blok jest jasnym pasmem między dwiema ciemnymi płytami, a dwie ciemne płyty
+nie dają się od siebie odróżnić (patrz niżej). Do września 2026 blok znikał w całości przy
+pustym snapshocie - reguła słuszna i stosowana na stronie alpak - ale jego zniknięcie sklejało
+Inspiracje z dojazdem w jeden blok wysoki na dwa ekrany. Stan pusty pokazuje nagłówek, inny
+lead i odnośnik do profilu; nie zmyśla żadnych wiadomości. **Nagłówek i oba leady są naszymi
+słowami, nie właścicieli** - do przejrzenia razem z resztą tekstów tego bloku.
+
+**Wszystkie trzy ciemne płyty stoją na jednym tokenie `--green-band` `#38442F`.** Wartość
+ustalała się w czterech podejściach i warto zapisać, czym każde padło, bo dwa środkowe
+wskazywały w przeciwne strony:
+
+1. `--green-deep` `#3D4A33` - to samo tło, co blok historii. Właściciel: **za ciemne**.
+2. `#556848`, mniej więcej dwukrotność jego jasności. Właściciel: **nie ten kolor.** Przy tej
+   wartości trzeba było już poświęcić hierarchię tekstu: `--green-lit` spadał do 3,87:1, więc
+   etykiety musiały wziąć kolor akapitów, a ochra (3,28:1) była poza zasięgiem całkiem.
+3. `#2E3A2B` - wybrane z porównania bok w bok, zaakceptowane słowami „ten kolor super".
+   **„Za ciemne" okazało się znaczyć „nie ten odcień", nie „za mało światła"** - kierunek był
+   odwrotny, niż sugerowało pierwsze zgłoszenie.
+4. `#38442F` - wybrane przy dobieraniu tła pozostałych sekcji, gdy okazało się, że wszystkie
+   trzy płyty mają być tym samym kolorem. Nieco jaśniejsze od poprzedniego i to ono jest
+   wdrożone.
+
+Trzecia wartość nie kosztuje nic po stronie tekstu i oddaje wszystko, co druga zabrała:
+`--bone` 10,39:1 (nagłówki), `--green-body` 9,04:1 (akapity), `--green-lit` 7,63:1 (etykiety
+i podpisy - własny, trzeci stopień zamiast pożyczonego), `--ochre-lit` 6,47:1 (nadtytuł, gdyby
+kiedyś doszedł), `--paper` 11,18:1 (tekst na wypełnieniu).
+
+**Ciemne płyty nie mogą ze sobą sąsiadować, i to jest twarde ograniczenie, nie preferencja.**
+Powyżej luminancji 0,076 gaśnie na płycie ochra, powyżej 0,098 etykiety - więc cały używalny
+zakres ciemnych zieleni ma 1,80:1 od końca do końca. Dwie sąsiadujące płyty nigdy nie
+przeczytają się jako dwie, niezależnie od tego, jak starannie dobrane. Na stronie głównej
+rozdziela je zawsze jakaś jasna sekcja, co czyni kolejność sekcji warunkiem poprawności.
+Jedynego styku, którego nie da się naprawić, dostarcza stopka: `--green-band` przy `--ink`
+to 1,44:1, a koloru stopki nie negocjujemy.
+
+**Kosztuje za to dwa wypełnienia.** Na tak ciemnym gruncie kafelek na `--green-slot` ma 1,09:1,
+a przycisk na `--green-deep` 1,27:1 - płytki, których nie widać, a i tak rysowane. Dlatego na
+tym pasie kafelek jest samą obwódką (jak przyciski sterowania obok, więc pas raczej zyskuje
+spójność, niż traci kształt), a stany wciśnięte odwracają się na jasne wypełnienie z ciemnym
+tekstem, 6,02:1 w obie strony.
+
+Sam pas robi `Compositions` przez **przemapowanie tokenów na kontenerze**, a nie przez
+wypisanie kolorów reguła po regule, jak robią to `.history` i `.footer`. To świadoma różnica
+i chodzi o rozmiar: tamte bloki mają po pięć elementów, ten ma nagłówek, lead, taśmę,
+sterowanie, podpisy i chipy w ~250 liniach CSS. Dwie pułapki, obie opisane przy kodzie:
+
+- **Token tła pasa nie może być przemapowany.** `background: var(--green-band)` na tym samym
+  elemencie rozwiązałoby się przez własne przemapowanie i element pomalowałby się tym, na co
+  token został wskazany. `--green-deep` jest wolny, bo przestał być tłem - ale na tak ciemnym
+  pasie przestał też być _użyteczny_ jako wypełnienie (1,27:1), i po to jest odwrócenie
+  opisane wyżej.
+- **`color` trzeba ustawić wprost.** Jest dziedziczone i zostało już rozwiązane na `body`, więc
+  wskazanie `--ink` gdzie indziej nie dosięga niczego, co samo nie podaje koloru. Nagłówek
+  „Inspiracje" był przez chwilę ciemnozielony na ciemnozielonym.
+
+Etykiety i podpisy mają tu własny stopień koloru (`--green-lit`, 7,63:1), a nie pożyczony
+z akapitów - to była cena wersji `#556848` i odpadła razem z nią.
+
+### Kontrasty
+
+Kolor na kolorze liczy się arytmetycznie, więc poniższe to wyliczenia, nie szacunki - i po
+usunięciu scrimu nie zostało na stronie nic, co wymagałoby pomiaru w przeglądarce.
+
+| Para                            | Kontrast   | Próg            |
+| ------------------------------- | ---------- | --------------- |
+| `--ochre` na `--paper`          | 5,56:1     | 4,5:1 ✓         |
+| `--ochre` na `--paper-sage`     | 5,05:1     | 4,5:1 ✓         |
+| `--ochre-lit` na `--green-deep` | 5,10:1     | 4,5:1 ✓         |
+| `--ochre-lit` na `--ink`        | 8,05:1     | 4,5:1 ✓         |
+| `--green` na `--paper-sage`     | 4,81:1     | 4,5:1 ✓         |
+| `--ink-grey` na `--paper-sage`  | **4,53:1** | 4,5:1 - na styk |
+
+Ostatni wiersz to jedyne ryzyko tej zmiany. `--ink-grey` niesie każdą etykietę wersalikami
+i każdy podpis zdjęcia, a nowy grunt zjada mu cały zapas. **Gdyby spadło poniżej 4,6:1,
+rozjaśnić `--paper-sage`, a nie przyciemniać `--ink-grey`** - ten drugi był już raz
+podnoszony (`#5B6153` → `#656E5B`) i ruszanie go zmienia charakter wszystkich etykiet naraz.
+
+### Pasek menu - co dokładnie cofnięto
+
+| Właściwość         | 0.10                                                      | Po cofnięciu        |
+| ------------------ | --------------------------------------------------------- | ------------------- |
+| `--text-nav`       | `clamp(0.86rem, 0.8rem + 0.28vw, 0.98rem)` (13,9–15,7 px) | `0.78rem` (12,5 px) |
+| tracking           | `0.08em`                                                  | `0.1em`             |
+| `--nav-pad-block`  | `clamp(0.4rem, 1vw, 0.7rem)` → pasek 70,4 px              | `3px` → pasek 54 px |
+| `--text-nav-panel` | —                                                         | bez zmian           |
+
+Waga **nie zmieniała się nigdy** i zostaje na 600; cięższy wygląd robił sam rozmiar
+i wysokość. Tracking wraca razem ze stopniem, bo zszedł do `0.08em` właśnie po to, żeby
+skompensować większą literę - to jedna decyzja, nie dwie.
+
+**Wysokość nie wróciła do zera i nie powinna.** Te dodatkowe piksele weszły na zgłoszenie
+właścicieli, że nie widać podkreślenia aktywnej strony: 2-pikselowa kreska lądowała 1 px nad
+dolną kreską nagłówka, a na stronie głównej 1 px nad górną krawędzią zdjęcia. Druga połowa
+tej przyczyny zniknęła sama razem z nowym hero - zdjęcie nie dotyka już paska. Zostaje kreska
+nagłówka i 3 px jej wystarcza. Gdyby okazało się, że nie, podnosić po pikselu, nie wracać do
+`clamp()`.
+
+### Do decyzji właścicieli
+
+1. **Kadr pionowy do hero.** To jest teraz najbardziej widoczna dziura na stronie. Hero jest
+   w proporcji 4:5, a w repozytorium nie ma wolnego kadru pionowego: wszystkie 23 z
+   `src/assets/gallery/` to obsadzenia, które pokazują się na tej samej stronie trzy sekcje
+   niżej; pas chryzantem ma 736 px szerokości; pas bratków to produkt marcowy. `heroPhoto` jest
+   więc obrazem generowanym 4:3, kadrowanym do 4:5, o rozdzielczości około 1,6x zamiast 2x.
+   Podmiana to jedna linia w `src/data/gallery.ts` plus wymiary w `Intro.astro`.
+2. **Czy „Poza sezonem" ma gasić trzy kafle na cztery przez większość roku?** Dziś tak -
+   zgodnie z decyzją. Jeśli okaże się to zbyt tłumiące, tańsza poprawka niż usuwanie chipa to
+   pokazywanie go tylko wtedy, gdy sezon trwa albo zaraz się zacznie: `currentSeason.groups`
+   już rozróżnia `"now"` / `"soon"` / `null`, więc to jeden warunek w szablonie.
+3. **Czy nadtytuły mają być ochrowe także na podstronach?** Dziś tak - `.eyebrow` jest jedną
+   klasą i nie ma wariantu per strona. Do obejrzenia w kontekście długich opisów upraw.
+4. **Trzy fakty w hero** („Uprawa: własna", „Sprzedaż: na miejscu", „Zamówienia: telefonicznie")
+   są przeredagowaniem zdania, które stoi tuż obok. Nic tam nie jest nową informacją - to
+   celowe, ale do potwierdzenia, czy powtórzenie jest warte miejsca.
+
 ## Historia wersji
 
 Ta sekcja przyjęła narrację, która do września 2026 stała w `CLAUDE.md`. Tam była szkodliwa:
@@ -1120,6 +1371,9 @@ się co wzięło.
 | 0.9     | Przebudowa kalendarza sprzedaży pod okna podane przez właścicieli. Znacznik stanu trafił na jedną iterację na kafle oferty i **został z nich zdjęty** - kafle to cztery równe drzwi do czterech stron. Karty sezonowe straciły natomiast odnośnik. Szczegóły: [Kalendarz sprzedaży](#kalendarz-sprzedaży--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | 0.9.1   | Zmniejszony stopień telefonu i adresu oraz brakująca spacja w adresie: [Stopień telefonu i adresu](#stopień-telefonu-i-adresu--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | 0.10.0  | Przebudowa menu po audycie UX/SEO: cztery kategorie zeszły do panelu „Oferta” na natywnym `<details>`, menu urosło z 12,5 do 13,8–15,7 px, „Historia gospodarstwa” nazywa się w menu „O nas”. Doszła dziewiąta strona, `/faq/`, z sześcioma pytaniami, których odpowiedzi w całości pochodzą z danych już w repozytorium. Do tego cztery poprawki po pierwszym pokazaniu wersji właścicielom: odstęp pod paskiem menu (podkreślenia bieżącej pozycji nie było widać), lżejszy i mniejszy `h1` na zdjęciu, zwijane pytania w FAQ oraz lżejsze pytania w tym akordeonie. Szczegóły: [Przebudowa menu](#przebudowa-menu--wrzesień-2026), [FAQ](#faq--wrzesień-2026) i [Zgłoszenia właścicieli](#zgłoszenia-właścicieli-po-przebudowie-menu--wrzesień-2026). |
+| 0.12.0  | Rozdzielenie sekcji strony głównej i zmiana kroju szeryfowego, po zgłoszeniu właściciela „wszystko się zlewa”. Newsreader → **Fraunces**; trzeci jasny grunt `--paper-sage`, ciemny pas pod „Inspiracjami”, odstęp sekcji w górę o jedną trzecią; **ochra** jako pierwszy kolor spoza rodziny zieleni, tylko w nadtytułach i licznikach. Hero przebudowane na dwie kolumny z kadrem 4:5, przez co znika `--hero-scrim` (jedyny gradient tonalny) i **jedyna media query w projekcie**. Chip sezonowy **wraca** na kafle oferty, a stopień w pasku menu **wraca** do wartości z handoffu - dwa cofnięcia decyzji z 0.9 i 0.10. Szczegóły: [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                       |
+| 0.12.1  | Drugie podejście do rytmu tła, po obejrzeniu kandydatów bok w bok. Cztery ciepłe jasne grunty zamiast dwóch (`--paper-linen`, `--paper-clay`, `--paper-blush` przy `--paper`), trzy ciemne płyty zamiast jednej, wszystkie na `--green-band` `#38442F`. `--paper-sage` usunięty, bo nic już na nim nie stało. Karta sezonu, której sezon trwa, **odwrócona**: na ciemnej płycie to ona jest jasna. `FacebookNews` renderuje się teraz zawsze, bo jest jasnym pasmem między dwiema ciemnymi płytami, a te nie dają się od siebie odróżnić. Szczegóły w [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                                                                                                          |
+| 0.12.2  | Dopracowanie kafli oferty: kadry z 4:3 na **4:5**, bo sześć z ośmiu zdjęć, z których kafle korzystają, jest pionowych i ramka 4:3 wyrzucała z nich 47%; pasek rośnie ze 225×82 do 225×136 px. Lista nazw przycięta do czterech plus ogon „i 7 innych” - jedenaście nazw szło na pięć linii i robiło dziurę w trzech kaflach na cztery. Tytuły dostają `text-wrap: balance`. Szczegóły: [Mozaika w kaflu](#mozaika-w-kaflu---dwa-kadry-zawsze).                                                                                                                                                                                                                                                                                                           |
 
 ### Paczki materiału od właścicieli
 
@@ -1206,3 +1460,10 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
 16. **Tekst kadru 8** („Biało-czerwona ekspozycja begonii”) - opis i porada napisane przez
     nas, bo nadesłana lista przeskakuje z 7 na 9. Jedyny tekst na `/inspiracje/`, którego
     autorem nie jest gospodarstwo; do przejrzenia albo do zastąpienia ich własnym.
+17. **Kadr pionowy do hero strony głównej (4:5).** Najbardziej widoczna dziura na stronie:
+    `heroPhoto` to obraz generowany 4:3, kadrowany do 4:5, o rozdzielczości ok. 1,6x zamiast
+    2x. W repozytorium nie ma wolnego kadru pionowego - wszystkie 23 z `src/assets/gallery/`
+    to obsadzenia pokazywane na tej samej stronie, pas chryzantem ma 736 px, pas bratków to
+    produkt marcowy. Podmiana: jedna linia w `src/data/gallery.ts` plus wymiary
+    w `Intro.astro`. Patrz
+    [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).
