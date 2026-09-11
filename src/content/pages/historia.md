@@ -1,7 +1,7 @@
 ---
 title: Rodzinna uprawa w Cholewiance
 label: Historia gospodarstwa
-description: Gospodarstwo ogrodnicze Saran działa od 1991 roku — 2,5 tys. m² pod osłonami, kwiaty balkonowe, rabatowe i chryzantemy z własnej uprawy.
+description: Gospodarstwo ogrodnicze Saran działa od 1991 roku - 2,5 tys. m² pod osłonami, kwiaty balkonowe, rabatowe i chryzantemy z własnej uprawy.
 ---
 
 Gospodarstwo ogrodnicze istnieje od 1991 roku. Początkowo zajmowało się uprawą warzyw. Od 1997
@@ -12,9 +12,9 @@ Gospodarstwo jest stale modernizowane. Zostały wymienione kotły centralnego og
 ekologiczne z certyfikatem unijnym. Współpracuje również z profesjonalnymi firmami
 ogrodniczymi zajmującymi się produkcją sadzonek.
 
-Za swoją działalność gospodarstwo zostało wyróżnione przez Ministra Rolnictwa i Rozwoju Wsi —
-Krzysztofa Jurgiela — w dniu 22 lipca 2016 roku odznaką honorową „Zasłużony dla Rolnictwa”
-oraz w 2019 roku nagrodą Starosty Puławskiego — Danuty Smagi.
+Za swoją działalność gospodarstwo zostało wyróżnione przez Ministra Rolnictwa i Rozwoju Wsi -
+Krzysztofa Jurgiela - w dniu 22 lipca 2016 roku odznaką honorową „Zasłużony dla Rolnictwa”
+oraz w 2019 roku nagrodą Starosty Puławskiego - Danuty Smagi.
 
 Sprzedaż kwiatów odbywa się na terenie gospodarstwa oraz na targowiskach. W gospodarstwie
 głównie uprawia się pelargonie rabatowe i bluszczolistne, surfinie, begonie, werbeny, bakopy,

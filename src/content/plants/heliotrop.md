@@ -2,7 +2,7 @@
 name: Heliotrop
 group: Balkonowe
 order: 7
-slot: zdjęcie — heliotrop, 4:3
+slot: zdjęcie - heliotrop, 4:3
 image: ../../assets/plants/heliotrop.jpg
 imageAlt: Fioletowe kwiatostany heliotropu w wiszącej doniczce, na tle szklarni
 facts:
@@ -23,7 +23,7 @@ peruwiański.
 
 Roślina tworzy zwarte, dobrze rozkrzewione kępy i osiąga wysokość około 40–60 cm. Jej
 drobne kwiaty zebrane są w efektowne kwiatostany, które doskonale prezentują się
-w grupowych nasadzeniach. Heliotrop kwitnie długo — od lipca do września, wprowadzając do
+w grupowych nasadzeniach. Heliotrop kwitnie długo - od lipca do września, wprowadzając do
 ogrodu kolor i przyjemny aromat.
 
 Najlepiej rośnie na stanowisku w pełni słonecznym, ciepłym i osłoniętym od wiatru.

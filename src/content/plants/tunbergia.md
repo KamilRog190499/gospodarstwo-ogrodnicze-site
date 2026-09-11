@@ -2,7 +2,7 @@
 name: Tunbergie
 group: Balkonowe
 order: 4
-slot: zdjęcie — tunbergia na podporze, 4:3
+slot: zdjęcie - tunbergia na podporze, 4:3
 image: ../../assets/plants/tunbergia.jpg
 imageAlt: Pomarańczowo-żółte kwiaty tunbergii z ciemnym gardzielem, pnące się po podporze w szklarni
 facts:
@@ -25,5 +25,5 @@ się w miejscu ciepłym i osłoniętym od silnego wiatru. Może być uprawiana z
 słońcu, jak i w półcieniu.
 
 Tunbergia wymaga regularnego i obfitego podlewania oraz stale lekko wilgotnego podłoża.
-W czasie upalnych dni zapotrzebowanie na wodę jest szczególnie duże — w takich warunkach
+W czasie upalnych dni zapotrzebowanie na wodę jest szczególnie duże - w takich warunkach
 roślinę warto podlewać nawet dwa razy dziennie.

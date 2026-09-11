@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Faq from "../components/Faq.astro";
+
+/**
+ * `/faq/` - a new address with no predecessor on WordPress, so nothing in
+ * docs/przekierowania.md points at it and no 301 is needed.
+ *
+ * The label is the English abbreviation, which is the one exception to the Polish interface:
+ * it is what the visitor recognises in a menu, and it is what the UX review asked for. The
+ * page's own overline says "Częste pytania" in full.
+ */
+---
+
+<BaseLayout
+  title="FAQ"
+  description="Najczęstsze pytania o sprzedaż kwiatów w gospodarstwie Saran w Cholewiance - zamówienia, terminy sprzedaży, dowóz i dojazd."
+  canonical="/faq/"
+  breadcrumb="FAQ"
+>
+  <Faq />
+</BaseLayout>

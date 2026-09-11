@@ -2,7 +2,7 @@
 name: Dahlie
 group: Balkonowe
 order: 9
-slot: zdjęcie — dahlia, 4:3
+slot: zdjęcie - dahlia, 4:3
 facts:
   - label: Średnica kwiatu
     value: do 30 cm

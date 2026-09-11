@@ -1,0 +1,332 @@
+---
+import { getCollection, render } from "astro:content";
+import { phones } from "../data/contact";
+import { saleWindows, currentSeason } from "../data/season";
+
+/**
+ * The body of `/faq/` - the questions people ask on the phone, answered once.
+ *
+ * ## The rule this page lives under
+ *
+ * Every answer here is something the repository already knows, and the two that are volatile
+ * are not written down here at all. The phone numbers come from `contact.ts` and the selling
+ * calendar from `season.ts`, so a number that changes or a window the owners move cannot
+ * leave a stale copy behind on this page - which is the specific way a FAQ goes wrong. The
+ * prose sits in `src/content/faq/`, one file per question, and the `data` flag in its
+ * frontmatter picks which live block goes under it.
+ *
+ * What is deliberately absent: selling hours, an e-mail address, card payment, minimum order.
+ * `email` and `openingHours` are `null` in `contact.ts` because the owners have not given
+ * them, and a FAQ is exactly where a guess gets quoted back at a visitor as the holding's own
+ * word. The questions to put to them are listed in docs/inwentaryzacja.md.
+ *
+ * ## The calendar answer moves, so the site has to be rebuilt
+ *
+ * `currentSeason` is resolved at build time, like everywhere else. This page therefore has the
+ * same dependency the season cards have on a **daily** `schedule:` in `deploy.yml` (CLAUDE.md,
+ * "Deployment"): without it the answer freezes on whatever the last build believed, and here
+ * it freezes as a sentence rather than as a word on a tile.
+ *
+ * ## FAQPage in the structured data
+ *
+ * Not for rich results. Google has shown FAQ rich results only to government and health sites
+ * since August 2023, and a horticultural holding will get nothing visible in the SERP from
+ * this - do not promise otherwise. It is here because it is free and because it states, without
+ * ambiguity, what this page answers, which is what a language model reads when someone asks it
+ * where to buy chrysanthemums near Kazimierz Dolny.
+ */
+const entries = (await getCollection("faq")).sort((a, b) => a.data.order - b.data.order);
+
+if (entries.length === 0) {
+  throw new Error("No entries in src/content/faq - the page would be a heading and nothing else.");
+}
+
+const rendered = await Promise.all(
+  entries.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
+
+/** The windows as the owners word them, with what is on sale today marked. Built from
+ *  `saleWindows` so it cannot drift from the season cards or the category pages. */
+const calendar = saleWindows.map((window) => ({
+  months: window.months,
+  what: window.groups.join(", ").toLocaleLowerCase("pl-PL"),
+  state: window.groups.some((group) => currentSeason.groups[group] === "now")
+    ? "now"
+    : window.groups.some((group) => currentSeason.groups[group] === "soon")
+      ? "soon"
+      : null,
+}));
+
+/** The plain-text answers the structured data needs. The prose bodies are Markdown and are
+ *  rendered rather than read as strings, so what goes into JSON-LD is the first paragraph or
+ *  the live block that belongs to the question - never an invented summary. */
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: rendered.map(({ entry }) => ({
+    "@type": "Question",
+    name: entry.data.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text:
+        entry.data.data === "phones"
+          ? phones.map((phone) => phone.person + ": " + phone.display).join(", ")
+          : entry.data.data === "season"
+            ? calendar.map((row) => row.months + " - " + row.what).join("; ")
+            : (entry.body ?? "").trim().split("\n\n")[0]?.replace(/\s+/g, " ").trim(),
+    },
+  })),
+};
+---
+
+<section class="faq" aria-labelledby="faq-title">
+  <div class="faq__head">
+    <p class="eyebrow faq__eyebrow">Częste pytania</p>
+    <h1 class="faq__title" id="faq-title">O co pytają Państwo najczęściej</h1>
+    <p class="faq__lead">
+      Odpowiadamy tu tylko na to, co wiemy na pewno. O godziny, terminy odbioru i szczegóły
+      zamówienia najlepiej zapytać telefonicznie.
+    </p>
+  </div>
+
+  <div class="faq__list">
+    {
+      rendered.map(({ entry, Content }, index) => (
+        <details class="faq__item" id={entry.id} open={index === 0}>
+          <summary class="faq__summary">
+            <h2 class="faq__question">{entry.data.question}</h2>
+          </summary>
+          <div class="faq__answer copy">
+            <Content />
+
+            {entry.data.data === "phones" && (
+              <ul class="faq__phones">
+                {phones.map((phone) => (
+                  <li>
+                    <span class="faq__person">{phone.person}</span>
+                    <a class="faq__tel" href={phone.href}>
+                      {phone.display}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {entry.data.data === "season" && (
+              <ul class="faq__calendar">
+                {calendar.map((row) => (
+                  <li class:list={["faq__row", row.state === "now" && "faq__row--now"]}>
+                    <span class="faq__months">{row.months}</span>
+                    <span class="faq__what">
+                      {row.what}
+                      {row.state === "now" && <span class="faq__state"> - sprzedaż trwa</span>}
+                      {row.state === "soon" && <span class="faq__state"> - wkrótce</span>}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+<style>
+  .faq {
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: var(--gap-columns);
+  }
+
+  /* No rule of its own. The accordion below opens with one, and two lines a centimetre
+     apart - one full width, one stopping at 62ch - read as a mistake rather than as
+     structure. The gap does the separating. */
+  .faq__head {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+  }
+
+  .faq__eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .faq__title {
+    font-size: var(--text-h2-wide);
+    line-height: 1.06;
+    max-width: 20ch;
+  }
+
+  .faq__lead {
+    max-width: 58ch;
+    color: var(--ink-soft);
+  }
+
+  /* Questions collapse. On a page whose whole job is "find the one thing you came to ask",
+     six open answers make the reader scan prose to find a question; six closed ones make the
+     questions themselves the list. The first is open so the pattern is visible without a
+     click, and so the page does not open as a bare list of headings.
+
+     `<details>` again, for the same reason as the menu: it opens, closes and announces its
+     state with no JavaScript at all. Unlike the menu there is nothing to add on top - an
+     accordion in the page flow has no outside to click and nothing to escape from - so this
+     one ships with no script whatsoever.
+
+     The `h2` lives *inside* the `<summary>`, which the HTML spec allows (summary takes
+     phrasing content "optionally intermixed with heading content"). That keeps the page's
+     outline - h1 plus one h2 per question - which a page that exists to answer questions
+     should not give up. Answers stay in the HTML when closed, so both the crawler and the
+     FAQPage block above see them. */
+  .faq__list {
+    max-width: 62ch;
+    border-top: 1px solid var(--rule);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .faq__summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: space-between;
+    padding-block: 1.1rem;
+    min-height: var(--tap);
+  }
+
+  .faq__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The same chevron as the menu's "Oferta", and deliberately so: two different marks for
+     "this opens" on one site is one more than the reader should have to learn. Two 1px edges
+     turned 45 degrees - not an icon and not a glyph, because the design forbids the first
+     and builds every other piece of hierarchy out of 1px lines. */
+  .faq__summary::after {
+    content: "";
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 1px solid var(--green);
+    border-bottom: 1px solid var(--green);
+    transform: translateY(-0.15rem) rotate(45deg);
+  }
+
+  .faq__item[open] > .faq__summary::after {
+    transform: translateY(0.08rem) rotate(225deg);
+  }
+
+  .faq__summary:hover .faq__question {
+    color: var(--green);
+  }
+
+  /* The outline would otherwise wrap the full-width row and collide with the rules above and
+     below it. Pulled inside, where it still reads as 2px of --green on paper. */
+  .faq__summary:focus-visible {
+    outline-offset: -3px;
+  }
+
+  /* Its own step, not --text-h3 - see the comment beside --text-question in tokens.css for
+     why a row in a list of six wants a different size from a plant name. The weight is the
+     same optical correction the hero heading carries; the wght axis of the loaded Newsreader
+     file is live, so 375 really does thin the stroke. Line height is looser than a heading's
+     because these wrap to two lines on a phone. */
+  .faq__question {
+    font-size: var(--text-question);
+    font-weight: 375;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+  }
+
+  .faq__answer {
+    padding-bottom: 1.6rem;
+    max-width: 58ch;
+  }
+
+  /* ---------- the two live blocks ---------- */
+
+  .faq__phones {
+    display: grid;
+    gap: 0.35rem;
+    margin-top: 1.1rem;
+  }
+
+  /* The same fixed first track as the contact list: a flex row made the four numbers start at
+     four different positions, which was a reported defect. Keep the grid. */
+  .faq__phones li {
+    display: grid;
+    grid-template-columns: minmax(8ch, auto) 1fr;
+    gap: 0 1rem;
+    align-items: baseline;
+  }
+
+  .faq__person {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .faq__tel {
+    font-family: var(--serif);
+    font-size: var(--text-tel);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+    justify-self: start;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .faq__tel:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  .faq__calendar {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 1.1rem;
+  }
+
+  .faq__row {
+    display: grid;
+    grid-template-columns: minmax(14ch, auto) 1fr;
+    gap: 0 1rem;
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.4rem;
+  }
+
+  .faq__months {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .faq__row--now .faq__months {
+    color: var(--green);
+  }
+
+  .faq__state {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .faq__row--now .faq__state {
+    color: var(--green);
+  }
+</style>

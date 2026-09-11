@@ -6,14 +6,25 @@ import History from "../components/History.astro";
  * `/o-nas/` - the address the history had on WordPress. Keeping it means the page that
  * ranks for the holding's story keeps ranking, and the 301 the redirect map planned for it
  * (`/o-nas/` → `/#historia`) is no longer needed at all.
+ *
+ * The page is called "O nas" from 1.0 on; it was "Historia gospodarstwa", the label from the
+ * old WordPress menu. The change came out of the same UX review as the menu rebuild and is
+ * recorded in docs/inwentaryzacja.md, because renaming a page the client can see is not a
+ * decision to take in a code comment.
+ *
+ * Note what did **not** change: the `h1` is `title` in src/content/pages/historia.md -
+ * "Rodzinna uprawa w Cholewiance" - and never said "Historia gospodarstwa" in the first
+ * place. That phrase is the overline above it, and it stays there. It is the one place on
+ * the site where the phrase is both true and indexable, and dropping it everywhere at once
+ * would have cost the page its subject for no gain.
  */
 ---
 
 <BaseLayout
-  title="Historia gospodarstwa"
+  title="O nas"
   description="Rodzinne gospodarstwo ogrodnicze w Cholewiance pod Kazimierzem Dolnym - od warzyw do kwiatów balkonowych i chryzantem. Historia, nagrody i dzisiejsza uprawa."
   canonical="/o-nas/"
-  breadcrumb="Historia gospodarstwa"
+  breadcrumb="O nas"
 >
   <History level={1} />
 </BaseLayout>

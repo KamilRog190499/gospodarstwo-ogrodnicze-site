@@ -2,7 +2,7 @@
 name: Chryzantema średniokwiatowa
 group: Chryzantemy
 order: 15
-slot: zdjęcie — chryzantema średniokwiatowa, 4:3
+slot: zdjęcie - chryzantema średniokwiatowa, 4:3
 image: ../../assets/plants/chryzantema-sredniokwiatowa.jpg
 imageAlt: Różowo-liliowe chryzantemy o kulistych, gęsto ułożonych płatkach, rzędy doniczek w uprawie
 facts:

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { navigation } from "../data/navigation";
+import { allPages } from "../data/navigation";
 import { primaryPhone } from "../data/contact";
 
 /**
@@ -15,9 +15,10 @@ import { primaryPhone } from "../data/contact";
  * The title is an `h1`. It was an `h2`, because the masthead held the page's only `h1`.
  */
 
-/** The menu minus the home page: it is already the button above this list, and one address
- *  offered twice on the same screen reads as two different destinations. */
-const otherPages = navigation.filter((item) => item.href !== "/");
+/** Every page except the home page, with the four categories flattened out of the menu's
+ *  "Oferta" group - see `allPages` in src/data/navigation.ts for why the flattening is done
+ *  there and not here. */
+const otherPages = allPages;
 ---
 
 <BaseLayout

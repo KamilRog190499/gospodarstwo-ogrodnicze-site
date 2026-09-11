@@ -2,7 +2,7 @@
 name: Goździk
 group: Balkonowe
 order: 6
-slot: zdjęcie — goździki, 4:3
+slot: zdjęcie - goździki, 4:3
 image: ../../assets/plants/gozdzik.jpg
 imageAlt: Różowy goździk o gęsto ułożonych, postrzępionych płatkach, zbliżenie na tle liści
 facts:

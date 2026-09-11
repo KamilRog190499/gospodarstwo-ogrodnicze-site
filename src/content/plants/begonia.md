@@ -2,9 +2,9 @@
 name: Begonia
 group: Balkonowe
 order: 11
-slot: zdjęcie — begonia, 4:3
+slot: zdjęcie - begonia, 4:3
 image: ../../assets/plants/begonia.jpg
-imageAlt: Begonie w wielu kolorach — białe, czerwone, różowe i żółte — w skrzynkach uprawowych
+imageAlt: Begonie w wielu kolorach - białe, czerwone, różowe i żółte - w skrzynkach uprawowych
 facts:
   - label: Stanowisko
     value: Ciepłe, zaciszne, półcień

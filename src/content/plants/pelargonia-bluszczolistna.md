@@ -2,7 +2,7 @@
 name: Pelargonie bluszczolistne
 group: Balkonowe
 order: 3
-slot: zdjęcie — pelargonia bluszczolistna w skrzynce, 4:3
+slot: zdjęcie - pelargonia bluszczolistna w skrzynce, 4:3
 facts:
   - label: Długość pędów
     value: do 100 cm
@@ -27,7 +27,7 @@ Jej obfite kwitnienie oraz elegancki, przewieszający się pokrój sprawiają, �
 prezentuje się w wiszących pojemnikach, skrzynkach balkonowych i kwietnikach.
 
 Pędy pelargonii bluszczolistnej mogą osiągać nawet 100 cm długości, dzięki czemu roślina
-tworzy efektowne, kwitnące kaskady. Najlepiej rośnie na stanowisku w pełni słonecznym —
+tworzy efektowne, kwitnące kaskady. Najlepiej rośnie na stanowisku w pełni słonecznym -
 duża ilość światła sprzyja intensywnemu wzrostowi i obfitemu kwitnieniu.
 
 W okresie letnim wymaga regularnego podlewania, szczególnie podczas upalnych dni. Na

@@ -347,7 +347,7 @@ export const compositions = gallery.filter(
   (photo): photo is GalleryPhoto & { composition: Composition } => photo.composition !== undefined,
 );
 
-/** The tunnel shot the spring card asks for: "galeria — tunel z kwiatami balkonowymi". */
+/** The tunnel shot the spring card asks for: "galeria - tunel z kwiatami balkonowymi". */
 export const tunnelPhoto = gallery[17]!;
 
 /** The full-bleed band at the top of the home page.
@@ -372,7 +372,7 @@ export const heroPhoto: GalleryPhoto = {
   alt: "Bujna kompozycja czerwonych, różowych i białych pelargonii w donicach i koszach wiszących",
 };
 
-/** The autumn card's frame: "galeria — chryzantemy przed 1 listopada, 16:9".
+/** The autumn card's frame: "galeria - chryzantemy przed 1 listopada, 16:9".
  *
  *  Deliberately outside `gallery`: that strip is the spring presentation, and a single
  *  autumn frame in the middle of it would read as a mistake rather than as a season.
@@ -416,11 +416,11 @@ export const pansyPhoto: GalleryPhoto = {
 export const chrysanthemumStrip: GalleryPhoto[] = [
   {
     src: offer01,
-    alt: "Rzędy kulistych chryzantem w tunelu — amarantowe, biało-żółte i czerwone, w tle żółte",
+    alt: "Rzędy kulistych chryzantem w tunelu - amarantowe, biało-żółte i czerwone, w tle żółte",
   },
   {
     src: offer02,
-    alt: "Kuliste chryzantemy w tunelu foliowym — czerwone, różowe, białe, żółte i pomarańczowe",
+    alt: "Kuliste chryzantemy w tunelu foliowym - czerwone, różowe, białe, żółte i pomarańczowe",
   },
   {
     src: offer03,
@@ -428,7 +428,7 @@ export const chrysanthemumStrip: GalleryPhoto[] = [
   },
   {
     src: offer04,
-    alt: "Ekspozycja chryzantem — żółte, amarantowe i liliowe obok białych o wąskich płatkach",
+    alt: "Ekspozycja chryzantem - żółte, amarantowe i liliowe obok białych o wąskich płatkach",
   },
 ];
 
@@ -452,7 +452,7 @@ export const chrysanthemumStrip: GalleryPhoto[] = [
 export const pansyStrip: GalleryPhoto[] = [
   {
     src: pansy01,
-    alt: "Dziewięć skrzynek z bratkami ustawionych obok siebie — żółte, białe, fioletowe, liliowe i różowe",
+    alt: "Dziewięć skrzynek z bratkami ustawionych obok siebie - żółte, białe, fioletowe, liliowe i różowe",
   },
   { src: pansy02, alt: "Skrzynka jednolicie żółtych bratków bez ciemnej plamki, widziana z góry" },
   { src: pansy03, alt: "Białe i kremowe bratki z ciemnofioletową plamką pośrodku kwiatu" },

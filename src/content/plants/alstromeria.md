@@ -2,7 +2,7 @@
 name: Alstromeria
 group: Balkonowe
 order: 1
-slot: zdjęcie — alstromeria, 4:3
+slot: zdjęcie - alstromeria, 4:3
 image: ../../assets/plants/alstromeria.jpg
 imageAlt: Biała alstromeria z żółto-czerwonym, prążkowanym gardzielem, na tle zieleni w szklarni
 facts:

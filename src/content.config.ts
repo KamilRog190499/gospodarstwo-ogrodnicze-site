@@ -28,7 +28,7 @@ const plants = defineCollection({
          *  build validates against cannot drift apart. */
         group: z.enum(plantGroups),
         order: z.number().int().positive(),
-        /** What the photograph should show, e.g. "zdjęcie — fuksja, 4:3". Printed inside
+        /** What the photograph should show, e.g. "zdjęcie - fuksja, 4:3". Printed inside
          *  the placeholder until a real photograph arrives, so whoever takes the pictures
          *  can read the brief off the page itself. */
         slot: z.string(),
@@ -73,4 +73,32 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { plants, pages };
+/** The questions on `/faq/`.
+ *
+ *  One file per question, ordered by `order`, exactly as `plants` works - so there is no new
+ *  convention to learn and a typo in a field still breaks the build.
+ *
+ *  **Every answer on that page has to be something the repository already knows.** The
+ *  owners have not given selling hours, an e-mail address or a card-payment policy
+ *  (src/data/contact.ts), so no question asks about them; the list of what to ask them is in
+ *  docs/inwentaryzacja.md. A FAQ is the one page where a guess is quoted straight back at a
+ *  visitor as if the holding had said it.
+ *
+ *  Which is what `data` is for. Two answers are not prose at all - the phone numbers and the
+ *  selling calendar - and typing either into a Markdown body would put a second copy of a
+ *  fact that already has an owner (`contact.ts`, `season.ts`) somewhere nothing keeps in
+ *  step. The body carries the sentence, the flag tells `Faq.astro` which live block to set
+ *  under it.
+ */
+const faq = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/faq" }),
+  schema: z.object({
+    question: z.string(),
+    order: z.number().int().positive(),
+    /** Which live block to render under the prose, if any. `phones` prints the four numbers
+     *  from `contact.ts`; `season` prints the windows from `season.ts`. */
+    data: z.enum(["phones", "season"]).optional(),
+  }),
+});
+
+export const collections = { plants, pages, faq };

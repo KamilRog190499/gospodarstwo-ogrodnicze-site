@@ -2,9 +2,9 @@
 name: Bratek ogrodowy
 group: Bratki
 order: 17
-slot: zdjęcie — bratek ogrodowy, 4:3
+slot: zdjęcie - bratek ogrodowy, 4:3
 image: ../../assets/plants/bratek-ogrodowy.jpg
-imageAlt: Skrzynka bratków w wielu kolorach — żółte, bordowe, białe i liliowe, widziane z góry
+imageAlt: Skrzynka bratków w wielu kolorach - żółte, bordowe, białe i liliowe, widziane z góry
 facts:
   - label: Uprawa
     value: Donice, skrzynki, rabaty
@@ -25,7 +25,7 @@ colors:
 
 Bratki ogrodowe to jedne z najbardziej popularnych roślin sezonowych, które już od wczesnej
 wiosny wprowadzają do ogrodu, na taras czy balkon mnóstwo koloru. Ich charakterystyczne,
-efektowne kwiaty zachwycają różnorodnością barw i wzorów — od intensywnej żółci i bordo,
+efektowne kwiaty zachwycają różnorodnością barw i wzorów - od intensywnej żółci i bordo,
 przez biel, róż i fiolet, aż po odmiany dwubarwne.
 
 Rośliny tworzą zwarte, dekoracyjne kępki z soczyście zielonymi liśćmi i licznymi kwiatami.

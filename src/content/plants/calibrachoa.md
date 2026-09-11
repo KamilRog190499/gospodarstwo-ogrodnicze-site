@@ -2,7 +2,7 @@
 name: Calibrachoa
 group: Balkonowe
 order: 10
-slot: zdjęcie — calibrachoa, 4:3
+slot: zdjęcie - calibrachoa, 4:3
 image: ../../assets/plants/calibrachoa.jpg
 imageAlt: Żółte, drobne kwiaty calibrachoa tworzące gęstą, zwisającą kaskadę
 facts:
@@ -18,7 +18,7 @@ facts:
 
 Calibrachoa, nazywana również minipetunią, to niezwykle dekoracyjna roślina balkonowa,
 która zachwyca ogromną liczbą drobnych, dzwonkowatych kwiatów. Nic dziwnego, że jej
-pierwsza popularna grupa odmian otrzymała nazwę Million Bells — roślina potrafi stworzyć
+pierwsza popularna grupa odmian otrzymała nazwę Million Bells - roślina potrafi stworzyć
 prawdziwą kaskadę kwiatów.
 
 Calibrachoa charakteryzuje się długim i obfitym kwitnieniem, które może trwać od wiosny aż

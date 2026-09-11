@@ -2,7 +2,7 @@
 name: Fuksja
 group: Balkonowe
 order: 2
-slot: zdjęcie — fuksja, 4:3
+slot: zdjęcie - fuksja, 4:3
 image: ../../assets/plants/fuksja.jpg
 imageAlt: Karminowoczerwone kwiaty fuksji o wydłużonych płatkach i długich pręcikach, w szklarni
 facts:
@@ -22,7 +22,7 @@ o charakterystycznym kształcie, które nadają kompozycjom lekkości i elegancj
 
 Roślina najlepiej rozwija się na stanowisku półcienistym, ciepłym i osłoniętym od wiatru.
 Nie lubi silnego, bezpośredniego nasłonecznienia. W okresie letnim wymaga regularnego
-i obfitego podlewania — szczególnie podczas upałów warto zadbać, aby podłoże nie
+i obfitego podlewania - szczególnie podczas upałów warto zadbać, aby podłoże nie
 przesychało, ponieważ może wówczas zrzucać liście i kwiaty.
 
 Fuksja świetnie nadaje się do tworzenia kolorowych aranżacji balkonowych, tarasowych

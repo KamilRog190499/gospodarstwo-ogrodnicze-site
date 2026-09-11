@@ -2,7 +2,7 @@
 name: Niecierpek nowogwinejski
 group: Rabatowe
 order: 13
-slot: zdjęcie — niecierpek nowogwinejski, 4:3
+slot: zdjęcie - niecierpek nowogwinejski, 4:3
 image: ../../assets/plants/niecierpek-nowogwinejski.jpg
 imageAlt: Biały kwiat niecierpka nowogwinejskiego, zbliżenie na tle ciemnozielonych, ząbkowanych liści
 facts:

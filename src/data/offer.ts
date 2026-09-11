@@ -27,7 +27,13 @@ export interface OfferPage {
   /** Which content groups this page lists. An array because a page may cover more than one. */
   groups: PlantGroup[];
   href: string;
-  /** The menu and footer label - short, because the menu is one line. */
+  /** The label in the menu's "Oferta" panel and in the footer's offer column.
+   *
+   *  It used to be the short one - "Rabatowe", "Bratki" - and the reason was width: the
+   *  menu was a single centred row of eight items and there was no room for more. The
+   *  panel removed that constraint, so the labels are now the ones a visitor would search
+   *  for. `tileTitle` still differs where the tile says something the menu should not
+   *  ("Rabatowe i wieloletnie"), which is why both fields are still here. */
   menuLabel: string;
   /** The home page tile heading, which has room for the fuller name. */
   tileTitle: string;
@@ -59,13 +65,13 @@ export const offer: OfferPage[] = [
   {
     groups: ["Rabatowe"],
     href: "/rabatowe/",
-    menuLabel: "Rabatowe",
+    menuLabel: "Kwiaty rabatowe",
     tileTitle: "Rabatowe i wieloletnie",
   },
   {
     groups: ["Bratki"],
     href: "/bratki/",
-    menuLabel: "Bratki",
+    menuLabel: "Bratki i prymulki",
     tileTitle: "Bratki i prymulki",
   },
   {

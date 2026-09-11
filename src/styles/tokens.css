@@ -113,15 +113,31 @@
   --mono: ui-monospace, Menlo, monospace;
 
   /* `auto` is the property's own initial value, so this is belt-and-braces rather than a
-     behaviour change — see src/styles/fonts.css for why the loaded Newsreader files vary
+     behaviour change - see src/styles/fonts.css for why the loaded Newsreader files vary
      `opsz` at all. Inherited, so one declaration here covers every element. */
   font-optical-sizing: auto;
 
   --text-body: clamp(1rem, 0.96rem + 0.22vw, 1.09rem);
-  /* The h1 now lies on the photograph, so the upper bound is larger than in the previous
-     scale - it has to hold up against the 3:1 panorama on a 1400px monitor, where the
-     photograph is itself very large. */
-  --text-h1: clamp(2.1rem, 1.35rem + 3.4vw, 3.9rem);
+  /* The `h1` on the home page photograph, and the only user of this token in the project -
+     every other page's `h1` is drawn at --text-h2-wide. So this step can be tuned for that
+     one heading without touching anything else, which is what happened in September 2026.
+
+     It was clamp(2.1rem, 1.35rem + 3.4vw, 3.9rem), reasoned as "it has to hold up against
+     the 3:1 panorama on a 1400px monitor". At 1440px that came out at 62.4px of Newsreader
+     over the scrim, and the owners called it too large and too heavy. Both halves of that
+     are right, and they have different causes:
+
+     - **Size.** 62.4px against a masthead capped at 37.6px is a ratio of 1.66. The heading
+       should be the largest type on screen (see --text-masthead), but it does not have to
+       win by that much; 48.8px keeps it comfortably first at 1.30.
+     - **Weight.** The heading is white on a dark scrim, where a stroke reads heavier than
+       the same stroke in ink on paper. Newsreader's wght axis is live in the loaded file
+       (measured: 400, 350 and 300 render at different widths), so `Intro.astro` sets 350 on
+       this one element as an optical correction. Do not push it below 300.
+
+     Checked across the range, not only at the ends: it stays above --text-masthead
+     everywhere, and it never drops below the --text-h2-wide the subpage headings use. */
+  --text-h1: clamp(1.95rem, 1.3rem + 2.6vw, 3.05rem);
   --text-h2: clamp(1.8rem, 1.35rem + 1.9vw, 2.7rem);
   --text-h2-wide: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);
   --text-h2-card: clamp(1.7rem, 1.3rem + 1.7vw, 2.5rem);
@@ -145,6 +161,43 @@
      does carry a wght axis, contrary to what the comment in fonts.css claimed until
      September 2026. */
   --text-tel: clamp(1.2rem, 1.05rem + 0.45vw, 1.45rem);
+  /* The menu bar, and the second step in this scale that departs from the handoff - the
+     table in docs/design/README.md draws `0.78rem` (12.5px) flat for a menu link, and that
+     value must not be restored "because the spec says so"; the departure is recorded in the
+     2a theme block in that same file.
+
+     12.5px in uppercase with 0.1em of tracking is small for the primary navigation of a
+     site whose visitors are buying flowers rather than reading interfaces, and an external
+     UX review said so. The bar also lost two items in the same release - the four categories
+     moved into the "Oferta" panel - so six shorter labels now have the room eight long ones
+     did not.
+
+     Fluid, like everything else in this scale, which is why there is still exactly one media
+     query in the project. 13.8px on a phone, 15.7px on a wide screen. The tracking drops with
+     it, in Nav.astro: 0.1em -> 0.08em, because a larger letter needs less.
+
+     The panel step is separate and is NOT uppercase. Those four are names of things -
+     "Kwiaty balkonowe" - not labels, and a column of uppercase reads worse than a row of it. */
+  --text-nav: clamp(0.86rem, 0.8rem + 0.28vw, 0.98rem);
+  --text-nav-panel: clamp(0.95rem, 0.92rem + 0.14vw, 1.02rem);
+
+  /* A question in the /faq/ accordion. It used to draw at --text-h3 (32px at 1280px) and the
+     owners reported it as too heavy - the second such report in one release, after the hero
+     heading.
+
+     The cause is not the step, it is the job. --text-h3 carries a plant name, an offer tile
+     title, a slide caption: each one subject over its own content, appearing once or twice on
+     a screen. A closed accordion is six of them stacked, and six 32px serif lines are a wall
+     of ink rather than a list you scan. So this is a step of its own rather than a change to
+     --text-h3, which stays exactly as it is for the three components that were never the
+     problem.
+
+     22.5px at 1280px - 1.29x the body text, where it had been 1.83x, and clearly under the
+     page's own h1 at --text-h2-wide. Weight 375 and -0.005em of tracking finish it, the same
+     optical correction as --text-h1 and for the same reason: Newsreader has a stronger stroke
+     than the Instrument Serif the handoff drew, and it shows most at display sizes. */
+  --text-question: clamp(1.15rem, 1.05rem + 0.45vw, 1.45rem);
+
   /* The holding's name in the masthead. Centred and at full scale, above the tagline and
      the menu bar - three storeys. It stays below --text-h1 so that the title of the page
      being read is still the largest type on screen; checked across the whole range of both

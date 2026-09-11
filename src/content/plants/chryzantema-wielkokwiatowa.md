@@ -2,7 +2,7 @@
 name: Chryzantema wielkokwiatowa
 group: Chryzantemy
 order: 14
-slot: zdjęcie — chryzantema wielkokwiatowa, 4:3
+slot: zdjęcie - chryzantema wielkokwiatowa, 4:3
 image: ../../assets/plants/chryzantema-wielkokwiatowa.jpg
 imageAlt: Chryzantema wielkokwiatowa o kremowożółtych, kulistych kwiatach, widziana z góry
 facts:

@@ -1,19 +1,48 @@
 ---
-import { navigation } from "../data/navigation";
+import { navigation, isNavGroup } from "../data/navigation";
 
 /**
  * The menu bar.
  *
- * It does not collapse. Eight items wrap onto a second line on a narrow screen, and that
- * means the site sends not one line of JavaScript for the menu - there is nothing here that
- * can fail to open.
+ * Six entries, one of which - "Oferta" - is a group of four rather than a destination. Before
+ * 1.0 all eight were peers in one row at 12.5px, which an external UX review called flat and
+ * small, and it was both: four of the eight were categories of a single thing and nothing said
+ * so. The structure is decided in `src/data/navigation.ts`; this file only draws it.
+ *
+ * ## The panel sends JavaScript, and it does not depend on it
+ *
+ * This comment used to promise the menu sent "not one line of JavaScript - there is nothing
+ * here that can fail to open". Half of that promise is kept and the important half is the one
+ * that survives: the panel is a native `<details>`, so it opens, closes, takes focus and
+ * announces its state with the script absent, blocked or broken.
+ *
+ * `src/scripts/nav.ts` adds the three things `<details>` has no opinion about - Escape,
+ * a click outside, focus leaving the group. Every one of them only ever *closes* an open
+ * panel, so the failure mode of that file is "the panel stayed open", never "the menu does
+ * not work". Do not move opening into the script.
+ *
+ * ## `data-current` on the summary, `aria-current` on the link
+ *
+ * `aria-current="page"` belongs to the link that leads to the page being read, and a
+ * `<summary>` is not a link - it leads nowhere, there is no `/oferta/`. So the summary carries
+ * `data-current` for the green underline alone, and the category link inside keeps the real
+ * `aria-current`. A screen reader that opens the panel still finds which of the four it is on.
+ *
+ * The panel is closed on a category page on purpose. Open-by-default would put an overlay
+ * across the `h1` of the four pages people most often arrive on straight from a search.
+ *
+ * ## Layout
+ *
+ * Still no media query. The bar wraps as it always did, and the panel is centred under its own
+ * summary with a `max-width` that keeps it on screen at 400px - so there is nothing here to
+ * fix with a breakpoint. `overflow` must stay visible all the way up, or the panel is clipped
+ * by the bar it hangs from.
  *
  * The 2a theme does not change this file: the bar keeps its faint `--paper-dim` ground, the
  * rule above it and its own `padding-inline`. The condition sits in `Header.astro` -
  * `<Nav />` has to stand outside the name's padding, as a separate row of the header grid,
  * or the side margins are added twice and the bar drifts out of line with the name.
  *
- * `aria-current="page"` plus the green underline on the current item - unchanged.
  * `trailingSlash: "always"` in astro.config.mjs means both sides of the comparison carry a
  * slash, so there is nothing to normalise.
  */
@@ -21,38 +50,83 @@ const path = Astro.url.pathname;
 ---
 
 <nav aria-label="Główne">
-  <ul>
+  <ul class="bar">
     {
-      navigation.map((item) => (
-        <li>
-          <a href={item.href} aria-current={item.href === path ? "page" : undefined}>
-            {item.label}
-          </a>
-        </li>
-      ))
+      navigation.map((entry) =>
+        isNavGroup(entry) ? (
+          <li class="bar__item bar__item--group">
+            <details data-nav-group>
+              <summary
+                data-current={entry.items.some((item) => item.href === path) ? "" : undefined}
+              >
+                {entry.label}
+              </summary>
+              <ul class="panel">
+                {entry.items.map((item) => (
+                  <li>
+                    <a href={item.href} aria-current={item.href === path ? "page" : undefined}>
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </li>
+        ) : (
+          <li class="bar__item">
+            <a href={entry.href} aria-current={entry.href === path ? "page" : undefined}>
+              {entry.label}
+            </a>
+          </li>
+        ),
+      )
     }
   </ul>
 </nav>
 
 <style>
   nav {
+    /* Declared once and read twice: the bar's vertical padding, and the offset that drops
+       the panel to the *bottom edge of the bar* rather than to the bottom of its own link.
+       Written as one custom property so the two cannot drift apart. */
+    --nav-pad-block: clamp(0.4rem, 1vw, 0.7rem);
     border-top: 1px solid var(--rule);
     background: var(--paper-dim);
+    /* The panel hangs below the bar. Anything that clips here clips it. */
+    overflow: visible;
   }
 
-  ul {
+  .bar {
     padding-inline: var(--edge-nav);
+    /* The band is taller than its items, and the reason is the 2px underline under the
+       current page. With the items flush to the band, that underline landed 1px above the
+       header's own bottom rule - and on the home page, 1px above the top of the hero
+       photograph, which is where the owners reported they could not see it at all. It was
+       not a colour problem: there was simply nowhere for it to sit. This also answers the
+       second half of that report, "move the photograph away from the menu", without adding
+       a gap element or breaking the full-bleed frame. */
+    padding-block: var(--nav-pad-block);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     /* Row gap of zero: the 48px touch targets separate the wrapped rows by themselves. */
     gap: 0 clamp(1rem, 3vw, 2.5rem);
+    overflow: visible;
   }
 
-  a {
-    font-size: 0.78rem;
+  /* The panel is positioned against its own item, so it follows the summary onto a second
+     row when the bar wraps. */
+  .bar__item--group {
+    position: relative;
+  }
+
+  /* ---------- the top row ---------- */
+
+  .bar > li > a,
+  summary {
+    font-size: var(--text-nav);
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--green-deep);
@@ -63,13 +137,88 @@ const path = Astro.url.pathname;
     border-bottom: 2px solid transparent;
   }
 
-  a:hover {
+  .bar > li > a:hover,
+  .bar > li > a[aria-current="page"],
+  summary:hover,
+  summary[data-current] {
     color: var(--ink);
     border-bottom-color: var(--green);
   }
 
-  a[aria-current="page"] {
+  /* ---------- the group ---------- */
+
+  summary {
+    cursor: pointer;
+    gap: 0.55em;
+    /* Both spellings: Safari still wants the pseudo-element, everything else the property. */
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The chevron is two 1px edges turned 45 degrees, not an icon and not a glyph: the design
+     forbids icons and builds every other piece of hierarchy out of 1px lines. `currentColor`
+     so it darkens with the label on hover. */
+  summary::after {
+    content: "";
+    width: 0.42em;
+    height: 0.42em;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    /* Nudged up by a quarter of its own height: rotating a square about its centre leaves
+       the visual mass low. */
+    transform: translateY(-0.12em) rotate(45deg);
+  }
+
+  details[open] > summary::after {
+    transform: translateY(0.06em) rotate(225deg);
+  }
+
+  /* ---------- the panel ---------- */
+
+  .panel {
+    position: absolute;
+    /* The bar's own bottom padding, so the panel hangs off the band rather than out of the
+       middle of it. */
+    top: calc(100% + var(--nav-pad-block));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    min-width: max-content;
+    max-width: calc(100vw - 2rem);
+    /* --paper, not --paper-dim: the panel has to read as a surface over the page rather than
+       as more of the bar it drops out of. No shadow and no radius - the 1px rule is the whole
+       separation, as everywhere else here. */
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding-block: 0.25rem;
+    display: grid;
+  }
+
+  .panel a {
+    font-size: var(--text-nav-panel);
+    font-weight: 400;
+    text-decoration: none;
+    color: var(--green-deep);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    padding-inline: 1.4rem;
+    border-left: 2px solid transparent;
+  }
+
+  .panel a:hover,
+  .panel a[aria-current="page"] {
     color: var(--ink);
-    border-bottom-color: var(--green);
+    background: var(--paper-dim);
+    border-left-color: var(--green);
+  }
+
+  /* The 3px offset would sit half outside the panel's own border. Pulled inside instead - the
+     ring is still 2px of --green on --paper, 4.95:1, well past the 3:1 of WCAG 1.4.11. */
+  .panel a:focus-visible {
+    outline-offset: -3px;
   }
 </style>

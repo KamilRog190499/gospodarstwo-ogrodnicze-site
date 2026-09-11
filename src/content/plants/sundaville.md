@@ -2,7 +2,7 @@
 name: Sundaville
 group: Balkonowe
 order: 8
-slot: zdjęcie — sundaville, 4:3
+slot: zdjęcie - sundaville, 4:3
 facts:
   - label: Stanowisko
     value: Słońce, znosi półcień
@@ -25,7 +25,7 @@ pergoli oraz ogrodowych kompozycji, gdzie szybko staje się efektownym elementem
 Roślina wyróżnia się błyszczącymi, ciemnozielonymi liśćmi oraz delikatnymi, wiotkimi
 pędami. Jej charakterystyczne, eleganckie kwiaty pojawiają się przez długi czas, tworząc
 efektowną, kolorową dekorację. Sundaville najlepiej rośnie na stanowiskach słonecznych,
-choć może również poradzić sobie w półcieniu — w takich warunkach kwitnienie może być
+choć może również poradzić sobie w półcieniu - w takich warunkach kwitnienie może być
 jednak mniej intensywne.
 
 W uprawie ważne jest regularne, umiarkowane podlewanie. Roślina nie lubi zarówno
