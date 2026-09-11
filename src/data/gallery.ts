@@ -14,8 +14,13 @@
  *  `compositions` content collection (`src/content/compositions/`) when the owners' pass
  *  over the plantings gave each one a paragraph of description and a paragraph of advice -
  *  two thousand words of Polish prose that belong in Markdown, not in a TypeScript file.
- *  `src/data/compositions.ts` holds what is left: the kinds, and the by-name lookup the two
- *  blocks outside `/inspiracje/` use to reach a planting's photograph.
+ *  `src/data/compositions.ts` holds what is left: the kinds, and the by-name lookup the one
+ *  block outside `/inspiracje/` still uses to reach a planting's photograph - the spring
+ *  season card. The history block was the other one until it got `historyPhoto` below.
+ *
+ *  `historyPhoto` is also the one frame here that carries a **caption** on the page rather
+ *  than only an `alt`; `History.astro` says why that is not a reversal of the September 2026
+ *  decision to strip captions from the plant entries.
  */
 import type { ImageMetadata } from "astro";
 
@@ -30,6 +35,7 @@ import pansy03 from "../assets/pansies/offer-03.jpg";
 import pansy04 from "../assets/pansies/offer-04.jpg";
 import pansyCrate from "../assets/pansies/crate-yellow.jpg";
 import heroGlasshouse from "../assets/hero/hero-glasshouse.jpg";
+import konskowolaStand from "../assets/farm/konskowola-stand.jpg";
 
 export interface GalleryPhoto {
   src: ImageMetadata;
@@ -85,6 +91,55 @@ export const chrysanthemumPhoto: GalleryPhoto = {
 export const pansyPhoto: GalleryPhoto = {
   src: pansyCrate,
   alt: "Skrzynka żółtych bratków z ciemnobordową plamką, widziana z góry",
+};
+
+/** The history block on `/o-nas/`: the holding's stand at the flower show in Konskowola.
+ *
+ *  **The first frame in this repository of the holding trading** rather than of a plant or a
+ *  planting. Until September 2026 that block borrowed `gallery-17` through
+ *  `compositionPhoto()`, a planting that is also on `/inspiracje/`; a photograph doing duty on
+ *  two pages is a weaker answer than one that belongs to this page alone, and the borrow is
+ *  gone with it. It illustrates a sentence the owners' own text already carries: "Sprzedaz
+ *  kwiatow odbywa sie na terenie gospodarstwa oraz na targowiskach."
+ *
+ *  **This is not the holding's own tunnel, and the first version of this note said it was.**
+ *  The owners corrected it when they gave the caption. The venue is a hall with numbered
+ *  stalls - 51, 52, 53 and 59 are painted on the wall behind the racks - not Cholewianka. The
+ *  banner in the frame is the holding's own and travels with them.
+ *
+ *  It does **not** close the open item. The design brief asks for an *archival* photograph
+ *  there and this one is contemporary, so the request stays on the list in
+ *  docs/inwentaryzacja.md - it is simply no longer urgent, because the frame now holds
+ *  something true of the page.
+ *
+ *  1920x1080 and committed byte-for-byte, like three of the four in `pansyStrip`: under the
+ *  2000px ceiling, so a resize would be a no-op and re-encoding would only cost quality. It
+ *  also arrived without EXIF and already upright, so there was no rotation to bake in.
+ *
+ *  `History.astro` draws it at 3 / 2, so `cover` takes 150px off either side. Checked rather
+ *  than assumed: the banner stays whole and roughly centred, which is why the `alt` names it.
+ *
+ *  The `alt` names **colours and not species**, the same restraint `chrysanthemumStrip` and
+ *  `pansyStrip` keep and for the same reason: this is a mixed stand, not a portrait, and
+ *  reading a species off a photograph is the one guess this repository does not make on a
+ *  grower's own site. The red pelargoniums in front are plain enough; the cascades behind
+ *  them are not, and calibrachoa has already been mistaken for a trailing petunia here once.
+ *
+ *  It also does not name Konskowola: **the `<figcaption>` in `History.astro` does that**, and
+ *  an `alt` repeating its caption is what that component had to fix once already
+ *  (`Compositions.astro`, on the slideshow). The picture describes itself, the caption says
+ *  where it was taken.
+ *
+ *  Everything the banner says agrees with `contact.ts` - Cholewianka 36, Kazimierz Dolny, and
+ *  722 238 987, which is Mateusz's current number and not one of the two withdrawn in
+ *  September 2026. Nobody is in the frame (the two chairs are empty), so the likeness
+ *  paragraph that docs/inwentaryzacja.md makes conditional on people appearing here does not
+ *  come back into the privacy policy.
+ *
+ *  **The alt text is read off the picture, not confirmed by the owners** (docs/inwentaryzacja.md). */
+export const historyPhoto: GalleryPhoto = {
+  src: konskowolaStand,
+  alt: "Stoisko gospodarstwa pod dachem hali - regały i skrzynki pełne kwiatów balkonowych w czerwieni, różu, żółci i bieli, pośrodku tablica z nazwą gospodarstwa",
 };
 
 /** The strip under the plant list on `/chryzantemy/`: the whole autumn offer in one row.

@@ -26,11 +26,15 @@ export type CompositionKind = (typeof compositionKinds)[number];
 
 /** One planting's photograph, in the shape the rest of the site passes pictures around in.
  *
- *  Two blocks outside `/inspiracje/` show a frame that is also a planting - the history
- *  block and the spring season card. They used to reach for it by **array position**
- *  (`gallery[16]`, `gallery[17]`), so reordering a single photograph would have quietly
- *  changed both. They ask for it by name now, and a name that does not resolve throws at
- *  build time rather than rendering the wrong picture. */
+ *  One block outside `/inspiracje/` shows a frame that is also a planting: the spring season
+ *  card. It used to reach for it by **array position** (`gallery[17]`), so reordering a
+ *  single photograph would have quietly changed it. It asks by name now, and a name that
+ *  does not resolve throws at build time rather than rendering the wrong picture.
+ *
+ *  There were two. The history block on `/o-nas/` borrowed `zielono-biala-kaskada-plektrantusa`
+ *  until September 2026 and now has a photograph of its own (`historyPhoto` in
+ *  src/data/gallery.ts) - a page about the holding should not be showing a picture that also
+ *  carries another page. */
 export async function compositionPhoto(id: string): Promise<GalleryPhoto> {
   const entry = await getEntry("compositions", id);
   if (!entry) {

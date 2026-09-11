@@ -174,6 +174,14 @@ Nie dotyczy to **pokazu slajdów**: tam każdy slajd nadal ma swój `<figcaption
 opisuje zdjęcie czytnikom ekranu (obrazek ma `alt=""` i jest opisany własnym podpisem).
 To samo w lightboxie. Usunięcie tamtych byłoby regresją dostępności.
 
+**Jeden podpis wrócił - wrzesień 2026, na polecenie właścicieli.** Zdjęcie w bloku historii
+na `/o-nas/` ma `<figcaption>` „Na wystawie kwiatów w Końskowoli”. To nie jest cofnięcie
+decyzji powyżej: tamta dotyczyła czternastu jednozdaniowych podpisów pod wpisami roślin,
+pisanych na podstawie tekstu klienta, a ten nazywa **miejsce**, którego zdjęcie nie jest
+w stanie podać samo i którego `alt` podawać nie powinien. `alt` celowo go nie powtarza -
+dublowanie podpisu w `alt` to defekt, który `Compositions.astro` już raz musiał naprawić.
+Podpisy pod wpisami roślin zostają usunięte i to się nie zmienia.
+
 Dla historii: podpisy były napisane na podstawie własnego tekstu klienta (np. dla fuksji
 „Nie znosi pełnego słońca - najlepiej rośnie w półcieniu, osłonięta od wiatru”); dwa wpisy
 rabatowe nigdy podpisu nie miały, bo ich opisy są dwuzdaniowe.
@@ -210,8 +218,11 @@ Uwagi do tej paczki:
 - Zdjęcia **nie zostały przypisane do wpisów roślin**. To ujęcia zbiorowe, nie portrety
   pojedynczych gatunków, a zgadywanie gatunku na stronie ogrodnika byłoby gorsze niż
   placeholder. Właściciele mogą wskazać, co do czego pasuje.
-- Sekcja Historia dostała zdjęcie współczesne (`gallery-17`, wiszące kosze w tunelu).
-  Projekt prosił tam o **zdjęcie archiwalne** - jeśli takie się znajdzie, warto podmienić.
+- Sekcja Historia dostała najpierw zdjęcie współczesne (`gallery-17`, wiszące kosze
+  w tunelu), a we wrześniu 2026 **własne zdjęcie stoiska na wystawie w Końskowoli**
+  (`src/assets/farm/konskowola-stand.jpg`, `historyPhoto`) - patrz „Blok historii dostaje własne zdjęcie” niżej. Projekt prosił tam
+  o **zdjęcie archiwalne**; nowy kadr też jest współczesny, więc prośba zostaje otwarta, ale
+  przestaje być pilna.
 - Karta jesienna doczekała się zdjęcia z osobnej paczki, patrz niżej.
 
 **Wrzesień 2026, druga paczka: 8 własnych zdjęć chryzantem.** Do repo weszły dwa - kadry
@@ -287,7 +298,8 @@ Do zrobienia zdjęć: każdy pozostały placeholder na stronie ma wypisany wymag
 Obie ramki 16:9 (tunel z kwiatami balkonowymi, chryzantemy przed 1 listopada) są już
 obsadzone, tak samo cała grupa chryzantem i bratek. Z 17 wpisów zdjęcie ma teraz
 czternaście, więc zostały po jednym kadrze 4:3 na dahlię, pelargonię bluszczolistną
-i sundaville, oraz 3:2 archiwalnego zdjęcia gospodarstwa.
+i sundaville, oraz 3:2 archiwalnego zdjęcia gospodarstwa - ta ostatnia ramka jest już czymś
+wypełniona (`historyPhoto`, stoisko na wystawie w Końskowoli), więc to prośba, a nie luka.
 
 **Wrzesień 2026, czwarta paczka: 6 własnych zdjęć bratków.** Do repo weszło pięć, w nowym
 katalogu `src/assets/pansies/` (pas) oraz `src/assets/plants/bratek-ogrodowy.jpg` (wpis).
@@ -1231,8 +1243,9 @@ w jednym body wymagałoby dzielenia wyrenderowanego HTML-a po `<hr>`. Ten sam ko
 **Efekt uboczny, dla którego warto było:** blok historii i wiosenna karta sezonu sięgały po
 swoje zdjęcia **przez pozycję w tablicy** (`gallery[16]`, `gallery[17]`). Przestawienie
 jednego kadru w rejestrze po cichu zmieniłoby oba bloki. Teraz proszą o zdjęcie po nazwie
-(`compositionPhoto("zielono-biala-kaskada-plektrantusa")`), a nazwa, która przestaje się
-rozwiązywać, wywala build zamiast pokazać nie ten obrazek.
+(`compositionPhoto("rozowo-biala-wystawa-kalibrachoi")`), a nazwa, która przestaje się
+rozwiązywać, wywala build zamiast pokazać nie ten obrazek. Zostało jedno takie wywołanie:
+blok historii ma od września 2026 własne zdjęcie i nie pożycza już kadru z obsadzeń.
 
 ### Trzy stany chipa zamiast dwóch
 
@@ -1528,6 +1541,122 @@ nagłówka i 3 px jej wystarcza. Gdyby okazało się, że nie, podnosić po piks
    są przeredagowaniem zdania, które stoi tuż obok. Nic tam nie jest nową informacją - to
    celowe, ale do potwierdzenia, czy powtórzenie jest warte miejsca.
 
+## Strona „O nas” na jasnym gruncie - wrzesień 2026
+
+Zgłoszenie właściciela: „dostosuj stronę o nas do innych (kolorystycznie)”, razem
+z gotowym zdjęciem do podmiany. Dwie rzeczy, jedna decyzja.
+
+### Co było nie tak
+
+`/o-nas/` było **jedyną podstroną na ciemnym tle**. `History.astro` malował się
+`--green-deep` od krawędzi do krawędzi, a pozostałe dziesięć stron - `/kontakt/`, `/faq/`,
+`/inspiracje/`, cztery strony oferty, polityka prywatności i 404 - to jedna płaska, jasna
+sekcja na `--paper`. Naprzemienne grunty, opisane wyżej w
+[Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026),
+są urządzeniem **strony głównej** i nigdy nie były regułą całej witryny.
+
+Przy okazji wychodził defekt, którego inaczej nie dało się usunąć. `tokens.css` zapisuje
+przy `--green-band`, że ciemna płyta musi być oddzielona od stopki `--ink` jasną sekcją:
+ten styk to 1,44:1, a koloru stopki się nie negocjuje. Na stronie głównej zawsze jest czym
+przedzielić. Na stronie długiej na jeden blok nie było czym - `/o-nas/` po prostu
+wypływało w stopkę i kończyło się niewidocznym szwem.
+
+### Co rozważano
+
+Drugi wariant brzmiał: zostawić ciemno, ale przemalować z `--green-deep` na `--green-band`
+(kolor trzech płyt strony głównej) i dostawić jasne domknięcie przed stopką. Odrzucony
+z dwóch powodów. Po pierwsze nie odpowiada na samo zgłoszenie - strona nadal odstawałaby
+od pozostałych, zmieniłby się tylko odcień. Po drugie „jasne domknięcie” musiałoby czymś
+być, a jedyną treścią tej strony jest tekst właścicieli; wymyślanie sekcji po to, żeby
+oddzielić płytę od stopki, to ogon merdający psem.
+
+Nie dodano też propu `ground` na wzór `Compositions.astro`. Tam prop istnieje, bo komponent
+renderuje się pod dwoma adresami i musi w nich wyglądać inaczej; `History` renderuje się pod
+jednym, więc prop miałby jednego wołającego i zero powodów.
+
+### Co się zmieniło w kodzie
+
+`History.astro` traci `background`, `color`, nadpisanie `--focus-ring` (domyślny `--green`
+ma na papierze 4,95:1 i nie trzeba go podnosić) oraz kolory na akapicie i nadtytule. Zamiast
+lokalnych deklaracji nadtytuł dostaje wspólną klasę `.eyebrow` i zostaje mu tylko stopień
+`0.72rem` - dokładnie tak, jak robią `.faq__eyebrow` i `.policy__eyebrow`. Ramka zdjęcia
+z blado-kościanej wraca na `--rule`, tę samą, którą ma `.entry__photo`. Układ - dwie kolumny
+`auto-fit` i `--pad-section-wide` - zostaje bez zmian; to ten sam układ, co w `.contact`.
+
+Skutek dla palety: **`--green-deep` przestaje być gruntem jakiejkolwiek sekcji.** Zostaje
+wypełnieniem (przyciski, chipy, zapalona karta sezonu, skip link, placeholder mapy), a
+ciemne grunty witryny to teraz dokładnie dwa: `--green-band` na stronie głównej i `--ink`
+w stopce. Zapisane przy tokenie, w `CLAUDE.md` i w nagłówku komponentu.
+
+### Blok historii dostaje własne zdjęcie i jedyny podpis na stronie
+
+Do tej pory blok pożyczał obsadzenie z kolekcji `compositions`
+(`zielono-biala-kaskada-plektrantusa`, czyli `gallery-17`) - zdjęcie, które pokazuje się
+także na `/inspiracje/`. Strona o gospodarstwie pokazująca kadr należący do innej strony to
+słabsza odpowiedź niż kadr własny. Nowe zdjęcie, `src/assets/farm/konskowola-stand.jpg`,
+przypięte w `src/data/gallery.ts` jako `historyPhoto`, przedstawia **stoisko gospodarstwa
+na wystawie kwiatów w Końskowoli, z własną tablicą „Gospodarstwo Ogrodnicze SARAN”** -
+pierwszy kadr w repozytorium pokazujący gospodarstwo przy pracy, a nie roślinę czy
+obsadzenie. Ilustruje przy tym zdanie, które stoi w tekście właścicieli o dwa akapity
+wyżej na tej samej stronie: „Sprzedaż kwiatów odbywa się na terenie gospodarstwa oraz na
+targowiskach”.
+
+**Pierwsza wersja tego wpisu mówiła, że to stoisko na terenie gospodarstwa. To była
+pomyłka** - moja, nie właścicieli - i wyszła dopiero wtedy, gdy podali podpis. Widać ją
+zresztą na samym zdjęciu: na ścianie za regałami są odmalowane numery stanowisk (51, 52,
+53, 59), czego tunel foliowy nie ma. Razem z poprawką zmieniła się nazwa pliku
+(`sales-stand.jpg` → `konskowola-stand.jpg`), `alt` i komentarz w `gallery.ts`. Wniosek na
+przyszłość, bo to drugi raz w tym projekcie: **opis zdjęcia czytany z samego zdjęcia jest
+hipotezą, nie faktem** - dokładnie z tego powodu wszystkie `alt` czekają na przejrzenie
+przez właścicieli.
+
+Co sprawdzono przed wstawieniem, żeby nie sprawdzać tego drugi raz:
+
+- **1920×1080, bez EXIF.** Poniżej pułapu 2000 px, więc plik idzie do repo bajt w bajt -
+  skalowanie byłoby operacją pustą, a ponowne kodowanie kosztowałoby tylko jakość. Brak EXIF
+  znaczy też, że nie ma rotacji do wypalenia (przypadłość paczki z obsadzeniami).
+- **Na zdjęciu nie ma żadnej osoby** - dwa fotele w głębi są puste. Warunek z
+  [Czego dokument świadomie nie mówi](#czego-dokument-świadomie-nie-mówi) nie zachodzi,
+  więc paragraf o wizerunku nie wraca do polityki prywatności.
+- **Tablica zgadza się z `contact.ts` co do znaku**: Cholewianka 36, Kazimierz Dolny,
+  tel. 722 238 987 - numer Mateusza, ten aktualny. Żadnego z dwóch numerów wycofanych we
+  wrześniu 2026 na zdjęciu nie ma. Widnieje też adres `gospodarstwo-saran.pl`, czyli domena,
+  którą ta strona przejmuje. Tablica jest własnością gospodarstwa i jeździ z nim - to ona,
+  a nie budynek, wiąże ten kadr z Cholewianką.
+- **Kadr 3:2** obcina przez `object-fit: cover` po 150 px z każdego boku; tablica zostaje
+  cała i mniej więcej pośrodku, dlatego `alt` ją wymienia.
+
+Prośba z handoffu o **zdjęcie archiwalne** w tym miejscu zostaje otwarta - nowy kadr też
+jest współczesny. Przestaje być jednak pilna: ramka trzyma coś prawdziwego o tej stronie.
+`alt` jest odczytany ze zdjęcia i **czeka na potwierdzenie właścicieli**, jak pozostałe.
+
+#### Podpis i wyrównanie kadru
+
+Właściciele poprosili o podpis „Wystawie kwiatów w Końskowoli” i o „trochę ładniejszy
+układ, lekko obniżyć, ale schludnie”. Oba życzenia zrealizowane bez ruszania układu dwóch
+kolumn - wariant z szerokim pasem i wariant pełnoekranowy zostały pokazane i **odrzucone
+na rzecz zostawienia dwóch kolumn**.
+
+- **Podpis.** `<figure>` + `<figcaption>` wokół zdjęcia, `0.8rem` w `--ink-grey` (4,99:1 na
+  papierze) - czyli figcaption dokładnie taki, jaki rysuje handoff, narysowany tu po raz
+  pierwszy, bo podpisy przy roślinach zostały usunięte. Dlaczego to nie jest cofnięcie
+  tamtej decyzji: patrz [Podpisy pod zdjęciami](#podpisy-pod-zdjęciami---usunięte).
+- **Brzmienie.** Na stronie jest **„Na wystawie kwiatów w Końskowoli”**. Właściciele podali
+  sam miejscownik, bez przyimka, który nim rządzi; pod zdjęciem czyta się to jak literówka,
+  a nie jak podpis. Dołożony jest jeden wyraz i żaden nie jest zmieniony. **Do potwierdzenia
+  przez właścicieli** - jeśli mieli na myśli mianownik („Wystawa kwiatów w Końskowoli”) albo
+  swój zapis dosłownie, to jedno słowo do poprawienia.
+- **Obniżenie.** Zdjęcie zaczynało się równo z nadtytułem, czyli optycznie wyżej niż
+  nagłówek. Teraz zaczyna się **równo z `h1`**, a przesunięcie to nie jest dobrana na oko
+  liczba, tylko wysokość wiersza nadtytułu: `calc(0.72rem * 1.68 + 1.1rem)` - jego stopień
+  razy odziedziczona interlinia, plus odstęp kolumny tekstu. Zmierzone w przeglądarce:
+  górna krawędź zdjęcia i górna krawędź `h1` różnią się o 0 px. Jeśli któraś z tych trzech
+  wartości się zmieni, suma pojedzie za nią; okrągła liczba by nie pojechała.
+- **Koszt, świadomy.** Przy zwężeniu do jednej kolumny ten margines dokłada się do odstępu
+  wiersza siatki, więc na telefonie między prozą a zdjęciem jest około 37 px więcej powietrza
+  niż było. Kierunek jest właściwy (luźniej, nie ciaśniej), a odkupienie tego kosztowałoby
+  breakpoint, którego ten projekt nie ma.
+
 ## Historia wersji
 
 Ta sekcja przyjęła narrację, która do września 2026 stała w `CLAUDE.md`. Tam była szkodliwa:
@@ -1554,6 +1683,8 @@ się co wzięło.
 | 0.12.1  | Drugie podejście do rytmu tła, po obejrzeniu kandydatów bok w bok. Cztery ciepłe jasne grunty zamiast dwóch (`--paper-linen`, `--paper-clay`, `--paper-blush` przy `--paper`), trzy ciemne płyty zamiast jednej, wszystkie na `--green-band` `#38442F`. `--paper-sage` usunięty, bo nic już na nim nie stało. Karta sezonu, której sezon trwa, **odwrócona**: na ciemnej płycie to ona jest jasna. `FacebookNews` renderuje się teraz zawsze, bo jest jasnym pasmem między dwiema ciemnymi płytami, a te nie dają się od siebie odróżnić. Szczegóły w [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).                                                                                                          |
 | 0.12.2  | Dopracowanie kafli oferty: kadry z 4:3 na **4:5**, bo sześć z ośmiu zdjęć, z których kafle korzystają, jest pionowych i ramka 4:3 wyrzucała z nich 47%; pasek rośnie ze 225×82 do 225×136 px. Lista nazw przycięta do czterech plus ogon „i 7 innych” - jedenaście nazw szło na pięć linii i robiło dziurę w trzech kaflach na cztery. Tytuły dostają `text-wrap: balance`. Szczegóły: [Mozaika w kaflu](#mozaika-w-kaflu---dwa-kadry-zawsze).                                                                                                                                                                                                                                                                                                           |
 | 0.13.1  | Obramowanie kafli oferty z `--rule` na `--rule-dim`. Kreska była tam od początku i względem wypełnienia daje 1,27:1, tyle co każda inna na stronie - ale od zewnątrz ma teraz glinę zamiast papieru, gdzie `--rule` spada do 1,18:1, a samo wypełnienie unosi się nad gruntem o 1,079:1. Miękka z obu stron naraz. `--rule-dim` daje 1,35:1 i 1,25:1: nadal włoskowata, ale z krawędzią. Cały kafel reaguje też teraz na najechanie, nie tylko kadry w środku. **Tabela nie ma wierszy dla 0.13.0 ani dla commita przed nim** - obie zmiany powstały w innych sesjach i nie dopisały się tutaj.                                                                                                                                                          |
+| 0.13.3  | Zdjęcie w bloku historii dostaje podpis „Na wystawie kwiatów w Końskowoli” - pierwszy `<figcaption>` poza pokazem slajdów i poza decyzją o usunięciu podpisów przy roślinach - i zaczyna się równo z `h1` zamiast z nadtytułem (przesunięcie liczone z wysokości wiersza nadtytułu, nie dobrane). Przy okazji **poprawka rzeczowa**: zdjęcie nie przedstawia stoiska na terenie gospodarstwa, tylko stoisko na wystawie kwiatów w Końskowoli; plik, `alt` i opisy w dokumentacji zmienione. Układ dwóch kolumn zostaje - dwa inne warianty pokazano i odrzucono. Szczegóły: [Blok historii](#blok-historii-dostaje-własne-zdjęcie-i-jedyny-podpis-na-stronie).                                                                                           |
+| 0.13.2  | `/o-nas/` przechodzi na jasny grunt - była to jedyna ciemna podstrona, a naprzemienne tła są urządzeniem strony głównej. Znika przy tym styk ciemnej płyty ze stopką `--ink` (1,44:1), którego na stronie długiej na jeden blok nie dało się niczym przedzielić. `--green-deep` przestaje być gruntem jakiejkolwiek sekcji i zostaje wypełnieniem. Blok historii dostaje własne zdjęcie (`historyPhoto`, stoisko gospodarstwa z tablicą) zamiast obsadzenia pożyczanego z `/inspiracje/`. Szczegóły: [Strona „O nas” na jasnym gruncie](#strona-o-nas-na-jasnym-gruncie--wrzesień-2026).                                                                                                                                                                 |
 
 ### Paczki materiału od właścicieli
 
@@ -1604,9 +1735,12 @@ działalność to inne cele przetwarzania i inny zestaw usług zewnętrznych.
 
 ### Czego dokument świadomie nie mówi
 
-- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 48 zdjęć to
-  rośliny i obsadzenia. Jeśli do bloku historii trafi archiwalne zdjęcie z ludźmi (punkt 1
-  poniżej), paragraf wraca - z art. 6 ust. 1 lit. a RODO i art. 81 prawa autorskiego.
+- **Nic o wizerunku.** Wzór ma paragraf o zdjęciach uczestników; tutaj wszystkie 49 zdjęć to
+  rośliny, obsadzenia i - od września 2026 - puste stoisko gospodarstwa. Jeśli do bloku
+  historii trafi archiwalne zdjęcie z ludźmi (punkt 1 poniżej), paragraf wraca - z art. 6
+  ust. 1 lit. a RODO i art. 81 prawa autorskiego. **Sprawdzone przy podmianie zdjęcia w bloku
+  historii: warunek nie zachodzi**, na `konskowola-stand.jpg` nie ma żadnej osoby (dwa fotele
+  w głębi są puste).
 - **Nie podaje adresu e-mail**, bo go nie ma (punkt 5). § 1 wskazuje dwa telefony i adres
   pocztowy, a § 6 nie ma klauzuli o dostawcy poczty. Jedno i drugie dochodzi razem z adresem.
 - **Nie ma na stronie żadnej ramki „do uzupełnienia”**, choć nazwisk brakuje. § 1 podaje nazwę
@@ -1643,10 +1777,15 @@ widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba parag
 
 1. Zdjęcia - po jednym na dahlię, pelargonię bluszczolistną i sundaville (4:3, żadne
    z trzech nie znalazło się ani na starej stronie, ani w jej bibliotece mediów - Facebook
-   gospodarstwa zostaje do sprawdzenia) oraz archiwalne zdjęcie gospodarstwa (3:2). Galeria,
+   gospodarstwa zostaje do sprawdzenia) oraz archiwalne zdjęcie gospodarstwa (3:2; ramka jest
+   obsadzona zdjęciem z wystawy w Końskowoli, więc to prośba, a nie pusty kadr). Galeria,
    wszystkie trzy karty sezonowe, wszystkie trzy chryzantemy, bratek i pozostałe 10 roślin
    balkonowych/rabatowych są obsadzone. Opisy `alt` - czterech zdjęć chryzantem, sześciu
-   bratków i dziesięciu z piątej paczki - czekają na przejrzenie przez właścicieli; przy
+   bratków, dziesięciu z piątej paczki i zdjęcia z Końskowoli w bloku historii
+   (`historyPhoto`) - czekają na przejrzenie przez właścicieli, a razem z nimi **brzmienie
+   jedynego podpisu na stronie**: właściciele podali „Wystawie kwiatów w Końskowoli”, a idzie
+   „Na wystawie kwiatów w Końskowoli” (dołożony przyimek, żeby miejscownik miał czym rządzić).
+   Przy
    średniokwiatowej trzeba dodatkowo potwierdzić typ, a przy calibrachoi i niecierpku
    z piątej paczki - gatunek (patrz [Zdjęcia](#zdjęcia)). **Opisy `alt` galerii są już
    potwierdzone** - patrz punkt 14.

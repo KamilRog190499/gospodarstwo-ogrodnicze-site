@@ -117,7 +117,12 @@
   /* greens */
   --green: #5a6d46; /* Text green - links, hover, focus ring (4.95:1) - AA */
   --sage: #6b7f55; /* Decorative green - type >=24px ONLY (3.9:1) */
-  --green-deep: #3d4a33; /* Deep green - buttons, the lit card, the skip link */
+  /* Deep green - buttons, the lit season card, the chips, the skip link, the map placeholder.
+     **A fill, and no longer the ground of any section.** It was the history block on /o-nas/
+     until September 2026, when that page was brought into line with every other subpage and
+     went light; History.astro says why. So the dark grounds on this site are now exactly two:
+     --green-band for the home page plates and --ink for the footer. */
+  --green-deep: #3d4a33;
   --green-slot: #33402b; /* Tunnel green - photo placeholders on dark */
   /* The three dark plates on the home page - the season calendar, the plantings strip and the
      directions block - and the only user of this token. It is not --green-deep, which stays
@@ -156,8 +161,8 @@
   --green-band: #38442f; /* Plate green - the three dark bands on the home page */
   --green-lit: #c6d3b6; /* Lit green - uppercase labels on dark */
   --green-slot-text: #d3dcc6;
-  --green-body: #dde2d2; /* Paragraphs on --green-deep */
-  --bone: #eef0e6; /* Headings on --green-deep and on --ink */
+  --green-body: #dde2d2; /* Paragraphs on the dark plates */
+  --bone: #eef0e6; /* Headings on the dark plates and on --ink */
 
   /* ---------- ochre ---------- */
 
@@ -195,9 +200,11 @@
 
      Custom properties inherit, so a dark block raises it for everything inside in one
      line: `--focus-ring: var(--green-lit)` on the container (9.49:1 on --ink, 6.02:1 on
-     --green-deep, 7.02:1 on --green-slot). The overrides live on .footer, .history and
-     .lightbox. The lit season card (.card--lit) does not have one, because since 0.9 it
-     holds nothing focusable - it lost its link.
+     --green-deep, 7.02:1 on --green-slot). The overrides live on .footer, .lightbox and the
+     consent bar, and on the home page's three dark plates. `.history` had one until September
+     2026 and lost it with the dark ground it was correcting for. The lit season card
+     (.card--lit) does not have one, because since 0.9 it holds nothing focusable - it lost
+     its link.
 
      Note: a dark element on a light ground (.cta, .skip) needs NO override - the 3px
      outline-offset puts the ring outside it, on the paper. What counts is what surrounds

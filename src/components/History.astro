@@ -1,19 +1,55 @@
 ---
 import { getEntry, render } from "astro:content";
 import { Picture } from "astro:assets";
-import { compositionPhoto } from "../data/compositions";
+import { historyPhoto } from "../data/gallery";
 
 /**
- * The dark block with the holding's own history - the text migrated from /o-nas/ on the
- * current site: the founding year, the switch from vegetables to flowers, the awards.
+ * The holding's own history - the text migrated from /o-nas/ on the current site: the
+ * founding year, the switch from vegetables to flowers, the awards.
  *
  * It is now the body of `/o-nas/`, the same address it had on WordPress, so the page that
  * ranks for it keeps ranking. The heading level is a prop for that reason: `h1` where the
  * block is the page, `h2` where it is a section on another one.
  *
+ * ## It used to be a dark block, and that is what changed in September 2026
+ *
+ * This was the one full-bleed `--green-deep` plate outside the home page, which made
+ * `/o-nas/` the one dark page on a site whose every other subpage - `/kontakt/`, `/faq/`,
+ * `/inspiracje/`, the four category pages, the privacy policy - is a single flat section on
+ * `--paper`. The owners asked for it to be brought into line, and it is now ink on paper
+ * like the rest. Alternating grounds remain a home page device only.
+ *
+ * It also closed a seam that could not be closed any other way. A dark plate has to be
+ * parted from the `--ink` footer by a light section (tokens.css, at `--green-band`: the
+ * join is 1.44:1 and the footer colour is not negotiable), and on a page that is one block
+ * long there was nothing to part them with - so the page simply ran out into the footer.
+ * **Do not repaint this block dark again** without answering that.
+ *
  * The text is longer than the placeholder paragraph the prototype carried, so this column
  * simply runs taller than the photograph beside it; nothing is trimmed to make the two
  * match.
+ *
+ * ## The one photo caption on the site, and why it is not a reversal
+ *
+ * September 2026: the owners asked for this frame to be captioned "Na wystawie kwiatow
+ * w Konskowoli", which is also how the repository learned that the photograph is **not** the
+ * holding's own tunnel but its stand at a flower show - see `historyPhoto` in
+ * src/data/gallery.ts.
+ *
+ * The owners had captions stripped from every plant entry earlier that month
+ * (docs/inwentaryzacja.md, "Podpisy pod zdjeciami - usuniete"), and `caption` went out of the
+ * schema with them. **This does not bring that back.** That decision was about the fourteen
+ * one-sentence captions under the plant entries; the slideshow kept its `<figcaption>`
+ * throughout, because there it carries the editorial description. This one names a place the
+ * picture cannot state for itself, which no `alt` should be doing - and the `alt` deliberately
+ * does not repeat it, a duplication `Compositions.astro` had to fix once already. Do not read
+ * this as licence to put captions back under the plant entries.
+ *
+ * The wording is the owners' own, with one preposition added: they wrote "Wystawie kwiatow
+ * w Konskowoli", a locative with nothing to govern it, which under a photograph reads as a
+ * typo rather than as a caption. "Na" is the smallest change that makes it a sentence and
+ * keeps every word they chose. It is on their list in docs/inwentaryzacja.md to confirm or
+ * put back.
  */
 interface Props {
   level?: 1 | 2;
@@ -28,44 +64,47 @@ if (!entry) {
 }
 const { Content } = await render(entry);
 
-/** The design brief here says "zdjecie archiwalne"; this frame is current, because nothing
- *  archival exists yet - a better fit than an empty panel, and still worth replacing if the
- *  owners find an old photograph.
+/** The design brief here says "zdjecie archiwalne" and this frame is still contemporary, so
+ *  the request stays on the list in docs/inwentaryzacja.md - but it is no longer urgent.
  *
- *  Asked for **by name**. It used to be `gallery[16]`, an array position, so reordering a
- *  single photograph in the registry would have changed this block without anyone saying so;
- *  a name that stops resolving throws at build time instead. */
-const historyPhoto = await compositionPhoto("zielono-biala-kaskada-plektrantusa");
+ *  What it replaced, in September 2026, was a planting borrowed out of the `compositions`
+ *  collection through `compositionPhoto()`. That photograph is also on `/inspiracje/`, and a
+ *  page about the holding showing a picture that belongs to another page is the weaker
+ *  answer; `historyPhoto` is a frame of the holding itself and of nothing else. The pinning
+ *  is in src/data/gallery.ts with the rest of the photographs the design asks for by name. */
 ---
 
 <section id="historia" class="history" aria-labelledby="historia-title">
   <div class="history__text">
-    <p class="history__eyebrow">{entry.data.label}</p>
+    <p class="eyebrow history__eyebrow">{entry.data.label}</p>
     <Heading class="history__title" id="historia-title">{entry.data.title}</Heading>
     <div class="history__body copy">
       <Content />
     </div>
   </div>
-  <Picture
-    class="history__photo"
-    src={historyPhoto.src}
-    formats={["avif", "webp"]}
-    fallbackFormat="jpg"
-    widths={[640, 1280]}
-    sizes="(min-width: 1200px) 560px, (min-width: 700px) 45vw, 90vw"
-    width={640}
-    height={427}
-    alt={historyPhoto.alt}
-    loading="lazy"
-  />
+  <figure class="history__figure">
+    <Picture
+      class="history__photo"
+      src={historyPhoto.src}
+      formats={["avif", "webp"]}
+      fallbackFormat="jpg"
+      widths={[640, 1280]}
+      sizes="(min-width: 1200px) 560px, (min-width: 700px) 45vw, 90vw"
+      width={640}
+      height={427}
+      alt={historyPhoto.alt}
+      loading="lazy"
+    />
+    <figcaption class="history__caption">Na wystawie kwiatów w Końskowoli</figcaption>
+  </figure>
 </section>
 
 <style>
+  /* No ground and no colour of its own: the section stands on the body's --paper and inherits
+     --ink, exactly like .contact, whose two-column layout this is. No --focus-ring override
+     either - the default --green is 4.95:1 here, and it was only raised while this block was
+     dark. No border-top: the nav bar draws the edge above it, as on .faq and .contact. */
   .history {
-    background: var(--green-deep);
-    color: var(--bone);
-    /* Ciemny blok: domyslna obwodka fokusa (--green) ma tu 1,67:1. Patrz tokens.css. */
-    --focus-ring: var(--green-lit);
     padding: var(--pad-section-wide) var(--edge);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
@@ -79,12 +118,11 @@ const historyPhoto = await compositionPhoto("zielono-biala-kaskada-plektrantusa"
     justify-items: start;
   }
 
+  /* The global .eyebrow carries the weight, the tracking, the uppercase and --ochre; only the
+     step is local, and it is the 0.72rem .faq__eyebrow and .policy__eyebrow use. --ochre-lit
+     went with the dark ground - it is the lit variant, for --green-deep and --ink only. */
   .history__eyebrow {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ochre-lit);
+    font-size: 0.72rem;
   }
 
   .history__title {
@@ -93,19 +131,47 @@ const historyPhoto = await compositionPhoto("zielono-biala-kaskada-plektrantusa"
     max-width: 24ch;
   }
 
+  /* No colour: the prose inherits --ink, like .policy__body. --green-body is a paragraph
+     colour for the dark plates and has nothing to sit on here. */
   .history__body {
     max-width: 54ch;
-    color: var(--green-body);
   }
 
-  /* The 3:2 box the placeholder used to hold. The rule is the pale one used everywhere on
-     the dark blocks - a --rule border would vanish against the moss. */
+  /* The photograph starts level with the `h1`, not with the small uppercase line above it.
+     The offset is **the overline's own row**, written as the two values it is made of rather
+     than as a nudge: its line box (0.72rem at the inherited 1.68) plus the text column's gap
+     (1.1rem). If either changes this sum moves with it, which a round number would not.
+
+     One accepted consequence: when the two columns collapse into one, this margin adds to the
+     grid's row gap, so on a narrow screen there is ~37px more air between the prose and the
+     photograph than there was. That is the right direction to err in, and buying it back would
+     cost a breakpoint - which this project does not have. */
+  .history__figure {
+    margin: 0;
+    margin-block-start: calc(0.72rem * 1.68 + 1.1rem);
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  /* The handoff's figcaption, drawn at last: 0.8rem in the grey that tokens.css reserves for
+     exactly this job - "every uppercase label and every photo caption" - at 4.99:1 on --paper.
+     It is the only photo caption on the site outside the slideshow; History.astro's header
+     says why that is not a reversal of the September 2026 removal. */
+  .history__caption {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--ink-grey);
+    max-width: 46ch;
+  }
+
+  /* The 3:2 box the placeholder used to hold, with the border every photograph on a light
+     ground has - the same one .entry__photo draws. */
   .history__photo {
     display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 3 / 2;
     object-fit: cover;
-    border: 1px solid rgb(238 240 230 / 30%);
+    border: 1px solid var(--rule);
   }
 </style>

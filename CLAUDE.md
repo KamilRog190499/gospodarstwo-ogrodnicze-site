@@ -36,7 +36,7 @@ and `linkinator` finds no dead internal link.
 - **17 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
   extra chrysanthemum types and the pansy, all three written by the owners. By group:
   Balkonowe 11, Rabatowe 2, Bratki 1, Chryzantemy 3.
-- **48 photographs** in `src/assets/`. 14 of the 17 entries have their own frame; **dahlia,
+- **49 photographs** in `src/assets/`. 14 of the 17 entries have their own frame; **dahlia,
   pelargonia bluszczolistna and sundaville are still placeholders**.
 - `/` is a preview of the whole site: intro, season cards, four offer tiles opening with a
   mosaic of that group's photographs, the plantings slideshow in a reduced variant, the
@@ -56,11 +56,11 @@ Read this before adding a file - most things already have a home.
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                          |
 | `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages` and `allPages` (flattened, for the 404). `/polityka-prywatnosci/` is deliberately absent from all three.                                                                           |
 | `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                      |
-| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                     |
+| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                     |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                           |
 | `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                            |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                 |
-| `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the history block and the spring season card use instead of an array position.                                                                                                                   |
+| `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                             |
 | `src/content/compositions/`    | **The 23 plantings**, one `.md` each, the file name being the anchor. Body = the description, `tip` = "Nasza podpowiedź". Both are the owners' own words.                                                                                                                                                                              |
 | `src/content.config.ts`        | The zod schemas for `plants`, `pages`, `faq` and `compositions`.                                                                                                                                                                                                                                                                       |
 | `src/layouts/BaseLayout.astro` | The one layout: head, skip link, header, `<main>`, footer, JSON-LD.                                                                                                                                                                                                                                                                    |
@@ -158,10 +158,14 @@ plus manual viewport checks.
 - **The design is deliberately austere.** No border radius, no shadows, no counters, no
   testimonials, no animations, no icons, no emoji. Hierarchy comes from 1px lines, type size
   and spacing.
-- **Three light grounds and two dark ones, and that is the whole palette of backgrounds.**
-  four warm papers - `--paper`, `--paper-linen`, `--paper-clay`, `--paper-blush` - on the light
-  side; `--green-deep` (the history block on `/o-nas/`), `--green-band` (**all three** dark
-  plates on the home page) and `--ink` (the footer) on the dark.
+- **Four light grounds and two dark ones, and that is the whole palette of backgrounds.**
+  Four warm papers - `--paper`, `--paper-linen`, `--paper-clay`, `--paper-blush` - on the light
+  side; `--green-band` (**all three** dark plates on the home page) and `--ink` (the footer) on
+  the dark. **Every dark ground is on the home page or in the footer**: since September 2026
+  each of the other ten pages is one flat light section, `/o-nas/` included - it was the one
+  dark subpage until the owners asked for it to be brought into line, and `History.astro`
+  records what that answered. `--green-deep` is a fill after that change, not a ground: the
+  buttons, the chips, the lit season card, the skip link, the map placeholder.
   - **The light grounds differ in hue, not in lightness, and that is forced rather than
     chosen.** `--ink-grey` carries every uppercase label and every photo caption, and it needs a
     ground of at least L 0.8353 to hold 4.5:1 against it. The four sit between 4.99:1 and
@@ -225,7 +229,7 @@ plus manual viewport checks.
   reason for each. **`ground="dark"` is the sixth and the odd one out** - it _is_ styling, and
   it is the home page copy alone, where this band is the page's one dark plate. It works by
   remapping the colour tokens on the container rather than by restating every rule, which is a
-  deliberate departure from how `.history` and `.footer` do it and is argued in the component;
+  deliberate departure from how `.footer` and `SeasonCards` do it and is argued in the component;
   the one thing that mechanism cannot reach is inherited `color`, which is why the block sets
   that explicitly. `prose` is the newest and the heaviest: the descriptions and the advice run
   to ~2000 words, which on the home page would make the preview longer than the page it
@@ -234,7 +238,12 @@ plus manual viewport checks.
   page buttons move the wrong track.
 - **A plant entry is a component fed by data**, not hand-written markup:
   `{ name, group, order, slot, image?, imageAlt?, facts?[<=4], colors?[] }`. There is no
-  `caption` field - the owners had the per-entry captions removed. Editorial text belongs in
+  `caption` field - the owners had the per-entry captions removed, and **that decision is
+  about the plant entries alone.** Two `<figcaption>`s survive it on purpose: every slideshow
+  slide, where the caption carries the editorial description, and the history photograph on
+  `/o-nas/`, captioned "Na wystawie kwiatów w Końskowoli" on the owners' instruction in
+  September 2026 because it names a place no `alt` should be asserting. Neither is licence to
+  put captions back under the plant entries. Editorial text belongs in
   the content collection, so a typo in a field breaks the build. `facts` is capped at four
   because that is how many lines the owners listed themselves (the handoff draws three), and
   the labels come from a fixed vocabulary - both in `docs/inwentaryzacja.md`. A fact is only
@@ -292,7 +301,8 @@ plus manual viewport checks.
   `--focus-ring` is a variable rather than a fixed colour because it has to change with the
   ground: the default `--green` is 2.63:1 on `--ink` and 1.67:1 on `--green-deep`, under the
   3:1 that WCAG 1.4.11 asks of a focus indicator. **Every dark container raises it in one
-  line** (`--focus-ring: var(--green-lit)`); `.footer`, `.history` and `.lightbox` do. A dark
+  line** (`--focus-ring: var(--green-lit)`); `.footer`, `.lightbox`, the consent bar and the
+  home page's three dark plates do. A dark
   element on a light ground (`.cta`, `.skip`) does not need it - the 3px offset puts the ring
   on the paper around it.
 - **The menu has one group, and it is a native `<details>`.** Six top-level entries, of which
@@ -371,7 +381,12 @@ value. The full list is in `docs/inwentaryzacja.md` under "Czego nadal brakuje";
 that shape code decisions:
 
 1. **Photographs** - what is left is one 4:3 frame each for dahlia, pelargonia
-   bluszczolistna and sundaville, plus an archival photograph for the history block. None of
+   bluszczolistna and sundaville, plus an archival photograph for the history block. That
+   last one is **no longer urgent**: since September 2026 the block holds `historyPhoto`, the
+   holding's stand at the flower show in Końskowola, its own banner in the frame - contemporary,
+   so the brief's "zdjecie archiwalne" is still unanswered, but the first frame in the
+   repository of the holding rather than of a plant, and the frame is no longer borrowed
+   from a planting that also appears on `/inspiracje/`. None of
    the three turned up in the old site's live pages or in its WordPress media library (which
    is reachable at `<site>/wp-json/wp/v2/media`, independently of anything linked from a live
    page, and did hold real unused photographs from 2019-2020); the farm's Facebook page is
@@ -388,7 +403,10 @@ that shape code decisions:
    Two rules for anything new: downscale to 2000px and **bake in the EXIF
    rotation** - many of the supplied files arrived as portrait frames flagged sideways, and
    `<Picture>` does not honour that flag.
-   **Wanting owner confirmation:** the Polish `alt` texts throughout; which chrysanthemum
+   **Wanting owner confirmation:** the Polish `alt` texts throughout, `historyPhoto`'s
+   among them, and the wording of the one caption on the site - the owners wrote "Wystawie
+   kwiatów w Końskowoli" and it ships as "Na wystawie kwiatów w Końskowoli", one preposition
+   added so a locative with nothing to govern it does not read as a typo; which chrysanthemum
    type each photograph shows (the igielkowa is unmistakable, the sredniokwiatowa is a
    judgement about bloom size); and the species in two frames recovered from the media
    library - calibrachoa (easily confused with a trailing petunia by eye) and niecierpek
