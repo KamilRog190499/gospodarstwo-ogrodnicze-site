@@ -16,11 +16,13 @@ perennial flowers plus large-flowered chrysanthemums from its own cultivation.
 It replaces the WordPress site at `http://gospodarstwo-saran.pl/`. The brief is to keep that
 site's structure and character - the menu, the "photo + long cultivation description + list
 of available colours" pattern, the seasonal blocks - with cleaned-up typography, spacing and
-accessibility. **The third part of that pattern is gone**: the owners had the colour chips
-removed from every entry in September 2026, so an entry is now a photograph and a description.
-That is a departure from the brief rather than an implementation of it, the 104 values are
-archived in `docs/inwentaryzacja.md`, and putting them back would be as client-visible as taking
-them out.
+accessibility. **Two of those three parts have since moved.** The owners had the colour chips
+removed from every entry in September 2026, so an entry is now a photograph and a description;
+that same month they had the descriptions themselves cut to one compact length, so the
+"long" in the middle term no longer holds either. Both are departures from the brief rather
+than implementations of it, both are the owners' own instruction, the 104 colour values and
+every dropped sentence are archived in `docs/inwentaryzacja.md`, and putting either back would
+be as client-visible as taking it out.
 
 **No e-commerce.** Orders are taken by phone or on site only. The site is a business card
 plus an informational catalogue. Do not add a cart, checkout, forms, accounts or prices.
@@ -303,13 +305,25 @@ plus manual viewport checks.
   the labels come from a fixed vocabulary - both in `docs/inwentaryzacja.md`. A fact is only
   ever something their own text states outright. `image` and `imageAlt` are required
   together.
-- **Do not shorten or rewrite the plant descriptions.** The long, concrete cultivation copy
-  is the strongest thing on the current site and the reason people find it in search. The
-  owners may replace their own text, but then whatever the new version drops goes on the list
-  in `docs/inwentaryzacja.md` for them to review, never silently. **Two entries are not
-  theirs:** `chryzantema-drobnokwiatowa.md` and `prymulka.md` were both drafted here in
-  September 2026 and lightly edited into the house style, so they are the two descriptions the
-  owners have not written and the only ones waiting to be replaced rather than protected.
+- **The plant descriptions are cut to one length, and cutting them further is not yours to do.**
+  Every entry was two to four paragraphs and 44 to 137 words until September 2026, when the
+  owners asked for them to be made compact and uniform. Thirty-two are now **two paragraphs and
+  66-78 words**; the other seven were already shorter than the target and were left alone,
+  because the only way to lengthen them would have been to write their text for them. The cut
+  removed whole sentences and kept every surviving one **verbatim** - no word on any entry is
+  ours - and what came out is listed in `docs/inwentaryzacja.md` under "Skrócenie opisów", never
+  silently. That reverses the rule that stood here, which protected the long cultivation copy as
+  the reason people find the site in search; the owners were told what it was for and asked for
+  the cut anyway. **What is unchanged is who may cut:** they may, we may not, and the same list
+  is the price of any further trim. Two entries are not theirs at all -
+  `chryzantema-drobnokwiatowa.md` and `prymulka.md` were drafted here in September 2026 and
+  lightly edited into the house style, so they are the only two waiting to be replaced rather
+  than protected.
+  - **The sentence that cannot come out is the one naming a colour.** The "Dostępne kolory" chips
+    left every entry in September 2026, so the prose is the last record the site keeps of what
+    colours a plant comes in. Nineteen entries still name them there and three already say
+    nothing; a cut that took the count to four would be deleting a fact, not tightening a
+    paragraph.
 - **A long category page sorts alphabetically, a short one by `order`.** `OfferSection` takes
   `sort="order" | "name"`, defaulting to `order`; `/kwiaty-balkonowe/` is the one page that
   passes `"name"`, because thirty-four entries in editorial order is a list nobody can find a

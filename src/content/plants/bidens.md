@@ -21,16 +21,10 @@ facts:
     value: Skrzynki, kosze wiszące
 ---
 
-Bidens, nazywany również uczepem, to niezwykle efektowna roślina balkonowa o zwisającym
-pokroju, ceniona za obfite i długotrwałe kwitnienie. Drobne, najczęściej intensywnie żółte
-kwiaty pojawiają się licznie na całej roślinie, tworząc efektowną, kwitnącą kaskadę.
+Bidens, nazywany również uczepem, to niezwykle efektowna roślina balkonowa o zwisającym pokroju,
+ceniona za obfite i długotrwałe kwitnienie. Drobne, najczęściej intensywnie żółte kwiaty
+pojawiają się licznie na całej roślinie, tworząc efektowną, kwitnącą kaskadę.
 
-Bidens doskonale sprawdza się w donicach, skrzynkach balkonowych oraz wiszących
-pojemnikach, gdzie jego pędy mogą swobodnie przewieszać się przez krawędzie. Świetnie
-nadaje się również do łączenia z innymi roślinami balkonowymi, tworząc kolorowe i bujne
-kompozycje.
-
-Najlepiej rośnie na stanowisku słonecznym i ciepłym. Regularne podlewanie oraz nawożenie
-w okresie intensywnego wzrostu pomagają utrzymać roślinę w dobrej kondycji i sprzyjają
-obfitemu kwitnieniu. W czasie upałów warto szczególnie zadbać o odpowiednią wilgotność
-podłoża.
+Bidens doskonale sprawdza się w donicach, skrzynkach balkonowych oraz wiszących pojemnikach,
+gdzie jego pędy mogą swobodnie przewieszać się przez krawędzie. Najlepiej rośnie na stanowisku
+słonecznym i ciepłym. W czasie upałów warto szczególnie zadbać o odpowiednią wilgotność podłoża.

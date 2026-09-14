@@ -17,15 +17,10 @@ facts:
 ---
 
 Sanvitalia to niezwykle dekoracyjna roślina sezonowa, ceniona za obfite kwitnienie, drobne
-kwiaty przypominające małe słoneczka oraz efektowny, przewieszający się pokrój. Jej
-intensywnie żółte kwiaty pięknie kontrastują z zielonymi liśćmi, tworząc jasne i pełne
-energii kompozycje.
+kwiaty przypominające małe słoneczka oraz efektowny, przewieszający się pokrój. Jej intensywnie
+żółte kwiaty pięknie kontrastują z zielonymi liśćmi, tworząc jasne i pełne energii kompozycje.
 
 Dzięki zwisającemu pokrojowi sanvitalia doskonale sprawdza się w skrzynkach balkonowych,
-donicach, wiszących pojemnikach oraz wielogatunkowych kompozycjach. Świetnie komponuje się
-z pelargoniami, petuniami, surfiniami, werbenami czy roślinami o dekoracyjnych liściach.
-
-Najlepiej rośnie na stanowisku słonecznym, w żyznym, przepuszczalnym podłożu. Lubi
-regularne podlewanie, szczególnie w okresie upałów, jednak należy unikać nadmiernego
-przelania. Przy odpowiedniej pielęgnacji odwdzięcza się długim i bardzo obfitym
-kwitnieniem.
+donicach, wiszących pojemnikach oraz wielogatunkowych kompozycjach. Najlepiej rośnie na
+stanowisku słonecznym, w żyznym, przepuszczalnym podłożu. Przy odpowiedniej pielęgnacji
+odwdzięcza się długim i bardzo obfitym kwitnieniem.

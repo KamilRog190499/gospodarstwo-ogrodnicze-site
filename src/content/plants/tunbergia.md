@@ -17,13 +17,10 @@ facts:
 ---
 
 Tunbergia to szybko rosnące, dekoracyjne pnącze, które doskonale sprawdza się jako ozdoba
-balkonów, tarasów, pergoli, krat i innych podpór. Jej delikatne, wiotkie pędy owijają się
-wokół podpór, tworząc efektowną, zieloną kompozycję.
+balkonów, tarasów, pergoli, krat i innych podpór. Jej delikatne, wiotkie pędy owijają się wokół
+podpór, tworząc efektowną, zieloną kompozycję.
 
-Roślina rośnie intensywnie, a jej pędy mogą osiągać 100–150 cm długości. Najlepiej rozwija
-się w miejscu ciepłym i osłoniętym od silnego wiatru. Może być uprawiana zarówno w pełnym
-słońcu, jak i w półcieniu.
-
-Tunbergia wymaga regularnego i obfitego podlewania oraz stale lekko wilgotnego podłoża.
-W czasie upalnych dni zapotrzebowanie na wodę jest szczególnie duże - w takich warunkach
-roślinę warto podlewać nawet dwa razy dziennie.
+Roślina rośnie intensywnie, a jej pędy mogą osiągać 100–150 cm długości. Najlepiej rozwija się w
+miejscu ciepłym i osłoniętym od silnego wiatru. Może być uprawiana zarówno w pełnym słońcu, jak
+i w półcieniu. Tunbergia wymaga regularnego i obfitego podlewania oraz stale lekko wilgotnego
+podłoża.

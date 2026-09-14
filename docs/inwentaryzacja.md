@@ -166,6 +166,102 @@ tekst pisze **Alstroemeria**. Obie pisownie pochodzą od właścicieli (starsza 
 strony), więc żadna nie została poprawiona samowolnie. Adres kotwicy to `#alstromeria`
 i zostaje bez zmian niezależnie od decyzji.
 
+## Skrócenie opisów - wrzesień 2026
+
+Właściciele poprosili, żeby opisy pozycji były **bardziej kompaktowe i ustandaryzowane** -
+„nie takie, że na jednej pozycji jest krótki, a na drugiej długi" - i **żeby nic nie było
+dopisywane od nas.**
+
+Stan przed zmianą, zmierzony na wszystkich 39 wpisach:
+
+| Kształt   | Ile wpisów | Słowa   |
+| --------- | ---------- | ------- |
+| 3 akapity | 28         | 95–113  |
+| 4 akapity | 4          | 108–137 |
+| 2 akapity | 3          | 63–80   |
+| 1 akapit  | 4          | 44–58   |
+
+Uzgodniony cel: **2 akapity, 65–80 słów.** Po zmianie 32 skrócone wpisy mieszczą się
+w 66–78 słowach, wszystkie po dwa akapity.
+
+### Jak cięto
+
+Wpisy miały jednakową budowę: akapit 1 = czym roślina jest i jak wygląda; akapit 2 = pokrój
+i zastosowanie; akapit 3 = stanowisko, podłoże, podlewanie, nawożenie; akapit 4 (gdy był) =
+zimowanie albo zdanie handlowe. Nowy kształt to akapit 1 bez zmiany roli, a akapit 2 złożony
+ze zdania o zastosowaniu i zdania o stanowisku.
+
+**Usuwano całe zdania; zdania, które zostały, zostały dosłownie.** Tam, gdzie zdanie trzeba
+było przyciąć, cięcie szło po granicy członu (przecinek, myślnik), a reszta została słowo
+w słowo. Jedyne zmiany mechaniczne to wielka litera na początku zdania, które teraz otwiera
+akapit, i kropka w miejscu uciętego przecinka. Nie dopisano ani jednego słowa i jest to
+sprawdzalne mechanicznie: każde słowo nowej wersji występuje w wersji sprzed zmiany.
+
+Kolejność usuwania: najpierw zdania o nawożeniu i o unikaniu zastojów wody, potem zdania
+powtarzające wprost linię z `facts`, potem zdania czysto handlowe i anegdotyczne, na końcu
+drugie i trzecie zdanie o zastosowaniu, gdy powtarzało pierwsze.
+
+**Czego nie ruszano:** zdań nazywających konkretny kolor (proza jest jedynym miejscem, gdzie
+kolory zostały po zdjęciu chipów - patrz „Kolory - ujednolicenia z nadesłanego tekstu"),
+ogólnego „dostępna w różnych kolorach" tam, gdzie było jedyną wzmianką o kolorze, a także
+`facts`, zdjęć i całego frontmatteru.
+
+### Czego nie zrobiono
+
+**Siedem wpisów zostało bez zmian**, bo były już krótsze od celu, a rozbudowanie ich
+oznaczałoby dopisanie naszego tekstu: `bratek-ogrodowy` (80 słów), `pelargonia-rabatowa`
+(70), `niecierpek-nowogwinejski` (63), `chryzantema-drobnokwiatowa` (58), `prymulka` (52),
+`chryzantema-sredniokwiatowa` (46), `chryzantema-wielkokwiatowa` (44). Pełna jednolitość jest
+więc nieosiągalna z tej strony - **domknąć ją mogą tylko właściciele**, dopisując do tych
+siedmiu. Dwa z nich (`chryzantema-drobnokwiatowa`, `prymulka`) są zresztą nasze, nie ich.
+
+### Co wypadło z opisów - do decyzji właścicieli
+
+Poniżej wszystko, co zniknęło. „(skrócone)" oznacza zdanie, które zostało, ale bez końcówki.
+
+| Wpis                      | Czego nowy tekst nie powtarza                                                                                                                                                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| aksamitka                 | połączenia z innymi roślinami sezonowymi; odporność na okresowe przesuszenie; usuwanie przekwitłych kwiatostanów                                                                                                                         |
+| alstromeria               | trwałość i bogata kolorystyka kwiatów; podlewanie i zastoje wody; „nie jest odporna na polskie mrozy" (zostaje w fakcie `Zimowanie: Nie zimuje w gruncie`)                                                                               |
+| bakopa                    | zestawienia z pelargoniami, petuniami, surfiniami, werbenami; wilgotność ziemi w upały                                                                                                                                                   |
+| begonia                   | „dla osób rozpoczynających przygodę z roślinami" (skrócone); wilgotne podłoże i przelewanie; dostosowanie podlewania do temperatury; różnorodność gatunków i odmian                                                                      |
+| bidens                    | łączenie z innymi roślinami balkonowymi; nawożenie w okresie wzrostu                                                                                                                                                                     |
+| calibrachoa               | **anegdota o nazwie Million Bells**; odporność na deszcz i wiatr; podlewanie, gdy podłoże przesycha; nawozy o zakwaszającym działaniu; „choć dobrze radzi sobie w miejscach osłoniętych" (skrócone)                                      |
+| dahlia                    | **średnica kwiatu nawet 30 cm** (skrócone - zostaje pierwsza połowa zdania); podlewanie w upały i w pojemnikach; słabsze kwitnienie przy niedoborze wody                                                                                 |
+| dichondra                 | kontrast srebrzystych liści z pelargoniami, petuniami, surfiniami, bidensami; przepuszczalne podłoże i problemy z korzeniami                                                                                                             |
+| fuksja                    | zrzucanie liści i kwiatów przy przesuszeniu (skrócone); zdanie zamykające o ożywieniu przestrzeni                                                                                                                                        |
+| funkia                    | „w żyznym, próchnicznym i umiarkowanie wilgotnym podłożu" (skrócone); **„dobrze zimują w naszym klimacie"**; dopasowanie odmian do wielkości ogrodu                                                                                      |
+| gazania                   | długie i obfite kwitnienie jako największa zaleta (jest w fakcie `Kwitnienie`); lekkie podłoże i rzadkie podlewanie (jest w faktach `Podłoże` i `Podlewanie`)                                                                            |
+| goździk                   | uniwersalność w aranżacjach; komponowanie z innymi roślinami kwitnącymi; „co pozwala dopasować rośliny do charakteru każdego ogrodu" (skrócone)                                                                                          |
+| helichrysum               | zestawienia z pelargoniami, petuniami, surfiniami, bidensami, werbeną; unikanie nadmiernego podlewania                                                                                                                                   |
+| heliotrop                 | drobne kwiaty zebrane w kwiatostany; uprawa w ogrodzie i w donicach                                                                                                                                                                      |
+| hortensja                 | **zwarte krzewy o różnej wielkości zależnie od gatunku i odmiany**; żyzne, próchniczne podłoże; podlewanie w upały i podczas kwitnienia                                                                                                  |
+| hypoestes                 | przypalanie liści przez bezpośrednie słońce i utrata wybarwienia przy niedoborze światła; wilgotne podłoże i regularne podlewanie                                                                                                        |
+| ipomoea                   | szybkie tworzenie bujnej dekoracji; podlewanie w okresie wzrostu i w upały                                                                                                                                                               |
+| koleus                    | sadzenie samodzielne lub jako kolorowe tło; żyzne i umiarkowanie wilgotne podłoże; zaleganie wody                                                                                                                                        |
+| lobelia                   | „z pelargoniami, petuniami, surfiniami czy bidensami" (skrócone); żyzne podłoże i regularne podlewanie; wilgotność ziemi w upały                                                                                                         |
+| łubin                     | rabaty bylinowe, ogrody wiejskie i naturalistyczne, nasadzenia grupowe; komponowanie z bylinami i trawami ozdobnymi; „jednak nie toleruje długotrwałego zalegania wody" (skrócone)                                                       |
+| orlik                     | „dzięki czemu sprawdza się w ogrodach naturalistycznych i klasycznych aranżacjach" (skrócone); małe wymagania uprawowe; **„orliki są mrozoodporne, mogą przez wiele lat zdobić ogród"** (jest w fakcie `Charakter: Bylina mrozoodporna`) |
+| pelargonia bluszczolistna | podlewanie w upalne dni; **„na słonecznych balkonach 1–2 razy dziennie"**                                                                                                                                                                |
+| petunie i surfinie        | podlewanie w upały i w pojemnikach; nawożenie roślin kwitnących; zdanie o szybkim rozrastaniu się i efekcie pełnej kompozycji                                                                                                            |
+| plektrantus               | „dlatego idealnie nadaje się do wiszących pojemników, skrzynek balkonowych oraz kompozycji z roślinami kwitnącymi" (skrócone); podlewanie i nadmiar wody                                                                                 |
+| sanvitalia                | zestawienia z pelargoniami, petuniami, surfiniami, werbenami; podlewanie w upały i przelewanie                                                                                                                                           |
+| sundaville                | „choć może również poradzić sobie w półcieniu - w takich warunkach kwitnienie może być mniej intensywne" (skrócone do pierwszej połowy); umiarkowane podlewanie; wrażliwość na przesuszenie i nadmiar wody                               |
+| szałwia                   | „w ogrodzie oraz na balkonach i tarasach" (skrócone); „tworząc efektowne zestawienia kolorystyczne" (skrócone); nawożenie roślin kwitnących                                                                                              |
+| trytoma                   | kępy wąskich liści ze sztywnymi pędami; żyzne, przepuszczalne podłoże (jest w fakcie `Podłoże`); zastoje wody; **„w chłodniejszych rejonach Polski warto zabezpieczyć roślinę na zimę"**                                                 |
+| tunbergia                 | podlewanie nawet dwa razy dziennie w upalne dni                                                                                                                                                                                          |
+| werbena                   | ząbkowane liście jako tło dla kwiatostanów; „kwitnie długo — od lipca aż do końca października" (jest w fakcie `Kwitnienie: Lipiec – październik`)                                                                                       |
+| wilczomlecz               | uprawa w donicach, skrzynkach i pojemnikach; „dlatego sprawdzi się w kompozycjach wymagających mniejszej ilości wody" (skrócone)                                                                                                         |
+| wrzos                     | sadzenie pojedyncze lub w wielobarwnych kompozycjach; podlewanie po posadzeniu i w okresach bezdeszczowych; **„przy odpowiednich warunkach może przez wiele lat zdobić ogród"**                                                          |
+
+**Najważniejsze z tej listy** - pogrubione wyżej zdania niosą informację, której nie ma
+nigdzie indziej na stronie: zimowanie funkii, zabezpieczanie trytomy na zimę, częstotliwość
+podlewania pelargonii bluszczolistnej, średnica kwiatu dalii, wielkość krzewów hortensji,
+długowieczność wrzosu i anegdota o nazwie Million Bells przy calibrachoi. Mrozoodporność orlika
+wygląda podobnie, ale stoi w jego `facts`, więc ze strony nie znika. Jeśli któreś z nich
+ma wrócić, wraca kosztem innego zdania w tym samym wpisie - inaczej wpis przestaje pasować do
+reszty, a o to właśnie chodziło w tej zmianie.
+
 ## Rozbieżności między handoffem a treścią klienta
 
 Wszędzie wygrała treść klienta. Do przejrzenia z właścicielami:

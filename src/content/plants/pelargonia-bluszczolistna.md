@@ -21,15 +21,11 @@ facts:
     value: Skrzynki i wiszące pojemniki
 ---
 
-Pelargonia bluszczolistna to wyjątkowo dekoracyjna roślina o długich, zwisających pędach,
-która doskonale sprawdza się w aranżacji balkonów, tarasów i przestrzeni wypoczynkowych.
-Jej obfite kwitnienie oraz elegancki, przewieszający się pokrój sprawiają, że świetnie
-prezentuje się w wiszących pojemnikach, skrzynkach balkonowych i kwietnikach.
+Pelargonia bluszczolistna to wyjątkowo dekoracyjna roślina o długich, zwisających pędach, która
+doskonale sprawdza się w aranżacji balkonów, tarasów i przestrzeni wypoczynkowych. Jej obfite
+kwitnienie oraz elegancki, przewieszający się pokrój sprawiają, że świetnie prezentuje się w
+wiszących pojemnikach, skrzynkach balkonowych i kwietnikach.
 
-Pędy pelargonii bluszczolistnej mogą osiągać nawet 100 cm długości, dzięki czemu roślina
-tworzy efektowne, kwitnące kaskady. Najlepiej rośnie na stanowisku w pełni słonecznym -
-duża ilość światła sprzyja intensywnemu wzrostowi i obfitemu kwitnieniu.
-
-W okresie letnim wymaga regularnego podlewania, szczególnie podczas upalnych dni. Na
-słonecznych balkonach zaleca się podlewanie 1–2 razy dziennie, w zależności od temperatury
-i wilgotności podłoża.
+Pędy pelargonii bluszczolistnej mogą osiągać nawet 100 cm długości, dzięki czemu roślina tworzy
+efektowne, kwitnące kaskady. Najlepiej rośnie na stanowisku w pełni słonecznym - duża ilość
+światła sprzyja intensywnemu wzrostowi i obfitemu kwitnieniu.

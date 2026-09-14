@@ -16,16 +16,11 @@ facts:
     value: Rabaty, doniczki, skrzynki
 ---
 
-Werbena ogrodowa to niezwykle dekoracyjna roślina sezonowa, ceniona za piękne kwiaty,
-delikatny zapach oraz długie i obfite kwitnienie. Tworzy zwarte, efektowne kępy, dzięki
-czemu świetnie prezentuje się zarówno w pojedynczych nasadzeniach, jak i w większych,
-wielobarwnych kompozycjach.
+Werbena ogrodowa to niezwykle dekoracyjna roślina sezonowa, ceniona za piękne kwiaty, delikatny
+zapach oraz długie i obfite kwitnienie. Tworzy zwarte, efektowne kępy, dzięki czemu świetnie
+prezentuje się zarówno w pojedynczych nasadzeniach, jak i w większych, wielobarwnych
+kompozycjach.
 
-Osiąga wysokość około 25–40 cm, dlatego doskonale sprawdza się na rabatach, obwódkach,
-balkonach i tarasach. Jej ząbkowane liście stanowią atrakcyjne tło dla licznych
-kwiatostanów.
-
-Werbena najlepiej rośnie na stanowiskach słonecznych lub w lekkim półcieniu. Kwitnie długo
-— od lipca aż do końca października, dzięki czemu przez wiele miesięcy może zdobić ogród
-i przestrzeń wokół domu. W naszym klimacie uprawiana jest jako roślina jednoroczna,
-ponieważ nie jest odporna na mróz.
+Osiąga wysokość około 25–40 cm, dlatego doskonale sprawdza się na rabatach, obwódkach, balkonach
+i tarasach. Werbena najlepiej rośnie na stanowiskach słonecznych lub w lekkim półcieniu. W
+naszym klimacie uprawiana jest jako roślina jednoroczna, ponieważ nie jest odporna na mróz.

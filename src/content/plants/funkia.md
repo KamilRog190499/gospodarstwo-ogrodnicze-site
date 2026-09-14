@@ -25,12 +25,7 @@ Funkia, znana również jako hosta, to niezwykle ceniona bylina ozdobna, której
 dekoracją są duże, efektowne liście. W zależności od odmiany mogą być zielone, niebieskawe,
 żółtawe lub wielobarwne, często z kontrastowym obrzeżeniem.
 
-Funkie tworzą gęste, dekoracyjne kępy, dzięki czemu doskonale sprawdzają się jako element
-rabat, obwódek oraz nasadzeń pod drzewami i krzewami. Latem ponad liśćmi pojawiają się
-eleganckie kwiaty osadzone na wysokich łodygach, najczęściej w odcieniach bieli, fioletu
-lub lila.
-
-Najlepiej rosną na stanowiskach półcienistych i cienistych, w żyznym, próchnicznym
-i umiarkowanie wilgotnym podłożu. Są łatwe w uprawie i dobrze zimują w naszym klimacie.
-Dzięki dużej różnorodności odmian można dopasować je zarówno do małych ogrodów, jak
-i większych założeń.
+Funkie tworzą gęste, dekoracyjne kępy, dzięki czemu doskonale sprawdzają się jako element rabat,
+obwódek oraz nasadzeń pod drzewami i krzewami. Latem ponad liśćmi pojawiają się eleganckie
+kwiaty osadzone na wysokich łodygach, najczęściej w odcieniach bieli, fioletu lub lila.
+Najlepiej rosną na stanowiskach półcienistych i cienistych.

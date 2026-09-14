@@ -16,19 +16,10 @@ facts:
     value: Skrzynki i wiszące pojemniki
 ---
 
-Calibrachoa, nazywana również minipetunią, to niezwykle dekoracyjna roślina balkonowa,
-która zachwyca ogromną liczbą drobnych, dzwonkowatych kwiatów. Nic dziwnego, że jej
-pierwsza popularna grupa odmian otrzymała nazwę Million Bells - roślina potrafi stworzyć
-prawdziwą kaskadę kwiatów.
+Calibrachoa, nazywana również minipetunią, to niezwykle dekoracyjna roślina balkonowa, która
+zachwyca ogromną liczbą drobnych, dzwonkowatych kwiatów. Charakteryzuje się długim i obfitym
+kwitnieniem, które może trwać od wiosny aż do jesieni.
 
-Calibrachoa charakteryzuje się długim i obfitym kwitnieniem, które może trwać od wiosny aż
-do jesieni. Jej zwisający pokrój sprawia, że doskonale prezentuje się w skrzynkach
-balkonowych, wiszących donicach i pojemnikach, tworząc efektowne, kolorowe kaskady.
-
-Roślina najlepiej czuje się na stanowiskach słonecznych, choć dobrze radzi sobie również
-w miejscach nieco bardziej osłoniętych od bezpośredniego słońca. Jest stosunkowo odporna
-na deszcz i wiatr, dzięki czemu dobrze sprawdza się w zmiennych warunkach pogodowych.
-
-Calibrachoę należy podlewać umiarkowanie, zawsze wtedy, gdy podłoże zaczyna przesychać.
-Warto stosować nawozy przeznaczone do roślin kwitnących, najlepiej o lekko zakwaszającym
-działaniu. Dostępna jest w naszym gospodarstwie w różnych kolorach i odmianach.
+Jej zwisający pokrój sprawia, że doskonale prezentuje się w skrzynkach balkonowych, wiszących
+donicach i pojemnikach, tworząc efektowne, kolorowe kaskady. Roślina najlepiej czuje się na
+stanowiskach słonecznych. Dostępna jest w naszym gospodarstwie w różnych kolorach i odmianach.

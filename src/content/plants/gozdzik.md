@@ -17,17 +17,9 @@ facts:
 ---
 
 Goździk to jedna z najbardziej cenionych i chętnie uprawianych roślin ozdobnych. Zachwyca
-pięknymi, często intensywnie pachnącymi kwiatami oraz dużą różnorodnością gatunków
-i odmian. Dzięki swojej uniwersalności doskonale sprawdza się w wielu ogrodowych
-aranżacjach.
+pięknymi, często intensywnie pachnącymi kwiatami oraz dużą różnorodnością gatunków i odmian.
 
-Można wykorzystać go na rabatach, skalniakach oraz w donicach i pojemnikach. Goździki
-świetnie komponują się zarówno z innymi roślinami kwitnącymi, jak i w bardziej
-minimalistycznych nasadzeniach.
-
-Jedną z ich dużych zalet jest dobra odporność na niskie temperatury. Wiele gatunków
-i odmian może zimować bezpośrednio w gruncie, dzięki czemu są doskonałym wyborem również
-do wieloletnich kompozycji ogrodowych.
-
-W naszym gospodarstwie oferujemy goździki w różnych gatunkach, odmianach i kolorach, co
-pozwala dopasować rośliny do charakteru każdego ogrodu.
+Można wykorzystać go na rabatach, skalniakach oraz w donicach i pojemnikach. Jedną z ich dużych
+zalet jest dobra odporność na niskie temperatury. Wiele gatunków i odmian może zimować
+bezpośrednio w gruncie, dzięki czemu są doskonałym wyborem również do wieloletnich kompozycji
+ogrodowych. W naszym gospodarstwie oferujemy goździki w różnych gatunkach, odmianach i kolorach.

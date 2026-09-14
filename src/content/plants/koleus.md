@@ -20,12 +20,7 @@ Koleus to niezwykle dekoracyjna roślina, której największą ozdobą są barwn
 wybarwione liście. Ich różnorodne połączenia kolorystyczne sprawiają, że koleus doskonale
 uzupełnia zarówno nowoczesne, jak i bardziej klasyczne aranżacje ogrodowe.
 
-Roślina szybko się rozrasta, tworząc gęste, atrakcyjne kępy. Świetnie sprawdza się na
-rabatach, w donicach, skrzynkach balkonowych oraz pojemnikach na tarasach. Może być sadzona
-samodzielnie lub wykorzystywana jako kolorowe tło i uzupełnienie kompozycji z roślin
-kwitnących.
-
-Koleus najlepiej rośnie na stanowisku jasnym i ciepłym, przy czym intensywność wybarwienia
-liści zależy od ilości dostępnego światła. Podłoże powinno być żyzne i umiarkowanie
-wilgotne. Regularne podlewanie sprzyja bujnemu wzrostowi, jednak należy unikać
-długotrwałego zalegania wody.
+Roślina szybko się rozrasta, tworząc gęste, atrakcyjne kępy. Świetnie sprawdza się na rabatach,
+w donicach, skrzynkach balkonowych oraz pojemnikach na tarasach. Koleus najlepiej rośnie na
+stanowisku jasnym i ciepłym, przy czym intensywność wybarwienia liści zależy od ilości
+dostępnego światła.

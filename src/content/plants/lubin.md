@@ -21,16 +21,10 @@ facts:
 ---
 
 Lupinus, czyli łubin, to niezwykle dekoracyjna roślina ogrodowa, ceniona za wysokie, smukłe
-kwiatostany i intensywne kolory kwiatów. Tworzy efektowne, kępiaste rozety liści, ponad
-którymi wyrastają charakterystyczne, gęste kwiatostany. Doskonale sprawdza się jako
-wyrazisty akcent na rabatach oraz w większych kompozycjach ogrodowych.
+kwiatostany i intensywne kolory kwiatów. Tworzy efektowne, kępiaste rozety liści, ponad którymi
+wyrastają charakterystyczne, gęste kwiatostany.
 
-Dzięki efektownemu pokrojowi łubin świetnie prezentuje się na rabatach bylinowych,
-w ogrodach wiejskich i naturalistycznych, a także w nasadzeniach grupowych. Wysokie
-kwiatostany dobrze komponują się z innymi bylinami, trawami ozdobnymi oraz niższymi
-roślinami, tworząc wielopoziomowe kompozycje.
-
-Najlepiej rośnie na stanowisku słonecznym, w żyznym, przepuszczalnym podłożu. Lubi
-regularne podlewanie, szczególnie w okresach suszy, jednak nie toleruje długotrwałego
-zalegania wody. Po przekwitnięciu warto usuwać kwiatostany, co poprawia wygląd rośliny
-i może sprzyjać ponownemu kwitnieniu.
+Doskonale sprawdza się jako wyrazisty akcent na rabatach oraz w większych kompozycjach
+ogrodowych. Najlepiej rośnie na stanowisku słonecznym, w żyznym, przepuszczalnym podłożu. Lubi
+regularne podlewanie, szczególnie w okresach suszy. Po przekwitnięciu warto usuwać kwiatostany,
+co poprawia wygląd rośliny i może sprzyjać ponownemu kwitnieniu.

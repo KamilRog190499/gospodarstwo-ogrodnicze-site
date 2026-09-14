@@ -21,16 +21,11 @@ facts:
     value: Rabaty, skalniaki, donice
 ---
 
-Calluna, czyli wrzos pospolity, to niezwykle dekoracyjna roślina, która doskonale wpisuje
-się w jesienny charakter ogrodu, tarasu i balkonu. Jej drobne, liczne kwiaty tworzą gęste,
-efektowne kępy, dostępne w szerokiej gamie kolorystycznej - od delikatnej bieli i różu po
-intensywne odcienie fioletu i purpury.
+Calluna, czyli wrzos pospolity, to niezwykle dekoracyjna roślina, która doskonale wpisuje się w
+jesienny charakter ogrodu, tarasu i balkonu. Jej drobne, liczne kwiaty tworzą gęste, efektowne
+kępy, dostępne w szerokiej gamie kolorystycznej - od delikatnej bieli i różu po intensywne
+odcienie fioletu i purpury.
 
-Wrzosy świetnie sprawdzają się na rabatach, wrzosowiskach, skalniakach oraz w donicach
-i pojemnikach. Można sadzić je pojedynczo lub tworzyć z nich wielobarwne kompozycje, które
-szczególnie pięknie prezentują się jesienią.
-
-Calluna najlepiej rośnie na stanowisku słonecznym, w lekkim, przepuszczalnym i kwaśnym
-podłożu. Nie wymaga intensywnej pielęgnacji, jednak należy pamiętać o regularnym
-podlewaniu, szczególnie po posadzeniu oraz podczas okresów bezdeszczowych. Przy
-odpowiednich warunkach może przez wiele lat zdobić ogród.
+Wrzosy świetnie sprawdzają się na rabatach, wrzosowiskach, skalniakach oraz w donicach i
+pojemnikach. Calluna najlepiej rośnie na stanowisku słonecznym, w lekkim, przepuszczalnym i
+kwaśnym podłożu.

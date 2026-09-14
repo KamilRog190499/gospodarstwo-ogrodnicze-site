@@ -25,11 +25,7 @@ Plektrantus to niezwykle popularna roślina ozdobna, ceniona przede wszystkim za
 przewieszający się pokrój oraz dekoracyjne liście. Doskonale sprawdza się jako uzupełnienie
 kompozycji balkonowych i tarasowych, tworząc efektowne zielone kaskady.
 
-Jego długie, elastyczne pędy pięknie przewieszają się przez brzegi donic i skrzynek,
-dlatego plektrantus idealnie nadaje się do wiszących pojemników, skrzynek balkonowych oraz
-kompozycji z roślinami kwitnącymi. Jego jasne, zielono-białe ulistnienie doskonale
-kontrastuje z intensywnymi kolorami kwiatów.
-
-Plektrantus najlepiej rośnie na stanowisku jasnym, ale nie w pełnym, intensywnym słońcu.
-Jest rośliną stosunkowo łatwą w uprawie i dobrze radzi sobie w warunkach balkonowych.
-Wymaga regularnego podlewania, jednak należy unikać nadmiaru wody.
+Jego długie, elastyczne pędy pięknie przewieszają się przez brzegi donic i skrzynek. Jego jasne,
+zielono-białe ulistnienie doskonale kontrastuje z intensywnymi kolorami kwiatów. Plektrantus
+najlepiej rośnie na stanowisku jasnym, ale nie w pełnym, intensywnym słońcu. Jest rośliną
+stosunkowo łatwą w uprawie i dobrze radzi sobie w warunkach balkonowych.

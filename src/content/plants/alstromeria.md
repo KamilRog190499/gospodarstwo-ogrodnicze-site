@@ -18,14 +18,7 @@ Alstroemeria, nazywana również lilią Inków, to wyjątkowo dekoracyjna rośli
 wyglądzie. Pochodzi z górskich regionów Ameryki Południowej i zachwyca oryginalnymi,
 wielobarwnymi kwiatami, często ozdobionymi charakterystycznymi, ciemniejszymi plamkami.
 
-Roślina tworzy liczne pędy i może osiągać wysokość 50–100 cm, dzięki czemu doskonale
-sprawdza się jako efektowny element rabat i większych kompozycji. Kwiaty alstroemerii
-wyróżniają się trwałością i bogatą kolorystyką, co pozwala tworzyć zarówno subtelne, jak
-i bardziej wyraziste aranżacje.
-
-Najlepiej rośnie na stanowisku półcienistym, ciepłym i jasnym. Wymaga żyznego,
-próchnicznego i przepuszczalnego podłoża o lekko kwaśnym odczynie. Podczas uprawy należy
-zapewnić jej regularne podlewanie, jednocześnie unikając zastojów wody.
-
-Alstroemeria nie jest odporna na polskie mrozy, dlatego w naszym klimacie wymaga
-odpowiedniego zabezpieczenia lub traktowania jako roślina sezonowa.
+Roślina tworzy liczne pędy i może osiągać wysokość 50–100 cm, dzięki czemu doskonale sprawdza
+się jako efektowny element rabat i większych kompozycji. Najlepiej rośnie na stanowisku
+półcienistym, ciepłym i jasnym. Wymaga żyznego, próchnicznego i przepuszczalnego podłoża o lekko
+kwaśnym odczynie.
