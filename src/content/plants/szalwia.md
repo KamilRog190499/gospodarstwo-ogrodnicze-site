@@ -13,12 +13,12 @@ imageCredit:
 facts:
   - label: Pokrój
     value: Zwarty
-  - label: Kwitnienie
-    value: Długie i obfite
   - label: Stanowisko
     value: Słońce, półcień
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Rabaty, donice, skrzynki
 ---
 
 Salvia, czyli szałwia, to niezwykle dekoracyjna roślina ceniona za intensywne kolory kwiatów,

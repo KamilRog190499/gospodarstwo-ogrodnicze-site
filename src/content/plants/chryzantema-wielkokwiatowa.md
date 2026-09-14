@@ -6,10 +6,12 @@ slot: zdjęcie - chryzantema wielkokwiatowa, 4:3
 image: ../../assets/plants/chryzantema-wielkokwiatowa.jpg
 imageAlt: Chryzantema wielkokwiatowa o kremowożółtych, kulistych kwiatach, widziana z góry
 facts:
-  - label: Forma
-    value: Doniczkowa
+  - label: Pokrój
+    value: Wzniesiony
   - label: Stanowisko
     value: Słońce, osłonięte
+  - label: Podlewanie
+    value: Regularne, obfite
   - label: Sprzedaż
     value: 1.10 – 1.11
 ---

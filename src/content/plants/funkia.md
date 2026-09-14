@@ -11,14 +11,14 @@ imageCredit:
   licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Flickr_-_brewbooks_-_Hosta_%27War_Paint%27_-_David_F_garden_(1).jpg"
 facts:
+  - label: Pokrój
+    value: Kępiasty
   - label: Stanowisko
     value: Cień, półcień
-  - label: Podłoże
-    value: Żyzne, próchniczne
+  - label: Podlewanie
+    value: Regularne
   - label: Uprawa
     value: Rabaty, obwódki
-  - label: Charakter
-    value: Duże, ozdobne liście
 ---
 
 Funkia, znana również jako hosta, to niezwykle ceniona bylina ozdobna, której największą

@@ -6,14 +6,14 @@ slot: zdjęcie - begonia, 4:3
 image: ../../assets/plants/begonia.jpg
 imageAlt: Żółta begonia pełnokwiatowa w wiszącej doniczce, sfotografowana pod światło na tle konstrukcji szklarni
 facts:
+  - label: Pokrój
+    value: Zwarty lub zwisający
   - label: Stanowisko
     value: Ciepłe, zaciszne, półcień
   - label: Podlewanie
     value: Umiarkowane
   - label: Uprawa
     value: Balkon, rabata, parapet
-  - label: Odmiany
-    value: Różne gatunki i kolory
 ---
 
 Begonia to niezwykle uniwersalna roślina ozdobna, chętnie wykorzystywana do dekoracji balkonów,

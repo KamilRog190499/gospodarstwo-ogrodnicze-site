@@ -12,12 +12,12 @@ imageCredit:
 facts:
   - label: Pokrój
     value: Wzniesiony
-  - label: Kwitnienie
-    value: Wysokie kwiatostany
   - label: Stanowisko
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Rabaty, kompozycje
 ---
 
 Lupinus, czyli łubin, to niezwykle dekoracyjna roślina ogrodowa, ceniona za wysokie, smukłe

@@ -6,14 +6,14 @@ slot: zdjęcie - koleus, 4:3
 image: ../../assets/plants/koleus.jpg
 imageAlt: Koleusy w doniczkach - liście zielono-różowe, karminowe, pomarańczowe i ciemnobordowe z różowym nerwem
 facts:
+  - label: Pokrój
+    value: Kępiasty
   - label: Stanowisko
     value: Jasne, ciepłe
   - label: Podlewanie
     value: Regularne
   - label: Uprawa
     value: Rabaty, donice, skrzynki
-  - label: Charakter
-    value: Wielobarwne liście
 ---
 
 Koleus to niezwykle dekoracyjna roślina, której największą ozdobą są barwne, efektownie

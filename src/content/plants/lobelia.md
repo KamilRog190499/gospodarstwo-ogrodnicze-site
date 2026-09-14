@@ -8,12 +8,12 @@ imageAlt: Gęsty kobierzec lobelii o drobnych, ciemnoniebieskich kwiatach z bia�
 facts:
   - label: Pokrój
     value: Zwisający lub zwarty
-  - label: Kwitnienie
-    value: Obfite, długotrwałe
   - label: Stanowisko
     value: Słońce, półcień
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Skrzynki, kosze wiszące
 ---
 
 Lobelia to niezwykle dekoracyjna roślina sezonowa, ceniona za obfite kwitnienie i delikatne,

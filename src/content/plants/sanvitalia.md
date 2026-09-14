@@ -8,12 +8,12 @@ imageAlt: Drobne żółte kwiaty sanwitalii nad srebrzystozielonymi, owłosionym
 facts:
   - label: Pokrój
     value: Zwisający
-  - label: Kwitnienie
-    value: Obfite, długotrwałe
   - label: Stanowisko
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Skrzynki, kosze wiszące
 ---
 
 Sanvitalia to niezwykle dekoracyjna roślina sezonowa, ceniona za obfite kwitnienie, drobne

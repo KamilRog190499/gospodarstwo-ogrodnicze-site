@@ -11,14 +11,14 @@ imageCredit:
   licenseUrl: "https://creativecommons.org/licenses/by/2.5"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Gazania_rigens-1.jpg"
 facts:
-  - label: Kwitnienie
-    value: Długie i obfite
+  - label: Pokrój
+    value: Zwarty
   - label: Stanowisko
     value: Pełne słońce
   - label: Podlewanie
     value: Umiarkowane
-  - label: Podłoże
-    value: Lekkie, przepuszczalne
+  - label: Uprawa
+    value: Rabaty, kompozycje
 ---
 
 Gazania to wyjątkowo efektowna roślina sezonowa, ceniona za duże, intensywnie wybarwione kwiaty

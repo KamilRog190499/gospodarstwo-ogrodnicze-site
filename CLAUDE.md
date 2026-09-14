@@ -300,11 +300,29 @@ plus manual viewport checks.
   `/o-nas/`, captioned "Na wystawie kwiatów w Końskowoli" on the owners' instruction in
   September 2026 because it names a place no `alt` should be asserting. Neither is licence to
   put captions back under the plant entries. Editorial text belongs in
-  the content collection, so a typo in a field breaks the build. `facts` is capped at four
-  because that is how many lines the owners listed themselves (the handoff draws three), and
-  the labels come from a fixed vocabulary - both in `docs/inwentaryzacja.md`. A fact is only
-  ever something their own text states outright. `image` and `imageAlt` are required
-  together.
+  the content collection, so a typo in a field breaks the build. `image` and `imageAlt` are
+  required together.
+- **`facts` is exactly four, and the first three labels are the same on every entry.** Not "at
+  most four" and not optional: `.length(4)` in the schema, so an entry with three fails the
+  build. The four slots, in order, are `Wysokość`/`Długość pędów`/`Średnica kwiatu`/`Pokrój`
+  (one slot - a measure on the six entries that have one, `Pokrój` on the other thirty-three),
+  then `Stanowisko`, then `Podlewanie`, then `Uprawa`. **Only the fourth slot varies**, and only
+  on nine entries: `Sprzedaż` on the six with a selling window, `Zimowanie` on alstromeria and
+  goździk, `Podłoże` on wrzos - acid soil decides whether heather lives, whereas the "żyzne,
+  przepuszczalne" that orlik, funkia and trytoma carried is true of most plants and so
+  differentiated nothing. The full vocabulary and the priority order are in
+  `docs/inwentaryzacja.md`; a new label needs a reason there first.
+  - **"A fact is only ever something their own text states outright" no longer holds, and what
+    replaced it is a condition, not a licence.** That rule stood until September 2026 - it is
+    the same rule that caps `/faq/` at six questions - and the owners lifted it **for this field
+    only**, to get uniform blocks. Twenty-six values are now general horticultural knowledge
+    rather than theirs. The condition they attached: every such value is listed entry by entry
+    in `docs/inwentaryzacja.md` under "Cztery gniazda faktów" and marked **Do potwierdzenia**.
+    Anything you add here goes on that list in the same commit - without it nobody can tell
+    their words from ours later. The move also displaced 36 facts, three of which are a real
+    loss (goździk's scent, heliotrop's scent, orlik's frost-hardiness); all 36 are archived in
+    the same section, and all three still stand in their entry's prose. Everywhere else on the
+    site, a guess is still not ours to make.
 - **The plant descriptions are cut to one length, and cutting them further is not yours to do.**
   Every entry was two to four paragraphs and 44 to 137 words until September 2026, when the
   owners asked for them to be made compact and uniform. Thirty-two are now **two paragraphs and

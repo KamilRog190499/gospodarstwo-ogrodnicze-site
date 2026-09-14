@@ -8,12 +8,12 @@ imageAlt: Fioletowa surfinia obficie zwisająca z wiszącej doniczki, dziesiątk
 facts:
   - label: Pokrój
     value: Przewieszający się
-  - label: Kwitnienie
-    value: Długie i obfite
   - label: Stanowisko
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Skrzynki, kosze wiszące
 ---
 
 Petunia, a w szczególności popularne odmiany Supertunia, to jedna z najbardziej efektownych

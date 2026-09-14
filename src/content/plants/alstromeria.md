@@ -10,6 +10,8 @@ facts:
     value: 50–100 cm
   - label: Stanowisko
     value: Półcień, ciepłe i jasne
+  - label: Podlewanie
+    value: Regularne
   - label: Zimowanie
     value: Nie zimuje w gruncie
 ---

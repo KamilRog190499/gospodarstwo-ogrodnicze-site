@@ -8,12 +8,12 @@ imageAlt: Fioletowe kwiatostany heliotropu w wiszącej doniczce, na tle szklarni
 facts:
   - label: Wysokość
     value: 40–60 cm
-  - label: Kwitnienie
-    value: Lipiec – wrzesień
   - label: Stanowisko
     value: Pełne słońce, osłonięte
-  - label: Charakter
-    value: Słodki, waniliowy zapach
+  - label: Podlewanie
+    value: Regularne
+  - label: Uprawa
+    value: Rabaty, donice
 ---
 
 Heliotrop to wyjątkowo dekoracyjna roślina ceniona przede wszystkim za piękny, słodki, waniliowy

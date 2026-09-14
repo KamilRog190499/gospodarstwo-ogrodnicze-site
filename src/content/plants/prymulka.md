@@ -6,10 +6,12 @@ slot: zdjęcie - prymulka, 4:3
 image: ../../assets/plants/prymulka.jpg
 imageAlt: Skrzynka prymulek w wielu kolorach - różowe, żółte, białe, czerwone i fioletowe nad rozetami pomarszczonych liści
 facts:
-  - label: Forma
-    value: Doniczkowa
+  - label: Pokrój
+    value: Kępiasty
   - label: Stanowisko
     value: Jasne, półcień
+  - label: Podlewanie
+    value: Regularne
   - label: Sprzedaż
     value: Marzec – kwiecień
 ---

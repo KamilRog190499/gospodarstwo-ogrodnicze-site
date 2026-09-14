@@ -6,14 +6,14 @@ slot: zdjęcie - goździki, 4:3
 image: ../../assets/plants/gozdzik.jpg
 imageAlt: Różowy goździk o gęsto ułożonych, postrzępionych płatkach, zbliżenie na tle liści
 facts:
-  - label: Uprawa
-    value: Rabaty, skalniaki, pojemniki
+  - label: Pokrój
+    value: Kępiasty
+  - label: Stanowisko
+    value: Słoneczne
+  - label: Podlewanie
+    value: Umiarkowane
   - label: Zimowanie
     value: Zimuje w gruncie
-  - label: Odmiany
-    value: Różne gatunki i kolory
-  - label: Charakter
-    value: Kwiaty pachnące
 ---
 
 Goździk to jedna z najbardziej cenionych i chętnie uprawianych roślin ozdobnych. Zachwyca

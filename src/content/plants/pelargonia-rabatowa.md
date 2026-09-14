@@ -6,6 +6,12 @@ slot: zdjęcie - pelargonia rabatowa, 4:3
 image: ../../assets/plants/pelargonia-rabatowa.jpg
 imageAlt: Rzędy różowych pelargonii rabatowych w szklarni
 facts:
+  - label: Pokrój
+    value: Zwarty
+  - label: Stanowisko
+    value: Słoneczne
+  - label: Podlewanie
+    value: Regularne
   - label: Uprawa
     value: Rabaty, donice, skrzynki
 ---

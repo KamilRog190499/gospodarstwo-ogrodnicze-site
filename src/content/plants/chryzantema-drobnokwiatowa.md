@@ -6,10 +6,12 @@ slot: zdjęcie - chryzantema drobnokwiatowa, 4:3
 image: ../../assets/plants/chryzantema-drobnokwiatowa.jpg
 imageAlt: Żółte i białe chryzantemy o drobnych, gęsto ułożonych kwiatach, w tle rzędy doniczek w tunelu
 facts:
-  - label: Forma
-    value: Doniczkowa
+  - label: Pokrój
+    value: Zwarty
   - label: Stanowisko
     value: Słońce, osłonięte
+  - label: Podlewanie
+    value: Regularne, obfite
   - label: Sprzedaż
     value: 1.10 – 1.11
 ---

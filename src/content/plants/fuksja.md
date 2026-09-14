@@ -6,12 +6,12 @@ slot: zdjęcie - fuksja, 4:3
 image: ../../assets/plants/fuksja.jpg
 imageAlt: Karminowoczerwone kwiaty fuksji o wydłużonych płatkach i długich pręcikach, w szklarni
 facts:
+  - label: Pokrój
+    value: Zwarty lub zwisający
   - label: Stanowisko
     value: Półcień, osłonięte
   - label: Podlewanie
     value: Obfite, latem 2× dziennie
-  - label: Uprawa
-    value: Doniczka lub rabata
   - label: Sprzedaż
     value: Wiosna
 ---

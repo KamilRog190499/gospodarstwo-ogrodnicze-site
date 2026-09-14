@@ -11,14 +11,14 @@ imageCredit:
   licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Aquilegia_vulgaris_in_Aveyron_02.jpg"
 facts:
+  - label: Pokrój
+    value: Kępiasty
   - label: Stanowisko
     value: Półcień, jasne
-  - label: Podłoże
-    value: Żyzne, przepuszczalne
+  - label: Podlewanie
+    value: Regularne
   - label: Uprawa
     value: Rabaty, skalniaki
-  - label: Charakter
-    value: Bylina mrozoodporna
 ---
 
 Aquilegia, czyli orlik, to niezwykle dekoracyjna bylina, która zachwyca oryginalnymi,

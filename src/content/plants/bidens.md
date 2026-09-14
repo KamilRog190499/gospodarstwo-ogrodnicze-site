@@ -13,10 +13,10 @@ imageCredit:
 facts:
   - label: Pokrój
     value: Zwisający
-  - label: Kwitnienie
-    value: Długie i obfite
   - label: Stanowisko
     value: Słoneczne, ciepłe
+  - label: Podlewanie
+    value: Regularne, latem obfite
   - label: Uprawa
     value: Skrzynki, kosze wiszące
 ---

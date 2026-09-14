@@ -81,16 +81,34 @@ const plants = defineCollection({
             sourceUrl: z.url(),
           })
           .optional(),
-        /** At most four, because that is how many lines the owners themselves listed under
-         *  the longest descriptions. The design specifies three in a single row; the grid is
-         *  `auto-fit`, so a fourth wraps rather than breaking - the deviation is recorded in
-         *  docs/inwentaryzacja.md. Only facts the owners own text states outright - nothing
-         *  added from general horticultural knowledge. Absent where their text does not say. */
-        facts: z
-          .array(z.object({ label: z.string(), value: z.string() }))
-          .min(1)
-          .max(4)
-          .optional(),
+        /** **Exactly four, and the first three labels are the same on every entry.** The design
+         *  specifies three in a single row; the grid is `auto-fit`, so a fourth wraps rather
+         *  than breaking - the deviation is recorded in docs/inwentaryzacja.md. Four slots, in
+         *  this order:
+         *
+         *    1. `Wysokość` / `Długość pędów` / `Średnica kwiatu` / `Pokrój` - one gniazdo, as
+         *       the label vocabulary has always treated it. A measure on the six entries that
+         *       have one, `Pokrój` on the other thirty-three.
+         *    2. `Stanowisko`.
+         *    3. `Podlewanie`.
+         *    4. `Uprawa`, **displaced** where the entry has a fact that says more: `Sprzedaż`
+         *       (the six with a selling window), `Zimowanie` (alstromeria, goździk) or
+         *       `Podłoże` (wrzos - acid soil is a condition of growing it, not generic advice).
+         *
+         *  `.length(4)` rather than a range: "always four" is the rule, so an entry with three
+         *  is a build failure and not a quiet gap. `slot` covers the "waiting for the owners"
+         *  state for photographs; facts have no such state, so the field is required.
+         *
+         *  **This reverses "only facts the owners' own text states outright".** That rule stood
+         *  until September 2026 and the reason it stood is still good - it is why the FAQ is
+         *  capped at six questions. It was lifted for this field alone, on the owners'
+         *  instruction, to make the blocks uniform: twenty-six of the values are general
+         *  horticultural knowledge rather than theirs. Every one of them is listed entry by
+         *  entry in docs/inwentaryzacja.md under "Cztery gniazda faktów" and marked **Do
+         *  potwierdzenia**, which is the condition the reversal came with - without that list
+         *  nobody can tell their words from ours six months from now. Anything added here later
+         *  goes on the same list. */
+        facts: z.array(z.object({ label: z.string(), value: z.string() })).length(4),
         /* **There is no `colors` field, and its absence is a decision rather than an
            oversight.** Twenty-two entries carried one - 104 chips under a "Dostępne kolory"
            label - until the owners had the whole block removed in September 2026. It went from

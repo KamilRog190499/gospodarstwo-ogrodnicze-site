@@ -6,8 +6,12 @@ slot: zdjęcie - bratek ogrodowy, 4:3
 image: ../../assets/plants/bratek-ogrodowy.jpg
 imageAlt: Skrzynka bratków w wielu kolorach - żółte, bordowe, białe i liliowe, widziane z góry
 facts:
-  - label: Uprawa
-    value: Donice, skrzynki, rabaty
+  - label: Pokrój
+    value: Zwarty
+  - label: Stanowisko
+    value: Słońce, półcień
+  - label: Podlewanie
+    value: Regularne
   - label: Sprzedaż
     value: Marzec – kwiecień
 ---

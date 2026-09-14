@@ -6,10 +6,12 @@ slot: zdjęcie - chryzantema średniokwiatowa, 4:3
 image: ../../assets/plants/chryzantema-sredniokwiatowa.jpg
 imageAlt: Różowo-liliowe chryzantemy o kulistych, gęsto ułożonych płatkach, rzędy doniczek w uprawie
 facts:
-  - label: Forma
-    value: Doniczkowa
+  - label: Pokrój
+    value: Zwarty
   - label: Stanowisko
     value: Słońce, osłonięte
+  - label: Podlewanie
+    value: Regularne, obfite
   - label: Sprzedaż
     value: 1.10 – 1.11
 ---

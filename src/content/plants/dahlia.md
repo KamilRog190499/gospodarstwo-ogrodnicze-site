@@ -10,10 +10,10 @@ facts:
     value: do 30 cm
   - label: Stanowisko
     value: Słoneczne, osłonięte
+  - label: Podlewanie
+    value: Regularne, obfite
   - label: Uprawa
     value: Grunt i pojemniki
-  - label: Odmiany
-    value: Różne kolory i odmiany
 ---
 
 Dalia to wyjątkowo dekoracyjna i ceniona roślina ogrodowa, która zachwyca różnorodnością

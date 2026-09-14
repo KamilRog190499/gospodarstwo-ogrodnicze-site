@@ -149,17 +149,19 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
     </div>
 
     {
-      facts && (
-        <dl class="facts">
-          {facts.map((fact) => (
-            <div class="facts__item">
-              <dt>{fact.label}</dt>
-              <dd>{fact.value}</dd>
-            </div>
-          ))}
-        </dl>
-      )
+      /* No `facts &&` guard: the schema requires exactly four (src/content.config.ts), so an
+        entry without them fails the build rather than reaching here. */
     }
+    <dl class="facts">
+      {
+        facts.map((fact) => (
+          <div class="facts__item">
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
 
     {
       backToIndex && (

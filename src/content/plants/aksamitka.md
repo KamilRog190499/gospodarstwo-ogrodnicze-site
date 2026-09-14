@@ -13,12 +13,12 @@ imageCredit:
 facts:
   - label: Pokrój
     value: Kępiasty
-  - label: Kwitnienie
-    value: Obfite, długotrwałe
   - label: Stanowisko
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Rabaty, skrzynki, donice
 ---
 
 Tagetes, czyli aksamitka, to niezwykle popularna roślina sezonowa, ceniona za obfite kwitnienie,

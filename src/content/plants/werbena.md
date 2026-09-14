@@ -8,10 +8,10 @@ imageAlt: Fioletowo-białe kwiatostany werbeny, zbliżenie na tle liści
 facts:
   - label: Wysokość
     value: 25–40 cm
-  - label: Kwitnienie
-    value: Lipiec – październik
   - label: Stanowisko
     value: Słońce, lekki półcień
+  - label: Podlewanie
+    value: Regularne
   - label: Uprawa
     value: Rabaty, doniczki, skrzynki
 ---

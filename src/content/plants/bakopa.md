@@ -8,12 +8,12 @@ imageAlt: Kobierzec białej bakopy - drobne pięciopłatkowe kwiaty z żółtym 
 facts:
   - label: Pokrój
     value: Zwisający
-  - label: Kwitnienie
-    value: Bardzo obfite
   - label: Stanowisko
     value: Słońce, półcień
   - label: Podlewanie
     value: Regularne
+  - label: Uprawa
+    value: Skrzynki, kosze wiszące
 ---
 
 Sutera, znana również jako bakopa, to niezwykle dekoracyjna roślina sezonowa, ceniona za drobne,

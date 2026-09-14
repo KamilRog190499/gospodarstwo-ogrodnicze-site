@@ -11,14 +11,14 @@ imageCredit:
   licenseUrl: "http://creativecommons.org/licenses/by-sa/3.0/"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Hydrangea_macrophylla_-_Hortensia_hydrangea.jpg"
 facts:
+  - label: Pokrój
+    value: Krzewiasty
   - label: Stanowisko
     value: Jasne, osłonięte
   - label: Podlewanie
     value: Regularne, obfite
   - label: Uprawa
     value: Ogród, rabaty, donice
-  - label: Charakter
-    value: Duże kwiatostany
 ---
 
 Hydrangea, czyli hortensja, to jedna z najbardziej efektownych roślin ozdobnych, ceniona za

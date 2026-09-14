@@ -11,12 +11,12 @@ imageCredit:
   licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Kniphofia_uvaria_close.JPG"
 facts:
+  - label: Pokrój
+    value: Kępiasty
   - label: Stanowisko
     value: Słoneczne, osłonięte
   - label: Podlewanie
     value: Regularne
-  - label: Podłoże
-    value: Żyzne, przepuszczalne
   - label: Uprawa
     value: Rabaty, solitery
 ---

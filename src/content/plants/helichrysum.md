@@ -17,8 +17,8 @@ facts:
     value: Słoneczne, jasne
   - label: Podlewanie
     value: Umiarkowane
-  - label: Podłoże
-    value: Lekkie, przepuszczalne
+  - label: Uprawa
+    value: Donice, kosze wiszące
 ---
 
 Helichrysum, czyli kocanka, to wyjątkowo dekoracyjna roślina o charakterystycznych, srebrzystych

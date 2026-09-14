@@ -11,14 +11,14 @@ imageCredit:
   licenseUrl: "https://creativecommons.org/licenses/by/4.0"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Calluna_vulgaris_RF.jpg"
 facts:
+  - label: Pokrój
+    value: Kępiasty
   - label: Stanowisko
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
   - label: Podłoże
     value: Kwaśne, przepuszczalne
-  - label: Uprawa
-    value: Rabaty, skalniaki, donice
 ---
 
 Calluna, czyli wrzos pospolity, to niezwykle dekoracyjna roślina, która doskonale wpisuje się w

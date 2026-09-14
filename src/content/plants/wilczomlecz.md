@@ -11,14 +11,14 @@ imageCredit:
   licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
   sourceUrl: "https://commons.wikimedia.org/wiki/File:Chamaesyce_%27Diamond_Frost%27.jpg"
 facts:
+  - label: Pokrój
+    value: Rozłożysty
   - label: Stanowisko
     value: Jasne, słoneczne
   - label: Podlewanie
     value: Umiarkowane
   - label: Uprawa
     value: Donice i skrzynki
-  - label: Charakter
-    value: Delikatna, ażurowa
 ---
 
 Euphorbia, czyli wilczomlecz, to dekoracyjna roślina ceniona za subtelny wygląd, delikatne pędy

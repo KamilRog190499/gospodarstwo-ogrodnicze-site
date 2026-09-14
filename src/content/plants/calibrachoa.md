@@ -6,8 +6,8 @@ slot: zdjęcie - calibrachoa, 4:3
 image: ../../assets/plants/calibrachoa.jpg
 imageAlt: Żółte, drobne kwiaty calibrachoa tworzące gęstą, zwisającą kaskadę
 facts:
-  - label: Kwitnienie
-    value: Od wiosny do jesieni
+  - label: Pokrój
+    value: Zwisający
   - label: Stanowisko
     value: Słońce, nieupalne
   - label: Podlewanie
