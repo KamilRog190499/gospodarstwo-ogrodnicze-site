@@ -68,8 +68,11 @@ export interface PlantLink {
 
 export const plantLinks: Record<PlantSlug, PlantLink> = {
   begonia: { label: "Begonie", href: "/kwiaty-balkonowe/#begonia" },
+  bidens: { label: "Bidens", href: "/kwiaty-balkonowe/#bidens" },
   calibrachoa: { label: "Calibrachoa", href: "/kwiaty-balkonowe/#calibrachoa" },
   gozdzik: { label: "Goździki", href: "/kwiaty-balkonowe/#gozdzik" },
+  hortensja: { label: "Hortensje", href: "/rabatowe/#hortensja" },
+  koleus: { label: "Koleus", href: "/rabatowe/#koleus", qualifier: "liście ozdobne" },
   "niecierpek-nowogwinejski": {
     label: "Niecierpki nowogwinejskie",
     href: "/rabatowe/#niecierpek-nowogwinejski",
@@ -82,19 +85,27 @@ export const plantLinks: Record<PlantSlug, PlantLink> = {
     label: "Pelargonie rabatowe",
     href: "/rabatowe/#pelargonia-rabatowa",
   },
+  "petunia-surfinia": {
+    label: "Petunie i surfinie",
+    href: "/kwiaty-balkonowe/#petunia-surfinia",
+  },
+  plektrantus: {
+    label: "Plektrantus",
+    href: "/kwiaty-balkonowe/#plektrantus",
+    qualifier: "liście ozdobne",
+  },
   werbena: { label: "Werbena", href: "/kwiaty-balkonowe/#werbena" },
+  wilczomlecz: {
+    label: "Wilczomlecz",
+    href: "/kwiaty-balkonowe/#wilczomlecz",
+    qualifier: "Euphorbia ‘Shades in Pink’",
+  },
 
-  /* Sold, no entry written yet. `kwiaty-balkonowe.astro` names surfinie in its `description`
-     and the collection has nothing under it; the other six came in with the owners' pass
-     over the plantings. All seven are on the list in docs/inwentaryzacja.md - the
-     descriptions are theirs to write, not ours to invent. */
-  bidens: { label: "Bidens", href: null },
+  /* Sold, no entry written yet. Six of the seven that stood here got their descriptions from
+     the owners in September 2026 and are linked above; brachyscome is the one still waiting,
+     and it is on the list in docs/inwentaryzacja.md - the description is theirs to write, not
+     ours to invent. */
   brachyscome: { label: "Brachyscome", href: null, qualifier: "stokrotka australijska" },
-  hortensja: { label: "Hortensje", href: null },
-  koleus: { label: "Koleus", href: null, qualifier: "liście ozdobne" },
-  "petunia-surfinia": { label: "Petunie i surfinie", href: null },
-  plektrantus: { label: "Plektrantus", href: null, qualifier: "liście ozdobne" },
-  wilczomlecz: { label: "Wilczomlecz", href: null, qualifier: "Euphorbia ‘Shades in Pink’" },
 
   /* In the frames, not in the offer. */
   gaura: { label: "Gaura", href: null, companion: true },

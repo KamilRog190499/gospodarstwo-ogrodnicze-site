@@ -1,7 +1,7 @@
 ---
 name: Niecierpek nowogwinejski
 group: Rabatowe
-order: 13
+order: 24
 slot: zdjęcie - niecierpek nowogwinejski, 4:3
 image: ../../assets/plants/niecierpek-nowogwinejski.jpg
 imageAlt: Biały kwiat niecierpka nowogwinejskiego, zbliżenie na tle ciemnozielonych, ząbkowanych liści

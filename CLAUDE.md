@@ -33,16 +33,23 @@ and `linkinator` finds no dead internal link.
   predecessor. The last of them is also **the only page not in the menu** - it is reached from
   the footer, the consent bar and the map placeholder, and deliberately not from
   `navigation.ts`, which also feeds the 404's list of real destinations.
-- **19 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
-  extra chrysanthemum types and the pansy written by the owners, plus two whose descriptions
-  are **ours and not theirs** (chryzantema drobnokwiatowa and prymulka, both September 2026):
-  the only entries on the site not in the owners' own words, and on their list to replace. By
-  group: Balkonowe 11, Rabatowe 2, Bratki 2, Chryzantemy 4.
-- **69 photographs** in `src/assets/`. 16 of the 19 entries have their own frame; **dahlia,
-  pelargonia bluszczolistna and sundaville are still placeholders**. Nineteen of the
-  sixty-nine arrived in September 2026 off the holding's Facebook page: fifteen chrysanthemums,
-  so `/chryzantemy/` carries a strip of nineteen frames, by some way the longest on the site,
-  and four pansies and primroses, which took `/bratki/` from four to seven.
+- **40 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
+  extra chrysanthemum types and the pansy written by the owners, plus **21 that arrived in one
+  batch at the end of September 2026** against a list of 38 Latin names the owners supplied,
+  plus two whose descriptions are **ours and not theirs** (chryzantema drobnokwiatowa and
+  prymulka): the only entries on the site not in the owners' own words, and on their list to
+  replace. By group: Balkonowe 22, Rabatowe 12, Bratki 2, Chryzantemy 4. The batch is argued
+  out in `docs/inwentaryzacja.md` under "Dwadzieścia jeden nowych opisów" - including why the
+  six perennials and the shrub did **not** get a fifth group (the `/rabatowe/` tile has been
+  called "Rabatowe i wieloletnie" all along) and why one of them, `wrzos.md`, knowingly sits
+  under a selling window that is wrong for it.
+- **69 photographs** in `src/assets/`. **Only 16 of the 40 entries have their own frame**, and
+  that ratio is the newest and largest gap on the site: the three long-standing placeholders
+  (dahlia, pelargonia bluszczolistna, sundaville) plus all 21 of the September batch. Every
+  one of the 24 names the crop it wants in its `slot`. Nineteen of the sixty-nine arrived in
+  September 2026 off the holding's Facebook page: fifteen chrysanthemums, so `/chryzantemy/`
+  carries a strip of nineteen frames, by some way the longest on the site, and four pansies
+  and primroses, which took `/bratki/` from four to seven.
 - `/` is a preview of the whole site: intro, season cards, four offer tiles opening with a
   mosaic of that group's photographs, the plantings slideshow in a reduced variant, the
   Facebook block and a map block. What each home page block may and may not repeat is argued
@@ -190,7 +197,7 @@ plus manual viewport checks.
     spacing that came with them:** `--pad-section` went up by a third in the same change, and a
     band repainted at the old spacing colours a section instead of parting it.
 - **There is one accent outside the green family, and its territory is written down.**
-  `--ochre` / `--ochre-lit` goes in overlines (`.eyebrow`) and in counters ("11 roślin"). It
+  `--ochre` / `--ochre-lit` goes in overlines (`.eyebrow`) and in counters ("22 rośliny"). It
   does **not** go in body text, buttons, prose links, the menu underline or the season chips.
   The value is the same token the sibling site alpaki-kazimierzdolny.pl uses, deliberately.
 - **There is no tonal gradient in the design.** `--hero-scrim` existed until September 2026,
@@ -404,8 +411,9 @@ Anything unconfirmed ships with a visible "pending confirmation" state rather th
 value. The full list is in `docs/inwentaryzacja.md` under "Czego nadal brakuje"; the ones
 that shape code decisions:
 
-1. **Photographs** - what is left is one 4:3 frame each for dahlia, pelargonia
-   bluszczolistna and sundaville, plus an archival photograph for the history block. That
+1. **Photographs** - what is left is one 4:3 frame each for **24 entries**: the three
+   long-standing ones (dahlia, pelargonia bluszczolistna, sundaville) and all 21 of the
+   September 2026 batch, plus an archival photograph for the history block. That
    last one is **no longer urgent**: since September 2026 the block holds `historyPhoto`, the
    holding's stand at the flower show in Końskowola, its own banner in the frame - contemporary,
    so the brief's "zdjecie archiwalne" is still unanswered, but the first frame in the

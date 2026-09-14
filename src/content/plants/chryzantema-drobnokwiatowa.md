@@ -1,7 +1,7 @@
 ---
 name: Chryzantema drobnokwiatowa
 group: Chryzantemy
-order: 16
+order: 37
 slot: zdjęcie - chryzantema drobnokwiatowa, 4:3
 image: ../../assets/plants/chryzantema-drobnokwiatowa.jpg
 imageAlt: Żółte i białe chryzantemy o drobnych, gęsto ułożonych kwiatach, w tle rzędy doniczek w tunelu

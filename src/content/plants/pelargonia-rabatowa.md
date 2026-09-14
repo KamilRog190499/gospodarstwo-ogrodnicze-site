@@ -1,7 +1,7 @@
 ---
 name: Pelargonie rabatowe
 group: Rabatowe
-order: 12
+order: 23
 slot: zdjęcie - pelargonia rabatowa, 4:3
 image: ../../assets/plants/pelargonia-rabatowa.jpg
 imageAlt: Rzędy różowych pelargonii rabatowych w szklarni

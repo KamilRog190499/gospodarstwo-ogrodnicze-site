@@ -1,7 +1,7 @@
 ---
 name: Prymulka
 group: Bratki
-order: 19
+order: 40
 slot: zdjęcie - prymulka, 4:3
 image: ../../assets/plants/prymulka.jpg
 imageAlt: Skrzynka prymulek w wielu kolorach - różowe, żółte, białe, czerwone i fioletowe nad rozetami pomarszczonych liści

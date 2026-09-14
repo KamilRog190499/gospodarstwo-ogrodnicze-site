@@ -20,12 +20,27 @@ a nie kotwicami na stronie głównej. Mapa przekierowań: [`przekierowania.md`](
 ## Rośliny
 
 Handoff projektowy ostrzegał przed „kilkudziesięcioma” wpisami i zalecał zaprojektowanie
-filtrowania i paginacji. Faktycznie jest ich **19** i dzielą się na cztery strony po 11, 2, 2
-i 4 wpisy, więc nic takiego nie jest potrzebne.
+filtrowania i paginacji. Przez rok było ich 19 i ostrzeżenie było bezprzedmiotowe.
+**Po wrześniu 2026 jest ich 40** - patrz [Dwadzieścia jeden nowych
+opisów](#dwadzieścia-jeden-nowych-opisów--wrzesień-2026) - i dzielą się na cztery strony po
+22, 12, 2 i 4 wpisy. Handoff okazał się mieć rację co do skali, ale nadal nie co do
+rozwiązania: filtrowania nie dodano, bo na `/kwiaty-balkonowe/` filtrować nie ma po czym -
+wszystkie 22 wpisy to jedna grupa, a wpisy są długie, więc paginacja rozbiłaby stronę, na
+którą ludzie przychodzą z wyszukiwarki po nazwie pojedynczej rośliny.
 
-Balkonowe (11): alstromeria, fuksja, pelargonie bluszczolistne, tunbergie, werbena, goździk,
-heliotrop, sundaville, dahlie, calibrachoa, begonia.
-Rabatowe (2): pelargonie rabatowe, niecierpek nowogwinejski.
+**Odpowiedź na skalę już w repozytorium jest i nie trzeba jej projektować:** `OfferSection`
+renderuje nad wpisami nawigację „Na tej stronie” - spis wszystkich roślin grupy jako kotwice
+(`aria-label="Spis roślin na tej stronie"`, warunek `entries.length > 1`). Przy 2 wpisach
+była ozdobą, przy 22 jest głównym sposobem poruszania się po stronie i to ona przejmuje
+robotę, którą handoff chciał dać filtrowi. **Do obserwacji zostaje sam spis**: dwadzieścia
+dwie pozycje to długa lista i jeśli zacznie przytłaczać, pierwszym ruchem jest jej układ,
+a nie ukrywanie wpisów za filtrem.
+
+Balkonowe (22): alstromeria, fuksja, pelargonie bluszczolistne, tunbergie, werbena, goździk,
+heliotrop, sundaville, dahlie, calibrachoa, begonia, bidens, wilczomlecz, petunie i surfinie,
+plektrantus, dichondra, helichrysum, hypoestes, ipomoea, lobelia, sanvitalia, bakopa.
+Rabatowe (12): pelargonie rabatowe, niecierpek nowogwinejski, hortensja, koleus, orlik, wrzos,
+funkia, gazania, trytoma, łubin, szałwia, aksamitka.
 Bratki (2): bratek ogrodowy i prymulka - nowa grupa i nowy adres `/bratki/`, wrzesień 2026;
 patrz niżej. **Opis prymulki, tak jak opis drobnokwiatowej, powstał u nas, nie u właścicieli**
 
@@ -88,8 +103,16 @@ Etykiety zostały ustandaryzowane do jednego słownika, renderowanego zawsze w t
 
 - ona jest też regułą wyboru, gdy kandydatów jest więcej niż cztery:
 
-`Wysokość` / `Długość pędów` / `Średnica kwiatu` → `Kwitnienie` → `Stanowisko` →
-`Podlewanie` → `Uprawa` → `Zimowanie` → `Odmiany` → `Charakter` → `Sprzedaż`.
+`Wysokość` / `Długość pędów` / `Średnica kwiatu` / `Pokrój` → `Kwitnienie` → `Stanowisko` →
+`Podlewanie` → `Podłoże` → `Uprawa` → `Zimowanie` → `Odmiany` → `Charakter` → `Sprzedaż`.
+
+**`Pokrój` i `Podłoże` doszły we wrześniu 2026** z 21 nadesłanymi opisami, w których
+wystąpiły odpowiednio 14 i 6 razy - za często, by je zwijać do czegoś innego. `Pokrój`
+stanął w pierwszym gnieździe, obok miar wielkości, bo jest jak one własnością formy rośliny
+i żaden wpis nie ma obu naraz. `Podłoże` stanęło zaraz za `Podlewaniem`, bo oba mówią
+o pielęgnacji. Zwinięte przy tej samej okazji: `Walor dekoracyjny` → `Charakter`,
+`Główna ozdoba` → `Charakter`, `Kolor kwiatów` / `Kwiaty` / `Dostępne kolory` → chipy
+`colors`, a nie fakt.
 
 Zwinięte synonimy: `Zastosowanie` → `Uprawa` (goździk), `Walor` → `Charakter` (heliotrop),
 `Dostępność` → `Sprzedaż` tam, gdzie oznaczało okno sprzedaży (fuksja: „wiosna”),
@@ -2006,6 +2029,102 @@ Przycisku „Ustawienia prywatności” ze wzoru **nie dodano**: stopka ma już 
 które robi dokładnie to samo, a § 3 i § 4 cytują tę etykietę dosłownie. Zmiana napisu byłaby
 widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba paragrafy.
 
+## Dwadzieścia jeden nowych opisów - wrzesień 2026
+
+Właściciele podali listę 38 nazw łacińskich i handlowych, a po sprawdzeniu, czego z niej
+brakuje, nadesłali opisy do 21 roślin. Katalog urósł z 19 wpisów do **40** - największa
+jednorazowa dosypka treści w historii projektu.
+
+### Co weszło
+
+Do `Balkonowe` (11): bidens, wilczomlecz, petunie i surfinie, plektrantus, dichondra,
+helichrysum, hypoestes, ipomoea, lobelia, sanvitalia, bakopa.
+Do `Rabatowe` (10): hortensja, koleus, orlik, wrzos, funkia, gazania, trytoma, łubin,
+szałwia, aksamitka.
+
+**Piątej grupy nie założono**, choć sześć z nowych roślin to byliny i krzewy. Powód jest
+w `offer.ts`: kafel `/rabatowe/` nazywa się „Rabatowe i wieloletnie”, więc miejsce na
+orlika, funkię, trytomę i łubin było w tej grupie od początku. Jedyny wpis, który do niej
+nie pasuje kalendarzem, to wrzos - punkt 19 na liście braków.
+
+### Nazwy wpisów - polskie tam, gdzie polskiej ktoś szuka
+
+Lista przyszła po łacinie, a strona rankuje na nazwach roślin, więc `name` i nazwa pliku
+są polskie wszędzie, gdzie polska nazwa jest w obiegu: `Aquilegia` → **orlik**, `Calluna` →
+**wrzos**, `Kniphofia` → **trytoma**, `Lupinus` → **łubin**, `Salvia` → **szałwia**,
+`Tagetes` → **aksamitka**, `Sutera` → **bakopa** (tak samo, jak nazywa ją `historia.md`).
+Łacina zostaje tam, gdzie to ona jest nazwą handlową i polskiej nikt nie używa:
+`Dichondra`, `Gazania`, `Helichrysum`, `Hypoestes`, `Ipomoea`, `Sanvitalia`, `Bidens`.
+Każdy opis i tak otwiera się glosą („Tagetes, czyli aksamitka…”), więc obie nazwy są w treści.
+
+Sześć nazw było już ustalonych w `plant-links.ts` i te wygrywają z listą: `Wilczomlecz` (nie
+Euphorbia), `Hortensja`, `Koleus`, `Plektrantus`, `Bidens`, `Petunie i surfinie`.
+
+### Powtórzenia w nadesłanej liście - rozstrzygnięte, nie zdublowane
+
+- **Dipladenia = Mandevilla = Sundaville.** Lista wymienia tę roślinę dwa razy, a my mamy ją
+  pod trzecią, handlową nazwą. Drugiego wpisu nie założono.
+- **Supertunia ⊂ Petunia.** Marka odmian petunii, nie osobny gatunek - jeden wpis
+  `petunia-surfinia.md`, którego treść mówi o obu.
+- **Koleus i Plektrantus zostają osobno.** Botanicznie koleus to dziś
+  _Plectranthus scutellarioides_, ale handlowo to dwie różne rośliny i tak nazwali je
+  właściciele. Dwa wpisy, dwa chipy.
+- **Helichrysum to nie heliotrop.** Kocanka ma srebrne liście, heliotrop fioletowe
+  kwiatostany; po polsku oba bywają opisywane jako „srebrzyste” i łatwo je skleić w jedno.
+  `heliotrop.md` istniał wcześniej i nie został ruszony.
+- **Impatiens** - mamy tylko niecierpka nowogwinejskiego. Czy lista obejmuje też balsaminę
+  (_I. walleriana_), nie wiadomo; jeśli tak, to osobna roślina i osobny brak.
+- **Sanvitalia przyszła dwa razy**, w dwóch nieco różnych redakcjach. Wzięto drugą
+  („małe słoneczka”, „unikać nadmiernego przelania”) jako późniejszą.
+
+### Czego nadesłane opisy nie mówią
+
+Żaden z 21 tekstów nie podaje **okna sprzedaży**, więc `season.ts` jest nietknięty i każda
+z nowych roślin dziedziczy okno swojej grupy. Dla wrzosu to jest błąd - patrz punkt 19.
+
+**Wszystkie 21 wpisów są bez zdjęcia** i mają wypełniony `slot`. Razem z trzema zastanymi
+daje to 24 puste ramki na 40 wpisów - punkt 18.
+
+### Fakty - pięć do siedmiu linii na cztery miejsca
+
+Nadesłane opisy mają po 5-7 wypunktowanych linii, a `facts` przyjmuje cztery. Wybór idzie
+kolejnością priorytetu ze [słownika](#fakty--limit-podniesiony-do-czterech), który przy tej
+okazji dostał `Pokrój` i `Podłoże`. Linie kolorów nie zajmują miejsca na fakt - idą do
+chipów `colors`.
+
+**Wartość faktu to etykieta, nie zdanie** - najwyżej dwa człony po jednym, dwóch słowach.
+Nadesłane linie były całymi frazami („Pokrój: zwisający, silnie rozrastający się”,
+„Podlewanie: umiarkowane, dobrze znosi okresowe przesuszenie”) i w siatce faktów, gdzie
+kafelek ma ok. 150 px, czytały się jak urwane zdania, a nie jak dane. Zostały ścięte do
+„Zwisający” i „Umiarkowane”. Po tej zmianie 84 fakty nowych wpisów mają średnio 1,8 słowa
+i żaden nie przekracza trzech; `Pokrój` jest jednowyrazowy wszędzie poza lobelią
+(„Zwisający lub zwarty” - ich tekst mówi wprost, że zależy od odmiany). Trzy słowa zostają
+tylko tam, gdzie człon jest wyliczeniem miejsc uprawy („Rabaty, skalniaki, donice”).
+**Zastanych wpisów to nie dotyczy** - `tunbergia.md` ma „Obficie, w upały 2× dziennie” i tak
+zostaje, bo to słowa właścicieli z pierwszej paczki.
+
+**Proza opisów jest nietknięta** poza zamianą półpauzy na dywiz w jednym zdaniu o wrzosie,
+zgodnie ze stylem reszty plików - wszystko, co wypadło z faktów, i tak stoi w opisie.
+
+### Co się przy okazji zmieniło poza wpisami
+
+- `plant-links.ts` - sześć chipów na `/inspiracje/` przestało być ślepych i prowadzi do
+  wpisów. Bez odnośnika została **jedna** roślina sprzedawana, brachyscome, i trzy dodatki.
+- `order` przenumerowany globalnie, żeby bloki grup zostały ciągłe: Balkonowe 1-22,
+  Rabatowe 23-34, Chryzantemy 35-38, Bratki 39-40. Osiem istniejących plików dostało nowe
+  numery, ich treść jest nietknięta.
+- Meta `description` na `/rabatowe/` wymieniało dwie rośliny na stronie, która ma teraz
+  dwanaście - przepisane. `/kwiaty-balkonowe/` kończyło się na „i inne”, więc nie było
+  nieprawdziwe, ale dopisano do niego nowe nazwy, na których strona może rankować.
+
+### Do przejrzenia przez właścicieli
+
+Nadesłane teksty są **wyraźnie jednorodne** - prawie każdy otwiera się tym samym zwrotem
+(„to niezwykle dekoracyjna roślina…”) i kończy tym samym akapitem o stanowisku i podlewaniu.
+Czytają się inaczej niż 14 opisów z pierwszej paczki, które były nierówne i konkretne. To nie
+jest powód, by ich nie publikować - są od właścicieli - ale warto ich zapytać, czy tak mają
+zostać, bo na jednej stronie stoi teraz 22 wpisy o bardzo podobnym rytmie.
+
 ## Czego nadal brakuje
 
 1. Zdjęcia - po jednym na dahlię, pelargonię bluszczolistną i sundaville (4:3, żadne
@@ -2066,14 +2185,12 @@ widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba parag
     karty sezonowej i w zdaniu na `/bratki/`; bez treści nie zakładamy im wpisu ani grupy.
 13. `deploy.yml` z **codziennym** `schedule:`. Miesięczny przegapiłby 2 listopada i zostawiłby
     „CHRYZANTEMY · W TRAKCIE" na stronie głównej przez cały listopad.
-14. **Opisy uprawy siedmiu roślin sprzedawanych bez wpisu.** Właściciele potwierdzili we
-    wrześniu 2026, że sprzedają osobno petunie i surfinie, hortensje, brachyscome,
-    plektrantus, wilczomlecz, koleus i bidens. Żadna z nich nie ma pliku
-    w `src/content/plants/`, więc na `/inspiracje/` są nazwane, ale nie prowadzą nigdzie -
-    chip bez odnośnika. Do wpisu potrzeba od nich opisu uprawy (jak przy pozostałych 17),
-    kolorów i zdjęcia 4:3, plus decyzji, do której z czterech grup każda trafia; hortensja
-    jest krzewem i może potrzebować własnej. Nic z tego nie jest zmyślane po naszej stronie -
-    patrz [Obsadzenia](#obsadzenia--opisy-od-właścicieli-wrzesień-2026).
+14. **Opis uprawy brachyscome** - ostatnia z siedmiu roślin sprzedawanych bez wpisu.
+    Sześć pozostałych (petunie i surfinie, hortensje, plektrantus, wilczomlecz, koleus,
+    bidens) dostało opisy pod koniec września 2026 i ma już wpisy oraz odnośniki - patrz
+    [Dwadzieścia jeden nowych opisów](#dwadzieścia-jeden-nowych-opisów--wrzesień-2026).
+    Brachyscome nadal jest na `/inspiracje/` nazwana bez odnośnika. Do wpisu potrzeba od
+    właścicieli opisu uprawy, kolorów i zdjęcia 4:3.
 15. **Cztery nienazwane składniki obsadzeń.** Kadr 3 i 4 - „drobne białe kwiaty ozdobne”;
     kadr 21 - „roślina o srebrzystych liściach”; kadr 13 - srebrzyste rośliny liściaste
     i trawy ozdobne w tle. Opisane w prozie, bez chipa. Jeśli właściciele je nazwą, chip
@@ -2081,10 +2198,27 @@ widoczna dla klienta i wymaga osobnej decyzji - wtedy trzeba poprawić oba parag
 16. **Tekst kadru 8** („Biało-czerwona ekspozycja begonii”) - opis i porada napisane przez
     nas, bo nadesłana lista przeskakuje z 7 na 9. Jedyny tekst na `/inspiracje/`, którego
     autorem nie jest gospodarstwo; do przejrzenia albo do zastąpienia ich własnym.
-17. **Kadr pionowy do hero strony głównej (4:5).** Najbardziej widoczna dziura na stronie:
+17. **Kadr pionowy do hero strony głównej (4:5).** Najbardziej widoczna pojedyncza dziura
+    na stronie głównej:
     `heroPhoto` to obraz generowany 4:3, kadrowany do 4:5, o rozdzielczości ok. 1,6x zamiast
     2x. W repozytorium nie ma wolnego kadru pionowego - wszystkie 23 z `src/assets/gallery/`
     to obsadzenia pokazywane na tej samej stronie, pas chryzantem ma 736 px, pas bratków to
     produkt marcowy. Podmiana: jedna linia w `src/data/gallery.ts` plus wymiary
     w `Intro.astro`. Patrz
     [Rozdzielenie sekcji i zmiana kroju](#rozdzielenie-sekcji-i-zmiana-kroju--wrzesień-2026).
+18. **Zdjęcia do 21 nowych wpisów.** Po wrześniowej dosypce katalog ma 40 wpisów, z czego
+    **24 bez zdjęcia** - trzy zastane (dahlia, pelargonia bluszczolistna, sundaville) i całe
+    21 nowych. To jest teraz największa dziura w repozytorium, większa niż hero. Każdy wpis
+    ma w `slot` gotowy opis kadru, wszystkie 4:3. Zasady jak zawsze: skalowanie do 2000 px
+    i **wypalona rotacja EXIF**.
+19. **Okno sprzedaży wrzosu.** `wrzos.md` siedzi w grupie `Rabatowe`, której okno to
+    kwiecień - czerwiec, a wrzos jest produktem jesiennym. `/rabatowe/` drukuje więc pod
+    nagłówkiem datę, która dla tego jednego wpisu jest nieprawdziwa - **świadomie, decyzją
+    z września 2026**, bo alternatywą było zmyślenie jesiennego okna w `season.ts`. Do
+    rozstrzygnięcia: od kiedy do kiedy właściciele sprzedają wrzosy. Jeśli podadzą daty,
+    trzeba piątej grupy w `offer.ts` (okno wiąże się z grupą, nie z wpisem) albo zgody na to,
+    że wrzos nie ma drukowanej daty wcale.
+20. **Dwie rośliny z listy właścicieli nadal bez opisu** - `Scaevola` i `Lobularia`
+    (smagliczka). Były na nadesłanej liście 38 nazw, ale opisy przyszły tylko do 21 z nich.
+    Smagliczka jest przy okazji najlepszą kandydatką na „drobne białe kwiaty ozdobne"
+    z punktu 15.

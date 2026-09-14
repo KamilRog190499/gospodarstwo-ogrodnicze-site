@@ -1,7 +1,7 @@
 ---
 name: Chryzantema igiełkowa
 group: Chryzantemy
-order: 17
+order: 38
 slot: zdjęcie - chryzantema igiełkowa, 4:3
 image: ../../assets/plants/chryzantema-igielkowa.jpg
 imageAlt: Różowo-białe chryzantemy o długich, wąskich i rurkowatych płatkach z podwiniętymi końcami
