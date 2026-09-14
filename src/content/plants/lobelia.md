@@ -3,6 +3,8 @@ name: Lobelia
 group: Balkonowe
 order: 20
 slot: zdjęcie - lobelia, 4:3
+image: ../../assets/plants/lobelia.jpg
+imageAlt: Gęsty kobierzec lobelii o drobnych, ciemnoniebieskich kwiatach z białym oczkiem, liście mokre po podlewaniu
 facts:
   - label: Pokrój
     value: Zwisający lub zwarty
@@ -12,12 +14,6 @@ facts:
     value: Słońce, półcień
   - label: Podlewanie
     value: Regularne
-colors:
-  - niebieski
-  - granatowy
-  - biały
-  - różowy
-  - fioletowy
 ---
 
 Lobelia to niezwykle dekoracyjna roślina sezonowa, ceniona za obfite kwitnienie

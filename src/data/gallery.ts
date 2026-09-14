@@ -40,6 +40,7 @@ import chrysRows08 from "../assets/chrysanthemums/rows-08.jpg";
 import chrysRows09 from "../assets/chrysanthemums/rows-09.jpg";
 import chrysRows10 from "../assets/chrysanthemums/rows-10.jpg";
 import chrysRows11 from "../assets/chrysanthemums/rows-11.jpg";
+import chrysRows12 from "../assets/chrysanthemums/rows-12.jpg";
 import chrysPot01 from "../assets/chrysanthemums/pots-01.jpg";
 import chrysPot02 from "../assets/chrysanthemums/pots-02.jpg";
 import chrysPot03 from "../assets/chrysanthemums/pots-03.jpg";
@@ -255,6 +256,17 @@ export const chrysanthemumStrip: GalleryPhoto[] = [
   {
     src: chrysRows11,
     alt: "Różowe chryzantemy o kulistych, gęsto ułożonych płatkach, długie rzędy w tunelu",
+  },
+  /* Was `chryzantema-igielkowa.jpg`, the photograph of its own entry, until the owners folded
+     the needle-petalled type into `chryzantema-sredniokwiatowa` in September 2026 and that entry
+     was deleted. The frame stayed and moved here, which is what this strip is for - frames that
+     belong to no single entry - and it is the same move the four `pots` frames made when the
+     second strip was removed. The alt is the entry's own, unchanged: it describes the petals in
+     the picture and claims nothing about which size class they belong to, which is exactly the
+     question the merge settled elsewhere. */
+  {
+    src: chrysRows12,
+    alt: "Różowo-białe chryzantemy o długich, wąskich i rurkowatych płatkach z podwiniętymi końcami, rzędy w uprawie",
   },
   {
     src: chrysPot01,

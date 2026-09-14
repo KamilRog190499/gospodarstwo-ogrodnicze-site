@@ -1,6 +1,6 @@
 ---
 name: Orlik
-group: Rabatowe
+group: Balkonowe
 order: 27
 slot: zdjęcie - orlik, 4:3
 facts:

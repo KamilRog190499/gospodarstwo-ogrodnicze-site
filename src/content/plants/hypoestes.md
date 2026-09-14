@@ -12,12 +12,6 @@ facts:
     value: Regularne
   - label: Uprawa
     value: Donice i skrzynki
-colors:
-  - różowy
-  - czerwony
-  - biały
-  - fioletowy
-  - wielobarwny
 ---
 
 Hypoestes, czyli niedośpian, to niezwykle efektowna roślina ozdobna, której największą

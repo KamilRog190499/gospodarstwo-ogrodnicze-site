@@ -1,6 +1,6 @@
 ---
 name: Wrzos
-group: Rabatowe
+group: Balkonowe
 order: 28
 slot: zdjęcie - wrzos, 4:3
 facts:
@@ -12,12 +12,6 @@ facts:
     value: Kwaśne, przepuszczalne
   - label: Uprawa
     value: Rabaty, skalniaki, donice
-colors:
-  - biały
-  - różowy
-  - liliowy
-  - fioletowy
-  - purpurowy
 ---
 
 Calluna, czyli wrzos pospolity, to niezwykle dekoracyjna roślina, która doskonale wpisuje

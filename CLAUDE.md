@@ -16,7 +16,11 @@ perennial flowers plus large-flowered chrysanthemums from its own cultivation.
 It replaces the WordPress site at `http://gospodarstwo-saran.pl/`. The brief is to keep that
 site's structure and character - the menu, the "photo + long cultivation description + list
 of available colours" pattern, the seasonal blocks - with cleaned-up typography, spacing and
-accessibility.
+accessibility. **The third part of that pattern is gone**: the owners had the colour chips
+removed from every entry in September 2026, so an entry is now a photograph and a description.
+That is a departure from the brief rather than an implementation of it, the 104 values are
+archived in `docs/inwentaryzacja.md`, and putting them back would be as client-visible as taking
+them out.
 
 **No e-commerce.** Orders are taken by phone or on site only. The site is a business card
 plus an informational catalogue. Do not add a cart, checkout, forms, accounts or prices.
@@ -26,31 +30,39 @@ plus an informational catalogue. Do not add a cart, checkout, forms, accounts or
 The site is built and the content is migrated. `npm run lint` and `npm run build` are clean
 and `linkinator` finds no dead internal link.
 
-- **Ten pages**, plus a 404: `/`, `/kwiaty-balkonowe/`, `/rabatowe/`, `/bratki/`,
-  `/chryzantemy/`, `/inspiracje/`, `/o-nas/`, `/faq/`, `/kontakt/`,
-  `/polityka-prywatnosci/`. All three of the old WordPress offer addresses are kept
-  unchanged; `/bratki/`, `/faq/` and `/polityka-prywatnosci/` are the three addresses with no
-  predecessor. The last of them is also **the only page not in the menu** - it is reached from
+- **Nine pages**, plus a 404: `/`, `/kwiaty-balkonowe/`, `/bratki/`, `/chryzantemy/`,
+  `/inspiracje/`, `/o-nas/`, `/faq/`, `/kontakt/`, `/polityka-prywatnosci/`. Two of the three
+  old WordPress offer addresses are kept unchanged; the third, `/rabatowe/`, was **merged away
+  in September 2026** and needs a 301 onto `/kwiaty-balkonowe/` (docs/przekierowania.md) -
+  it is the one ranking address this project did not keep. `/bratki/`, `/faq/` and
+  `/polityka-prywatnosci/` are the three addresses with no predecessor. The last of them is also **the only page not in the menu** - it is reached from
   the footer, the consent bar and the map placeholder, and deliberately not from
   `navigation.ts`, which also feeds the 404's list of real destinations.
-- **40 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus two
+- **39 plant entries** in `src/content/plants/` - 14 migrated from the old site, plus the
   extra chrysanthemum types and the pansy written by the owners, plus **21 that arrived in one
   batch at the end of September 2026** against a list of 38 Latin names the owners supplied,
   plus two whose descriptions are **ours and not theirs** (chryzantema drobnokwiatowa and
   prymulka): the only entries on the site not in the owners' own words, and on their list to
-  replace. By group: Balkonowe 22, Rabatowe 12, Bratki 2, Chryzantemy 4. The batch is argued
+  replace. By group: Balkonowe 34, Bratki 2, Chryzantemy 3 - **three groups, not four**, since
+  the owners had `Rabatowe` folded into `Balkonowe` in September 2026. The chrysanthemums were
+  four until the owners folded the needle-petalled type into `chryzantema-sredniokwiatowa` later
+  that month: it is a petal shape, not a size class. Its photograph stayed and is now `rows-12`
+  in `chrysanthemumStrip`; its description was the owners' own and is preserved verbatim in
+  `docs/inwentaryzacja.md`, which is where any text of theirs goes when it leaves the site. The batch is argued
   out in `docs/inwentaryzacja.md` under "Dwadzieścia jeden nowych opisów" - including why the
-  six perennials and the shrub did **not** get a fifth group (the `/rabatowe/` tile has been
-  called "Rabatowe i wieloletnie" all along) and why one of them, `wrzos.md`, knowingly sits
-  under a selling window that is wrong for it.
-- **69 photographs** in `src/assets/`. **Only 16 of the 40 entries have their own frame**, and
+  six perennials and the shrub did **not** get a group of their own, and why one of them,
+  `wrzos.md`, knowingly sits under a selling window that is wrong for it. The merge made the
+  second point louder rather than quieter: heather now sits under a page called "Kwiaty
+  balkonowe" as well.
+- **75 photographs** in `src/assets/`. **21 of the 39 entries have their own frame**, and
   that ratio is the newest and largest gap on the site: the three long-standing placeholders
   (dahlia, pelargonia bluszczolistna, sundaville) plus all 21 of the September batch. Every
   one of the 24 names the crop it wants in its `slot`. Nineteen of the sixty-nine arrived in
-  September 2026 off the holding's Facebook page: fifteen chrysanthemums, so `/chryzantemy/`
-  carries a strip of nineteen frames, by some way the longest on the site, and four pansies
-  and primroses, which took `/bratki/` from four to seven.
-- `/` is a preview of the whole site: intro, season cards, four offer tiles opening with a
+  September 2026 off the holding's Facebook page: fifteen chrysanthemums, and four pansies
+  and primroses, which took `/bratki/` from four to seven. `/chryzantemy/` carries a strip of
+  **twenty** frames, by some way the longest on the site - nineteen, plus the needle-petalled
+  frame that moved there when its entry was folded away.
+- `/` is a preview of the whole site: intro, season cards, three offer tiles opening with a
   mosaic of that group's photographs, the plantings slideshow in a reduced variant, the
   Facebook block and a map block. What each home page block may and may not repeat is argued
   out in `docs/inwentaryzacja.md` under "Strona główna jako witryna".
@@ -62,26 +74,26 @@ and `linkinator` finds no dead internal link.
 
 Read this before adding a file - most things already have a home.
 
-| Path                           | Role                                                                                                                                                                                                                                                                                                                                   |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/data/offer.ts`            | **The four groups and the four category pages, in one table.** Exports `plantGroups`, which `src/content.config.ts` turns into the schema's `z.enum` and `navigation.ts` turns into menu entries. A new group starts here, never in the schema. Also holds `plantCount()`, the Polish three-form plural.                               |
-| `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                          |
-| `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the four category pages derived from `offer.ts`. Also `offerPages` and `allPages` (flattened, for the 404). `/polityka-prywatnosci/` is deliberately absent from all three.                                                                           |
-| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                      |
-| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                     |
-| `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                           |
-| `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                            |
-| `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                 |
-| `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                             |
-| `src/content/compositions/`    | **The 23 plantings**, one `.md` each, the file name being the anchor. Body = the description, `tip` = "Nasza podpowiedź". Both are the owners' own words.                                                                                                                                                                              |
-| `src/content.config.ts`        | The zod schemas for `plants`, `pages`, `faq` and `compositions`.                                                                                                                                                                                                                                                                       |
-| `src/layouts/BaseLayout.astro` | The one layout: head, skip link, header, `<main>`, footer, JSON-LD.                                                                                                                                                                                                                                                                    |
-| `src/components/`              | 19 components. `SeasonCards`, `OfferOverview` (home tiles), `OfferSection` (a whole category page), `PlantEntry`, `PhotoSlot` (a pending photograph), `PhotoStrip`, `Compositions` (the slideshow), `Intro`, `Header`, `Nav`, `Footer`, `Contact`, `Directions`, `MapEmbed`, `ConsentBanner`, `History`, `FacebookNews`, `Faq`, `Seo`. |
-| `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the slideshow), `lightbox.ts` (the overlay preview), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                                                                   |
-| `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, daily.                                                                                                                                                                                                                                                                  |
-| `docs/inwentaryzacja.md`       | The project chronicle: what was on the old site, where it went, every open question, and the version history.                                                                                                                                                                                                                          |
-| `docs/przekierowania.md`       | The 301 map.                                                                                                                                                                                                                                                                                                                           |
-| `docs/facebook.md`             | Written for the owners: how to issue the token.                                                                                                                                                                                                                                                                                        |
+| Path                           | Role                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/data/offer.ts`            | **The three groups and the three category pages, in one table.** Exports `plantGroups`, which `src/content.config.ts` turns into the schema's `z.enum` and `navigation.ts` turns into menu entries. A new group starts here, never in the schema, and **dropping a value here is how a group is merged away** - the schema then fails the build on any `.md` left behind. Also holds `plantCount()`, the Polish three-form plural. |
+| `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                                                                                                                      |
+| `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the three category pages derived from `offer.ts`. Also `offerPages` and `allPages` (flattened, for the 404). `/polityka-prywatnosci/` is deliberately absent from all three.                                                                                                                                                                      |
+| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                                                                                                                  |
+| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                                                                                                 |
+| `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                       |
+| `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                        |
+| `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                                                                                                             |
+| `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                                                                                                                         |
+| `src/content/compositions/`    | **The 23 plantings**, one `.md` each, the file name being the anchor. Body = the description, `tip` = "Nasza podpowiedź". Both are the owners' own words.                                                                                                                                                                                                                                                                          |
+| `src/content.config.ts`        | The zod schemas for `plants`, `pages`, `faq` and `compositions`.                                                                                                                                                                                                                                                                                                                                                                   |
+| `src/layouts/BaseLayout.astro` | The one layout: head, skip link, header, `<main>`, footer, JSON-LD.                                                                                                                                                                                                                                                                                                                                                                |
+| `src/components/`              | 19 components. `SeasonCards`, `OfferOverview` (home tiles), `OfferSection` (a whole category page), `PlantEntry`, `PhotoSlot` (a pending photograph), `PhotoStrip`, `Compositions` (the slideshow), `Intro`, `Header`, `Nav`, `Footer`, `Contact`, `Directions`, `MapEmbed`, `ConsentBanner`, `History`, `FacebookNews`, `Faq`, `Seo`.                                                                                             |
+| `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the slideshow), `lightbox.ts` (the overlay preview), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                                                                                                                                                               |
+| `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, daily.                                                                                                                                                                                                                                                                                                                                                              |
+| `docs/inwentaryzacja.md`       | The project chronicle: what was on the old site, where it went, every open question, and the version history.                                                                                                                                                                                                                                                                                                                      |
+| `docs/przekierowania.md`       | The 301 map.                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `docs/facebook.md`             | Written for the owners: how to issue the token.                                                                                                                                                                                                                                                                                                                                                                                    |
 
 ## Design handoff - the source of truth
 
@@ -248,8 +260,24 @@ plus manual viewport checks.
   previews. `src/scripts/compositions.ts` drives one strip per `[data-comp]`, so scope every
   query to the root if you touch it; a `document.querySelector` there would make the home
   page buttons move the wrong track.
+- **Every entry photograph is 4:3, and so is every `PhotoSlot` beside it.** One constant,
+  `PHOTO_RATIO` in `PlantEntry.astro`, written there and as `width`/`height` on the `<Picture>`;
+  the two must move together or Astro emits one shape while the CSS crops to another. This
+  **reverses** the adaptive frame (each file's own ratio, floored at 3:4) that the owners chose
+  earlier in September 2026, and they reversed it themselves after seeing both - uniformity over
+  fidelity to each frame. The price is measured in `PlantEntry.astro` and
+  `docs/inwentaryzacja.md`: one of the twenty-one photographs is untouched, eighteen taller-than-4:3
+  files keep 52-61% of their height, and the two landscape files are cropped on width. The crop is centred and **`object-position` cannot rescue it** - aiming moves
+  the band, and no position helps when the bloom is taller than the window. A badly clipped entry
+  is fixed by re-cropping its source file, never by a per-entry exception.
 - **A plant entry is a component fed by data**, not hand-written markup:
-  `{ name, group, order, slot, image?, imageAlt?, facts?[<=4], colors?[] }`. There is no
+  `{ name, group, order, slot, image?, imageAlt?, facts?[<=4] }`. **There is no `colors` field
+  any more** - the "Dostępne kolory" chips came off every entry in September 2026 on the owners'
+  instruction, and the field left the schema with them, because one no component reads is dead
+  weight. Nineteen of the twenty-two entries that had chips still name their colours in the prose
+  body; three (bakopa, chryzantema wielkokwiatowa, pelargonie bluszczolistne) now say nothing
+  about colour at all, and that gap is on the owners' list rather than filled in by us - their
+  descriptions are theirs to extend. There is also no
   `caption` field - the owners had the per-entry captions removed, and **that decision is
   about the plant entries alone.** Two `<figcaption>`s survive it on purpose: every slideshow
   slide, where the caption carries the editorial description, and the history photograph on
@@ -268,6 +296,28 @@ plus manual viewport checks.
   theirs:** `chryzantema-drobnokwiatowa.md` and `prymulka.md` were both drafted here in
   September 2026 and lightly edited into the house style, so they are the two descriptions the
   owners have not written and the only ones waiting to be replaced rather than protected.
+- **A long category page sorts alphabetically, a short one by `order`.** `OfferSection` takes
+  `sort="order" | "name"`, defaulting to `order`; `/kwiaty-balkonowe/` is the one page that
+  passes `"name"`, because thirty-four entries in editorial order is a list nobody can find a
+  plant in. `"name"` also turns on the two finding aids that come with it: the "Na tej stronie"
+  index grouped by initial, and a large letter between the entries as the page scrolls. Both are
+  off on `/bratki/` and `/chryzantemy/`, which are short enough to say what matters first
+  instead. Collation is `localeCompare(…, "pl-PL")` and it is not optional - the default sorts
+  "Łubin" past "Wrzos". **The letter dividers are not headings** (`<p aria-hidden="true">`): the
+  outline stays one `h1` and one `h2` per plant, and a screen reader gets the letters from the
+  index, which is a real `<nav>` with real links. **The divider draws no line of its own**, and
+  that was a reported defect, not a preference: it first sat beside a 1px `--rule` running right,
+  which is the same mark and the same weight every `.entry` already closes with, so the two
+  blurred into each other. One kind of horizontal line per page. The letter carries the break
+  with size and lopsided spacing instead - large gap above, none below, so it attaches to the
+  plants that follow - and it is `--sage`, which `tokens.css` permits only on decorative type at
+  24px and up. It never renders below 40px. **Do not take that green up to the index's `<dt>`**,
+  which sits at 20px and stays `--ink-grey`.
+- **`order` no longer means "position on the page" everywhere.** On `/kwiaty-balkonowe/` it
+  decides only which four names and which two photographs the home page tile shows. That the
+  tile is in `order` while the page is alphabetical is deliberate and argued in
+  `OfferOverview.astro`: a tile with room for four names wants the best four, not the first four
+  of the alphabet.
 - **A page gets one photo strip, and the overline lives in `OfferSection`.** It briefly took a
   list of labelled rows, when `/chryzantemy/` carried a second strip of finished pots beside the
   crop; the owner had that strip removed in September 2026 and its four frames moved to the end
@@ -279,11 +329,18 @@ plus manual viewport checks.
   - **The strip is lightboxed, and the entries deliberately are not.** Every frame in a
     `PhotoStrip` is an `<a data-lightbox>` around the thumbnail, reusing the same global
     `src/scripts/lightbox.ts` the slideshow uses - so with scripting off the link still opens the
-    photograph. It earns this where a plant entry does not: the strip frame is a fixed 3:4 with
-    `object-fit: cover`, so four of the nineteen chrysanthemum sources are cropped on the page and
-    the full frame is otherwise unreachable, whereas `PlantEntry` already fits the box to the
     photograph. The href is the source at its own width **capped at 2000px** - `offer-01..04` are
     736px files and asking for more would serve an upscale.
+
+    **The reason the entries were left out has expired, and nothing has been done about it yet.**
+    It used to be that a strip frame is a fixed 3:4 with `object-fit: cover`, so its sources are
+    cropped on the page and the full frame is otherwise unreachable, "whereas `PlantEntry`
+    already fits the box to the photograph". That stopped being true when the owners asked for a
+    flat 4:3 on every entry: fifteen of the sixteen entry photographs are now cropped too, and
+    the whole frame is no more reachable there than it is in a strip. So the distinction that
+    justified lightboxing one and not the other is gone. **Do not take that as licence to add
+    it** - it is a client-visible change and it is on the owners' list in
+    `docs/inwentaryzacja.md`, not a decision to make here.
 - **Non-editorial data goes in typed `src/data/*.ts`**, imported directly - one place per
   fact, so a phone number changes once and updates the intro CTA, the contact list, the
   footer and the JSON-LD together. See the repository map above for which file owns what.
@@ -307,8 +364,8 @@ plus manual viewport checks.
     someone arriving from a search never sees the home page.
   - **The home page offer tiles carry a season chip**, in three states: "W sprzedaży",
     "Wkrótce", "Poza sezonem". This reverses what stood here - the marker was put on the tiles
-    for one release, taken off on the argument that four equal doors to four pages is what that
-    block is for and that a door changing colour with the month is a worse door, and put back
+    for one release, taken off on the argument that a row of equal doors, one per page, is what
+    that block is for and that a door changing colour with the month is a worse door, and put back
     in September 2026 on the owner's instruction after seeing both. The argument that lost is
     kept in the header of `OfferOverview.astro`, not deleted, together with the one that won:
     someone arriving in July and opening "Chryzantemy" meets a full catalogue with no hint that
@@ -356,7 +413,7 @@ plus manual viewport checks.
     is not a link and leads nowhere, so it gets the green underline only; the hidden category
     link keeps the real `aria-current`, which is how a screen reader still finds which of the
     four it is on. The panel stays **closed** on a category page - open-by-default would drop
-    an overlay across the `h1` of the four pages people most often arrive on from search.
+    an overlay across the `h1` of the pages people most often arrive on from search.
   - **The FAQ is the same element again, and needs no script at all.** `/faq/` is an accordion
     of `<details>` with the `h2` inside the `<summary>` - valid HTML, and it keeps the page's
     outline. An accordion in the page flow has no outside to click and nothing to escape from,
@@ -364,7 +421,7 @@ plus manual viewport checks.
     answers may be open at once. Both use the same 1px chevron - one site, one mark for "this
     opens".
   - **The footer pays for the panel.** Hiding four ranking addresses behind a summary costs
-    them a click from every page. What pays it back is the footer's list of the four category
+    them a click from every page. What pays it back is the footer's list of the three category
     pages and the "Pozostałe grupy" nav at the foot of every category page. Do not trim either.
     **It is no longer a flat list of every page**, and that is the owners' call, not a
     regression: they said in September 2026 that "Inspiracje" is not part of the offer and had
@@ -411,9 +468,11 @@ Anything unconfirmed ships with a visible "pending confirmation" state rather th
 value. The full list is in `docs/inwentaryzacja.md` under "Czego nadal brakuje"; the ones
 that shape code decisions:
 
-1. **Photographs** - what is left is one 4:3 frame each for **24 entries**: the three
-   long-standing ones (dahlia, pelargonia bluszczolistna, sundaville) and all 21 of the
-   September 2026 batch, plus an archival photograph for the history block. That
+1. **Photographs** - what is left is one 4:3 frame each for **18 entries**, plus an archival
+   photograph for the history block. Of the three long-standing gaps only **pelargonia
+   bluszczolistna and sundaville** remain: dahlia was filled by the September 2026 batch of
+   nine, which also covered lobelia, koleus, sanvitalia, bakopa and petunia-surfinia and
+   replaced the frames on alstromeria, tunbergia and begonia. That
    last one is **no longer urgent**: since September 2026 the block holds `historyPhoto`, the
    holding's stand at the flower show in Końskowola, its own banner in the frame - contemporary,
    so the brief's "zdjecie archiwalne" is still unanswered, but the first frame in the
@@ -439,8 +498,9 @@ that shape code decisions:
    among them, and the wording of the one caption on the site - the owners wrote "Wystawie
    kwiatów w Końskowoli" and it ships as "Na wystawie kwiatów w Końskowoli", one preposition
    added so a locative with nothing to govern it does not read as a typo; which chrysanthemum
-   type each photograph shows (the igielkowa is unmistakable, the sredniokwiatowa is a
-   judgement about bloom size); and the species in two frames recovered from the media
+   type each photograph shows - a question the September 2026 merge shrank but did not close,
+   since the needle-petalled frame is now a strip frame that claims no type at all and
+   `sredniokwiatowa` is still a judgement about bloom size; and the species in two frames recovered from the media
    library - calibrachoa (easily confused with a trailing petunia by eye) and niecierpek
    nowogwinejski (its source sat under a caption block mislabelled "Pelargonie"). The gallery
    photographs are deliberately not assigned to individual plant entries, because they are

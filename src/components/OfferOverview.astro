@@ -14,16 +14,19 @@ import { currentSeason } from "../data/season";
  * descriptions are the plant names themselves, taken from the collection, so nothing here
  * is copy that has to be kept in step with the offer by hand.
  *
- * The four pages come from `src/data/offer.ts` and no longer from a list in this file - the
- * same four addresses used to be written out both here and in `navigation.ts`.
+ * The pages come from `src/data/offer.ts` and no longer from a list in this file - the same
+ * addresses used to be written out both here and in `navigation.ts`. There are three of them
+ * since September 2026, when the owners had `Rabatowe` merged into `Balkonowe`; nothing in this
+ * file had to change for that, because `page.groups` was already a list and the grid was
+ * already `auto-fit`.
  *
  * ## The season chip, which this block spent two releases without
  *
  * Every tile carries one, in three states: "W sprzedaży", "Wkrótce", "Poza sezonem". That is
  * a deliberate reversal of what stood here, and the argument it reverses was not a bad one,
  * so it is kept rather than deleted: the marker lived on these tiles for one release and was
- * taken off because the year is `SeasonCards`' subject, not this block's, and because four
- * equal doors to four pages is what this block is for - a door that changes colour with the
+ * taken off because the year is `SeasonCards`' subject, not this block's, and because a row of
+ * equal doors, one per page, is what this block is for - a door that changes colour with the
  * date being a worse door.
  *
  * The owner asked for it back in September 2026, having seen both. The reasoning that lost:
@@ -31,11 +34,11 @@ import { currentSeason } from "../data/season";
  * hint that nothing in it is for sale for another three months, and the season strip a screen
  * above does not travel with them.
  *
- * **The cost is real and is worth watching.** Three of the four groups are out of season for
- * most of the year, so most of the time this section shows three greyed doors and one lit
- * one. If that turns out to tell too gloomy a story, the cheap fix is not to remove the chip
- * but to print it only where there is something to say - `currentSeason.groups[group]` is
- * already `"now" | "soon" | null`, so it is one condition in the template below.
+ * **The cost is real and is worth watching.** Two of the three groups are out of season for
+ * most of the year, so most of the time this section shows two greyed doors and one lit one.
+ * If that turns out to tell too gloomy a story, the cheap fix is not to remove the chip but to
+ * print it only where there is something to say - `currentSeason.groups[group]` is already
+ * `"now" | "soon" | null`, so it is one condition in the template below.
  *
  * Recorded in docs/inwentaryzacja.md with both halves of the argument.
  *
@@ -47,7 +50,7 @@ import { currentSeason } from "../data/season";
  * had a strip three times taller than the tile holding eleven, so the smallest group was the
  * heaviest thing in the section. Moving the ratio onto the strip levelled the heights and
  * broke the frames instead: three came out nearly square, two came out as 110x57 letterboxes
- * on `Rabatowe i wieloletnie`.
+ * on the tile that was then called "Rabatowe i wieloletnie".
  *
  * Two frames in two fixed columns has neither failure, because there is no longer a variable
  * to fail on. Every tile is the same height and every frame is the same shape.
@@ -66,16 +69,27 @@ import { currentSeason } from "../data/season";
  * vary - it was tried twice and failed twice. An entry is one photograph on its own; a tile is
  * one of four that have to match. Do not harmonise them.
  *
- * Two is also the number the content can actually guarantee. `Rabatowe` has exactly two
- * entries with a photograph and no `PhotoStrip` to borrow from, so it can never reach three;
- * a design needing three would be permanently broken on one of the four tiles.
+ * Two is also the number the content can guarantee, and the merge did not make that argument
+ * obsolete - it moved it. Every group can reach two today: `Balkonowe` has ten photographed
+ * entries out of thirty-four, `Bratki` two plus a strip, `Chryzantemy` four plus a strip. What
+ * a fixed two buys is that no tile can ever come up short, whatever arrives in or leaves the
+ * collection; three would have been permanently broken on `Bratki` before its second
+ * photograph turned up, and would break again on any group that starts out with one.
  *
  * **The name list is capped at four.** It is still generated from the collection and still
  * cannot drift from the offer, but it no longer prints all of it: eleven balcony plants ran to
  * five lines while the pansy tile ran to one, and because the tiles share a height that
- * difference came out as a hole in three tiles out of four. Four names and a tail - `i 7
- * innych` - say what the wall of eleven was saying badly. The full list is one click away, on
- * the page the tile is a door to.
+ * difference came out as a hole in most of the tiles. Four names and a tail - `i 30 innych` -
+ * say what the wall of names was saying badly. The full list is one click away, on the page
+ * the tile is a door to.
+ *
+ * **Those four names come from `order`, while the page they lead to is alphabetical, and the
+ * disagreement is deliberate.** `sort="name"` on `/kwiaty-balkonowe/` is a finding aid for
+ * thirty-four entries; `order` is the owners' sense of what is worth showing first, which is
+ * exactly what a tile with room for four names wants. Harmonised the other way, this tile
+ * would open the offer with "Aksamitka · Alstromeria · Bakopa · Begonia" - an alphabet, not a
+ * shop window. The two orders answer different questions and neither should be made to answer
+ * the other's.
  *
  * Which two: **the collection chooses, not a list here.** The group's entries in `order` that
  * have an `image`, then, if that is fewer than two, the group's own `PhotoStrip` - the same
@@ -92,8 +106,8 @@ const plants = (await getCollection("plants")).sort((a, b) => a.data.order - b.d
 /** Where a group short of two frames borrows the rest. Deliberately here and not in
  *  `offer.ts`: these are the same photographs the category pages show under their lists, so
  *  this is a presentation choice, and keeping it here spares every page that imports the
- *  menu from pulling the image imports in with it. Only `Bratki` needs it today - one entry,
- *  four strip frames. */
+ *  menu from pulling the image imports in with it. No group needs it today - it is the reason
+ *  none of them can fall short tomorrow. */
 const stripFallback: Partial<Record<PlantGroup, GalleryPhoto[]>> = {
   Bratki: pansyStrip,
   Chryzantemy: chrysanthemumStrip,
@@ -312,9 +326,10 @@ const tiles = offer
   }
 
   /* Counter and chip share the foot of the tile. They were first drawn beside the title, which
-     is where the mockup put them - but four tiles across 1200px leaves each one about 180px
-     wide, and an 85px chip on that row squeezed "Rabatowe i wieloletnie" onto three lines. The
-     two are the same kind of thing anyway: small uppercase metadata about the group, as
+     is where the mockup put them - but four tiles across 1200px left each one about 180px wide,
+     and an 85px chip on that row squeezed the longest title ("Rabatowe i wieloletnie", back
+     when that tile existed) onto three lines. Three tiles give more room and the argument holds
+     anyway: the two are the same kind of thing, small uppercase metadata about the group, as
      against the title and the plant names, which are the group. */
   .tile__foot {
     margin-top: auto;
@@ -327,7 +342,8 @@ const tiles = offer
 
   /* Lit or not, with the three labels doing the rest - the same arrangement as the season
      cards, and it works here for the same reason: the calendar marks at most one window at a
-     time, so at most one tile is ever lit and there is nothing for a second fill to mean. */
+     time, and since the merge each window covers exactly one group, so at most one tile is
+     ever lit and there is nothing for a second fill to mean. */
   .tile__tag {
     margin-inline-start: auto;
     font-size: 0.62rem;

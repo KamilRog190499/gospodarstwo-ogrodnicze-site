@@ -12,13 +12,6 @@ facts:
     value: 1–2× dziennie latem
   - label: Uprawa
     value: Skrzynki i wiszące pojemniki
-colors:
-  - bordowy
-  - czerwony
-  - pomarańczowy
-  - różowy
-  - jasny lila
-  - biały
 ---
 
 Pelargonia bluszczolistna to wyjątkowo dekoracyjna roślina o długich, zwisających pędach,

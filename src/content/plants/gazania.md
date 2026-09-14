@@ -1,6 +1,6 @@
 ---
 name: Gazania
-group: Rabatowe
+group: Balkonowe
 order: 30
 slot: zdjęcie - gazania, 4:3
 facts:
@@ -12,13 +12,6 @@ facts:
     value: Umiarkowane
   - label: Podłoże
     value: Lekkie, przepuszczalne
-colors:
-  - żółty
-  - pomarańczowy
-  - czerwony
-  - różowy
-  - biały
-  - wielobarwny
 ---
 
 Gazania to wyjątkowo efektowna roślina sezonowa, ceniona za duże, intensywnie wybarwione

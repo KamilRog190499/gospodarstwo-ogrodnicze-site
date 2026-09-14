@@ -6,18 +6,34 @@ import OfferSection from "../components/OfferSection.astro";
  * `/kwiaty-balkonowe/` - the WordPress address, unchanged, so no 301 is needed and the
  * page that ranks for "kwiaty balkonowe Kazimierz Dolny" keeps ranking
  * (docs/przekierowania.md).
+ *
+ * Since September 2026 it is also where `/rabatowe/` went: the owners had the two groups
+ * merged, so this page carries all 34 of them and `/rabatowe/` is a 301 onto it. The
+ * argument is in `src/data/offer.ts`.
+ *
+ * **The description is where "rabatowe i wieloletnie" survives.** The owners chose "Kwiaty
+ * balkonowe" as the name of the merged page, which drops a phrase the old site ranked on
+ * from the title and the menu; keeping it here costs the page nothing and keeps the words
+ * people actually search for in the one field written for them. Both halves of the old
+ * descriptions are folded in.
+ *
+ * `sort="name"` is the other consequence of the merge: 34 entries in editorial `order` is a
+ * list nobody can find anything in, so this page alone runs alphabetically, with the letter
+ * index and the dividers `OfferSection` draws for it. `/bratki/` and `/chryzantemy/` are
+ * short enough to keep saying what the owners consider most important first.
  */
 ---
 
 <BaseLayout
   title="Kwiaty balkonowe"
-  description="Kwiaty balkonowe z własnej uprawy: pelargonie, petunie i surfinie, begonie, fuksje, lobelia, bakopa, calibrachoa i inne. Opis uprawy i dostępne kolory. Gospodarstwo Ogrodnicze „Saran” w Cholewiance pod Kazimierzem Dolnym."
+  description="Kwiaty balkonowe, rabatowe i wieloletnie z własnej uprawy: pelargonie, petunie i surfinie, begonie, fuksje, aksamitki, szałwia, hortensje i funkie. Opis uprawy i dostępne kolory. Gospodarstwo Ogrodnicze „Saran” w Cholewiance pod Kazimierzem Dolnym."
   canonical="/kwiaty-balkonowe/"
   breadcrumb="Kwiaty balkonowe"
 >
   <OfferSection
     group="Balkonowe"
     title="Kwiaty balkonowe"
+    sort="name"
     note="Poza samymi roślinami sprzedajemy gotowe obsadzone skrzynki, kosze i doniczki - kompozycje można oglądać w zakładce Inspiracje."
   />
 </BaseLayout>

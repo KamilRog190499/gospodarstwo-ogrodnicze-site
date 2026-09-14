@@ -1,6 +1,6 @@
 ---
 name: Hortensja
-group: Rabatowe
+group: Balkonowe
 order: 25
 slot: zdjęcie - hortensja, 4:3
 facts:

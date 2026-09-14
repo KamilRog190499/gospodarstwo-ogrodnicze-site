@@ -58,7 +58,7 @@ src/
 ├── data/         dane nieredakcyjne w TypeScripcie: offer, season, navigation,
 │              contact, gallery, plant-links, facebook, version
 ├── layouts/      BaseLayout.astro
-├── pages/        index.astro, kwiaty-balkonowe.astro, rabatowe.astro,
+├── pages/        index.astro, kwiaty-balkonowe.astro,
 │              bratki.astro, chryzantemy.astro, inspiracje.astro,
 │              o-nas.astro, kontakt.astro, 404.astro
 ├── scripts/      consent.ts, compositions.ts, lightbox.ts - jedyny JavaScript
@@ -85,14 +85,17 @@ pola albo zdjęcie bez opisu **przerywa build**, zamiast po cichu wypuścić pus
 
 ```yaml
 name: Fuksja # nazwa w nagłówku
-group: Balkonowe # Balkonowe | Rabatowe | Bratki | Chryzantemy - steruje chipem
+group: Balkonowe # Balkonowe | Bratki | Chryzantemy - steruje chipem
 order: 2 # kolejność na stronie
 slot: zdjęcie - fuksja, 4:3 # opis kadru, widoczny w placeholderze
 facts: # maks. 4, opcjonalne
   - label: Stanowisko
     value: Półcień, osłonięte
-colors: [czerwony, biały] # opcjonalne - chipy „Dostępne kolory”
 ```
+
+Pola `colors` **nie ma** - chipy „Dostępne kolory” zdjęto ze wszystkich wpisów we wrześniu 2026
+na polecenie właścicieli i pole wypadło też ze schematu. Usunięte wartości są w
+`docs/inwentaryzacja.md`.
 
 Lista grup jest w `src/data/offer.ts` i **stamtąd** bierze ją schemat - nowa grupa zaczyna
 się w tym pliku, nie w `content.config.ts`.

@@ -4,7 +4,7 @@ group: Balkonowe
 order: 4
 slot: zdjęcie - tunbergia na podporze, 4:3
 image: ../../assets/plants/tunbergia.jpg
-imageAlt: Pomarańczowo-żółte kwiaty tunbergii z ciemnym gardzielem, pnące się po podporze w szklarni
+imageAlt: Tunbergia w wiszącej doniczce - trzy żółte kwiaty z ciemnym środkiem i jeden różowy, na tle sercowatych liści
 facts:
   - label: Długość pędów
     value: 100–150 cm

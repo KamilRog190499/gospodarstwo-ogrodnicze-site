@@ -29,6 +29,18 @@ const plants = defineCollection({
          *  come from `src/data/offer.ts`, so the union the components use and the enum the
          *  build validates against cannot drift apart. */
         group: z.enum(plantGroups),
+        /** Where the entry stands among its group's.
+         *
+         *  **It stopped meaning "position on the page" for one of the three groups.**
+         *  `/kwiaty-balkonowe/` runs alphabetically since it absorbed `Rabatowe` in September
+         *  2026 - thirty-four entries in editorial order is a list nobody can find a plant in
+         *  (`OfferSection.astro`, prop `sort`). There it now decides only which four names and
+         *  which two photographs the home page tile shows, which is the question it was always
+         *  really answering: what the owners consider worth putting first. On `/bratki/` and
+         *  `/chryzantemy/` it still sets the order of the page as well.
+         *
+         *  Values are unique across the whole collection rather than per group, which is why
+         *  the merge needed no renumbering. Nothing requires that and nothing checks it. */
         order: z.number().int().positive(),
         /** What the photograph should show, e.g. "zdjęcie - fuksja, 4:3". Printed inside
          *  the placeholder until a real photograph arrives, so whoever takes the pictures
@@ -46,10 +58,16 @@ const plants = defineCollection({
           .min(1)
           .max(4)
           .optional(),
-        /** The colour chips. Absent for the plants the old site describes only as
-         *  available "w różnych kolorach" - that sentence stays in the body instead,
-         *  rather than being turned into invented chips. */
-        colors: z.array(z.string()).min(1).optional(),
+        /* **There is no `colors` field, and its absence is a decision rather than an
+           oversight.** Twenty-two entries carried one - 104 chips under a "Dostępne kolory"
+           label - until the owners had the whole block removed in September 2026. It went from
+           the schema too, not just from the markup: a field no component reads is the dead
+           weight this file exists to prevent. The 104 values are archived verbatim in
+           docs/inwentaryzacja.md, and nineteen of the twenty-two entries still name their
+           colours in the prose body, which is where the old WordPress site kept them for the
+           other seventeen all along. Do not re-add this without the owners asking - the brief
+           lists "lista dostępnych kolorów" as a pattern to carry over, so putting it back is as
+           client-visible as taking it out was. */
       })
       .superRefine((entry, ctx) => {
         // A photograph without a description is exactly what the old site shipped - every

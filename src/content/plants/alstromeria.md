@@ -4,7 +4,7 @@ group: Balkonowe
 order: 1
 slot: zdjęcie - alstromeria, 4:3
 image: ../../assets/plants/alstromeria.jpg
-imageAlt: Biała alstromeria z żółto-czerwonym, prążkowanym gardzielem, na tle zieleni w szklarni
+imageAlt: Malinowoczerwone kwiaty alstromerii z ciemnym kreskowaniem u nasady płatków, wśród wąskich zielonych liści
 facts:
   - label: Wysokość
     value: 50–100 cm
@@ -12,13 +12,6 @@ facts:
     value: Półcień, ciepłe i jasne
   - label: Zimowanie
     value: Nie zimuje w gruncie
-colors:
-  - czerwony
-  - czerwono-biały
-  - biało-żółty
-  - biało-różowy
-  - lila
-  - pomarańczowy
 ---
 
 Alstroemeria, nazywana również lilią Inków, to wyjątkowo dekoracyjna roślina o egzotycznym

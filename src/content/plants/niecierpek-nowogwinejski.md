@@ -1,6 +1,6 @@
 ---
 name: Niecierpek nowogwinejski
-group: Rabatowe
+group: Balkonowe
 order: 24
 slot: zdjęcie - niecierpek nowogwinejski, 4:3
 image: ../../assets/plants/niecierpek-nowogwinejski.jpg
@@ -10,12 +10,6 @@ facts:
     value: Pełne słońce
   - label: Uprawa
     value: Rabaty i kompozycje
-colors:
-  - biały
-  - łososiowy
-  - biskupi
-  - różowy
-  - pomarańczowy
 ---
 
 Niecierpek nowogwinejski to efektowna roślina rabatowa, ceniona za obfite i długotrwałe

@@ -1,8 +1,10 @@
 ---
 name: Koleus
-group: Rabatowe
+group: Balkonowe
 order: 26
 slot: zdjęcie - koleus, 4:3
+image: ../../assets/plants/koleus.jpg
+imageAlt: Koleusy w doniczkach - liście zielono-różowe, karminowe, pomarańczowe i ciemnobordowe z różowym nerwem
 facts:
   - label: Stanowisko
     value: Jasne, ciepłe

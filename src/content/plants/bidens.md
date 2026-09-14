@@ -12,8 +12,6 @@ facts:
     value: Słoneczne, ciepłe
   - label: Uprawa
     value: Skrzynki, kosze wiszące
-colors:
-  - żółty
 ---
 
 Bidens, nazywany również uczepem, to niezwykle efektowna roślina balkonowa o zwisającym

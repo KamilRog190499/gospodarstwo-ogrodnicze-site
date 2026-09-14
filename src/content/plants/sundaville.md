@@ -12,10 +12,6 @@ facts:
     value: Balkon, taras, podpory
   - label: Charakter
     value: Pnąca, długo kwitnąca
-colors:
-  - czerwony
-  - różowy
-  - biały
 ---
 
 Sundaville to niezwykle dekoracyjna roślina wieloletnia o pnącym charakterze, ceniona za

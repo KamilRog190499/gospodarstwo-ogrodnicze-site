@@ -1,30 +1,54 @@
-/** The offer, as one table: four pages, four groups of plants, four tiles.
+/** The offer, as one table: three pages, three groups of plants, three tiles.
  *
- *  This exists because the same four pages were written down twice - once in `navigation.ts`
+ *  This exists because the same pages were written down twice - once in `navigation.ts`
  *  as the menu's offer section, once inside `OfferOverview.astro` as the home page tiles -
- *  so `/rabatowe/` was in the repository as a string in two files that nothing kept in step.
- *  The rule in CLAUDE.md is one place per fact; this is that place, and `navigation.ts`
+ *  so a category address was in the repository as a string in two files that nothing kept in
+ *  step. The rule in CLAUDE.md is one place per fact; this is that place, and `navigation.ts`
  *  derives `offerPages` from it rather than repeating it.
  *
  *  Three facts live here that used to have nowhere to live: which content groups a page
- *  covers, the tile's title (longer than the menu label - the menu has no room for
- *  "Rabatowe i wieloletnie"), and the fact that pansies and primroses share one shelf.
+ *  covers, the tile's title (which may differ from the menu label, where the menu has no
+ *  room for the longer name), and the fact that pansies and primroses share one shelf.
  *
- *  **The selling window is deliberately not here.** April-June covers two rows at once
- *  (balcony and bedding flowers), so a window is not a property of a page; it lives in
- *  `season.ts` and binds to the offer through the group name - the same name the content
- *  schema validates against.
+ *  **The selling window is deliberately not here.** A window is not a property of a page; it
+ *  lives in `season.ts` and binds to the offer through the group name - the same name the
+ *  content schema validates against.
+ *
+ *  ## Why there are three groups and not four
+ *
+ *  `Rabatowe` was the fourth, at `/rabatowe/`, and the owners had it folded into `Balkonowe`
+ *  in September 2026. The two had been one thing in the data for a while without anyone
+ *  saying so: they shared a single selling window in `season.ts` (April to June) and a single
+ *  season card on the home page, and the comment in `SeasonCards.astro` recorded that the card
+ *  "could not tell the truth anyway", because one window led to two pages. It now leads to one.
+ *
+ *  What that cost: `/rabatowe/` was a WordPress address with search positions, so it needs a
+ *  301 to `/kwiaty-balkonowe/` in the server configuration - docs/przekierowania.md carries
+ *  the row. The merged page is named "Kwiaty balkonowe" on the owners' instruction, which is
+ *  a name wider than the plants under it: marigolds, hostas, hydrangeas, columbine, red-hot
+ *  poker, lupin and heather are not balcony flowers. They were told, they chose it, and the
+ *  phrase "rabatowe i wieloletnie" survives in the page's meta description, which is where it
+ *  does its work in search. docs/inwentaryzacja.md has the argument and the open question.
  */
 
 /** The `group` values in the plants' frontmatter. The content schema builds its `z.enum`
  *  from this array, so the union and the validator cannot drift apart. Order is the order of
- *  the menu and of the tiles. */
-export const plantGroups = ["Balkonowe", "Rabatowe", "Bratki", "Chryzantemy"] as const;
+ *  the menu and of the tiles.
+ *
+ *  **Dropping a value here is how a group is merged away**, and the schema is the safety net:
+ *  `content.config.ts` rebuilds its enum from this list, so any `.md` left behind on the old
+ *  value fails the build by name rather than shipping a plant onto no page at all. */
+export const plantGroups = ["Balkonowe", "Bratki", "Chryzantemy"] as const;
 
 export type PlantGroup = (typeof plantGroups)[number];
 
 export interface OfferPage {
-  /** Which content groups this page lists. An array because a page may cover more than one. */
+  /** Which content groups this page lists.
+   *
+   *  Still an array although every page now covers exactly one group. It is what let the home
+   *  page tiles keep working unchanged through the September 2026 merge - `OfferOverview`
+   *  already flattened this field and already resolved a season state across several groups -
+   *  and it is the shape a page covering two groups would need again. */
   groups: PlantGroup[];
   href: string;
   /** The label in the menu's "Oferta" panel and in the footer's offer column.
@@ -32,28 +56,27 @@ export interface OfferPage {
    *  It used to be the short one - "Rabatowe", "Bratki" - and the reason was width: the
    *  menu was a single centred row of eight items and there was no room for more. The
    *  panel removed that constraint, so the labels are now the ones a visitor would search
-   *  for. `tileTitle` still differs where the tile says something the menu should not
-   *  ("Rabatowe i wieloletnie"), which is why both fields are still here. */
+   *  for. `tileTitle` is still a separate field for the page that wants a fuller name on the
+   *  tile than the menu has room for. */
   menuLabel: string;
   /** The home page tile heading, which has room for the fuller name. */
   tileTitle: string;
 }
 
 /**
- * The four pages, in menu order.
+ * The three pages, in menu order.
  *
  * **That order is importance, not the calendar** - and it used to claim otherwise. The
  * comment here read "in menu order - which is the order of the growing year", which stopped
  * being true when the owners moved the pansies to March alone and the balcony flowers to
- * April: the year now opens with `Bratki`, which sits third. The year is told by the season
- * cards in `SeasonCards.astro` (see `season.ts`), so the order does not have to tell it, and a menu
- * that leads with one plant instead of eleven would be a worse menu.
+ * April: the year now opens with `Bratki`, which sits second. The year is told by the season
+ * cards in `SeasonCards.astro` (see `season.ts`), so the order does not have to tell it, and a
+ * menu that leads with two plants instead of thirty-four would be a worse menu.
  *
  * `tileTitle` says "Bratki i prymulki" while the group is only `Bratki`: the owners sell
- * primroses in the same March window and off the same benches, but no description and no
- * photograph of one exists yet, so a primrose entry would be a placeholder promising a page
- * that cannot deliver. The word ships, the entry waits - and the tile's count still says one
- * plant, because one plant is what the page holds. See docs/inwentaryzacja.md.
+ * primroses in the same March window and off the same benches. Both now have an entry, so the
+ * tile and the page agree; the wording of that shared window is still open in
+ * docs/inwentaryzacja.md.
  */
 export const offer: OfferPage[] = [
   {
@@ -61,12 +84,6 @@ export const offer: OfferPage[] = [
     href: "/kwiaty-balkonowe/",
     menuLabel: "Kwiaty balkonowe",
     tileTitle: "Kwiaty balkonowe",
-  },
-  {
-    groups: ["Rabatowe"],
-    href: "/rabatowe/",
-    menuLabel: "Kwiaty rabatowe",
-    tileTitle: "Rabatowe i wieloletnie",
   },
   {
     groups: ["Bratki"],

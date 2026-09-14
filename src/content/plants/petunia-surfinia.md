@@ -3,6 +3,8 @@ name: Petunie i surfinie
 group: Balkonowe
 order: 14
 slot: zdjęcie - petunie i surfinie, 4:3
+image: ../../assets/plants/petunia-surfinia.jpg
+imageAlt: Fioletowa surfinia obficie zwisająca z wiszącej doniczki, dziesiątki lejkowatych kwiatów
 facts:
   - label: Pokrój
     value: Przewieszający się

@@ -71,11 +71,11 @@ export const plantLinks: Record<PlantSlug, PlantLink> = {
   bidens: { label: "Bidens", href: "/kwiaty-balkonowe/#bidens" },
   calibrachoa: { label: "Calibrachoa", href: "/kwiaty-balkonowe/#calibrachoa" },
   gozdzik: { label: "Goździki", href: "/kwiaty-balkonowe/#gozdzik" },
-  hortensja: { label: "Hortensje", href: "/rabatowe/#hortensja" },
-  koleus: { label: "Koleus", href: "/rabatowe/#koleus", qualifier: "liście ozdobne" },
+  hortensja: { label: "Hortensje", href: "/kwiaty-balkonowe/#hortensja" },
+  koleus: { label: "Koleus", href: "/kwiaty-balkonowe/#koleus", qualifier: "liście ozdobne" },
   "niecierpek-nowogwinejski": {
     label: "Niecierpki nowogwinejskie",
-    href: "/rabatowe/#niecierpek-nowogwinejski",
+    href: "/kwiaty-balkonowe/#niecierpek-nowogwinejski",
   },
   "pelargonia-bluszczolistna": {
     label: "Pelargonie bluszczolistne",
@@ -83,7 +83,7 @@ export const plantLinks: Record<PlantSlug, PlantLink> = {
   },
   "pelargonia-rabatowa": {
     label: "Pelargonie rabatowe",
-    href: "/rabatowe/#pelargonia-rabatowa",
+    href: "/kwiaty-balkonowe/#pelargonia-rabatowa",
   },
   "petunia-surfinia": {
     label: "Petunie i surfinie",

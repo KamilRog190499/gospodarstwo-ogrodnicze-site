@@ -3,6 +3,8 @@ name: Dahlie
 group: Balkonowe
 order: 9
 slot: zdjęcie - dahlia, 4:3
+image: ../../assets/plants/dahlia.jpg
+imageAlt: Niskie dalie obsypane kwiatami - czerwonymi, malinowymi, różowymi i kremowymi - nad ciemnozielonymi liśćmi
 facts:
   - label: Średnica kwiatu
     value: do 30 cm

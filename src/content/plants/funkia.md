@@ -1,6 +1,6 @@
 ---
 name: Funkia
-group: Rabatowe
+group: Balkonowe
 order: 29
 slot: zdjęcie - funkia, 4:3
 facts:
@@ -12,10 +12,6 @@ facts:
     value: Rabaty, obwódki
   - label: Charakter
     value: Duże, ozdobne liście
-colors:
-  - biały
-  - lila
-  - fioletowy
 ---
 
 Funkia, znana również jako hosta, to niezwykle ceniona bylina ozdobna, której największą

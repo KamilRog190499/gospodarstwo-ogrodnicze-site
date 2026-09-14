@@ -1,6 +1,6 @@
 ---
 name: Pelargonie rabatowe
-group: Rabatowe
+group: Balkonowe
 order: 23
 slot: zdjęcie - pelargonia rabatowa, 4:3
 image: ../../assets/plants/pelargonia-rabatowa.jpg
@@ -8,13 +8,6 @@ imageAlt: Rzędy różowych pelargonii rabatowych w szklarni
 facts:
   - label: Uprawa
     value: Rabaty, donice, skrzynki
-colors:
-  - bordowy
-  - czerwony
-  - ciemnoróżowy
-  - fioletowy
-  - pomarańczowy
-  - biały
 ---
 
 Pelargonia rabatowa to sprawdzona i ceniona roślina sezonowa, która doskonale sprawdza się

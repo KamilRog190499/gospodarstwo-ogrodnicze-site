@@ -11,20 +11,45 @@ Konfiguracja serwera nie jest częścią tego repozytorium; poniżej jest sama m
 Wcześniejsza wersja tego dokumentu opisywała decyzję do podjęcia: jedna strona z kotwicami
 czy realne podstrony. **Wybrano podstrony** - rekomendowany wariant. Konsekwencje:
 
-- `/kwiaty-balkonowe/`, `/rabatowe/` i `/chryzantemy/` **zostają bez zmian**, więc nie
-  potrzebują żadnego przekierowania. Trzy adresy z pozycjami zostają trzema adresami.
+- `/kwiaty-balkonowe/` i `/chryzantemy/` **zostają bez zmian**, więc nie potrzebują żadnego
+  przekierowania.
+- `/rabatowe/` **przestało istnieć we wrześniu 2026** i jest to jedyny rankujący adres, który
+  nie przeżył przebudowy w całości - patrz „Scalenie oferty” niżej.
 - `/o-nas/` też zostaje 1:1 - historia gospodarstwa jest teraz stroną pod tym adresem,
   a nie kotwicą na stronie głównej. Przekierowanie zbędne.
 - Doszły cztery nowe adresy bez historii w wyszukiwarce: `/inspiracje/` (galeria),
   `/kontakt/`, `/bratki/` i `/faq/`.
-- Jedyne przekierowanie treściowe to `/kontakt-2/` → `/kontakt/`: stary slug był efektem
-  kolizji nazw w WordPressie i nie ma sensu go przenosić.
+- Przekierowania treściowe są dwa: `/kontakt-2/` → `/kontakt/` (stary slug był efektem kolizji
+  nazw w WordPressie i nie ma sensu go przenosić) oraz `/rabatowe/` → `/kwiaty-balkonowe/`.
+
+## Scalenie oferty (wrzesień 2026)
+
+Właściciele poprosili o połączenie kwiatów balkonowych i rabatowych w jedną zakładkę. Grupa
+`Rabatowe` zniknęła z danych, jej dwanaście roślin siedzi teraz w `Balkonowe`, a strona
+`/rabatowe/` **została usunięta z repozytorium**. Wszystkie 34 rośliny są pod
+`/kwiaty-balkonowe/`, ułożone alfabetycznie.
+
+Wybrano `/kwiaty-balkonowe/` jako adres, który zostaje, bo to on ma mocniejszą frazę i większą
+część treści. Konsekwencje dla wdrożenia:
+
+- **`/rabatowe/` musi dostać 301 na `/kwiaty-balkonowe/` w konfiguracji serwera.** To jest
+  jedyny adres w tej mapie, który **zwróci 404, jeśli reguła nie powstanie** - reszta tabeli
+  to albo adresy istniejące dalej, albo endpointy WordPressa, których nikt nie linkuje.
+  Konfiguracja serwera nie jest częścią tego repozytorium, więc nic w kodzie tego nie dopilnuje.
+- Kotwice na poszczególne rośliny zostają bez zmian (`#hortensja`, `#koleus`,
+  `#niecierpek-nowogwinejski`, `#pelargonia-rabatowa` i pozostałe), bo identyfikator wpisu to
+  nazwa pliku, a pliki się nie ruszyły. Odnośniki z `/inspiracje/` wskazują już nowy adres.
+  Przy przekierowaniu 301 kotwica z żądania przeżywa przeskok, więc stary link z kotwicą
+  trafi we właściwą roślinę na nowej stronie.
+- Fraza „kwiaty rabatowe” zniknęła z tytułu i z menu (właściciele wybrali nazwę „Kwiaty
+  balkonowe” dla całości), ale **została w `description` strony** - to jest miejsce, w którym
+  pracuje na wyszukiwanie. Patrz `inwentaryzacja.md`.
 
 Menu (`src/data/navigation.ts`) wskazuje te adresy, a `Nav.astro` oznacza bieżącą pozycję
 przez `aria-current="page"`.
 
-**Uwaga do trzech rankujących adresów.** Od wersji 0.10.0 `/kwiaty-balkonowe/`, `/rabatowe/`
-i `/chryzantemy/` nie stoją już wprost w pasku menu - są w rozwijanym panelu „Oferta”. Adresy
+**Uwaga do rankujących adresów.** Od wersji 0.10.0 `/kwiaty-balkonowe/` i `/chryzantemy/` nie
+stoją już wprost w pasku menu - są w rozwijanym panelu „Oferta”. Adresy
 się nie zmieniły i nadal nie potrzebują przekierowań, a odnośniki są w HTML-u każdej strony
 (`<details>` nie ukrywa ich przed indeksowaniem). Ale są o jedno kliknięcie dalej, więc płaska
 lista wszystkich stron w stopce i nawigacja „Pozostałe grupy” pod każdą kategorią przestały
@@ -36,7 +61,7 @@ być wygodą, a stały się częścią tej mapy. Nie usuwać ich.
 | ----------------------------------------------------------- | -------------------- | --------------------------------------------------- |
 | `/`                                                         | `/`                  | bez zmian                                           |
 | `/kwiaty-balkonowe/`                                        | `/kwiaty-balkonowe/` | bez zmian - realna podstrona, 301 niepotrzebne      |
-| `/rabatowe/`                                                | `/rabatowe/`         | jw.                                                 |
+| `/rabatowe/`                                                | `/kwiaty-balkonowe/` | **301** - grupa scalona, strona usunięta            |
 | `/chryzantemy/`                                             | `/chryzantemy/`      | jw.                                                 |
 | `/o-nas/`                                                   | `/o-nas/`            | jw. - historia jest teraz osobną stroną             |
 | `/kontakt-2/`                                               | `/kontakt/`          | 301                                                 |

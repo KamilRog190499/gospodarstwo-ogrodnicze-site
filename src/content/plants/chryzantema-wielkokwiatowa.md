@@ -12,11 +12,6 @@ facts:
     value: Słońce, osłonięte
   - label: Sprzedaż
     value: 1.10 – 1.11
-colors:
-  - biały
-  - żółty
-  - fiolet
-  - złoty
 ---
 
 Chryzantema wielkokwiatowa wyróżnia się dużymi, efektownymi kwiatostanami o regularnej,

@@ -1,6 +1,6 @@
 ---
 name: Szałwia
-group: Rabatowe
+group: Balkonowe
 order: 33
 slot: zdjęcie - szałwia, 4:3
 facts:
@@ -12,12 +12,6 @@ facts:
     value: Słońce, półcień
   - label: Podlewanie
     value: Regularne
-colors:
-  - czerwony
-  - różowy
-  - fioletowy
-  - biały
-  - niebieski
 ---
 
 Salvia, czyli szałwia, to niezwykle dekoracyjna roślina ceniona za intensywne kolory

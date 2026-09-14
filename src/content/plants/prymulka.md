@@ -12,14 +12,6 @@ facts:
     value: Jasne, półcień
   - label: Sprzedaż
     value: Marzec – kwiecień
-colors:
-  - biały
-  - żółty
-  - różowy
-  - czerwony
-  - fioletowy
-  - pomarańczowy
-  - dwubarwny
 ---
 
 Prymulka wyróżnia się kolorowymi, delikatnymi kwiatami osadzonymi nisko nad rozetą liści.

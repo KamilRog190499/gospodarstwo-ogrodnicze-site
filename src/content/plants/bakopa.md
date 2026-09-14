@@ -3,6 +3,8 @@ name: Bakopa
 group: Balkonowe
 order: 22
 slot: zdjęcie - bakopa, 4:3
+image: ../../assets/plants/bakopa.jpg
+imageAlt: Kobierzec białej bakopy - drobne pięciopłatkowe kwiaty z żółtym środkiem wśród ząbkowanych liści
 facts:
   - label: Pokrój
     value: Zwisający
@@ -12,11 +14,6 @@ facts:
     value: Słońce, półcień
   - label: Podlewanie
     value: Regularne
-colors:
-  - biały
-  - różowy
-  - fioletowy
-  - niebieski
 ---
 
 Sutera, znana również jako bakopa, to niezwykle dekoracyjna roślina sezonowa, ceniona za

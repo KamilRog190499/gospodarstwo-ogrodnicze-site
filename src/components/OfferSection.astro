@@ -9,11 +9,21 @@ import type { GalleryPhoto } from "../data/gallery";
 import { primaryPhone } from "../data/contact";
 
 /**
- * The body of one category page: `/kwiaty-balkonowe/`, `/rabatowe/`, `/bratki/`, `/chryzantemy/`.
+ * The body of one category page: `/kwiaty-balkonowe/`, `/bratki/`, `/chryzantemy/`.
  *
  * One component rather than three copies of the same markup - docs/przekierowania.md said
  * as much: "ta sama sekcja, węższy zbiór wpisów, ten sam komponent PlantEntry, ta sama
  * siatka". Each page passes its group and its own words; everything else is here.
+ *
+ * ## Two shapes, because one page is now ten times the size of another
+ *
+ * `/bratki/` holds two entries and `/chryzantemy/` four; `/kwiaty-balkonowe/` holds
+ * thirty-four, having absorbed `Rabatowe` in September 2026 (see `src/data/offer.ts`).
+ * Thirty-four entries in editorial `order` is a list nobody can find a plant in, so `sort="name"` puts that
+ * page in Polish alphabetical order and draws two things the short pages have no use for: an
+ * index grouped by initial, and a letter between the entries as the page scrolls past. Both are
+ * off by default - a four-item page does not need finding aids, and `order` is where the owners
+ * say what they consider most important.
  *
  * Outline: `h1` (this page's subject) then one `h2` per plant. No level is skipped and no
  * heading names anything other than the thing under it.
@@ -33,8 +43,17 @@ interface Props {
   /** The `group` value in the plants' frontmatter. */
   group: PlantGroup;
   title: string;
-  /** Sentence beside the heading. Defaults to `OFFER_LEAD` below, which is what all four
-   *  category pages want; pass a different one only for a page that genuinely says something
+  /** How the entries are ordered, and with them whether this page gets its letter index and
+   *  its dividers.
+   *
+   *  `"order"` is the frontmatter's own number - the owners' sense of what matters most, and
+   *  the right answer while a page fits on a screen or two. `"name"` is Polish alphabetical
+   *  order, for a page long enough that finding one plant beats being shown the best one
+   *  first. The two are one prop rather than two because grouping an `order` list by initial
+   *  would draw letters over a list that is not in letter order. */
+  sort?: "order" | "name";
+  /** Sentence beside the heading. Defaults to `OFFER_LEAD` below, which is what every
+   *  category page wants; pass a different one only for a page that genuinely says something
    *  else, and `""` for a page that should say nothing. */
   lead?: string;
   /** Optional sentence under the list - what the group covers beyond the entries. */
@@ -54,11 +73,11 @@ interface Props {
 
 /** The sentence every category page opens with.
  *
- *  **It lives here rather than in the four page files**, which is where `title`, `note` and the
+ *  **It lives here rather than in the page files**, which is where `title`, `note` and the
  *  meta description live. Those are page copy and differ page to page; this one is deliberately
- *  identical on all four, and keeping four copies of it is what let them drift: by September
- *  2026 `/kwiaty-balkonowe/` and `/rabatowe/` carried it and `/bratki/` and `/chryzantemy/` did
- *  not, which is the defect the owner reported. One copy cannot drift.
+ *  identical on every category page, and keeping a copy per page is what let them drift: by
+ *  September 2026 the two balcony and bedding pages carried it and `/bratki/` and
+ *  `/chryzantemy/` did not, which is the defect the owner reported. One copy cannot drift.
  *
  *  `/chryzantemy/` is the page that dropped it, and the reason does not apply any more. What
  *  the owners had removed there in September 2026 was a **different** sentence - "Duży wybór
@@ -68,18 +87,60 @@ interface Props {
 const OFFER_LEAD =
   "Kwiaty z naszej uprawy. Przy każdej roślinie są najważniejsze informacje o jej uprawie i o kolorach dostępnych u nas.";
 
-const { group, title, lead = OFFER_LEAD, note, photos } = Astro.props;
+const { group, title, lead = OFFER_LEAD, note, photos, sort = "order" } = Astro.props;
 
+const byLetter = sort === "name";
+
+/** Polish collation, not the default. `localeCompare` without a locale sorts "Łubin" past
+ *  "Wrzos" and hides it at the end of the list, and files "Goździk" wherever the runtime's
+ *  default happens to put it. With "pl-PL" both land where a Polish reader looks for them:
+ *  Ł directly after L, ź inside G. */
 const entries = (await getCollection("plants"))
   .filter((plant) => plant.data.group === group)
-  .sort((a, b) => a.data.order - b.data.order);
+  .sort((a, b) =>
+    byLetter ? a.data.name.localeCompare(b.data.name, "pl-PL") : a.data.order - b.data.order,
+  );
 
 if (entries.length === 0) {
   throw new Error(`No plants with group "${group}" - the page would have a heading and no list.`);
 }
 
-/** The other three category pages, in menu order. A visitor on one of the four should not
- *  have to go back to the menu to reach the others. */
+/** The initial a name is filed under. `toLocaleUpperCase("pl-PL")` rather than the plain one
+ *  so that the cased letters this alphabet actually uses survive the round trip. */
+const initialOf = (name: string): string => name.trim().charAt(0).toLocaleUpperCase("pl-PL");
+
+/** The entries grouped by initial, in the order they already stand in - so this is a
+ *  partition of a sorted list and never a second sort. Empty unless the page asked for it.
+ *
+ *  Feeds the index at the top. The list below reads the same grouping off `divider`, which is
+ *  derived from the same array rather than recomputed, so the two cannot disagree about where
+ *  a letter starts. */
+const letterGroups: { letter: string; plants: typeof entries }[] = [];
+if (byLetter) {
+  for (const plant of entries) {
+    const letter = initialOf(plant.data.name);
+    const open = letterGroups.at(-1);
+    if (open?.letter === letter) open.plants.push(plant);
+    else letterGroups.push({ letter, plants: [plant] });
+  }
+}
+
+/** Each entry, with the letter to draw above it, or null where it continues the current one.
+ *
+ *  Kept as one flat list rather than rendering out of `letterGroups`, because `priority` needs
+ *  the index of the entry on the page as a whole - the first photograph is the likely LCP
+ *  element, and nesting the loop would make that "first of its letter" instead. */
+const list = entries.map((entry, index) => ({
+  entry,
+  divider:
+    byLetter &&
+    (index === 0 || initialOf(entries[index - 1]!.data.name) !== initialOf(entry.data.name))
+      ? initialOf(entry.data.name)
+      : null,
+}));
+
+/** The other category pages, in menu order. A visitor on one of them should not have to go
+ *  back to the menu to reach the rest. */
 const others = offerPages.filter((item) => item.href !== Astro.url.pathname);
 
 /** "Sprzedaż trwa: marzec" while the window is open, "Sprzedaż wkrótce: ..." while it is the
@@ -115,26 +176,52 @@ const saleLine = saleWindow
     entries.length > 1 && (
       <nav class="offer__index" aria-label="Spis roślin na tej stronie">
         <p class="offer__indexLabel">Na tej stronie</p>
-        <ul>
-          {entries.map((plant) => (
-            <li>
-              <a href={`#${plant.id}`}>{plant.data.name}</a>
-            </li>
-          ))}
-        </ul>
+        {byLetter ? (
+          <dl class="offer__letters">
+            {letterGroups.map((row) => (
+              <div class="offer__lettersRow">
+                <dt>{row.letter}</dt>
+                <dd>
+                  <ul>
+                    {row.plants.map((plant) => (
+                      <li>
+                        <a href={`#${plant.id}`}>{plant.data.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <ul>
+            {entries.map((plant) => (
+              <li>
+                <a href={`#${plant.id}`}>{plant.data.name}</a>
+              </li>
+            ))}
+          </ul>
+        )}
       </nav>
     )
   }
 
   <div class="offer__list">
     {
-      entries.map((plant, index) => (
-        <PlantEntry
-          entry={plant}
-          level={2}
-          priority={index === 0}
-          backToIndex={entries.length > 1}
-        />
+      list.map(({ entry, divider }, index) => (
+        <Fragment>
+          {divider && (
+            <p class="offer__letter" aria-hidden="true">
+              {divider}
+            </p>
+          )}
+          <PlantEntry
+            entry={entry}
+            level={2}
+            priority={index === 0}
+            backToIndex={entries.length > 1}
+          />
+        </Fragment>
       ))
     }
   </div>
@@ -259,8 +346,92 @@ const saleLine = saleWindow
     border-bottom-color: var(--green);
   }
 
+  /* The index a page gets once it is long enough to be found in rather than read down.
+     Seventeen initials over thirty-four plants would be seventeen full-width rows - a screen
+     and a half of index standing in front of the first plant - so the rows run in columns:
+     three on a desktop, one on a phone, decided by `column-width` rather than by a breakpoint.
+
+     **Columns and not a grid, because a grid aligns its rows across the tracks.** That is what
+     it is for and it was wrong here: the P row holds four names and wraps to three lines, and
+     every grid row is as tall as its tallest cell, so the two cells beside P were padded out
+     into a hole under "Orlik" and "Szałwia". Multi-column packs each column independently and
+     there is nothing left to pad.
+
+     It also puts the alphabet where a reader of any printed index expects it - down a column
+     and on to the next, A-G, H-N, O-W, rather than across the page in rows. The DOM stays in
+     one alphabetical order either way, so the tab order and what a screen reader reads are
+     untouched by the choice. */
+  .offer__letters {
+    columns: 3 300px;
+    column-gap: 2rem;
+  }
+
+  /* The initial in a fixed first track and the names wrapping in the second, so the letters
+     line up down each column. This is the contact list's grid and it is here for the contact
+     list's reported defect: laid out with flex, every row starts wherever its own first word
+     happens to end, and a column of initials that does not line up is not an index.
+
+     `break-inside` keeps a letter with its plants: without it a column can end between the "H"
+     and "Hortensja". `margin-bottom` does the vertical spacing rather than the parent's `gap`,
+     which multi-column has no equivalent of. */
+  .offer__lettersRow {
+    display: grid;
+    grid-template-columns: 2.5ch 1fr;
+    gap: 0.3rem 0.9rem;
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    break-inside: avoid;
+  }
+
+  .offer__lettersRow dt {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--ink-grey);
+  }
+
+  /* Tighter than the flat index above, which has a whole row to itself per line; here the names
+     share their row with the letter and several rows share a screen. */
+  .offer__lettersRow dd ul {
+    gap: 0.3rem 1.5rem;
+  }
+
   .offer__list {
     display: grid;
+  }
+
+  /* A waypoint between entries, and deliberately not a heading: the outline of this page is one
+     h1 and one h2 per plant, and a letter names nothing that stands under it. `aria-hidden`
+     follows from the same thing - a screen reader moves through this page by plant name, and a
+     lone "A" announced between two entries is noise. The letters reach that reader through the
+     index above, which is a real nav with real links.
+
+     **It draws no line, and that is the whole point of the second attempt.** The first one set
+     the letter beside a 1px --rule running off to the right, which was one hairline too many:
+     every .entry already closes with a 1px --rule of its own, so the page alternated
+     "line, letter+line, line" and the two marks were the same weight and the same colour doing
+     two different jobs. The owner reported exactly that - the letter's line and the entry's line
+     blurred into each other. A page gets one kind of horizontal line; on this one it means "an
+     entry ended".
+
+     So the letter carries the break by itself, with the other two things this design has:
+     **size and spacing.** It is set well above a plant name, which no heading here is, and the
+     space is deliberately lopsided - a large gap above, none below - so proximity attaches it to
+     the plants that follow rather than leaving it floating between two of them. That asymmetry
+     is the part that makes it read at a glance.
+
+     --sage rather than --ink or --ink-grey, and the size is what licenses it: tokens.css
+     restricts this green to decorative type at 24px and up (3.9:1, which clears the 3:1 WCAG
+     asks of large text but not the 4.5:1 it asks of body). This letter is decorative by
+     construction - it is aria-hidden - and never smaller than 40px. The same green must not
+     travel up to the index's <dt>, which sits at 20px; that one stays --ink-grey. */
+  .offer__letter {
+    padding-block: clamp(2.75rem, 6vw, 4.5rem) 0;
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 1.9rem + 2.6vw, 4rem);
+    line-height: 0.9;
+    color: var(--sage);
   }
 
   .offer__note,

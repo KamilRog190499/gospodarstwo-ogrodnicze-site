@@ -43,30 +43,39 @@ interface Props {
 }
 
 const { entry, level = 2, showGroup = false, priority = false, backToIndex = false } = Astro.props;
-const { name, group, slot, image, imageAlt, facts, colors } = entry.data;
+const { name, group, slot, image, imageAlt, facts } = entry.data;
 const { Content } = await render(entry);
 
 /**
- * The frame follows the photograph instead of forcing one ratio on all of them.
+ * **One ratio for every photograph in the offer: 4:3.**
  *
- * The handoff asks for 4:3 per plant (docs/design/README.md), but eleven of the fourteen
- * photographs the owners supplied are portrait and four of those are 9:16 phone frames. A 4:3
- * window kept only 41-61% of them and took that band from the middle, so on alstromeria,
- * fuksja and niecierpek - where the bloom is simply taller than the window - it clipped the
- * petals at the frame edge. **`object-position` cannot fix that**: aiming moves the band, and
- * no position helps when the subject does not fit in it. Only a taller box does.
+ * This is the handoff's own figure (docs/design/README.md) and it is back after a detour. The
+ * frame used to follow each file - its own ratio, floored at 3:4 - and the owners chose that in
+ * September 2026 precisely because a flat 4:3 crops most of what they supplied. They reversed it
+ * later the same month, having seen both, and asked for every entry photograph to be the same
+ * size. Uniformity won over fidelity to each frame; that is their call to make and it is written
+ * down in docs/inwentaryzacja.md with the measurements.
  *
- * So the box is the file's own ratio, capped at 3:4: nothing is cropped unless the photograph
- * is taller than that, and then `object-fit: cover` takes the middle. The four phone frames go
- * from 41% to 73% and every other photograph is shown whole. A 4:3 file still lands in a 4:3
- * box untouched, which is why `PhotoSlot` beside it keeps asking for 4:3.
+ * **What it costs, measured rather than remembered.** Of the twenty-one photographs in the
+ * collection today, exactly one is already 4:3 (werbena) and survives untouched. Eighteen are
+ * taller than 4:3 and keep 52-61% of their height; the two landscape files are cropped on width
+ * instead - chryzantema wielkokwiatowa keeps 89%, pelargonia rabatowa 75%. The September 2026
+ * batch of nine changed the arithmetic but not the shape of it: those sources are mostly 3:4
+ * phone frames, so they land at 55-60%, and the one near-landscape frame among them
+ * (petunia-surfinia, 1.21) keeps 91%.
  *
- * Chosen by the owner in September 2026 over a flat 3:4 and a flat 1:1, both of which fixed
- * the portrait frames by breaking the three landscape ones. docs/inwentaryzacja.md has the
- * measurements.
+ * **The crop is centred and cannot be aimed.** There is no `object-position` here and adding one
+ * would not rescue the tall frames: aiming moves the band, and no position helps when the bloom
+ * is simply taller than the window. If a particular entry turns out to be clipped somewhere
+ * ruinous, the fix is a re-crop of the source file, not a per-entry exception - the whole point
+ * of this rule is that there are no per-entry exceptions.
+ *
+ * **What it buys**, and it is the reason they asked: `PhotoSlot` has always drawn its pending
+ * frame at 4:3, so a page holding both photographs and placeholders used to alternate between
+ * two box shapes down the column. Now it does not. With 18 of the 39 entries still waiting for a
+ * picture, that column is more placeholder than photograph, and it is now one straight edge.
  */
-const PHOTO_MIN_RATIO = 3 / 4;
-const photoRatio = image ? Math.max(image.width / image.height, PHOTO_MIN_RATIO) : null;
+const PHOTO_RATIO = 4 / 3;
 
 /** `width`/`height` describe the **box**, not the file - otherwise the browser reserves the
  *  file's height and the text under the photograph jumps when it loads. */
@@ -87,8 +96,7 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
           widths={[560, 1120]}
           sizes="(min-width: 1200px) 578px, (min-width: 700px) 45vw, 90vw"
           width={PHOTO_WIDTH}
-          height={Math.round(PHOTO_WIDTH / photoRatio!)}
-          style={`--entry-ratio: ${photoRatio}`}
+          height={Math.round(PHOTO_WIDTH / PHOTO_RATIO)}
           alt={imageAlt}
           loading={priority ? "eager" : "lazy"}
           fetchpriority={priority ? "high" : undefined}
@@ -119,19 +127,6 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
             </div>
           ))}
         </dl>
-      )
-    }
-
-    {
-      colors && (
-        <div class="colors">
-          <p class="colors__label">Dostępne kolory</p>
-          <ul class="colors__list">
-            {colors.map((colour) => (
-              <li>{colour}</li>
-            ))}
-          </ul>
-        </div>
       )
     }
 
@@ -172,19 +167,21 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
     gap: 0.6rem;
   }
 
-  /* The ratio comes from `--entry-ratio` on the element - the photograph's own, capped at 3:4;
-     the note beside `PHOTO_MIN_RATIO` above argues why. The fallback is the 4:3 the placeholder
-     holds, which is what an entry renders at if the custom property ever fails to land.
-     `object-fit: cover` only bites on the four frames taller than 3:4; for every other
-     photograph the box already matches the file and it crops nothing. The entries stack as
-     rows rather than sitting in a grid, so they do not have to share a height. 578px in
-     `sizes` is the photograph column at full width: --edge caps the content at 1200px, .entry
-     splits it in two, and --gap-entry takes at most 2.75rem out of the middle. */
+  /* 4:3, the same on every entry and the same as the `PhotoSlot` that stands in for a missing
+     photograph - the note beside `PHOTO_RATIO` above argues why, and what it costs. It is a
+     constant rather than a custom property per element because there is no longer anything to
+     vary: a ratio written once here and once as width/height on the <Picture> is the whole of
+     it, and the two must move together or Astro emits a file the CSS then crops a second time.
+
+     `object-fit: cover` now bites on twenty of the twenty-one photographs; it takes the middle
+     band and cannot be aimed. 578px in `sizes` is the photograph column at full width: --edge
+     caps the content at 1200px, .entry splits it in two, and --gap-entry takes at most 2.75rem
+     out of the middle. */
   .entry__photo {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: var(--entry-ratio, 4 / 3);
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     border: 1px solid var(--rule);
   }
@@ -262,33 +259,6 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
   .facts dd {
     font-size: 0.95rem;
     margin: 0;
-  }
-
-  .colors {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: 0.15rem;
-  }
-
-  .colors__label {
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink-grey);
-  }
-
-  .colors__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .colors__list li {
-    font-size: 0.85rem;
-    border: 1px solid var(--rule-dim);
-    background: var(--paper-dim);
-    padding: 0.25rem 0.65rem;
   }
 
   .entry__back {

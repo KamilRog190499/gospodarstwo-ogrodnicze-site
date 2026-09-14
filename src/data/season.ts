@@ -71,7 +71,7 @@ export const saleWindows: SaleWindow[] = [
     from: "04-01",
     to: "06-30",
     months: "Kwiecień – czerwiec",
-    groups: ["Balkonowe", "Rabatowe"],
+    groups: ["Balkonowe"],
   },
   {
     from: "10-01",

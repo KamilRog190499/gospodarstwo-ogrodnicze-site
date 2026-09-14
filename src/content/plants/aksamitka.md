@@ -1,6 +1,6 @@
 ---
 name: Aksamitka
-group: Rabatowe
+group: Balkonowe
 order: 34
 slot: zdjęcie - aksamitka, 4:3
 facts:
@@ -12,11 +12,6 @@ facts:
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
-colors:
-  - żółty
-  - pomarańczowy
-  - złocisty
-  - czerwono-brązowy
 ---
 
 Tagetes, czyli aksamitka, to niezwykle popularna roślina sezonowa, ceniona za obfite

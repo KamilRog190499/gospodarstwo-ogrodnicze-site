@@ -3,6 +3,8 @@ name: Sanvitalia
 group: Balkonowe
 order: 21
 slot: zdjęcie - sanvitalia, 4:3
+image: ../../assets/plants/sanvitalia.jpg
+imageAlt: Drobne żółte kwiaty sanwitalii nad srebrzystozielonymi, owłosionymi liśćmi, rzędy roślin w uprawie
 facts:
   - label: Pokrój
     value: Zwisający
@@ -12,8 +14,6 @@ facts:
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
-colors:
-  - żółty z ciemnym środkiem
 ---
 
 Sanvitalia to niezwykle dekoracyjna roślina sezonowa, ceniona za obfite kwitnienie, drobne

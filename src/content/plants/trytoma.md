@@ -1,6 +1,6 @@
 ---
 name: Trytoma
-group: Rabatowe
+group: Balkonowe
 order: 31
 slot: zdjęcie - trytoma, 4:3
 facts:
@@ -12,11 +12,6 @@ facts:
     value: Żyzne, przepuszczalne
   - label: Uprawa
     value: Rabaty, solitery
-colors:
-  - żółty
-  - pomarańczowy
-  - czerwony
-  - dwubarwny
 ---
 
 Kniphofia, czyli trytoma, to niezwykle dekoracyjna bylina, która przyciąga uwagę

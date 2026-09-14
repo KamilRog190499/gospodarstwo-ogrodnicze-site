@@ -10,17 +10,6 @@ facts:
     value: Donice, skrzynki, rabaty
   - label: Sprzedaż
     value: Marzec – kwiecień
-colors:
-  - żółty
-  - kremowy
-  - biały
-  - bordowy
-  - różowy
-  - amarantowy
-  - fioletowy
-  - liliowy
-  - błękitny
-  - dwubarwny
 ---
 
 Bratki ogrodowe to jedne z najbardziej popularnych roślin sezonowych, które już od wczesnej

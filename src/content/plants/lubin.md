@@ -1,6 +1,6 @@
 ---
 name: Łubin
-group: Rabatowe
+group: Balkonowe
 order: 32
 slot: zdjęcie - łubin, 4:3
 facts:
@@ -12,13 +12,6 @@ facts:
     value: Słoneczne
   - label: Podlewanie
     value: Regularne
-colors:
-  - różowy
-  - fioletowy
-  - niebieski
-  - biały
-  - czerwony
-  - wielobarwny
 ---
 
 Lupinus, czyli łubin, to niezwykle dekoracyjna roślina ogrodowa, ceniona za wysokie, smukłe

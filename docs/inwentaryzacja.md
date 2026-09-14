@@ -9,45 +9,51 @@ w nowym serwisie. Spisane 6 września 2026 z żywej strony.
 | -------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
 | `/`                  | Powitanie, zajawka oferty                         | Sekcja Intro na stronie głównej                                   |
 | `/kwiaty-balkonowe/` | 11 wpisów roślin z opisami uprawy                 | `src/content/plants/`, strona `/kwiaty-balkonowe/`                |
-| `/rabatowe/`         | 2 krótkie wpisy (pelargonia rabatowa, niecierpek) | `src/content/plants/`, strona `/rabatowe/`                        |
+| `/rabatowe/`         | 2 krótkie wpisy (pelargonia rabatowa, niecierpek) | `src/content/plants/`, **301 na `/kwiaty-balkonowe/`**            |
 | `/chryzantemy/`      | Akapit o typach, kolorach, cenach i dowozie       | Wpis `chryzantema-wielkokwiatowa.md` + akapity na `/chryzantemy/` |
 | `/o-nas/`            | Historia gospodarstwa                             | `src/content/pages/historia.md`, strona `/o-nas/`                 |
 | `/kontakt-2/`        | Cztery telefony i adres                           | `src/data/contact.ts`, strona `/kontakt/`                         |
 
-Cztery z pięciu starych adresów zostały 1:1 - oferta jest trzema realnymi podstronami,
-a nie kotwicami na stronie głównej. Mapa przekierowań: [`przekierowania.md`](przekierowania.md).
+Trzy z pięciu starych adresów zostały 1:1 - oferta jest realnymi podstronami, a nie kotwicami
+na stronie głównej. Czwarty, `/rabatowe/`, przestał istnieć we wrześniu 2026 i dostaje 301 -
+patrz [Scalenie oferty](#scalenie-oferty---wrzesień-2026). Mapa przekierowań:
+[`przekierowania.md`](przekierowania.md).
 
 ## Rośliny
 
 Handoff projektowy ostrzegał przed „kilkudziesięcioma” wpisami i zalecał zaprojektowanie
 filtrowania i paginacji. Przez rok było ich 19 i ostrzeżenie było bezprzedmiotowe.
 **Po wrześniu 2026 jest ich 40** - patrz [Dwadzieścia jeden nowych
-opisów](#dwadzieścia-jeden-nowych-opisów--wrzesień-2026) - i dzielą się na cztery strony po
-22, 12, 2 i 4 wpisy. Handoff okazał się mieć rację co do skali, ale nadal nie co do
+opisów](#dwadzieścia-jeden-nowych-opisów--wrzesień-2026) - i po scaleniu oferty dzielą się na
+trzy strony po 34, 2 i 4 wpisy. Handoff okazał się mieć rację co do skali, ale nadal nie co do
 rozwiązania: filtrowania nie dodano, bo na `/kwiaty-balkonowe/` filtrować nie ma po czym -
-wszystkie 22 wpisy to jedna grupa, a wpisy są długie, więc paginacja rozbiłaby stronę, na
+wszystkie 34 wpisy to jedna grupa, a wpisy są długie, więc paginacja rozbiłaby stronę, na
 którą ludzie przychodzą z wyszukiwarki po nazwie pojedynczej rośliny.
 
 **Odpowiedź na skalę już w repozytorium jest i nie trzeba jej projektować:** `OfferSection`
 renderuje nad wpisami nawigację „Na tej stronie” - spis wszystkich roślin grupy jako kotwice
 (`aria-label="Spis roślin na tej stronie"`, warunek `entries.length > 1`). Przy 2 wpisach
-była ozdobą, przy 22 jest głównym sposobem poruszania się po stronie i to ona przejmuje
-robotę, którą handoff chciał dać filtrowi. **Do obserwacji zostaje sam spis**: dwadzieścia
-dwie pozycje to długa lista i jeśli zacznie przytłaczać, pierwszym ruchem jest jej układ,
-a nie ukrywanie wpisów za filtrem.
+była ozdobą, przy 34 jest głównym sposobem poruszania się po stronie i to ona przejmuje
+robotę, którą handoff chciał dać filtrowi. **Punkt „do obserwacji” został zamknięty właśnie
+tak, jak tu zapowiedziano** - przy scaleniu oferty spis dostał nowy układ (grupowanie po
+literze), a nie filtr i nie paginację. Patrz [Scalenie oferty](#scalenie-oferty---wrzesień-2026).
 
-Balkonowe (22): alstromeria, fuksja, pelargonie bluszczolistne, tunbergie, werbena, goździk,
+Balkonowe (34): alstromeria, fuksja, pelargonie bluszczolistne, tunbergie, werbena, goździk,
 heliotrop, sundaville, dahlie, calibrachoa, begonia, bidens, wilczomlecz, petunie i surfinie,
-plektrantus, dichondra, helichrysum, hypoestes, ipomoea, lobelia, sanvitalia, bakopa.
-Rabatowe (12): pelargonie rabatowe, niecierpek nowogwinejski, hortensja, koleus, orlik, wrzos,
-funkia, gazania, trytoma, łubin, szałwia, aksamitka.
+plektrantus, dichondra, helichrysum, hypoestes, ipomoea, lobelia, sanvitalia, bakopa oraz -
+po scaleniu z dawną grupą `Rabatowe` we wrześniu 2026 - pelargonie rabatowe, niecierpek
+nowogwinejski, hortensja, koleus, orlik, wrzos, funkia, gazania, trytoma, łubin, szałwia,
+aksamitka. Na stronie stoją alfabetycznie, nie w tej kolejności; patrz
+[Scalenie oferty](#scalenie-oferty---wrzesień-2026).
 Bratki (2): bratek ogrodowy i prymulka - nowa grupa i nowy adres `/bratki/`, wrzesień 2026;
 patrz niżej. **Opis prymulki, tak jak opis drobnokwiatowej, powstał u nas, nie u właścicieli**
 
 - patrz [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).
-  Chryzantemy (4): chryzantema wielkokwiatowa, średniokwiatowa, drobnokwiatowa, igiełkowa -
-  wielkokwiatowa, średniokwiatowa i igiełkowa dopisane we wrześniu 2026 z tekstu
-  właścicieli, patrz niżej.
+  Chryzantemy (3): chryzantema wielkokwiatowa, średniokwiatowa, drobnokwiatowa -
+  wielkokwiatowa i średniokwiatowa dopisane we wrześniu 2026 z tekstu właścicieli, patrz niżej.
+  **Igiełkowa była czwarta i została zwinięta do średniokwiatowej** jeszcze w tym samym
+  miesiącu; jej opis stoi w całości w [Chryzantema igiełkowa
+  zwinięta](#chryzantema-igiełkowa-zwinięta-do-średniokwiatowej---wrzesień-2026).
   **Drobnokwiatowa jest wyjątkiem i jedynym na całej stronie:** jej opis powstał u nas, nie
   u właścicieli - patrz [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026).
   Kolejność wpisów idzie malejącą wielkością kwiatu (wielko → średnio → drobno), a igiełkowa
@@ -635,6 +641,50 @@ Dwie rzeczy, które to umożliwiły i o których łatwo zapomnieć:
 - **`PhotoSlot` dalej prosi o 4:3** i tak zostaje. Przy tej regule plik 4:3 ląduje w pudełku
   4:3 nietknięty, więc zaślepka nadal pokazuje dokładnie ten kadr, o który prosimy
   właścicieli dla dalii, pelargonii bluszczolistnej i sundaville.
+
+### Odwrócone: wszystkie kadry na 4:3 - wrzesień 2026
+
+Właściciel poprosił później, żeby **ujednolicić wszystkie zdjęcia przy opisach do 4:3**. To
+odwraca decyzję opisaną wyżej, podjętą przez niego samego kilka dni wcześniej, i zostało
+zgłoszone jako świadoma zmiana zdania („jednak"). Wygrała jednolitość nad wiernością
+poszczególnym kadrom.
+
+**Cena, zmierzona a nie zapamiętana.** Na szesnaście zdjęć w kolekcji:
+
+| Wpis                                   | Plik      | Zostaje dziś | Zostaje przy 4:3 |
+| -------------------------------------- | --------- | -----------: | ---------------: |
+| werbena                                | 960×720   |         100% |             100% |
+| chryzantema wielkokwiatowa             | 2000×1329 |         100% |              89% |
+| pelargonia rabatowa                    | 960×540   |         100% |              75% |
+| bratek ogrodowy                        | 1622×2000 |         100% |              61% |
+| calibrachoa                            | 720×960   |         100% |              56% |
+| niecierpek nowogwinejski               | 720×960   |         100% |              56% |
+| chryzantemy (3 × 1500×2000)            | 1500×2000 |         100% |              56% |
+| alstromeria                            | 1278×1810 |          94% |              53% |
+| fuksja                                 | 1268×1810 |          93% |              53% |
+| prymulka                               | 1381×2000 |          92% |              52% |
+| begonia, goździk, heliotrop, tunbergia | 528×960   |          73% |              41% |
+
+Nietknięte zostaje **jedno zdjęcie z szesnastu** (werbena, która jest już 4:3); przy poprzedniej
+regule nietkniętych było dziewięć. Dwa kadry poziome są teraz przycinane **z boków**, czego
+poprzednia reguła nie robiła w ogóle.
+
+Przycięcie jest wyśrodkowane i **`object-position` go nie uratuje** - celowanie przesuwa pas,
+a żadne położenie nie pomoże, kiedy kwiat jest po prostu wyższy niż okno. To był argument, który
+w ogóle doprowadził do reguły adaptacyjnej, i on nie przestał być prawdziwy - został przegłosowany.
+Jeśli któryś wpis okaże się przycięty w złym miejscu, **poprawką jest przekadrowanie pliku
+źródłowego, nie wyjątek dla wpisu.**
+
+**Co to daje**, i to jest powód prośby: `PhotoSlot` od zawsze rysuje ramkę oczekującą w 4:3, więc
+strona trzymająca i zdjęcia, i zastępniki przeskakiwała w dół kolumny między dwoma kształtami.
+Już nie przeskakuje. Przy 24 z 40 wpisów nadal czekających na zdjęcie ta kolumna jest bardziej
+zastępnikiem niż fotografią, a teraz ma jedną prostą krawędź.
+
+**Uboczny skutek do rozstrzygnięcia przez właścicieli.** Lupa (`lightbox`) jest dziś tylko na
+pasach zdjęć, a uzasadnienie brzmiało: pas przycina kadr i pełnej ramki nie da się inaczej
+zobaczyć, „podczas gdy `PlantEntry` dopasowuje ramkę do zdjęcia”. Po tej zmianie **wpisy
+przycinają piętnaście kadrów na szesnaście**, więc to rozróżnienie zniknęło. Lupy przy wpisach
+**nie dodano** - to zmiana widoczna dla klienta i wymaga ich decyzji. Do listy pytań.
 
 ## Trzecia karta sezonowa - wrzesień 2026
 
@@ -1928,6 +1978,13 @@ się co wzięło.
 | 0.15.0  | Ósma paczka zdjęć - 18 kadrów chryzantem z Facebooka gospodarstwa, z czego **trzy były powtórzeniami** wykrytymi porównaniem percepcyjnym, nie hashem pliku. Repozytorium rośnie z 50 zdjęć do 65, a pas pod listą na `/chryzantemy/` z 4 do **19** kadrów: cztery mieszane, jedenaście rzędów ułożonych jako paleta kolorów i cztery gotowe doniczki. Doniczki stały przez jedną iterację w **drugim pasie** („Gotowe doniczki”) i właściciel kazał go usunąć, więc `OfferSection` wrócił do jednej tablicy zdjęć z etykietą zaszytą w komponencie. Kadry w pasie **powiększają się po kliknięciu**, na tym samym globalnym `lightbox.ts`, którego używa pokaz obsadzeń; komentarz w `PhotoStrip` mówił dotąd „no lightbox” i to jest świadome odwrócenie. Sam podgląd traci przy okazji **podpis pod zdjęciem** - powtarzał `alt` obrazka, który podgląd i tak nosi, więc czytnik ekranu czytał ten sam tekst dwa razy. Szczegóły: [Zdjęcia](#zdjęcia) i [Lupa w pasach zdjęć](#lupa-w-pasach-zdjęć--wrzesień-2026). |
 | 0.16.0  | **Prymulka dostaje wpis** - dziewiętnasta roślina i druga w grupie `Bratki`, która była jednoroślinna od powstania. Zamyka to otwarty punkt stojący od jej dołożenia: prymulki były na stronie samym słowem, bo nie było opisu ani zdjęcia. Żadnej nowej grupy i żadnego nowego adresu - właściciele sprzedają je dokładnie wtedy co bratki, więc `season.ts` jest nietknięty, a `h1` strony to teraz „Bratki i prymulki”, jak w menu i na kaflu (`<title>` zostaje „Bratki”). Pas na `/bratki/` rośnie z 4 do 7 kadrów. **Opis jest nasz, nie właścicieli** - drugi taki wpis po chryzantemie drobnokwiatowej. Przy okazji zapisany rozjazd terminu sprzedaży: `season.ts` mówi marzec, a fakty przy obu wpisach „Marzec – kwiecień”. Szczegóły: [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).                                                                                                                                                                                                                   |
 | 0.16.1  | Wyrównanie lidów na zgłoszenie właściciela. Zdanie otwierające strony kategorii schodzi z czterech plików stron do `OfferSection` jako `OFFER_LEAD` i domyślna wartość propa - dwie strony je miały, dwie nie. `/chryzantemy/` odzyskuje lid; to **nie** jest cofnięcie decyzji z września 2026, bo usunięte tam było inne zdanie, powtarzające termin i kolory. Sekcja „Kwiaty w naszej ofercie” na stronie głównej dostaje własny tekst od właściciela i **zamyka świadomie przyjętą nieścisłość** ciągnącą się od handoffu: pokazuje cztery kafle kategorii, a mówiła o „każdej roślinie”. Szczegóły: [Wyrównanie lidów](#wyrównanie-lidów---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                        |
+| 0.17.0  | Dwadzieścia jeden nowych opisów z listy 38 nazw łacińskich od właścicieli - kolekcja rośnie z 19 do 40 roślin. Sześć bylin i krzew trafiają do `Rabatowe` zamiast do nowej grupy. Patrz [Dwadzieścia jeden nowych opisów](#dwadzieścia-jeden-nowych-opisów--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| 0.18.0  | **Scalenie oferty**: `Rabatowe` wchłonięte przez `Balkonowe` na prośbę właścicieli, `/rabatowe/` usunięte i przekierowane na `/kwiaty-balkonowe/`. Trzy grupy, trzy kafle, jedna strona z 34 roślinami w porządku alfabetycznym, ze spisem grupowanym po literze i literami między wpisami. `OfferSection` dostaje prop `sort`. Patrz [Scalenie oferty](#scalenie-oferty---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 0.18.1  | Poprawki do scalenia po obejrzeniu przez właściciela: przekładka literowa traci własną kreskę (zlewała się z linią kończącą wpis) i niesie podział rozmiarem, kolorem `--sage` i niesymetrycznym odstępem; spis przechodzi z siatki na `columns`, co usuwa dziurę wybitą przez wysoki wiersz „P”.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| 0.18.2  | Wszystkie zdjęcia przy opisach ujednolicone do 4:3 na prośbę właściciela - odwrócenie ramki adaptacyjnej z tego samego miesiąca. Jedno zdjęcie z szesnastu zostaje nietknięte zamiast dziewięciu; pomiary i uboczny skutek dla lupy w [Kadr zdjęć we wpisach](#kadr-zdjęć-we-wpisach---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 0.19.0  | **Chryzantema igiełkowa zwinięta do średniokwiatowej** na polecenie właścicieli - typ opisywał kształt płatka, a pozostałe trzy wpisy dzielą chryzantemy wielkością kwiatu. Grupa schodzi z czterech wpisów do trzech, repozytorium z 40 roślin do 39. Zdjęcie przechodzi do pasa (`rows-12`), który rośnie do 20 kadrów; słowo „igiełkowe” znika z opisu meta i ze zdania właścicieli w `note`. Usunięty opis zachowany w całości: [Chryzantema igiełkowa zwinięta](#chryzantema-igiełkowa-zwinięta-do-średniokwiatowej---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 0.19.1  | **Blok „Dostępne kolory" usunięty ze wszystkich wpisów** na polecenie właścicieli - 22 wpisy, 104 chipy. Pole `colors` wypada również ze schematu. 19 z 22 roślin nadal ma kolory w treści opisu; trzy (bakopa, chryzantema wielkokwiatowa, pelargonie bluszczolistne) tracą tę informację całkowicie. Wszystkie wartości zarchiwizowane: [Chipy kolorów usunięte](#chipy-kolorów-usunięte---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| 0.20.0  | **Dziewiąta paczka zdjęć** - sześć wpisów dostaje pierwsze zdjęcie (dahlia, lobelia, koleus, sanvitalia, bakopa, petunia-surfinia), trzy dostają lepsze (alstromeria, tunbergia, begonia). Wpisów ze zdjęciem 21 z 39, czekających 18. `Plectranthus.jpg` trafił do koleusa wbrew nazwie pliku - zdjęcie jawnie nie zgadza się z opisem plektrantusa. Dwie z trzech nadesłanych petunii niewykorzystane. Szczegóły: [Dziewiąta paczka zdjęć](#dziewiąta-paczka-zdjęć---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ### Paczki materiału od właścicieli
 
@@ -2124,6 +2181,336 @@ Nadesłane teksty są **wyraźnie jednorodne** - prawie każdy otwiera się tym 
 Czytają się inaczej niż 14 opisów z pierwszej paczki, które były nierówne i konkretne. To nie
 jest powód, by ich nie publikować - są od właścicieli - ale warto ich zapytać, czy tak mają
 zostać, bo na jednej stronie stoi teraz 22 wpisy o bardzo podobnym rytmie.
+
+## Scalenie oferty - wrzesień 2026
+
+Właściciele poprosili o **połączenie kwiatów balkonowych i rabatowych w jedną zakładkę**. Grupa
+`Rabatowe` zniknęła z `plantGroups`, jej dwanaście roślin ma teraz `group: Balkonowe`, strona
+`/rabatowe/` została usunięta, a `/kwiaty-balkonowe/` niesie wszystkie 34 wpisy. Oferta ma trzy
+grupy, menu trzy pozycje w panelu „Oferta”, a strona główna trzy kafle zamiast czterech.
+
+**Dane były już w połowie scalone, tylko nikt tego nie napisał.** Obie grupy dzieliły jedno okno
+sprzedaży w `season.ts` (kwiecień – czerwiec) i jedną kartę sezonową, a komentarz w
+`SeasonCards.astro` od dawna odnotowywał, że ta karta „nie może powiedzieć prawdy”, bo jedno
+okno prowadzi na dwie strony. Teraz prowadzi na jedną i ten argument wygasł - co jest zapisane
+przy karcie, razem z uwagą, że **odnośnika i tak nie dostaje**: kafle niżej są jedynymi drzwiami
+do strony kategorii i drugie drzwi wróciłyby do duplikacji, dla której karty odnośnik straciły.
+
+### Który adres został i co to kosztowało
+
+Zostało `/kwiaty-balkonowe/` - mocniejsza fraza w wyszukiwarce i 22 z 34 wpisów już tam były.
+`/rabatowe/` to **jedyny rankujący adres starej strony, którego ten projekt nie zachował**;
+dostaje 301 w [`przekierowania.md`](przekierowania.md). Ryzyko jest realne i warto je nazwać:
+konfiguracja serwera nie jest częścią repozytorium, więc **dopóki reguła 301 nie powstanie,
+adres z pozycjami zwraca 404**. Nic w kodzie tego nie dopilnuje.
+
+Kotwice przeżyły w całości - identyfikator wpisu to nazwa pliku, a pliki się nie ruszyły. Cztery
+odnośniki w `plant-links.ts` (`hortensja`, `koleus`, `niecierpek-nowogwinejski`,
+`pelargonia-rabatowa`) wskazują teraz `/kwiaty-balkonowe/#…`.
+
+`order` nie wymagał przenumerowania: wartości w całej kolekcji były już globalnie unikalne
+(Balkonowe 1–22, Rabatowe 23–34, reszta 35–40), więc scalenie grup niczego nie zderzyło.
+
+### Nazwa - do potwierdzenia przez właścicieli
+
+Właściciele wybrali **„Kwiaty balkonowe”** jako nazwę całości, po przedstawieniu wariantów
+z frazą „rabatowe” w tytule. **Nazwa jest szersza niż to, co pod nią stoi**: aksamitka, funkia,
+hortensja, orlik, trytoma, łubin i wrzos balkonowe nie są. Właściciele zostali o tym
+poinformowani i wybrali tę nazwę świadomie - zapisane tutaj, żeby przy następnym przeglądzie
+treści nie wyglądało to na przeoczenie.
+
+Fraza „kwiaty rabatowe i wieloletnie” **została w `description`** strony, czyli tam, gdzie
+pracuje na wyszukiwanie, i zniknęła tylko z tytułu, menu i kafla. Do decyzji właścicieli, czy
+ma zniknąć również stamtąd - to jedna linia w `src/pages/kwiaty-balkonowe.astro`.
+
+Zniknął przy okazji tytuł kafla „Rabatowe i wieloletnie”, a wraz z nim **jedyne miejsce
+w serwisie, które mówiło o bylinach**. Sześć bylin i krzew nadal nie mają własnej grupy ani
+słowa w nazwie - to jest ten sam otwarty punkt co w
+[Dwudziestu jeden nowych opisach](#dwadzieścia-jeden-nowych-opisów--wrzesień-2026), tylko teraz
+bez żadnego zawoalowanego sygnału na stronie. Wrzos, który już wcześniej siedział pod złym
+oknem sprzedaży, siedzi teraz dodatkowo pod stroną nazwaną „Kwiaty balkonowe”.
+
+### Układ listy: alfabet, indeks literowy, przekładki
+
+34 wpisy to strona, po której trzeba dało się nawigować, a nie tylko ją przewijać. Wybrano
+**jedną płaską listę alfabetyczną bez chipów grup** - właściciele nie chcieli, żeby podział na
+balkonowe i rabatowe był na stronie widoczny w jakiejkolwiek formie. Doszły dwie rzeczy:
+
+1. **Spis „Na tej stronie” grupowany po literze.** Siedemnaście liter na 34 rośliny
+   (A B C D F G H I K L Ł N O P S T W), w trzech kolumnach na desktopie i jednej na telefonie -
+   siedemnaście wierszy na pełną szerokość byłoby półtora ekranu spisu przed pierwszą rośliną.
+2. **Duża litera między wpisami.** **Nie jest nagłówkiem** i ma `aria-hidden="true"`: konspekt
+   strony to jeden `h1` i 34 `h2` z nazwami roślin, a samotne „A” wołane między wpisami byłoby
+   dla czytnika ekranu szumem. Litery docierają tam spisem wyżej, który jest prawdziwym `<nav>`
+   z prawdziwymi odnośnikami.
+
+### Dwie poprawki po obejrzeniu pierwszej wersji
+
+**Przekładka straciła linię.** Pierwsza wersja stawiała literę obok kreski `--rule` biegnącej
+w prawo. Właściciel zgłosił, że to się zlewa - i miał rację: każdy wpis **już** kończy się
+kreską `--rule` tej samej grubości i w tym samym kolorze, więc strona szła „linia, litera
+z linią, linia”, a dwa znaki o identycznym ciężarze robiły dwie różne rzeczy. Teraz **na tej
+stronie jest jeden rodzaj poziomej kreski i znaczy jedno: skończył się wpis.**
+
+Podział niesie sama litera, dwoma środkami, które ten projekt i tak ma - **rozmiarem
+i odstępem**. Jest wyraźnie większa niż nazwa rośliny (40–64px, `clamp`), a odstęp jest celowo
+niesymetryczny: dużo miejsca nad literą, zero pod nią, więc bliskość przykleja ją do roślin,
+które po niej idą, zamiast zostawiać ją w zawieszeniu między dwiema. Ta asymetria jest tym, co
+sprawia, że czyta się to od razu.
+
+Kolor to `--sage`, i licencjonuje go rozmiar: `tokens.css` dopuszcza tę zieleń **wyłącznie dla
+typografii dekoracyjnej od 24px w górę** (3,9:1 - próg 3:1 dla dużego tekstu przechodzi, próg
+4,5:1 dla tekstu ciągłego nie). Litera jest dekoracyjna z definicji, bo ma `aria-hidden`, i nigdy
+nie schodzi poniżej 40px. **Tej zieleni nie wolno przenieść do `<dt>` w spisie** - tamte litery
+mają 20px i zostają `--ink-grey`.
+
+**Spis przeszedł z siatki na kolumny.** `grid` z `auto-fit` wyrównuje wiersze **między
+kolumnami** - do tego służy - i tu było to błędem: wiersz „P” trzyma cztery nazwy i łamie się na
+trzy linie, więc obie komórki obok niego zostały rozepchane w dziurę pod „Orlikiem”
+i „Szałwią”. `columns: 3 300px` pakuje każdą kolumnę osobno i nie ma czego rozpychać. Przy
+okazji alfabet stoi tam, gdzie go szuka czytelnik dowolnego drukowanego indeksu: w dół kolumny
+i dalej do następnej (A–G, H–N, O–W), a nie w poprzek strony. Kolejność w DOM-ie jest
+alfabetyczna tak czy tak, więc kolejność tabulacji i to, co czyta czytnik ekranu, nie zależy od
+tego wyboru.
+
+Kotwic literowych **nie ma i nie są potrzebne**: w spisie linkami są nazwy roślin, a każda ma
+już `id`. To omija problem identyfikatora dla „Ł”, który po transliteracji zderzyłby się z „L”.
+
+Sortowanie idzie przez `localeCompare(…, "pl-PL")` i kolacja **nie jest tu opcjonalna** -
+domyślna wyrzuca „Łubin” za „Wrzos”, czyli na koniec listy, zamiast postawić go zaraz po
+„Lobelii”.
+
+Jedno i drugie jest **wyłączone na `/bratki/` i `/chryzantemy/`**. `OfferSection` dostał prop
+`sort: "order" | "name"`; przy dwóch i czterech wpisach pomoce w szukaniu są zbędne, a `order`
+mówi, co właściciele uważają za najważniejsze, i na krótkiej stronie to jest lepsza odpowiedź
+niż alfabet.
+
+### `order` przestał znaczyć to samo wszędzie
+
+Na `/kwiaty-balkonowe/` `order` nie rządzi już kolejnością na stronie - steruje wyłącznie tym,
+które cztery nazwy i które dwa zdjęcia pokazuje kafel na stronie głównej. **Kafel jest więc
+w kolejności redakcyjnej, a strona w alfabetycznej, i to jest celowe**: kafel z miejscem na
+cztery nazwy ma pokazać cztery najlepsze, a nie cztery pierwsze z alfabetu, bo inaczej oferta
+otwierałaby się słowami „Aksamitka · Alstromeria · Bakopa · Begonia”. Argument stoi
+w `OfferOverview.astro`.
+
+## Chryzantema igiełkowa zwinięta do średniokwiatowej - wrzesień 2026
+
+Właściciele polecili usunąć chryzantemę igiełkową jako osobny typ i **zaliczać ją do
+średniokwiatowych**. Jest to rozstrzygnięcie merytoryczne, nie redakcyjne: „igiełkowa” opisuje
+kształt płatka, a pozostałe trzy wpisy dzielą chryzantemy według wielkości kwiatu, więc czwarty
+wpis stał w tej grupie na innej osi niż reszta. Grupa `Chryzantemy` ma teraz trzy wpisy,
+a repozytorium 39 roślin zamiast 40.
+
+### Tekst, który zniknął ze strony
+
+**To były słowa właścicieli**, wzięte z ich własnego opisu trzech typów we wrześniu 2026, więc
+zgodnie z regułą z `CLAUDE.md` nie znika po cichu. Zapis w całości, bez skrótów:
+
+> Chryzantema igiełkowa wyróżnia się charakterystyczną budową kwiatostanu. Tworzą ją długie,
+> wąskie i rurkowate płatki, które nadają kwiatom lekki, przestrzenny i niepowtarzalny wygląd.
+> Ich ułożenie może być bardziej rozchylone lub skierowane ku górze, dzięki czemu kwiatostany
+> mają wyraźnie odmienną formę od chryzantem o szerokich płatkach. Jest to typ szczególnie
+> ceniony za oryginalny kształt kwiatów i dekoracyjny charakter.
+
+Fakty przy wpisie (Forma: doniczkowa, Stanowisko: słońce osłonięte, Sprzedaż: 1.10 – 1.11)
+i chipy kolorów (biały, żółty, fiolet, złoty) były identyczne jak u pozostałych trzech typów,
+więc nic osobnego z nimi nie przepadło.
+
+**Do rozważenia przez właścicieli:** opis średniokwiatowej kończy się zdaniem „Poszczególne
+odmiany różnią się kształtem i budową kwiatów oraz ich kolorystyką”, które jest naturalnym
+miejscem na zdanie o płatkach igiełkowych, gdyby chcieli je zachować. **Nie dopisano go** -
+opisy roślin są ich, nie nasze.
+
+### Zdjęcie zostało
+
+`chryzantema-igielkowa.jpg` (1500×2000, z profilu Facebook gospodarstwa) przeszło do
+`src/assets/chrysanthemums/rows-12.jpg` i weszło do `chrysanthemumStrip`, który rośnie z 19 do
+**20 kadrów** - nadal najdłuższy pas w serwisie. To ten sam ruch, co przy usunięciu drugiego
+pasa na tej stronie, kiedy cztery kadry gotowych doniczek przeszły do pasa głównego: pas jest
+właśnie od kadrów, które nie należą do żadnego wpisu. Zdjęcie stoi w grupie `rows-*`, bo pokazuje
+rzędy w uprawie, a nie pojedynczą doniczkę.
+
+Opis alternatywny został wzięty z wpisu bez zmian („Różowo-białe chryzantemy o długich, wąskich
+i rurkowatych płatkach z podwiniętymi końcami”, z dopiskiem „rzędy w uprawie” dla zgodności
+z sąsiadami w pasie). Opisuje płatki na zdjęciu i **nie twierdzi niczego o klasie wielkości**,
+czyli dokładnie o to, co ta zmiana rozstrzygnęła gdzie indziej. Liczba zdjęć w repozytorium
+zostaje 69 - plik się przeniósł, nie zniknął.
+
+### Słowo „igiełkowe” zeszło ze strony
+
+Zniknęło z dwóch miejsc na `/chryzantemy/`: z `description` i ze zdania w `note` („W uprawie
+znajdują się chryzantemy wielkokwiatowe, średniokwiatowe, drobnokwiatowe i igiełkowe”).
+Właściciele wybrali ten wariant spośród trzech przedstawionych. Uzasadnienie: skoro igiełkowe
+**są** średniokwiatowymi, wymienianie ich obok jako osobnego typu przeczy tej klasyfikacji,
+a zdanie obiecujące cztery typy nad stroną pokazującą trzy wpisy to dokładnie ta rozbieżność,
+której ten projekt unika trzymając jedną kopię każdego faktu.
+
+**Zdanie w `note` to słowa właścicieli i zostało zmienione**, więc trafia na tę listę tak samo
+jak usunięty opis. Cena: fraza „chryzantemy igiełkowe” nie występuje już nigdzie w serwisie,
+łącznie z opisem meta, więc strona przestaje na nią rankować. Przedstawiono wariant pośredni
+(zostawić frazę w samym `description`, tak jak zrobiono z „rabatowymi” przy scalaniu oferty) -
+nie został wybrany.
+
+### Zmierzone skutki uboczne
+
+- Wpisów ze zdjęciem: **15 z 39** (było 16 z 40). Wpisów czekających na zdjęcie: 24, bez zmian.
+- Tabela kadrowania 4:3 w [Kadrze zdjęć we wpisach](#kadr-zdjęć-we-wpisach---wrzesień-2026)
+  liczyła szesnaście plików; teraz jest ich piętnaście. Nietknięty przy 4:3 pozostaje jeden
+  (werbena), a przy poprzedniej regule adaptacyjnej nietkniętych było osiem, nie dziewięć.
+  Wiersz `chryzantema-igielkowa` w tamtej tabeli zostaje jako zapis pomiaru z chwili, gdy był
+  robiony.
+- `order: 38` zwolniło się i **nie zostało użyte ponownie** - numeracja nie musi być ciągła,
+  a przenumerowanie czegokolwiek byłoby ruchem bez powodu.
+- Pytanie otwarte „który typ chryzantemy pokazuje które zdjęcie” zmalało, ale nie zniknęło:
+  kadr igiełkowy jest teraz kadrem w pasie i nie twierdzi nic o typie, ale przypisanie
+  `sredniokwiatowa` nadal jest oceną wielkości kwiatu.
+
+## Chipy kolorów usunięte - wrzesień 2026
+
+Właściciele polecili usunąć blok „Dostępne kolory" ze **wszystkich** wpisów. Dotknęło to
+22 wpisów i 104 chipów; pozostałych 17 nigdy chipów nie miało, bo stara strona opisywała te
+rośliny tylko jako dostępne „w różnych kolorach" i to zdanie zostało w treści, zamiast zostać
+zamienione na wymyślone chipy.
+
+**To jest odejście od briefu i warto, żeby było tak nazwane.** Wzorzec przeniesiony ze starej
+strony WordPressa brzmiał: zdjęcie + długi opis uprawy + **lista dostępnych kolorów**. Trzeci
+człon właśnie odpadł. Ponowne dodanie go będzie tak samo widoczne dla klienta jak usunięcie,
+więc nie robi się tego bez ich prośby - notatka stoi też w `src/content.config.ts`, w miejscu
+po polu `colors`.
+
+### Co dokładnie przepadło ze strony
+
+Pole `colors` zniknęło z frontmattera 22 plików **i ze schematu**, nie tylko ze znaczników: pole,
+którego żaden komponent nie czyta, to dokładnie ten martwy balast, któremu `content.config.ts`
+ma zapobiegać. Wartości są tutaj w całości.
+
+| Wpis                        | Chipy kolorów                                                                               | Kolory też w opisie? |
+| --------------------------- | ------------------------------------------------------------------------------------------- | -------------------- |
+| Aksamitka                   | żółty, pomarańczowy, złocisty, czerwono-brązowy                                             | tak                  |
+| Alstromeria                 | czerwony, czerwono-biały, biało-żółty, biało-różowy, lila, pomarańczowy                     | tak                  |
+| Bakopa                      | biały, różowy, fioletowy, niebieski                                                         | **nie**              |
+| Bidens                      | żółty                                                                                       | tak                  |
+| Bratek ogrodowy             | żółty, kremowy, biały, bordowy, różowy, amarantowy, fioletowy, liliowy, błękitny, dwubarwny | tak                  |
+| Chryzantema drobnokwiatowa  | biały, żółty, fiolet, złoty                                                                 | tak                  |
+| Chryzantema średniokwiatowa | biały, żółty, fiolet, złoty                                                                 | tak                  |
+| Chryzantema wielkokwiatowa  | biały, żółty, fiolet, złoty                                                                 | **nie**              |
+| Funkia                      | biały, lila, fioletowy                                                                      | tak                  |
+| Gazania                     | żółty, pomarańczowy, czerwony, różowy, biały, wielobarwny                                   | tak                  |
+| Hypoestes                   | różowy, czerwony, biały, fioletowy, wielobarwny                                             | tak                  |
+| Lobelia                     | niebieski, granatowy, biały, różowy, fioletowy                                              | tak                  |
+| Łubin                       | różowy, fioletowy, niebieski, biały, czerwony, wielobarwny                                  | tak                  |
+| Niecierpek nowogwinejski    | biały, łososiowy, biskupi, różowy, pomarańczowy                                             | tak                  |
+| Pelargonie bluszczolistne   | bordowy, czerwony, pomarańczowy, różowy, jasny lila, biały                                  | **nie**              |
+| Pelargonie rabatowe         | bordowy, czerwony, ciemnoróżowy, fioletowy, pomarańczowy, biały                             | tak                  |
+| Prymulka                    | biały, żółty, różowy, czerwony, fioletowy, pomarańczowy, dwubarwny                          | tak                  |
+| Sanvitalia                  | żółty z ciemnym środkiem                                                                    | tak                  |
+| Sundaville                  | czerwony, różowy, biały                                                                     | tak                  |
+| Szałwia                     | czerwony, różowy, fioletowy, biały, niebieski                                               | tak                  |
+| Trytoma                     | żółty, pomarańczowy, czerwony, dwubarwny                                                    | tak                  |
+| Wrzos                       | biały, różowy, liliowy, fioletowy, purpurowy                                                | tak                  |
+
+(Chryzantema igiełkowa miała te same cztery chipy co pozostałe chryzantemy; jej wpis usunięto
+wcześniej - patrz [Chryzantema igiełkowa
+zwinięta](#chryzantema-igiełkowa-zwinięta-do-średniokwiatowej---wrzesień-2026).)
+
+### Trzy wpisy tracą informację o kolorach całkowicie
+
+U **19 z 22** kolory są nadal w treści opisu, więc czytelnik ich nie traci - zmienia się tylko
+forma podania. Wyjątki są trzy i to one są ceną tej zmiany:
+
+- **Bakopa** - traci „biały, różowy, fioletowy, niebieski"
+- **Chryzantema wielkokwiatowa** - traci „biały, żółty, fiolet, złoty"
+- **Pelargonie bluszczolistne** - traci „bordowy, czerwony, pomarańczowy, różowy, jasny lila,
+  biały"
+
+Przy tych trzech roślinach serwis nie mówi już nic o dostępnych kolorach. **Nie dopisano tego do
+opisów** - opisy roślin są własnością właścicieli i nie wolno ich uzupełniać za nich. Jeśli mają
+o kolorach wspominać, to ich zdanie, nie nasze. Do listy pytań.
+
+Chryzantema wielkokwiatowa jest z tej trójki przypadkiem najdotkliwszym: to sztandarowa roślina
+gospodarstwa, sprzedawana na Wszystkich Świętych, a „duży wybór kolorów" był argumentem
+sprzedażowym, który stara strona podawała wprost. Zdanie o tym usunięto z `/chryzantemy/`
+wcześniej we wrześniu 2026 **właśnie dlatego, że powielało chipy** - a teraz nie ma ani zdania,
+ani chipów. To realna dziura w treści i do rozstrzygnięcia przez właścicieli.
+
+## Dziewiąta paczka zdjęć - wrzesień 2026
+
+Właściciele przysłali jedenaście plików z nazwami roślin w nazwach. Weszło **dziewięć**: sześć
+wpisów dostało pierwsze zdjęcie, trzy dostały lepsze. Wpisów ze zdjęciem jest teraz **21 z 39**
+(było 15), czekających 18 (było 24). Zdjęć w repozytorium 75 (było 69).
+
+| Plik źródłowy      | Wpis             | Co się stało | Źródło → po obróbce   |
+| ------------------ | ---------------- | ------------ | --------------------- |
+| `Alstroemeria.jpg` | alstromeria      | podmiana     | 1512×2016 → 1500×2000 |
+| `tunbergia.jpg`    | tunbergia        | podmiana     | 1512×2016 → 1500×2000 |
+| `begonia.jpg`      | begonia          | podmiana     | 752×1020 (bez zmian)  |
+| `dalia.jpg`        | dahlia           | **nowe**     | 1580×2048 → 1543×2000 |
+| `Lobelia.jpg`      | lobelia          | **nowe**     | 752×1020 (bez zmian)  |
+| `Sanvitalia.jpg`   | sanvitalia       | **nowe**     | 752×1020 (bez zmian)  |
+| `bakopa.jpg`       | bakopa           | **nowe**     | 752×1020 (bez zmian)  |
+| `Plectranthus.jpg` | **koleus**       | **nowe**     | 1638×2048 → 1600×2000 |
+| `petunia (2).jpg`  | petunia-surfinia | **nowe**     | 2048×1691 → 2000×1651 |
+
+Wszystkie trzy podmiany są awansem: alstromeria z 1278×1810 na 1500×2000, tunbergia i begonia
+z 528×960 (kadry telefoniczne) na większe pliki.
+
+Obróbka według reguły z `CLAUDE.md`: wypalona rotacja EXIF i zejście do 2000 px na dłuższej
+krawędzi. **Wszystkie jedenaście plików miało `orientation: 1`**, więc obrót był tym razem
+operacją pustą - ale przeszły przez nią mimo to, bo poprzednie paczki nie były tak łaskawe.
+
+### `Plectranthus.jpg` trafił do koleusa, nie do plektrantusa
+
+To jedyne miejsce, w którym **odstąpiono od nazwy pliku**, i warto, żeby było zapisane. Zdjęcie
+pokazuje gęste kępy wielobarwnych, ząbkowanych liści - zielono-różowych, karminowych,
+pomarańczowych i ciemnobordowych. To koleus.
+
+Nazwa pliku nie jest błędem: koleus nosi dziś nazwę _Plectranthus scutellarioides_, więc
+botanicznie „Plectranthus" jest poprawne. Ale **na stronie to dwa osobne produkty**, oba
+w grupie Balkonowe, i `plektrantus.md` opisuje coś innego: „długie, elastyczne pędy", które
+„przewieszają się przez brzegi donic", i „jasne, zielono-białe ulistnienie". Nic z tego nie jest
+na zdjęciu. `koleus.md` z kolei mówi o „barwnych, efektownie wybarwionych liściach"
+i „gęstych, atrakcyjnych kępach" - i to jest dokładnie ten kadr.
+
+Podpięcie go pod plektrantusa postawiłoby na stronie zdjęcie jawnie sprzeczne z tekstem obok.
+**Plektrantus nadal czeka na własne zdjęcie.**
+
+### Dwie petunie zostały niewykorzystane
+
+Przyszły **trzy** zdjęcia petunii, a wpis „Petunie i surfinie" jest jeden. Do wpisu poszła
+`petunia (2).jpg` - fioletowa surfinia kaskadowo zwisająca z wiszącej doniczki. Powód jest
+mierzalny: przy proporcji 1,21 zostaje jej w kadrze 4:3 **91%**, podczas gdy dwóm pozostałym,
+pionowym, zostałoby 70% i 62%. Pokazuje też przewieszający się pokrój, który jest tym, czym
+surfinia się sprzedaje.
+
+Niewykorzystane, obie dobre:
+
+- `Petunia.jpg` (1702×2048) - różowa petunia pełnokwiatowa w wiszącej doniczce;
+- `494257532_718985697129862_217150299954056229_n.jpg` (1896×2048) - różowo-biała petunia
+  w paski, w wiszącej doniczce.
+
+**Propozycja, której nie zrealizowano, bo wykraczała poza prośbę:** `Petunia.jpg` ma proporcję
+0,83, czyli prawie dokładnie 4:5, a otwartym punktem na tej liście jest **pionowy kadr do sekcji
+hero na stronie głównej** - dziś stoi tam obraz 4:3 przycięty do 4:5 w powiększeniu ~1,6×, co
+`Intro.astro` opisuje jako rozwiązanie tymczasowe. Ten plik pasowałby tam tracąc około 4%.
+Do decyzji właścicieli.
+
+### Opisy alternatywne - do potwierdzenia
+
+Dziewięć nowych `imageAlt` napisano tutaj, na podstawie tego, co widać w kadrze, i **nie są to
+słowa właścicieli**. Trafiają na tę samą listę co wszystkie pozostałe opisy alternatywne
+w serwisie. Jeden punkt wymaga ich potwierdzenia szczególnie: chipy kolorów sanwitalii (zanim
+je usunięto) mówiły „żółty z ciemnym środkiem", a na nadesłanym zdjęciu środki koszyczków są
+żółto-pomarańczowe, nie ciemne. Opis alternatywny nie przesądza tego - mówi tylko „drobne żółte
+kwiaty" - ale pytanie, czy to na pewno ta odmiana, zostaje otwarte.
+
+### Jakość źródeł
+
+Cztery z dziewięciu nowych plików (lobelia, sanvitalia, bakopa, begonia) mają 752 px szerokości.
+`PlantEntry` prosi o warianty 560 i 1120 px, a Astro nie powiększa ponad źródło, więc na
+ekranach o podwójnej gęstości te cztery będą nieco miękkie. Razem z wcześniejszymi jest
+**dziesięć takich plików na dwadzieścia jeden**. To nie jest defekt do naprawienia w kodzie -
+jedyną poprawką są ostrzejsze pliki od właścicieli.
 
 ## Czego nadal brakuje
 
