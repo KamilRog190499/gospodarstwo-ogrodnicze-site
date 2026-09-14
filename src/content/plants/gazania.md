@@ -3,6 +3,13 @@ name: Gazania
 group: Balkonowe
 order: 30
 slot: zdjęcie - gazania, 4:3
+image: ../../assets/plants/gazania.jpg
+imageAlt: "Żółty kwiat gazanii z wieńcem ciemnych plamek wokół środka, rozłożony w pełnym słońcu"
+imageCredit:
+  author: "Alvesgaspar"
+  license: "CC BY 2.5"
+  licenseUrl: "https://creativecommons.org/licenses/by/2.5"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Gazania_rigens-1.jpg"
 facts:
   - label: Kwitnienie
     value: Długie i obfite

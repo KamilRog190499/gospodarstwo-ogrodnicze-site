@@ -3,6 +3,13 @@ name: Dichondra
 group: Balkonowe
 order: 16
 slot: zdjęcie - dichondra, 4:3
+image: ../../assets/plants/dichondra.jpg
+imageAlt: "Srebrzystozielone, okrągłe liście dichondry gęsto pokrywające przewieszające się pędy"
+imageCredit:
+  author: "Derek Ramsey"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "http://creativecommons.org/licenses/by-sa/3.0/"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Dichondra_%27Silver_Falls%27_Closeup_3008px.jpg"
 facts:
   - label: Pokrój
     value: Kaskadowy

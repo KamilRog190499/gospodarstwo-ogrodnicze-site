@@ -54,10 +54,15 @@ and `linkinator` finds no dead internal link.
   `wrzos.md`, knowingly sits under a selling window that is wrong for it. The merge made the
   second point louder rather than quieter: heather now sits under a page called "Kwiaty
   balkonowe" as well.
-- **75 photographs** in `src/assets/`. **21 of the 39 entries have their own frame**, and
-  that ratio is the newest and largest gap on the site: the three long-standing placeholders
-  (dahlia, pelargonia bluszczolistna, sundaville) plus all 21 of the September batch. Every
-  one of the 24 names the crop it wants in its `slot`. Nineteen of the sixty-nine arrived in
+- **93 photographs** in `src/assets/`. **All 39 entries now show a picture, but only 21 of
+  them show the holding's own.** The other eighteen carry a stand-in from Wikimedia Commons,
+  taken in September 2026 because `/kwiaty-balkonowe/` was more striped placeholder than
+  photograph after the merge put every gap on one page. Those eighteen are **temporary and
+  say so in three places**: they keep their `slot` (the brief for the frame the owners still
+  owe), they carry an `imageCredit` no photograph of the owners' has, and each prints its
+  source under the picture. Swapping one back is a file plus three lines of frontmatter.
+  `PhotoSlot` therefore renders nowhere today and still has to keep working - the next plant
+  the owners add will arrive before its picture does. Nineteen of the owners' own arrived in
   September 2026 off the holding's Facebook page: fifteen chrysanthemums, and four pansies
   and primroses, which took `/bratki/` from four to seven. `/chryzantemy/` carries a strip of
   **twenty** frames, by some way the longest on the site - nineteen, plus the needle-petalled
@@ -266,12 +271,16 @@ plus manual viewport checks.
   **reverses** the adaptive frame (each file's own ratio, floored at 3:4) that the owners chose
   earlier in September 2026, and they reversed it themselves after seeing both - uniformity over
   fidelity to each frame. The price is measured in `PlantEntry.astro` and
-  `docs/inwentaryzacja.md`: one of the twenty-one photographs is untouched, eighteen taller-than-4:3
-  files keep 52-61% of their height, and the two landscape files are cropped on width. The crop is centred and **`object-position` cannot rescue it** - aiming moves
-  the band, and no position helps when the bloom is taller than the window. A badly clipped entry
-  is fixed by re-cropping its source file, never by a per-entry exception.
+  `docs/inwentaryzacja.md`: of the owners' twenty-one, one is untouched, eighteen taller-than-4:3
+  files keep 52-61% of their height, and the two landscape files are cropped on width. The eighteen
+  Wikimedia stand-ins pay far less, because they were picked against a ratio that was already
+  known - eleven lose nothing at all and the worst, bidens, keeps 56%. The crop is centred and
+  **`object-position` cannot rescue it** - aiming moves the band, and no position helps when the
+  bloom is taller than the window. A badly clipped entry is fixed by re-cropping its source file,
+  never by a per-entry exception; trytoma is the worked example, cropped from the top of its
+  source because the automatic choice took the grass and beheaded the flower spikes.
 - **A plant entry is a component fed by data**, not hand-written markup:
-  `{ name, group, order, slot, image?, imageAlt?, facts?[<=4] }`. **There is no `colors` field
+  `{ name, group, order, slot, image?, imageAlt?, imageCredit?, facts?[<=4] }`. **There is no `colors` field
   any more** - the "Dostępne kolory" chips came off every entry in September 2026 on the owners'
   instruction, and the field left the schema with them, because one no component reads is dead
   weight. Nineteen of the twenty-two entries that had chips still name their colours in the prose
@@ -279,7 +288,12 @@ plus manual viewport checks.
   about colour at all, and that gap is on the owners' list rather than filled in by us - their
   descriptions are theirs to extend. There is also no
   `caption` field - the owners had the per-entry captions removed, and **that decision is
-  about the plant entries alone.** Two `<figcaption>`s survive it on purpose: every slideshow
+  about the plant entries alone.** **`imageCredit` is not a way back in**: it prints a
+  `<figcaption>` under the eighteen borrowed photographs, but it holds an author, a licence
+  and two links rather than anything about the plant, it is the condition CC BY and CC BY-SA
+  attach to publishing the file at all, and the schema fails the build if it outlives the
+  picture it credits. Editorial text under an entry is still closed. Two further
+  `<figcaption>`s survive the removal on purpose: every slideshow
   slide, where the caption carries the editorial description, and the history photograph on
   `/o-nas/`, captioned "Na wystawie kwiatów w Końskowoli" on the owners' instruction in
   September 2026 because it names a place no `alt` should be asserting. Neither is licence to
@@ -468,23 +482,28 @@ Anything unconfirmed ships with a visible "pending confirmation" state rather th
 value. The full list is in `docs/inwentaryzacja.md` under "Czego nadal brakuje"; the ones
 that shape code decisions:
 
-1. **Photographs** - what is left is one 4:3 frame each for **18 entries**, plus an archival
-   photograph for the history block. Of the three long-standing gaps only **pelargonia
-   bluszczolistna and sundaville** remain: dahlia was filled by the September 2026 batch of
-   nine, which also covered lobelia, koleus, sanvitalia, bakopa and petunia-surfinia and
-   replaced the frames on alstromeria, tunbergia and begonia. That
-   last one is **no longer urgent**: since September 2026 the block holds `historyPhoto`, the
+1. **Photographs** - what is left is **the owners' own 4:3 frame for the eighteen entries now
+   standing on a Wikimedia stand-in**, plus an archival photograph for the history block. The
+   eighteen are the September 2026 import argued out in `docs/inwentaryzacja.md` under "Zdjęcia
+   zastępcze z Wikimedia Commons", which carries the provenance table and the swap procedure.
+   **A borrowed frame closes the hole in the page, not the request**: the site sells plants
+   "z własnej uprawy" and eighteen of its thirty-nine pictures do not show them, which is
+   why the `slot` brief stays on those entries and why they are the first thing on the owners'
+   list rather than a settled matter. The archival photograph is **no longer urgent**: since
+   September 2026 the block holds `historyPhoto`, the
    holding's stand at the flower show in Końskowola, its own banner in the frame - contemporary,
    so the brief's "zdjecie archiwalne" is still unanswered, but the first frame in the
    repository of the holding rather than of a plant, and the frame is no longer borrowed
-   from a planting that also appears on `/inspiracje/`. None of
-   the three turned up in the old site's live pages or in its WordPress media library (which
+   from a planting that also appears on `/inspiracje/`. Neither pelargonia bluszczolistna nor
+   sundaville turned up in the old site's live pages or in its WordPress media library (which
    is reachable at `<site>/wp-json/wp/v2/media`, independently of anything linked from a live
    page, and did hold real unused photographs from 2019-2020); the farm's Facebook page is
-   the remaining place to look, and needs a logged-in browser. Each remaining `PhotoSlot`
-   names the crop it wants. A plant photograph goes in `src/assets/plants/` under the same
-   name as its Markdown file, with `image` and `imageAlt` in the frontmatter - the schema
-   requires the pair. **A fourth photograph is now wanted and it is the most visible gap on
+   the remaining place to look, and needs a logged-in browser. A plant photograph goes in
+   `src/assets/plants/` under the same name as its Markdown file, with `image` and `imageAlt`
+   in the frontmatter - the schema requires the pair. Replacing a stand-in means overwriting
+   that file and **deleting the entry's `imageCredit`**, which is what the credit line under
+   the photograph hangs off; leaving it behind fails the build rather than shipping a wrong
+   attribution. **A fourth photograph is now wanted and it is the most visible gap on
    the site: a portrait frame for the home page hero.** The rebuilt hero is a 4:5 figure, and
    the old rule that "only a landscape frame goes in this band" is reversed with it. Nothing
    in the repository fits - all 23 portrait frames in `src/assets/gallery/` are plantings that
@@ -494,8 +513,9 @@ that shape code decisions:
    Two rules for anything new: downscale to 2000px and **bake in the EXIF
    rotation** - many of the supplied files arrived as portrait frames flagged sideways, and
    `<Picture>` does not honour that flag.
-   **Wanting owner confirmation:** the Polish `alt` texts throughout, `historyPhoto`'s
-   among them, and the wording of the one caption on the site - the owners wrote "Wystawie
+   **Wanting owner confirmation:** the Polish `alt` texts throughout, `historyPhoto`'s and the
+   eighteen stand-ins' among them, the wording of the attribution line itself, and the wording
+   of the one editorial caption on the site - the owners wrote "Wystawie
    kwiatów w Końskowoli" and it ships as "Na wystawie kwiatów w Końskowoli", one preposition
    added so a locative with nothing to govern it does not read as a typo; which chrysanthemum
    type each photograph shows - a question the September 2026 merge shrank but did not close,

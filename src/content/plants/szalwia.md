@@ -3,6 +3,13 @@ name: Szałwia
 group: Balkonowe
 order: 33
 slot: zdjęcie - szałwia, 4:3
+image: ../../assets/plants/szalwia.jpg
+imageAlt: "Zwarty łan szałwii błyszczącej o intensywnie czerwonych kwiatostanach"
+imageCredit:
+  author: "Hungda"
+  license: "CC0"
+  licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Salvia_splendens_in_Dalat_city_(2).JPG"
 facts:
   - label: Pokrój
     value: Zwarty

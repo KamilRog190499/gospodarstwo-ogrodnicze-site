@@ -3,6 +3,12 @@ name: Łubin
 group: Balkonowe
 order: 32
 slot: zdjęcie - łubin, 4:3
+image: ../../assets/plants/lubin.jpg
+imageAlt: "Rząd wysokich kwiatostanów łubinu w odcieniach fioletu, liliowego i bieli, nad dłoniastymi liśćmi"
+imageCredit:
+  author: "George Chernilevsky"
+  license: "domena publiczna"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Lupinus_polyphyllus_UA_2015_G5.jpg"
 facts:
   - label: Pokrój
     value: Wzniesiony

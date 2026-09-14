@@ -3,6 +3,13 @@ name: Pelargonie bluszczolistne
 group: Balkonowe
 order: 3
 slot: zdjęcie - pelargonia bluszczolistna w skrzynce, 4:3
+image: ../../assets/plants/pelargonia-bluszczolistna.jpg
+imageAlt: "Skrzynka balkonowa pod oknem obsypana różowymi i czerwonymi kwiatami pelargonii bluszczolistnej, z pędami zwisającymi poniżej"
+imageCredit:
+  author: "DenesFeri"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Geraniales_-_Pelargonium_peltatum_1.jpg"
 facts:
   - label: Długość pędów
     value: do 100 cm

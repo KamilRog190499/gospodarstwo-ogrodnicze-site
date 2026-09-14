@@ -3,6 +3,13 @@ name: Hortensja
 group: Balkonowe
 order: 25
 slot: zdjęcie - hortensja, 4:3
+image: ../../assets/plants/hortensja.jpg
+imageAlt: "Kilka dużych, kulistych kwiatostanów hortensji w odcieniach błękitu, nad ciemnozielonymi liśćmi"
+imageCredit:
+  author: "Raul654"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "http://creativecommons.org/licenses/by-sa/3.0/"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Hydrangea_macrophylla_-_Hortensia_hydrangea.jpg"
 facts:
   - label: Stanowisko
     value: Jasne, osłonięte

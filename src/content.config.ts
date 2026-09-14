@@ -48,6 +48,39 @@ const plants = defineCollection({
         slot: z.string(),
         image: image().optional(),
         imageAlt: z.string().min(10).optional(),
+        /** Where a photograph that is **not the holding's own** came from, and under what
+         *  licence. Absent on every frame the owners supplied, which is what it is for: the
+         *  presence of this field is the machine-readable answer to "is this picture ours?".
+         *
+         *  Eighteen entries carry it - the September 2026 stand-ins from Wikimedia Commons,
+         *  taken because the offer had eighteen plants with no picture at all and a column of
+         *  striped placeholders. They are **temporary**, which is why `slot` stays on those
+         *  entries too: the brief for the photograph the owners still owe is not cancelled by
+         *  a borrowed frame standing in for it. When a real one arrives, this field and the
+         *  file go together and nothing else changes.
+         *
+         *  `PlantEntry` prints it as a line under the photograph. That is not a reversal of
+         *  the September 2026 removal of per-entry captions: a caption is editorial text about
+         *  the plant, this is the attribution CC BY and CC BY-SA require in exchange for the
+         *  right to publish the file, and it disappears with the file it belongs to.
+         *
+         *  `licenseUrl` is optional because one of the eighteen is public domain and has no
+         *  deed to link; the licence then prints as plain text and the file page carries the
+         *  provenance. Every source is recorded in docs/inwentaryzacja.md as well, because a
+         *  frontmatter field is lost the moment the entry is rewritten. */
+        imageCredit: z
+          .object({
+            /** A person, cleaned up from the Commons "Artist" field by hand - those hold wiki
+             *  signatures, copyright notices and chained derivative-work credits. */
+            author: z.string().min(2),
+            /** As the licence names itself: "CC BY-SA 4.0", "CC0", "domena publiczna". */
+            license: z.string().min(2),
+            licenseUrl: z.url().optional(),
+            /** The file's **description page**, not the image - that is where the licence,
+             *  the full author string and the file's own history actually live. */
+            sourceUrl: z.url(),
+          })
+          .optional(),
         /** At most four, because that is how many lines the owners themselves listed under
          *  the longest descriptions. The design specifies three in a single row; the grid is
          *  `auto-fit`, so a fourth wraps rather than breaking - the deviation is recorded in
@@ -77,6 +110,18 @@ const plants = defineCollection({
             code: "custom",
             message: "`image` and `imageAlt` go together - a photograph needs a description.",
             path: ["imageAlt"],
+          });
+        }
+        // Attribution for a photograph that is not here is either a leftover from a removed
+        // stand-in or a credit pointed at the wrong entry. Both are worth a failed build:
+        // the field's whole job is to say which files are borrowed, and it cannot do that
+        // while it outlives them.
+        if (entry.imageCredit && !entry.image) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              "`imageCredit` without `image` - attribution for a photograph that is not here.",
+            path: ["imageCredit"],
           });
         }
       }),

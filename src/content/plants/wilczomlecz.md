@@ -3,6 +3,13 @@ name: Wilczomlecz
 group: Balkonowe
 order: 13
 slot: zdjęcie - wilczomlecz, 4:3
+image: ../../assets/plants/wilczomlecz.jpg
+imageAlt: "Obłok drobnych białych kwiatków wilczomlecza na cienkich, rozgałęzionych pędach"
+imageCredit:
+  author: "Meneerke bloem"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Chamaesyce_%27Diamond_Frost%27.jpg"
 facts:
   - label: Stanowisko
     value: Jasne, słoneczne

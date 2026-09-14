@@ -3,6 +3,13 @@ name: Bidens
 group: Balkonowe
 order: 12
 slot: zdjęcie - bidens, 4:3
+image: ../../assets/plants/bidens.jpg
+imageAlt: "Gęsty kobierzec drobnych żółtych kwiatów bidensa nad pierzastymi, jasnozielonymi liśćmi"
+imageCredit:
+  author: "BotBln"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Bidens_ferulifolia_BotGardBln07122011A.JPG"
 facts:
   - label: Pokrój
     value: Zwisający

@@ -3,6 +3,13 @@ name: Hypoestes
 group: Balkonowe
 order: 18
 slot: zdjęcie - hypoestes, 4:3
+image: ../../assets/plants/hypoestes.jpg
+imageAlt: "Liście hypoestes gęsto nakrapiane różem, poprzetykane zielenią i ciemną czerwienią"
+imageCredit:
+  author: "Forest & Kim Starr"
+  license: "CC BY 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Starr_070906-8669_Hypoestes_phyllostachya.jpg"
 facts:
   - label: Pokrój
     value: Zwarty

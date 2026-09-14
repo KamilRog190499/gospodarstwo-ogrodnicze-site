@@ -3,6 +3,13 @@ name: Sundaville
 group: Balkonowe
 order: 8
 slot: zdjęcie - sundaville, 4:3
+image: ../../assets/plants/sundaville.jpg
+imageAlt: "Karminowe, lejkowate kwiaty sundaville wśród ciemnozielonych, błyszczących liści"
+imageCredit:
+  author: "Lazaregagnidze"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Mandevilla_sanderi_Brazilian_Jasmine_%E1%83%9B%E1%83%90%E1%83%9C%E1%83%93%E1%83%94%E1%83%95%E1%83%98%E1%83%9A%E1%83%90.JPG"
 facts:
   - label: Stanowisko
     value: Słońce, znosi półcień

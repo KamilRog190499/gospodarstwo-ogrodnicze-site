@@ -3,6 +3,13 @@ name: Ipomoea
 group: Balkonowe
 order: 19
 slot: zdjęcie - ipomoea, 4:3
+image: ../../assets/plants/ipomoea.jpg
+imageAlt: "Limonkowe, sercowate liście ipomoei ozdobnej tworzące gęsty, niski kobierzec"
+imageCredit:
+  author: "David J. Stang"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Ipomoea_batatas_Margarita_2zz.jpg"
 facts:
   - label: Pokrój
     value: Zwisający

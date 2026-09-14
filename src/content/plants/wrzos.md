@@ -3,6 +3,13 @@ name: Wrzos
 group: Balkonowe
 order: 28
 slot: zdjęcie - wrzos, 4:3
+image: ../../assets/plants/wrzos.jpg
+imageAlt: "Gęsty kobierzec wrzosu obsypany drobnymi różowoliliowymi kwiatami wzdłuż pędów"
+imageCredit:
+  author: "Robert Flogaus-Faust"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Calluna_vulgaris_RF.jpg"
 facts:
   - label: Stanowisko
     value: Słoneczne

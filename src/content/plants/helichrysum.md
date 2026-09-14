@@ -3,6 +3,13 @@ name: Helichrysum
 group: Balkonowe
 order: 17
 slot: zdjęcie - helichrysum, 4:3
+image: ../../assets/plants/helichrysum.jpg
+imageAlt: "Srebrzyste, drobno owłosione liście kocanki na cienkich, rozłożystych pędach"
+imageCredit:
+  author: "Forest & Kim Starr"
+  license: "CC BY 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Starr_070906-8466_Helichrysum_petiolare.jpg"
 facts:
   - label: Pokrój
     value: Kaskadowy

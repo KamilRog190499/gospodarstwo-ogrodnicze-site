@@ -3,6 +3,13 @@ name: Aksamitka
 group: Balkonowe
 order: 34
 slot: zdjęcie - aksamitka, 4:3
+image: ../../assets/plants/aksamitka.jpg
+imageAlt: "Pomarańczowa aksamitka pełnokwiatowa w pełnym rozkwicie, obok niej pąk, w tle pierzaste liście"
+imageCredit:
+  author: "Joydeep"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Tagetes_patula,_Burdwan,_West_Bengal,_India_10_01_2013_01.jpg"
 facts:
   - label: Pokrój
     value: Kępiasty

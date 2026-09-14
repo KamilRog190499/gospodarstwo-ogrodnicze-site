@@ -3,6 +3,13 @@ name: Plektrantus
 group: Balkonowe
 order: 15
 slot: zdjęcie - plektrantus, 4:3
+image: ../../assets/plants/plektrantus.jpg
+imageAlt: "Owłosione, karbowane liście plektrantusa z szeroką, kremowobiałą obwódką"
+imageCredit:
+  author: "Jerzy Opioła"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Plectranthus_coleoides_a3.JPG"
 facts:
   - label: Pokrój
     value: Zwisający

@@ -22,8 +22,19 @@ import PhotoSlot from "./PhotoSlot.astro";
  * The photograph is the entry's own when it has one. `image` and `imageAlt` come from the
  * frontmatter and the schema keeps them together, so the branch is on the pair, not on one
  * of them; an entry without a photograph falls back to the striped `PhotoSlot`, which is now
- * a waiting state rather than the default. Three of the sixteen plants are photographed so
- * far, so both arms of this render on the live site and both have to keep working.
+ * a waiting state rather than the default. **Nothing on the site takes that branch today** -
+ * the last eighteen gaps were filled with stand-ins in September 2026 - but it stays, because
+ * the next plant the owners add will arrive before its picture does, exactly as every other
+ * one has.
+ *
+ * **`imageCredit` is why there is a `<figcaption>` here again, and it is not the caption that
+ * was removed.** The owners had the one-sentence editorial captions taken off every entry in
+ * September 2026; this line is attribution for a file that is not theirs, which CC BY and
+ * CC BY-SA require in exchange for the right to publish it at all. It is printed only where
+ * the frontmatter carries a credit, so the twenty-one photographs from the holding still show
+ * a bare picture, and it leaves with the borrowed file rather than being edited away. The same
+ * shape of argument `History.astro` makes for its own surviving caption - and the same warning:
+ * this is not licence to put editorial captions back.
  *
  * The file name is the anchor, so /kwiaty-balkonowe/#fuksja links straight at one plant.
  */
@@ -43,7 +54,7 @@ interface Props {
 }
 
 const { entry, level = 2, showGroup = false, priority = false, backToIndex = false } = Astro.props;
-const { name, group, slot, image, imageAlt, facts } = entry.data;
+const { name, group, slot, image, imageAlt, imageCredit, facts } = entry.data;
 const { Content } = await render(entry);
 
 /**
@@ -103,6 +114,20 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
         />
       ) : (
         <PhotoSlot ratio="4 / 3" label={slot} stripe={10} boxed />
+      )
+    }
+
+    {
+      image && imageCredit && (
+        <figcaption class="entry__credit">
+          fot. <a href={imageCredit.sourceUrl}>{imageCredit.author}</a>, Wikimedia Commons ·{" "}
+          {imageCredit.licenseUrl ? (
+            <a href={imageCredit.licenseUrl}>{imageCredit.license}</a>
+          ) : (
+            imageCredit.license
+          )}{" "}
+          · kadr
+        </figcaption>
       )
     }
   </figure>
@@ -184,6 +209,33 @@ const Heading = `h${level}` as "h2" | "h3" | "h4";
     aspect-ratio: 4 / 3;
     object-fit: cover;
     border: 1px solid var(--rule);
+  }
+
+  /* Attribution, not a caption - the component header says why the distinction matters and
+     why this line is allowed to exist. It is set smaller than the one caption on the site
+     (History.astro draws its figcaption at 0.8rem) because that one carries something the
+     visitor came for and this one is a debt being paid: legible, checkable, and not competing
+     with the plant's name. --ink-grey is the token tokens.css reserves for "every uppercase
+     label and every photo caption", 4.99:1 on --paper, and every category page is one flat
+     light section, so there is no dark ground here to raise it against.
+
+     No rule above it: a category page draws exactly one kind of horizontal line and it means
+     "a different plant starts here" (see .entry). The 0.6rem grid gap on .entry__figure is
+     what separates this from the photograph. */
+  .entry__credit {
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--ink-grey);
+    /* The photograph's own width, so a long author name wraps inside the column instead of
+       widening the grid track and squeezing the text beside it. */
+    max-width: 100%;
+    text-wrap: pretty;
+  }
+
+  /* The links inherit the prose green rather than the grey around them - an attribution whose
+     two links are invisible is not an attribution. */
+  .entry__credit a {
+    color: var(--green);
   }
 
   .entry__text {

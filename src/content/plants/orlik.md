@@ -3,6 +3,13 @@ name: Orlik
 group: Balkonowe
 order: 27
 slot: zdjęcie - orlik, 4:3
+image: ../../assets/plants/orlik.jpg
+imageAlt: "Fioletowy kwiat orlika z wyraźnymi ostrogami, zwieszony na cienkiej łodydze na tle rozmytej zieleni"
+imageCredit:
+  author: "Krzysztof Golik"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Aquilegia_vulgaris_in_Aveyron_02.jpg"
 facts:
   - label: Stanowisko
     value: Półcień, jasne

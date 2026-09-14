@@ -1985,6 +1985,7 @@ się co wzięło.
 | 0.19.0  | **Chryzantema igiełkowa zwinięta do średniokwiatowej** na polecenie właścicieli - typ opisywał kształt płatka, a pozostałe trzy wpisy dzielą chryzantemy wielkością kwiatu. Grupa schodzi z czterech wpisów do trzech, repozytorium z 40 roślin do 39. Zdjęcie przechodzi do pasa (`rows-12`), który rośnie do 20 kadrów; słowo „igiełkowe” znika z opisu meta i ze zdania właścicieli w `note`. Usunięty opis zachowany w całości: [Chryzantema igiełkowa zwinięta](#chryzantema-igiełkowa-zwinięta-do-średniokwiatowej---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | 0.19.1  | **Blok „Dostępne kolory" usunięty ze wszystkich wpisów** na polecenie właścicieli - 22 wpisy, 104 chipy. Pole `colors` wypada również ze schematu. 19 z 22 roślin nadal ma kolory w treści opisu; trzy (bakopa, chryzantema wielkokwiatowa, pelargonie bluszczolistne) tracą tę informację całkowicie. Wszystkie wartości zarchiwizowane: [Chipy kolorów usunięte](#chipy-kolorów-usunięte---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | 0.20.0  | **Dziewiąta paczka zdjęć** - sześć wpisów dostaje pierwsze zdjęcie (dahlia, lobelia, koleus, sanvitalia, bakopa, petunia-surfinia), trzy dostają lepsze (alstromeria, tunbergia, begonia). Wpisów ze zdjęciem 21 z 39, czekających 18. `Plectranthus.jpg` trafił do koleusa wbrew nazwie pliku - zdjęcie jawnie nie zgadza się z opisem plektrantusa. Dwie z trzech nadesłanych petunii niewykorzystane. Szczegóły: [Dziewiąta paczka zdjęć](#dziewiąta-paczka-zdjęć---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 0.21.0  | **Zdjęcia zastępcze z Wikimedia Commons** - osiemnaście wpisów bez zdjęcia dostaje pożyczony kadr 4:3 na licencji CC/PD, więc na `/kwiaty-balkonowe/` nie ma już ani jednej zaślepki. Nowe pole `imageCredit` w schemacie plants (schemat wywala budowanie, jeśli atrybucja przeżyje zdjęcie) i linia atrybucji pod kadrem w `PlantEntry` - to nie jest powrót usuniętych podpisów, tylko warunek licencji. Zdjęcia są **tymczasowe**, `slot` na tych wpisach zostaje. Szczegóły: [Zdjęcia zastępcze](#zdjęcia-zastępcze-z-wikimedia-commons--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ### Paczki materiału od właścicieli
 
@@ -2512,17 +2513,119 @@ ekranach o podwójnej gęstości te cztery będą nieco miękkie. Razem z wcześ
 **dziesięć takich plików na dwadzieścia jeden**. To nie jest defekt do naprawienia w kodzie -
 jedyną poprawką są ostrzejsze pliki od właścicieli.
 
+## Zdjęcia zastępcze z Wikimedia Commons - wrzesień 2026
+
+**Osiemnaście wpisów nie miało żadnego zdjęcia** i rysowało pasiasty `PhotoSlot`. Po scaleniu
+`Rabatowe` w `Balkonowe` wszystkie osiemnaście wylądowało na jednej stronie, więc
+`/kwiaty-balkonowe/` była w ponad połowie kolumną zaślepek. Na polecenie właściciela ramki
+obsadzono zdjęciami z Wikimedia Commons, **tymczasowo**, do czasu aż przyjdą własne kadry.
+
+**To jest odejście od reszty serwisu i tak ma być widoczne.** Pozostałe 21 zdjęć to kadry
+gospodarstwa; te osiemnaście nie. Dlatego:
+
+- każdy z osiemnastu wpisów **zachowuje pole `slot`** - brief na zdjęcie, które właściciele
+  nadal są winni, nie znika dlatego, że stoi za nie pożyczona ramka;
+- frontmatter niesie `imageCredit`, którego **żadne własne zdjęcie nie ma**. Obecność tego
+  pola jest maszynowo sprawdzalną odpowiedzią na pytanie „czy to zdjęcie jest nasze?”;
+- `PlantEntry` drukuje pod kadrem linię `fot. <autor>, Wikimedia Commons · <licencja> · kadr`.
+
+### Podpis to atrybucja, nie powrót podpisów pod wpisami
+
+Właściciele kazali we wrześniu 2026 usunąć jednozdaniowe podpisy redakcyjne spod wszystkich
+wpisów - patrz [Podpisy pod zdjęciami](#podpisy-pod-zdjęciami--usunięte). Ta linia ich nie
+przywraca. Podpis redakcyjny mówi coś o roślinie; ta linia jest **warunkiem prawnym** korzystania
+z pliku: CC BY i CC BY-SA wymagają wskazania autora i licencji. Nie da się jej usunąć, nie
+usuwając zdjęcia - i odwrotnie, znika razem z nim, kiedy przyjdzie własny kadr. Schemat tego
+pilnuje: `imageCredit` bez `image` wywala budowanie.
+
+Słowo **„kadr”** na końcu linii też nie jest ozdobą. Każdy plik został przeskalowany
+i przycięty do 4:3, czyli powstał utwór zależny, a CC BY-SA wymaga oznaczenia modyfikacji.
+
+### Filtr licencji
+
+Przyjęto: domena publiczna, CC0, CC BY 2.0–4.0, CC BY-SA 2.0–4.0. **Odrzucono GFDL** (kłopotliwa
+przy użyciu komercyjnym) oraz wszystko z `NC` i `ND`. Kandydat bez jednoznacznej licencji
+w metadanych Commons w ogóle nie wchodził do puli - nie było przypadków „sprawdzę ręcznie potem”.
+
+### Skąd pochodzi każde zdjęcie
+
+| Roślina                   | Plik na Commons                                                                                                                                                                                                          | Autor                | Licencja                                                        | Źródło → plik w repo  | Ile zostało po kadrze |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------- | --------------------------------------------------------------- | --------------------- | --------------------- |
+| Aksamitka                 | [Tagetes patula, Burdwan, West Bengal, India 10 01 2013 01.jpg](https://commons.wikimedia.org/wiki/File:Tagetes_patula,_Burdwan,_West_Bengal,_India_10_01_2013_01.jpg)                                                   | Joydeep              | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)  | 3317x2471 → 2000x1500 | szer. 99%, wys. 100%  |
+| Bidens                    | [Bidens ferulifolia BotGardBln07122011A.JPG](https://commons.wikimedia.org/wiki/File:Bidens_ferulifolia_BotGardBln07122011A.JPG)                                                                                         | BotBln               | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)  | 1536x2048 → 1536x1152 | szer. 100%, wys. 56%  |
+| Dichondra                 | [Dichondra 'Silver Falls' Closeup 3008px.jpg](https://commons.wikimedia.org/wiki/File:Dichondra_%27Silver_Falls%27_Closeup_3008px.jpg)                                                                                   | Derek Ramsey         | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/)  | 3008x2000 → 2000x1500 | szer. 89%, wys. 100%  |
+| Funkia                    | [Flickr - brewbooks - Hosta 'War Paint' - David F garden (1).jpg](<https://commons.wikimedia.org/wiki/File:Flickr_-_brewbooks_-_Hosta_%27War_Paint%27_-_David_F_garden_(1).jpg>)                                         | brewbooks            | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0)  | 3072x2304 → 2000x1500 | bez straty            |
+| Gazania                   | [Gazania rigens-1.jpg](https://commons.wikimedia.org/wiki/File:Gazania_rigens-1.jpg)                                                                                                                                     | Alvesgaspar          | [CC BY 2.5](https://creativecommons.org/licenses/by/2.5)        | 2406x1832 → 2000x1500 | szer. 100%, wys. 98%  |
+| Helichrysum               | [Starr 070906-8466 Helichrysum petiolare.jpg](https://commons.wikimedia.org/wiki/File:Starr_070906-8466_Helichrysum_petiolare.jpg)                                                                                       | Forest & Kim Starr   | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0)        | 2816x2112 → 2000x1500 | bez straty            |
+| Hortensja                 | [Hydrangea macrophylla - Hortensia hydrangea.jpg](https://commons.wikimedia.org/wiki/File:Hydrangea_macrophylla_-_Hortensia_hydrangea.jpg)                                                                               | Raul654              | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/)  | 2016x1512 → 2000x1500 | bez straty            |
+| Hypoestes                 | [Starr 070906-8669 Hypoestes phyllostachya.jpg](https://commons.wikimedia.org/wiki/File:Starr_070906-8669_Hypoestes_phyllostachya.jpg)                                                                                   | Forest & Kim Starr   | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0)        | 2816x2112 → 2000x1500 | bez straty            |
+| Ipomoea                   | [Ipomoea batatas Margarita 2zz.jpg](https://commons.wikimedia.org/wiki/File:Ipomoea_batatas_Margarita_2zz.jpg)                                                                                                           | David J. Stang       | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)  | 3504x2336 → 2000x1500 | szer. 89%, wys. 100%  |
+| Łubin                     | [Lupinus polyphyllus UA 2015 G5.jpg](https://commons.wikimedia.org/wiki/File:Lupinus_polyphyllus_UA_2015_G5.jpg)                                                                                                         | George Chernilevsky  | domena publiczna                                                | 4600x3350 → 2000x1500 | szer. 97%, wys. 100%  |
+| Orlik                     | [Aquilegia vulgaris in Aveyron 02.jpg](https://commons.wikimedia.org/wiki/File:Aquilegia_vulgaris_in_Aveyron_02.jpg)                                                                                                     | Krzysztof Golik      | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)  | 2523x1901 → 2000x1500 | bez straty            |
+| Pelargonia bluszczolistna | [Geraniales - Pelargonium peltatum 1.jpg](https://commons.wikimedia.org/wiki/File:Geraniales_-_Pelargonium_peltatum_1.jpg)                                                                                               | DenesFeri            | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)  | 1600x1200 → 1600x1200 | bez straty            |
+| Plektrantus               | [Plectranthus coleoides a3.JPG](https://commons.wikimedia.org/wiki/File:Plectranthus_coleoides_a3.JPG)                                                                                                                   | Jerzy Opioła         | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)  | 1280x960 → 1280x960   | bez straty            |
+| Sundaville                | [Mandevilla sanderi Brazilian Jasmine მანდევილა.JPG](https://commons.wikimedia.org/wiki/File:Mandevilla_sanderi_Brazilian_Jasmine_%E1%83%9B%E1%83%90%E1%83%9C%E1%83%93%E1%83%94%E1%83%95%E1%83%98%E1%83%9A%E1%83%90.JPG) | Lazaregagnidze       | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)  | 3034x2650 → 2000x1500 | szer. 100%, wys. 86%  |
+| Szałwia                   | [Salvia splendens in Dalat city (2).JPG](<https://commons.wikimedia.org/wiki/File:Salvia_splendens_in_Dalat_city_(2).JPG>)                                                                                               | Hungda               | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) | 4320x3240 → 2000x1500 | bez straty            |
+| Trytoma                   | [Kniphofia uvaria close.JPG](https://commons.wikimedia.org/wiki/File:Kniphofia_uvaria_close.JPG)                                                                                                                         | Toby Hudson / 99of9  | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)  | 2330x2330 → 2000x1500 | szer. 100%, wys. 75%  |
+| Wilczomlecz               | [Chamaesyce 'Diamond Frost'.jpg](https://commons.wikimedia.org/wiki/File:Chamaesyce_%27Diamond_Frost%27.jpg)                                                                                                             | Meneerke bloem       | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)  | 2048x1536 → 2000x1500 | bez straty            |
+| Wrzos                     | [Calluna vulgaris RF.jpg](https://commons.wikimedia.org/wiki/File:Calluna_vulgaris_RF.jpg)                                                                                                                               | Robert Flogaus-Faust | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0)        | 4608x3456 → 2000x1500 | bez straty            |
+
+### Kadr kosztował mniej niż przy własnych zdjęciach
+
+Jedenaście z osiemnastu źródeł było już w proporcji bliskiej 4:3 i nie straciło nic. Najgorszy
+przypadek to bidens - pionowe 1536×2048, zostaje 56% wysokości. Dla porównania: z dwudziestu
+jeden zdjęć właścicieli osiemnaście trzyma 52–61% wysokości. Pożyczone kadry są pod tym względem
+**łatwiejsze, nie trudniejsze** - bo wybierano je już pod znaną proporcję.
+
+Przetwarzanie: `sharp`, `.rotate()` (wypalenie obrotu EXIF), przycięcie `fit: "cover"` ze
+strategią `attention`, dłuższy bok do 2000 px, **nigdy w górę** - trzy pliki są mniejsze, bo
+takie były źródła (`plektrantus` 1280×960, `pelargonia-bluszczolistna` 1600×1200, `bidens`
+1536×1152). Zapis: progresywny JPEG q82.
+
+**Jeden wyjątek od `attention`, i jest o pliku, nie o wpisie.** Trytoma: strategia wybrała suchą
+trawę i głazy, a ucięła pochodnie kwiatostanów przy górnej krawędzi. Poprawka to inny kadr tego
+samego źródła (`position: "north"`), a nie wyjątek w komponencie - wpis dalej jest tym samym
+płaskim 4:3 co każdy inny. Tak właśnie ma wyglądać naprawa źle przyciętego wpisu.
+
+### Dobór gatunku - cztery przypadki niejednoznaczne
+
+Zapytania szły po nazwie łacińskiej z pierwszego zdania opisu. Cztery rozstrzygnął dopiero
+kontekst, i warto to zapisać, bo pomyłka byłaby niewidoczna:
+
+| Wpis          | Wybrano                                   | Dlaczego                                                                |
+| ------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| `dichondra`   | _Dichondra argentea_ 'Silver Falls'       | opis mówi o srebrzystych liściach i kaskadowym pokroju                  |
+| `helichrysum` | _Helichrysum petiolare_                   | srebrzyste liście, pokrój przewieszający - nie kocanka na suche bukiety |
+| `ipomoea`     | _Ipomoea batatas_, odmiana ozdobna        | opis mówi o **liściach**, nie o kwiatach, więc to nie wilec pnący       |
+| `wilczomlecz` | _Euphorbia hypericifolia_ 'Diamond Frost' | „delikatne pędy”, „lekki charakter”, dodatek do kompozycji              |
+
+Sundaville to znak towarowy, nie gatunek - pod kadrem stoi _Mandevilla sanderi_.
+
+### Co idzie na listę właścicieli
+
+1. **Podmiana wszystkich osiemnastu na własne kadry.** To jest właściwe rozwiązanie, a nie to.
+   Strona sprzedaje rośliny „z własnej uprawy” i te osiemnaście zdjęć tej obietnicy nie
+   ilustruje. Podmiana jednej pozycji = jeden plik w `src/assets/plants/` plus usunięcie
+   `imageCredit` z frontmatteru. Nic poza tym.
+2. **Opisy `alt`** - osiemnaście nowych, napisanych tutaj z tego, co widać w kadrze. Trafiają
+   na tę samą listę co wszystkie pozostałe opisy alternatywne w serwisie.
+3. **Brzmienie linii atrybucji** - „fot. … , Wikimedia Commons · … · kadr” jest nasze.
+4. **Czy w ogóle zostawiać obce zdjęcia**, gdyby właściciele woleli wrócić do zaślepek. Pasiasty
+   `PhotoSlot` nie został usunięty z kodu i nadal obsługuje wpis bez zdjęcia.
+
 ## Czego nadal brakuje
 
-1. Zdjęcia - po jednym na dahlię, pelargonię bluszczolistną i sundaville (4:3, żadne
-   z trzech nie znalazło się ani na starej stronie, ani w jej bibliotece mediów - Facebook
-   gospodarstwa zostaje do sprawdzenia) oraz archiwalne zdjęcie gospodarstwa (3:2; ramka jest
-   obsadzona zdjęciem z wystawy w Końskowoli, więc to prośba, a nie pusty kadr). Galeria,
-   wszystkie trzy karty sezonowe, wszystkie cztery chryzantemy, bratek i pozostałe 10 roślin
-   balkonowych/rabatowych są obsadzone. Opisy `alt` - czterech zdjęć chryzantem, sześciu
+1. Zdjęcia - **żaden wpis nie stoi już pusty, ale osiemnaście stoi na pożyczonym kadrze.**
+   Od września 2026 te osiemnaście ramek obsadzają zdjęcia z Wikimedia Commons, opisane
+   w [Zdjęciach zastępczych](#zdjęcia-zastępcze-z-wikimedia-commons--wrzesień-2026) razem
+   z tabelą pochodzenia. **Prośba o własne kadry nie jest przez to zamknięta - jest tylko
+   mniej widoczna**, bo zamiast pasiastej zaślepki stoi tam cudze zdjęcie, a strona sprzedaje
+   rośliny „z własnej uprawy”. Nadal brakuje też archiwalnego zdjęcia gospodarstwa (3:2; ramka
+   jest obsadzona zdjęciem z wystawy w Końskowoli, więc to prośba, a nie pusty kadr). Galeria,
+   wszystkie trzy karty sezonowe, chryzantemy i bratki są obsadzone własnymi kadrami. Opisy `alt` - czterech zdjęć chryzantem, sześciu
    bratków, dziesięciu z piątej paczki, zdjęcia z Końskowoli w bloku historii
-   (`historyPhoto`) i zdjęcia chryzantemy drobnokwiatowej - czekają na przejrzenie przez
-   właścicieli, a razem z nimi **brzmienie
+   (`historyPhoto`), zdjęcia chryzantemy drobnokwiatowej i **osiemnastu zastępczych** - czekają
+   na przejrzenie przez właścicieli, a razem z nimi **brzmienie
    jedynego podpisu na stronie**: właściciele podali „Wystawie kwiatów w Końskowoli”, a idzie
    „Na wystawie kwiatów w Końskowoli” (dołożony przyimek, żeby miejscownik miał czym rządzić).
    Przy
