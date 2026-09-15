@@ -1,6 +1,6 @@
 ---
 title: Różowo-biała skrzynka petunii
-kind: Skrzynka
+kind: Kosz i skrzynka
 order: 3
 image: ../../assets/gallery/gallery-03.jpg
 imageAlt: Skrzynka z różowymi petuniami i drobnymi białymi kwiatami, ustawiona na trawie

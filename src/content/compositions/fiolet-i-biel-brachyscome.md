@@ -1,6 +1,6 @@
 ---
 title: Fiolet i biel brachyscome
-kind: Skrzynka
+kind: Kosz i skrzynka
 order: 15
 image: ../../assets/gallery/gallery-15.jpg
 imageAlt: Fioletowe i białe brachyscome w sąsiadujących pojemnikach

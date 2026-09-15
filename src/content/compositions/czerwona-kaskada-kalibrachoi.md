@@ -1,6 +1,6 @@
 ---
 title: Czerwona kaskada kalibrachoi
-kind: Skrzynka
+kind: Kosz i skrzynka
 order: 5
 image: ../../assets/gallery/gallery-05.jpg
 imageAlt: Szeroka kaskada drobnych czerwonych kwiatów calibrachoi w podłużnym pojemniku

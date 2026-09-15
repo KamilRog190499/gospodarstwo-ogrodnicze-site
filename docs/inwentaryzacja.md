@@ -2248,6 +2248,7 @@ się co wzięło.
 | 0.20.0  | **Dziewiąta paczka zdjęć** - sześć wpisów dostaje pierwsze zdjęcie (dahlia, lobelia, koleus, sanvitalia, bakopa, petunia-surfinia), trzy dostają lepsze (alstromeria, tunbergia, begonia). Wpisów ze zdjęciem 21 z 39, czekających 18. `Plectranthus.jpg` trafił do koleusa wbrew nazwie pliku - zdjęcie jawnie nie zgadza się z opisem plektrantusa. Dwie z trzech nadesłanych petunii niewykorzystane. Szczegóły: [Dziewiąta paczka zdjęć](#dziewiąta-paczka-zdjęć---wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | 0.21.0  | **Zdjęcia zastępcze z Wikimedia Commons** - osiemnaście wpisów bez zdjęcia dostaje pożyczony kadr 4:3 na licencji CC/PD, więc na `/kwiaty-balkonowe/` nie ma już ani jednej zaślepki. Nowe pole `imageCredit` w schemacie plants (schemat wywala budowanie, jeśli atrybucja przeżyje zdjęcie) i linia atrybucji pod kadrem w `PlantEntry` - to nie jest powrót usuniętych podpisów, tylko warunek licencji. Zdjęcia są **tymczasowe**, `slot` na tych wpisach zostaje. Szczegóły: [Zdjęcia zastępcze](#zdjęcia-zastępcze-z-wikimedia-commons--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 0.22.0  | **Fakty ujednolicone do czterech gniazd** na prośbę właścicieli. Bloki faktów były nierówne - 31 wpisów miało cztery, osiem od jednego do trzech - więc sąsiadujące wpisy pokazywały różne rzeczy w różnej liczbie wierszy. Teraz **każdy z 39 wpisów ma dokładnie cztery**, a trzy pierwsze etykiety są wszędzie te same: miara-albo-`Pokrój` → `Stanowisko` → `Podlewanie`, przy czwartym gnieździe `Uprawa` ustępującym `Sprzedaży`, `Zimowaniu` lub `Podłożu` tam, gdzie te mówią więcej (dziewięć wpisów). Schemat egzekwuje to przez `.length(4)`, więc wpis z trzema faktami wywala build; pole przestało być opcjonalne, a `PlantEntry` stracił martwą osłonę `facts &&`. Cena: **36 faktów wypadło** (głównie `Kwitnienie`, `Charakter` i `Odmiany`, w większości powtarzające zdanie z opisu obok), a **26 wartości dopisano z wiedzy ogrodniczej** - co **odwraca zasadę „tylko to, co mówi opis klienta”** obowiązującą tu od początku. Odwrócenie jest warunkowe: wszystkie 26 jest spisane co do jednej i czeka na potwierdzenie. Patrz [Cztery gniazda faktów](#cztery-gniazda-faktów---wrzesień-2026). |
+| 0.22.1  | **Filtr obsadzeń schodzi z pięciu rodzajów do trzech**: `Kosz i skrzynka` / `Donica` / `Rabata` zamiast `Kosz wiszący` / `Skrzynka` / `Donica` / `Rabata` / `Ekspozycja`. Przy 23 kadrach pięć przycisków dawało niecałe pięć kadrów na przycisk; teraz rozkład to 10 / 7 / 6. **„Ekspozycja” wypadła jako błąd, nie jako nadmiar** - nazywała okoliczność zdjęcia (stoisko, tunel), a nie coś, co odwiedzający obsadza, więc jako jedyna odpowiadała na inne pytanie niż etykieta „Co obsadzasz” nad nią; jej cztery kadry rozeszły się tam, gdzie wskazują ich własne opisy `alt`. Trzynaście plików zmienia `kind:`, nic poza tym - schemat i rząd przycisków idą za `compositionKinds` same. Tytuły i proza właścicieli ze słowem „ekspozycja” zostają co do słowa. Patrz [Trzy rodzaje obsadzeń zamiast pięciu](#trzy-rodzaje-obsadzeń-zamiast-pięciu---wrzesień-2026).                                                                                                                                                                                                                                           |
 
 ### Paczki materiału od właścicieli
 
@@ -2874,6 +2875,74 @@ Sundaville to znak towarowy, nie gatunek - pod kadrem stoi _Mandevilla sanderi_.
 3. **Brzmienie linii atrybucji** - „fot. … , Wikimedia Commons · … · kadr” jest nasze.
 4. **Czy w ogóle zostawiać obce zdjęcia**, gdyby właściciele woleli wrócić do zaślepek. Pasiasty
    `PhotoSlot` nie został usunięty z kodu i nadal obsługuje wpis bez zdjęcia.
+
+## Trzy rodzaje obsadzeń zamiast pięciu - wrzesień 2026
+
+Filtr nad pokazem na `/inspiracje/` pyta **„Co obsadzasz”** i miał pod tym pytaniem pięć
+przycisków: `Kosz wiszący`, `Skrzynka`, `Donica`, `Rabata`, `Ekspozycja`. Przy 23 obsadzeniach
+to niecałe pięć kadrów na przycisk - podział drobniejszy niż decyzja, w której miał pomóc.
+Zostały **trzy**, w `src/data/compositions.ts`:
+
+```ts
+export const compositionKinds = ["Kosz i skrzynka", "Donica", "Rabata"] as const;
+```
+
+Oś jest jedna i porządek przycisków od lewej jest nią: **wisi → stoi → rośnie w gruncie.**
+Kosz wiszący i skrzynka zawieszana na balustradzie biorą te same zwisające rośliny i są jedną
+odpowiedzią, nie dwiema.
+
+### „Ekspozycja” wypadła i to jest naprawienie błędu, nie skrócenie listy
+
+Ta wartość nazywała **okoliczność zdjęcia** - stoisko, rząd pod tunelem - a nie coś, co
+ktokolwiek obsadza. Był to jedyny przycisk odpowiadający na inne pytanie niż etykieta nad nim.
+Co więcej, wszystkie cztery kadry same mówią w swoim `alt`, czym naprawdę są:
+
+| Kadr                                | `alt` mówi                                     | Trafił do       |
+| ----------------------------------- | ---------------------------------------------- | --------------- |
+| `bialo-czerwona-ekspozycja-begonii` | „w dwóch rzędach **doniczek**”                 | Donica          |
+| `czerwono-zolty-duet-begonii`       | begonie **w doniczkach** ustawione obok siebie | Donica          |
+| `rozowa-chmura-begonii`             | gęsto obsadzone **doniczki** na ekspozycji     | Donica          |
+| `rozowo-biala-wystawa-kalibrachoi`  | „Ekspozycja **koszy i obsadzonych skrzynek**…” | Kosz i skrzynka |
+
+**Samo słowo zostaje na stronie.** Tytuły „Biało-czerwona ekspozycja begonii” i „Różowo-biała
+wystawa kalibrachoi”, zdania o ekspozycji w opisach i w `alt` - wszystko to są słowa
+właścicieli o konkretnym zdjęciu, a nie etykieta kategorii, i nic ich nie ruszało.
+
+### Pełne mapowanie 5 → 3
+
+| Było (liczba kadrów) | Jest              | Kadrów |
+| -------------------- | ----------------- | ------ |
+| `Kosz wiszący` (4)   | `Kosz i skrzynka` | 10     |
+| `Skrzynka` (5)       | `Kosz i skrzynka` |        |
+| `Ekspozycja` (1 z 4) | `Kosz i skrzynka` |        |
+| `Donica` (4)         | `Donica`          | 7      |
+| `Ekspozycja` (3 z 4) | `Donica`          |        |
+| `Rabata` (6)         | `Rabata`          | 6      |
+
+Trzynaście z 23 plików zmieniło linię `kind:`; szóstka rabat została nietknięta. Rozkład
+10 / 7 / 6 zamiast 5 / 4 / 4 / 4 / 6.
+
+### Co się nie zmieniło, choć mogło się wydawać, że musi
+
+- **`src/content.config.ts` i `Compositions.astro`.** Schemat czyta `compositionKinds` przez
+  `z.enum`, a komponent liczy przyciski przez `compositionKinds.filter(…)`, więc oba poszły za
+  danymi same. To ten sam mechanizm, co `plantGroups` w `offer.ts`: usunięcie wartości ze
+  słownika wywala build na każdym `.md`, który ją jeszcze nosi, z nazwą pliku.
+- **Kotwice i adresy.** `kind` nie wchodzi ani do URL-a, ani do stanu w adresie - `applyFilter`
+  w `src/scripts/compositions.ts` tylko chowa panele. Zero przekierowań.
+- **Lid sekcji** („Kosze, skrzynki, donice i rabaty pokazują różne sposoby łączenia roślin…”)
+  opisuje zawartość kadrów, a nie przyciski, i nadal jest prawdziwy. Patrz
+  [Dwa lidy](#dwa-lidy---odejście-od-handoffu).
+- **Etykieta filtra „Co obsadzasz”** - po usunięciu „Ekspozycji” jest wreszcie prawdziwa dla
+  każdego przycisku pod nią.
+
+### Dwa odrzucone warianty
+
+1. **Podział wg miejsca: `Balkon` / `Taras` / `Ogród`.** Kupującemu czyta się to naturalniej,
+   ale „Taras” byłoby twierdzeniem, którego zdjęcia nie stawiają - donica stoi na balkonie
+   równie dobrze jak na tarasie. Nazwy pojemników są uczciwsze.
+2. **Dwa przyciski: `W pojemniku` / `Rabata`.** Najkrótsze i prawdziwe, ale 17 z 23 kadrów
+   ląduje pod jednym przyciskiem - filtr, który prawie nie filtruje.
 
 ## Czego nadal brakuje
 

@@ -1,6 +1,6 @@
 ---
 title: Biała kaskada surfinii
-kind: Skrzynka
+kind: Kosz i skrzynka
 order: 12
 image: ../../assets/gallery/gallery-12.jpg
 imageAlt: Obfita kaskada białych surfinii w pojemniku

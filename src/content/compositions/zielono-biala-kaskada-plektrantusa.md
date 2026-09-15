@@ -1,6 +1,6 @@
 ---
 title: Zielono-biała kaskada plektrantusa
-kind: Kosz wiszący
+kind: Kosz i skrzynka
 order: 17
 image: ../../assets/gallery/gallery-17.jpg
 imageAlt: Wiszące kosze z zielono-białymi kaskadami plektrantusa pod dachem tunelu foliowego

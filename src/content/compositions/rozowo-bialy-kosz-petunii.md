@@ -1,6 +1,6 @@
 ---
 title: Różowo-biały kosz petunii
-kind: Kosz wiszący
+kind: Kosz i skrzynka
 order: 4
 image: ../../assets/gallery/gallery-04.jpg
 imageAlt: Wiszący kosz z różowymi petuniami i drobnymi białymi kwiatami o długich, zwisających pędach

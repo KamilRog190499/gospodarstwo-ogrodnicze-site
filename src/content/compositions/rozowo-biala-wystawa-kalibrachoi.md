@@ -1,6 +1,6 @@
 ---
 title: Różowo-biała wystawa kalibrachoi
-kind: Ekspozycja
+kind: Kosz i skrzynka
 order: 18
 image: ../../assets/gallery/gallery-18.jpg
 imageAlt: Ekspozycja koszy i obsadzonych skrzynek z różowo-białą calibrachoą wewnątrz tunelu foliowego

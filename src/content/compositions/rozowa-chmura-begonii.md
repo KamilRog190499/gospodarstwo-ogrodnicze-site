@@ -1,6 +1,6 @@
 ---
 title: Różowa chmura begonii
-kind: Ekspozycja
+kind: Donica
 order: 9
 image: ../../assets/gallery/gallery-09.jpg
 imageAlt: Begonie w odcieniach różu i łososia, gęsto obsadzone

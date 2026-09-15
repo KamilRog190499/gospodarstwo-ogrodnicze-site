@@ -1,6 +1,6 @@
 ---
 title: Petunie czerwone i białe w srebrnym koszu
-kind: Kosz wiszący
+kind: Kosz i skrzynka
 order: 21
 image: ../../assets/gallery/gallery-21.jpg
 imageAlt: Kosz z czerwonymi i białymi petuniami, gaurą i rośliną o srebrzystych liściach

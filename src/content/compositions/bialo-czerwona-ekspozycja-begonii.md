@@ -1,6 +1,6 @@
 ---
 title: Biało-czerwona ekspozycja begonii
-kind: Ekspozycja
+kind: Donica
 order: 8
 image: ../../assets/gallery/gallery-08.jpg
 imageAlt: Begonie białe i czerwone w dwóch rzędach doniczek

@@ -1,6 +1,6 @@
 ---
 title: Różowo-biała chmurka wilczomlecza
-kind: Skrzynka
+kind: Kosz i skrzynka
 order: 20
 image: ../../assets/gallery/gallery-20.jpg
 imageAlt: Drewniana skrzynia obsadzona drobnymi biało-różowymi kwiatami wilczomlecza

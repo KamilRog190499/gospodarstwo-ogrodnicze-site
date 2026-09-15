@@ -1,6 +1,6 @@
 ---
 title: Limonkowa kaskada lizymacji
-kind: Kosz wiszący
+kind: Kosz i skrzynka
 order: 23
 image: ../../assets/gallery/gallery-23.jpg
 imageAlt: Zielono-żółta kaskada lizymacji zwisająca z kosza w tunelu foliowym

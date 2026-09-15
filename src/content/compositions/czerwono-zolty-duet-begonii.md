@@ -1,6 +1,6 @@
 ---
 title: Czerwono-żółty duet begonii
-kind: Ekspozycja
+kind: Donica
 order: 7
 image: ../../assets/gallery/gallery-07.jpg
 imageAlt: Begonie czerwone i żółte ustawione obok siebie na ekspozycji
