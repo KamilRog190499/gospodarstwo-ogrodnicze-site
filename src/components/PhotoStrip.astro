@@ -26,6 +26,11 @@ import type { GalleryPhoto } from "../data/gallery";
  * scripting off the link still opens the photograph on its own. Nothing is built per page -
  * the overlay is created once, lazily, by the global script.
  *
+ * **The section carries `id="zdjecia"`**, because the home page show links into it: its
+ * "Więcej zdjęć" row points at `/kwiaty-balkonowe/#zdjecia` rather than at the top of the page,
+ * so a visitor who came for photographs lands on the photographs. Like every other section id
+ * here the fragment is Polish, because it is a published address.
+ *
  * The lightbox target is the source at its own size, capped at 2000px: `offer-01..04` are only
  * 736px wide, and asking for 2000 would hand the visitor an upscale of a small file.
  *
@@ -50,7 +55,7 @@ const previews = await Promise.all(
 );
 ---
 
-<section class="strip" aria-label={label}>
+<section class="strip" id="zdjecia" aria-label={label} data-lightbox-group>
   <p class="strip__label">{label}</p>
   <ul class="strip__grid">
     {

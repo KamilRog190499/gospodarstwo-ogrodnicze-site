@@ -1,0 +1,357 @@
+---
+import { Picture, getImage } from "astro:assets";
+import type { GalleryGroup } from "../data/gallery";
+import { offer } from "../data/offer";
+
+/**
+ * The old site's slideshow, rebuilt for this design and for these photographs: **a row of
+ * portrait frames at a time, advancing on its own, under the name of the group it belongs to.**
+ *
+ * `gospodarstwo-saran.pl` runs MetaSlider on Nivo Slider in an 800x408 band, and the owners
+ * asked for the same thing here. `src/scripts/gallery-show.ts` carries the argument for every
+ * behaviour that was and was not carried over, for why a slide is a row rather than a picture,
+ * and for why only three rows are mounted at a time. This file is the markup and the shape.
+ *
+ * **The frame is 3:4, and for these sources that is close to free.** Most are 0.74-0.76, which
+ * is 3:4 to the pixel; the handful that are not - `pansies/offer-04` at 0.56, `balcony/
+ * baskets-08` at 0.93 - lose their edges to `cover`, and the lightbox is where the whole frame
+ * lives. It is the same window `PhotoStrip` uses on the category pages, for the same reason.
+ *
+ * **It carries 69 photographs** - every frame of the offer that is the holding's own and is
+ * not already on this page. Which ones those are, and the two rules that decide it, is
+ * `homeGallery`'s business in `src/data/gallery.ts`. It costs the page nothing it would not
+ * otherwise pay: `hidden` keeps everything outside three rows out of the layout, and an image
+ * inside `display: none` is never fetched. What it does cost is markup - 69 `<picture>`
+ * elements - and that is the price of the no-script fallback being the whole set rather than
+ * one row of it.
+ *
+ * **Three things here are deliberately not props.** The ground is `--paper` because this band
+ * sits between two other light sections and the dark plates on this page cannot touch; the
+ * motion is the cascade, chosen out of three that were built and shown; and the group order is
+ * the year, which is `homeGallery`'s business and not this component's. A prop for any of them
+ * would be a second place to decide something already decided.
+ */
+interface Props {
+  groups: GalleryGroup[];
+  /** The `id` the section's heading carries, for `aria-labelledby`. */
+  headingId?: string;
+}
+
+const { groups, headingId = "galeria-title" } = Astro.props;
+
+/** The frames in one flat list, each carrying the name and the number of the group it came
+ *  from. The track is flat because the script windows it - a row is "the next few" - and the
+ *  group rides on the frame so the script can read the grouping off the markup rather than
+ *  being told it a second time. */
+const frames = groups.flatMap((group, index) =>
+  group.photos.map((photo) => ({ ...photo, label: group.label, group: index })),
+);
+
+/** One full-size target per frame, capped at 2000px exactly as `PhotoStrip` caps it - the
+ *  `offer-01..04` chrysanthemum frames are 736px files and asking for more would hand the
+ *  visitor an upscale. */
+const previews = await Promise.all(
+  frames.map((photo) =>
+    getImage({ src: photo.src, width: Math.min(2000, photo.src.width), format: "webp" }),
+  ),
+);
+---
+
+<section class="show" aria-labelledby={headingId} data-show>
+  <div class="show__head">
+    <h2 class="show__title" id={headingId}>Zdjęcia z naszego gospodarstwa</h2>
+    <p class="show__lead">
+      Nasze zdjęcia pokazują rytm roku w gospodarstwie i kolejne etapy naszej pracy. Wiosną
+      zaczynamy od bratków i prymulek, latem pojawiają się pełne kosze i skrzynki, a jesienią czas
+      na chryzantemy. Zdjęcia pokazują, jak w ciągu roku zmienia się gospodarstwo i co powstaje
+      dzięki naszej codziennej pracy.
+    </p>
+  </div>
+
+  {
+    /* The group's name and the position in one live region rather than two. It sits above the
+      row because it is a label for the row, and it is what turns four photographs into a slide
+      about one part of the offer instead of four unrelated frames. */
+  }
+  <p class="show__group" role="status">
+    <span class="show__groupName" data-show-label>{groups[0]?.label}</span>
+    <span class="show__count">
+      <span data-show-index>1</span> z <span data-show-total>{frames.length}</span>
+    </span>
+  </p>
+
+  <ul class="show__track" data-show-track data-lightbox-group role="list">
+    {
+      frames.map((photo, index) => (
+        <li
+          class="show__slide"
+          data-show-slide
+          data-group={photo.group}
+          data-group-label={photo.label}
+        >
+          <a
+            class="show__link"
+            href={previews[index].src}
+            data-lightbox
+            aria-label={`Powiększ: ${photo.alt}`}
+          >
+            <Picture
+              class="show__photo"
+              src={photo.src}
+              formats={["avif", "webp"]}
+              fallbackFormat="jpg"
+              widths={[360, 720]}
+              sizes="(min-width: 1200px) 290px, (min-width: 660px) 30vw, 90vw"
+              width={360}
+              height={480}
+              alt={photo.alt}
+              loading="lazy"
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="show__controls">
+    {
+      /* The old slider's dots, drawn as this design draws things: a 1px square, filled when it
+        is the group showing. No border radius anywhere on this site. One per **group**, not one
+        per row - `gallery-show.ts` says why - so this row is three squares at every width. */
+    }
+    <ul class="show__ticks" role="list">
+      {
+        groups.map((group) => (
+          <li>
+            <button
+              type="button"
+              class="show__tick"
+              data-show-tick
+              aria-label={`Pokaż: ${group.label}`}
+            >
+              <span class="show__tickMark" />
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="show__buttons">
+      <button type="button" class="show__button" data-show-prev>Poprzednie</button>
+      <button type="button" class="show__button" data-show-toggle aria-pressed="false">
+        Zatrzymaj
+      </button>
+      <button type="button" class="show__button" data-show-next>Następne</button>
+    </div>
+  </div>
+
+  {
+    /* Into the photo strip on each category page, not to the top of it: this row is the answer
+      to "where is the rest", and `#zdjecia` is where the rest is. `PhotoStrip` owns that id. */
+  }
+  <nav class="show__more" aria-label="Zdjęcia przy grupach roślin">
+    <p class="show__moreLabel">Więcej zdjęć</p>
+    <ul>
+      {
+        offer.map((page) => (
+          <li>
+            <a href={`${page.href}#zdjecia`}>{page.menuLabel}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</section>
+
+<script>
+  import "../scripts/gallery-show";
+</script>
+
+<style>
+  .show {
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    padding: var(--pad-section) var(--edge);
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .show__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.9rem;
+  }
+
+  .show__title {
+    font-size: var(--text-h2);
+  }
+
+  .show__lead {
+    max-width: 52ch;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  /* The label above the row, and the count beside it. One line, one live region. The negative
+     margin pulls it onto the row it names rather than leaving it floating between two gaps. */
+  .show__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    align-items: baseline;
+    margin-bottom: -0.9rem;
+  }
+
+  .show__groupName {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--ink);
+  }
+
+  /* Until the script runs, the slides are an ordinary list of every photograph: all of them
+     there, all of them links. `data-ready` turns the list into one row. */
+  .show__track {
+    display: grid;
+    gap: var(--gap-entry);
+  }
+
+  /* The row. `grid-template-columns` is written by the script, which is the only thing that
+     knows how many frames fit; every slide sits on row 1, and the mounted-but-not-showing ones
+     stack in the first column, under the row on screen. */
+  .show[data-ready] .show__slide {
+    grid-row: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--show-fade, 420ms) linear;
+  }
+
+  .show[data-ready] .show__slide[data-current] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .show__link {
+    display: block;
+  }
+
+  /* The window the category strips use. Most sources are 3:4 to the pixel, so for them this
+     crops nothing at all; the few that are not lose their edges, and the lightbox holds the
+     whole frame. */
+  .show__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+  }
+
+  .show__link:hover .show__photo {
+    border-color: var(--green);
+  }
+
+  .show__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .show__count,
+  .show__moreLabel {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-grey);
+  }
+
+  .show__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .show__button {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: none;
+    border: 1px solid var(--rule-dim);
+    padding: 0 1rem;
+    min-height: var(--tap);
+    cursor: pointer;
+  }
+
+  .show__button:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .show__ticks {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* The tap target is 44px; the mark inside it is 9px. */
+  .show__tick {
+    background: none;
+    border: 0;
+    padding: 0;
+    width: var(--tap);
+    min-height: var(--tap);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+
+  .show__tickMark {
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--ink-grey);
+  }
+
+  .show__tick:hover .show__tickMark {
+    border-color: var(--green);
+  }
+
+  .show__tick[aria-current="true"] .show__tickMark {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .show__more {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.1rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .show__more ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+
+  .show__more a {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-link);
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .show__more a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+</style>

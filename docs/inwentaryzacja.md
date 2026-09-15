@@ -1061,7 +1061,10 @@ osiem razy silniejsza - podczas gdy komentarz w `index.astro` twierdził, że nu
 raz. Panelowe CTA jest od tej pory zależne od `level`: zostaje na `/inspiracje/`, znika na
 stronie głównej, gdzie drogą do telefonu jest sąsiedni odnośnik „Kontakt i dojazd”. Cokolwiek
 powtarza się w panelu, powtarza się tu 23 razy - liczba do sprawdzenia na zbudowanej stronie
-(`grep -o 'tel:+48602518401' dist/index.html | wc -l` ma dawać 2), nie do przyjęcia na słowo.
+(`grep -o 'href="tel:' dist/index.html | wc -l` ma dawać **3**: jedno CTA w intro i dwa
+numery w stopce), nie do przyjęcia na słowo. **Warunek był zapisany na numerze** `602 518 401`,
+który zniknął z `contact.ts`, gdy właściciele wycofali dwa z czterech telefonów - sprawdzenie
+przechodziło, bo nie trafiało w nic. Liczy się odnośniki, nie konkretny numer.
 
 Skutek uboczny, oczekiwany: strona główna osadza teraz mapę, więc **pasek zgody pokazuje się
 także na niej** (`consent.ts` pyta tylko tam, gdzie pytanie ma konsekwencję). Zgoda jest
@@ -1102,6 +1105,175 @@ Naprawa to zarezerwowanie pudełka dla niewczytanego obrazka. Nie jest to jednol
 źródła mają różne proporcje i `object-fit: contain` jest tam właśnie dlatego, więc sztywne
 `aspect-ratio` popsułoby kadry poziome, a `min-height` dokłada pustkę pod kadrem poziomym na
 telefonie. Zostaje jako osobna zmiana, z weryfikacją obu adresów i obu orientacji.
+
+## Pokaz zdjęć na stronie głównej - wrzesień 2026
+
+Strona główna dostała blok **„Zdjęcia z naszego gospodarstwa”**: pokaz slajdów niosący
+**69 własnych kadrów**, rząd naraz, pogrupowanych i podpisanych nazwą grupy. Stoi między kaflami
+oferty a pokazem obsadzeń.
+
+Do tej pory żadne z tych zdjęć nie było na stronie głównej - 51 kadrów z pasów widniało wyłącznie
+na trzech stronach kategorii, a 18 zdjęć wpisów tylko przy swoich roślinach.
+
+### Co dokładnie wchodzi, a co nie
+
+Zestaw powstał w dwóch turach: najpierw wszystkie 51 kadrów z pasów, potem - na prośbę
+o „jeszcze te najciekawsze” - **18 pionowych zdjęć wpisów roślin**, czyli wszystko, co
+gospodarstwo ma własnego i czego nie ma jeszcze na tej stronie. Razem 69: bratki 9, balkonowe 38,
+chryzantemy 22.
+
+Decydują dwie reguły, obie zapisane w `gallery.ts`:
+
+1. **Nasze, nie pożyczone.** Siedemnaście wpisów stoi na zastępniku z Wikimedia Commons i odpada
+   po obecności `imageCredit` - to pole istnieje wyłącznie na pożyczonym kadrze. To nie jest
+   preferencja: lead nad blokiem mówi, że zdjęcia są nasze i robione u nas, więc cudza hortensja
+   czyniłaby to zdanie fałszywym. Reguła wygasa sama - gdy właściciele dosyłają własny kadr,
+   `imageCredit` znika z wpisu, a zdjęcie pojawia się tu bez niczyjej decyzji.
+2. **Wyższe niż szersze.** Rząd jest oknem pionowym, a kadr poziomy traci w nim od 38% do 58%
+   szerokości (`pelargonia-rabatowa` ma 1,78 i zostawiłaby 42%). Odpadają cztery zdjęcia wpisów:
+   `chryzantema-wielkokwiatowa`, `pelargonia-rabatowa`, `petunia-surfinia`, `werbena` - wszystkie
+   nadal są przy swoich wpisach, w ramce 4:3, która im służy.
+
+**Świadomie nie wchodzą** 23 obsadzenia (najlepsze zdjęcia w repozytorium, ale są już na tej
+stronie w pokazie sekcję niżej - pokazywanie ich dwa razy na jednym ekranie to dokładnie to
+powtórzenie, które jedna z poprzednich wersji usuwała), `chrysanthemumPhoto` i `pansyPhoto`
+(karty sezonowe ekran wyżej), `heroPhoto` (obraz generowany, nie fotografia gospodarstwa) oraz
+`historyPhoto` (należy do `/o-nas/`).
+
+### Dokąd prowadzi „Więcej zdjęć”
+
+Rząd odnośników pod pokazem celuje w **kotwicę `#zdjecia`** na stronie kategorii, a nie w jej
+górę: `/kwiaty-balkonowe/#zdjecia` otwiera się na pasie zdjęć, czyli tam, gdzie jest reszta
+kadrów tej grupy. Identyfikator należy do `PhotoStrip`, więc mają go wszystkie trzy strony
+kategorii naraz i żadna nie może go zgubić bez zgubienia całego pasa.
+
+### Czego chcieli właściciele i co z tego wyszło
+
+Prośba brzmiała: **pokaz slajdów jak na obecnej stronie**, tylko wpasowany w projekt. Obecna
+witryna używa MetaSlidera na Nivo Sliderze: 49 slajdów, pas 800×408 (ok. 2:1), zmiana co
+3 sekundy, efekt `random` (siekanie kadru na 15 pasków albo 35 kwadratów), kropki pod spodem,
+strzałki na zdjęciu, pauza na najechanie.
+
+Zanim to powstało, **odrzucono dwie tury propozycji** - obie w makietach z prawdziwymi zdjęciami,
+tokenami i krojami, bo `tokens.css` zapisuje regułę, że o wyglądzie nie decyduje się z opisu:
+
+| Tura | Propozycje                                                                    | Werdykt                                       |
+| ---- | ----------------------------------------------------------------------------- | --------------------------------------------- |
+| 1    | kolaż w naturalnych proporcjach, przewijany pas, istniejący `PhotoStrip`      | „żaden z tych” - ma być pokaz slajdów         |
+| 2    | jedno zdjęcie w pasie 16:9, jedno obok tekstu sekcji, jedno duże wyśrodkowane | „dobry kierunek, ale nie dopasowany do zdjęć” |
+| 3    | rząd pionowych kadrów, trzy animacje do wyboru                                | przyjęte                                      |
+
+### Dlaczego slajd jest rzędem, a nie zdjęciem
+
+**Bo pas 2:1 na obecnej stronie stoi na zdjęciach, których tu nie ma.** Slajdy MetaSlidera to
+osobne kadry panoramiczne generowane przez WordPress pod ten slider - `2100×900`, `960×411`,
+`720×308`. W tym repozytorium **53 z 55 zdjęć gospodarstwa są pionowe**, najszersze ma 0,95;
+jedyne dwa poziome to zdjęcie z Końskowoli i wygenerowany kadr nagłówka.
+
+Jedno pionowe zdjęcie w szerokim pasie jest albo przycięte do 42% wysokości, albo tonie w pustym
+papierze. Zmierzone na makiecie: przycięcie do 16:9 **wypada lepiej, niż wynika z arytmetyki** -
+większość kadrów to zbliżenia gęsto zakwitniętych rabat, gdzie nie ma pojedynczego obiektu do
+ścięcia. Traci co innego: **kadry „ile tego jest”**. Rząd koszy ciągnący się w głąb tunelu po
+przycięciu jest już tylko zbliżeniem petunii - znika głębia i skala, czyli to, co te zdjęcia miały
+mówić o gospodarstwie.
+
+Cztery kadry 3:4 obok siebie wypełniają ten sam pas i **nie ucinają nic**: większość źródeł ma
+0,74-0,76, czyli 3:4 co do piksela. Płacą tylko `pansies/offer-04` (0,56) i `balcony/baskets-08`
+(0,93), a pełny kadr jest w podglądzie.
+
+### Grupy, nie tasowanie
+
+Pierwsza wersja miała dwanaście kadrów przeplecionych między grupami, żeby blok czytał się jako
+jedno gospodarstwo, a nie trzy mniejsze bloki. Na ekranie nie czytał się ani tak, ani tak - cztery
+niezwiązane kadry w rzędzie wyglądają jak tasowanie i tak zostały nazwane.
+
+Teraz **slajd to jedna grupa**, podpisana własną nazwą, a grupy idą **w kolejności roku**: bratki
+i prymulki (marzec) → kwiaty balkonowe (kwiecień-czerwiec) → chryzantemy (październik). To celowo
+nie jest kolejność z `offer.ts`, która jest kolejnością ważności i sama to o sobie mówi. Wewnątrz
+grupy kolejność jest ta, co w pasie na jej stronie: najpierw uprawa, potem to, co w niej rośnie,
+na końcu gotowy kosz albo doniczka.
+
+**Rząd nigdy nie łączy dwóch grup** - rzędy są cięte wewnątrz grupy, a **grupa rozkłada się na
+nie równomiernie**, a nie „pełny rząd, pełny rząd, reszta”. Żadna z trzech grup (9, 38, 22) nie
+dzieli się przez cztery, więc krótszy rząd jest tu przypadkiem zwykłym, nie wyjątkiem - i to
+decyduje, jak wygląda koniec grupy. Dziewięć kadrów bratków przy czterech w rzędzie to **trzy
+rzędy po trzy**; zapełniane po kolei dawały cztery, cztery i **jeden**, czyli jedno zdjęcie obok
+trzech pustych kolumn, co czyta się jak usterka, a nie jak koniec grupy. Liczba rzędów jest
+w obu wariantach ta sama. Zmierzony rozkład przy czterech w rzędzie: bratki 3-3-3, balkonowe
+osiem rzędów po cztery i dwa po trzy, chryzantemy cztery po cztery i dwa po trzy - **żaden rząd
+nie ma mniej niż trzy kadry**.
+
+**Zmierzone przy zmianie szerokości okna**, bo o to było osobne pytanie: 1280 px → 4 kadry
+i 19 slajdów, 900 px → 2 kadry i 35 slajdów, 390 px → 1 kadr i 69 slajdów. W obie strony
+**na ekranie zostaje to samo zdjęcie**, na które się patrzyło (skrypt przelicza pozycję z kadru,
+nie z numeru rzędu), nic nie wyjeżdża poza kontener i strona nie przewija się w bok. Przesunięć
+układu przy wczytaniu nie ma - zmierzone `layout-shift` to 0,0000.
+
+### Co jest w środku
+
+| Rzecz            | Jak                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------- |
+| Kadrów w rzędzie | 4 przy 1280 px, 2 w okolicach 900 px, 1 na telefonie - liczone ze skryptu, bez breakpointów |
+| Rzędów           | 19 przy czterech w rzędzie, 35 przy dwóch, 69 na telefonie                                  |
+| Zmiana           | co 6 sekund (obecna strona ma 3; pokaz obsadzeń niżej ma 6)                                 |
+| Animacja         | kaskada krycia - kadry rzędu zapalają się kolejno co 90 ms                                  |
+| Znaczniki        | jeden na grupę (trzy), nie jeden na rząd                                                    |
+| Ground           | `--paper`                                                                                   |
+
+Zbudowano i pokazano trzy animacje: przenikanie całym rzędem, kaskadę i przenikanie z uniesieniem
+o 16 px. Została kaskada. **Efekty Nivo nie weszły w ogóle** - siekanie kadru na paski jest
+dokładnie tym, czego ten projekt nie ma, a prośba o „jakieś animacje” nie znosi reszty reguł.
+
+**Czas trwania przejścia ustawia skrypt, nie CSS.** Blok `prefers-reduced-motion` w komponencie
+byłby drugim `@media` w projekcie, a pierwszy jest świadomym jedynakiem; skrypt i tak musi zapytać
+o ruch, żeby zdecydować, czy w ogóle przewijać, więc zapisuje `--show-fade` na korzeniu.
+
+**Strzałek na zdjęciu nie ma** - stara strona kładzie je na kadrze, a ta witryna nie kładzie na
+zdjęciu żadnego tekstu ani sterowania.
+
+### 51 zdjęć, trzy rzędy w układzie
+
+Wszystkie kadry są w znaczniku - to jest to, co czyni wersję bez JavaScriptu kompletną: zostaje
+lista wszystkich 51, każdy klikalny. Gdyby wszystkie były w układzie naraz, przeglądarka pobrałaby
+wszystkie 51 w momencie, gdy sekcja wjedzie na ekran, bo `loading="lazy"` mierzy przecięcie
+z oknem, a one dzielą jedną komórkę siatki.
+
+Dlatego wszystko poza **rzędem poprzednim, bieżącym i następnym** ma `hidden`, a obrazek
+w `display: none` nie jest pobierany nigdy. Sprawdzone na działającej stronie: po wjechaniu sekcji
+na ekran wczytanych jest **11 z 69** na monitorze i **3 z 69** na telefonie. Rząd następny jest zamontowany, ale przezroczysty - to go
+pobiera zawczasu i to daje przejściu poprzedni styl, z którego może przejść.
+
+### Co przy okazji trzeba było naprawić
+
+1. **Podgląd zdjęć zawężony do grupy.** `lightbox.ts` brał wszystkie `a[data-lightbox]` na stronie
+   do jednego zawijającego się zbioru. Było to bezpieczne, póki żadna strona nie mieszała dwóch
+   zestawów - strona główna ma teraz pokaz zdjęć **i** pokaz obsadzeń, więc „Następne”
+   wychodziłoby z jednego w drugi. Zbiór to teraz „otwieracze z tego samego kontenera”
+   (`[data-lightbox-group]`), liczony w chwili kliknięcia. Bez atrybutu zachowanie jest dokładnie
+   poprzednie. Sprawdzone: pokaz 51, obsadzenia 23, `/kwiaty-balkonowe/` 24, `/chryzantemy/` 20,
+   `/bratki/` 7.
+2. **Powrót focusa po zamknięciu podglądu.** Podgląd oddawał focus kadrowi, na którym stanął -
+   a ten w pokazie bywa ukryty albo w poddrzewie `inert`. Trzeba sprawdzać jedno i drugie:
+   `offsetParent` łapie `display: none`, `closest("[inert]")` łapie rzędy czekające na swoją
+   kolej, bo poddrzewo `inert` odmawia focusa po cichu. Kolejność ratunkowa: kadr oglądany → kadr
+   kliknięty → pierwszy widoczny w grupie.
+3. **Znaczniki liczone per grupa.** Przy 69 kadrach i zmiennej liczbie w rzędzie znacznik na rząd
+   dawałby od 19 do 69 kwadratów.
+4. **Kotwica `#zdjecia` na pasie zdjęć.** `PhotoStrip` nie miał żadnego identyfikatora, więc
+   „Więcej zdjęć” mogło celować najwyżej w górę strony kategorii.
+
+### Do przejrzenia przez właścicieli
+
+| Miejsce       | Tekst                                                                            | Czyj               |
+| ------------- | -------------------------------------------------------------------------------- | ------------------ |
+| Nagłówek      | „Zdjęcia z naszego gospodarstwa”                                                 | nasz               |
+| Lead          | „Nasze zdjęcia pokazują rytm roku w gospodarstwie i kolejne etapy naszej pracy…” | **od właścicieli** |
+| Etykiety grup | nazwy z `offer.ts`, nie nowe                                                     | -                  |
+
+Lead jest jedynym tekstem w tym bloku, którego nie napisaliśmy - przyszedł gotowy. Nagłówek
+zostaje na liście do potwierdzenia.
+
+Pełna lista tego, czego blok nie pokazuje, jest wyżej, przy regułach doboru.
 
 ## Kalendarz sprzedaży - wrzesień 2026
 
@@ -2288,6 +2460,7 @@ się co wzięło.
 | 0.22.1  | **Filtr obsadzeń schodzi z pięciu rodzajów do trzech**: `Kosz i skrzynka` / `Donica` / `Rabata` zamiast `Kosz wiszący` / `Skrzynka` / `Donica` / `Rabata` / `Ekspozycja`. Przy 23 kadrach pięć przycisków dawało niecałe pięć kadrów na przycisk; teraz rozkład to 10 / 7 / 6. **„Ekspozycja” wypadła jako błąd, nie jako nadmiar** - nazywała okoliczność zdjęcia (stoisko, tunel), a nie coś, co odwiedzający obsadza, więc jako jedyna odpowiadała na inne pytanie niż etykieta „Co obsadzasz” nad nią; jej cztery kadry rozeszły się tam, gdzie wskazują ich własne opisy `alt`. Trzynaście plików zmienia `kind:`, nic poza tym - schemat i rząd przycisków idą za `compositionKinds` same. Tytuły i proza właścicieli ze słowem „ekspozycja” zostają co do słowa. Patrz [Trzy rodzaje obsadzeń zamiast pięciu](#trzy-rodzaje-obsadzeń-zamiast-pięciu---wrzesień-2026).                                                                                                                                                                                                                                           |
 | 0.23.0  | **Trzy strony kategorii wyrównane do jednego układu** na polecenie właścicieli, którzy obejrzeli oba warianty obok siebie. `/bratki/` i `/chryzantemy/` przechodzą z kolejności redakcyjnej na alfabetyczną i dostają spis literowy oraz przekładki, które dotąd miały tylko `/kwiaty-balkonowe/`. Prop `sort: "order"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | "name"`**znika** zamiast dostać trzecie wywołanie - przełącznik z jedną wartością jest martwy, a bez niego „bez wyjątków" jest własnością konstrukcji, nie zgodnością trzech plików. Cena jest na`/chryzantemy/`i przyjęto ją świadomie: alfabet odwraca tę stronę, więc wielkokwiatowe stoją ostatnie mimo`<title>`, otwiera ją jedyny opis, którego nie napisali właściciele, a wszystkie trzy nazwy mają tę samą literę, więc przekładka nic nie rozdziela. Kotwice bez zmian. Szczegóły: [Jeden układ na trzech stronach kategorii](#jeden-układ-na-trzech-stronach-kategorii--wrzesień-2026). |
 | 0.24.0  | **Pasek „Zdjęcia z gospodarstwa" na `/kwiaty-balkonowe/`** - ostatnia różnica w układzie między trzema stronami kategorii, i jedyna, która czekała na materiał, a nie na kod. Z paczki 45 kadrów z Facebooka gospodarstwa weszły 24: uprawa, pojedyncze gotowe kosze, dwie hortensje i dwie donice u klienta. Dziewięć obsadzonych kompozycji świadomie **nie** weszło - to gatunek zdjęć z `/inspiracje/`. Przy okazji **pierwszy zastępnik z Wikimedia zdjęty**: hortensja dostała własny kadr, zostaje siedemnaście. Szczegóły: [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 0.26.0  | **Pokaz zdjęć na stronie głównej** - 69 własnych kadrów, rząd naraz, pogrupowane kategoriami i podpisane, w kolejności roku. Odpowiedź na prośbę o „pokaz slajdów jak na obecnej stronie”, po dwóch odrzuconych turach makiet. **Slajd jest rzędem, nie zdjęciem**, bo pas 2:1 obecnego slidera stoi na osobnych kadrach panoramicznych, a tutaj 53 z 55 zdjęć są pionowe. Rzędy cięte wewnątrz grupy, znaczniki per grupa, kaskada krycia co 90 ms, zmiana co 6 s, trzy rzędy zamontowane naraz (11 z 69 zdjęć pobranych po wjechaniu sekcji na ekran), a „Więcej zdjęć” celuje w kotwicę `#zdjecia` na stronie kategorii. Przy okazji **podgląd zawężony do grupy** - strona główna jako pierwsza ma dwa zestawy zdjęć naraz - i naprawiony powrót focusa z kadru ukrytego lub `inert`. Szczegóły: [Pokaz zdjęć na stronie głównej](#pokaz-zdjęć-na-stronie-głównej---wrzesień-2026).                                                                                                                                                                                                                                |
 | 0.25.0  | **Podgląd zdjęć przechodzi między zdjęciami** - zgłoszenie właściciela: z powiększenia nie dało się przejść do następnego kadru, trzeba było zamknąć i trafić w kolejną miniaturę. Doszły „Poprzednie” / „Następne”, strzałki `←` / `→`, licznik pozycji i prawdziwy cykl focusa po `Tab` (dotąd pułapka zakładała jeden przycisk). Zbiór zawija się i obejmuje wszystkie `a[data-lightbox]` na stronie - bezpieczne, bo żadna strona nie miesza pasa z pokazem. Sterowanie stoi nad i pod zdjęciem, nigdy na nim. Szczegóły: [Przechodzenie między zdjęciami](#przechodzenie-między-zdjęciami--wrzesień-2026-zgłoszenie-właściciela).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ### Paczki materiału od właścicieli

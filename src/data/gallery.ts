@@ -24,6 +24,10 @@
  */
 import type { ImageMetadata } from "astro";
 
+import { getCollection } from "astro:content";
+
+import { offer, type PlantGroup } from "./offer";
+
 import chrysanthemums from "../assets/chrysanthemums/cultivation-rows.jpg";
 import offer01 from "../assets/chrysanthemums/offer-01.jpg";
 import offer02 from "../assets/chrysanthemums/offer-02.jpg";
@@ -504,3 +508,96 @@ export const balconyStrip: GalleryPhoto[] = [
     alt: "Dwie białe donice z amarantowymi kwiatami ustawione przed przeszklonym wejściem",
   },
 ];
+
+/** One group of the home page show: the holding's own frames of one part of the offer, under
+ *  that part's own name. */
+export interface GalleryGroup {
+  /** The name printed above the row. Taken from `offer.ts`, never written again here. */
+  label: string;
+  photos: GalleryPhoto[];
+}
+
+/** The group's name, read off the offer table rather than repeated.
+ *
+ *  `offer.ts` exists because the same three pages were once written down in two files that
+ *  nothing kept in step; a literal "Kwiaty balkonowe" here would be the third. Keyed on the
+ *  content group rather than the address, because that is the name the schema validates and the
+ *  one that survives an address changing. */
+function labelOf(group: PlantGroup): string {
+  const page = offer.find((entry) => entry.groups.includes(group));
+  if (!page) {
+    throw new Error(`homeGallery: no offer page covers "${group}".`);
+  }
+  return page.menuLabel;
+}
+
+/** The strips, by group. The home page show is these three plus the entry photographs below. */
+const stripOf: Record<PlantGroup, GalleryPhoto[]> = {
+  Bratki: pansyStrip,
+  Balkonowe: balconyStrip,
+  Chryzantemy: chrysanthemumStrip,
+};
+
+/** **Every photograph of the offer that is the holding's own and is not already on the home
+ *  page** - the three strips, plus the portrait frames from the plant entries.
+ *
+ *  ## What is in, and the two rules that decide it
+ *
+ *  1. **Ours, not borrowed.** Seventeen entries stand on a Wikimedia Commons stand-in, and
+ *     those are excluded by `imageCredit` - the field exists only on a borrowed frame. This is
+ *     not a preference: the lead above this block says the photographs are ours, taken here,
+ *     and a stand-in of somebody else's hydrangea would make that sentence false. It also has
+ *     an expiry: as the owners send their own frames, `imageCredit` comes off the entry and the
+ *     photograph appears here on its own.
+ *  2. **Taller than it is wide.** The row is a portrait window, and a landscape frame loses
+ *     between 38% and 58% of its width to it - `pelargonia-rabatowa` is 1.78 and would keep
+ *     42%. Four entry photographs are excluded by this (`chryzantema-wielkokwiatowa`,
+ *     `pelargonia-rabatowa`, `petunia-surfinia`, `werbena`); all four are still on their own
+ *     entry, in the 4:3 frame that suits them.
+ *
+ *  ## What is deliberately not here
+ *
+ *  - **The 23 plantings.** They are the best photographs in the repository and they are already
+ *    on this page, in the slideshow one section below. Showing them twice on one screen is the
+ *    repetition `docs/inwentaryzacja.md` spent a release removing, not a bigger gallery.
+ *  - **`chrysanthemumPhoto` and `pansyPhoto`**, which are on this page too, in the season cards
+ *    a screen above.
+ *  - **`heroPhoto`**, a generated image rather than a photograph of the holding at all, and
+ *    **`historyPhoto`**, which belongs to `/o-nas/`.
+ *
+ *  ## The order is the year, not the menu
+ *
+ *  Bratki open it because the holding's year opens in March, then the balcony flowers from
+ *  April, then the chrysanthemums in October. `offer.ts` leads with Balkonowe because that
+ *  order is importance and it says so about itself; this order is the one the lead text
+ *  describes, and it is what makes a show of this length read as a year rather than as a pile.
+ *
+ *  Within a group the strip comes first, in the strip's own order - the crop, then what grows
+ *  in it, then a finished pot or basket - and the entry portraits follow in the entries' own
+ *  `order`, which is where the owners say which plant matters most. So a group runs from the
+ *  scale of the holding down to the single plant, which is the same direction every category
+ *  page runs in.
+ *
+ *  It is a function rather than a constant because the entry photographs live in the content
+ *  collection, and `src/data/compositions.ts` already reaches for `astro:content` the same way.
+ *
+ *  The alt texts are the strips' and the entries' own, and carry the same caveat as everything
+ *  else in this file: **read off the picture, not confirmed by the owners.**
+ */
+export async function homeGallery(): Promise<GalleryGroup[]> {
+  const plants = await getCollection("plants");
+
+  const entryPhotos = (group: PlantGroup): GalleryPhoto[] =>
+    plants
+      .filter((plant) => plant.data.group === group)
+      .filter((plant) => plant.data.image && plant.data.imageAlt && !plant.data.imageCredit)
+      .filter((plant) => plant.data.image!.width < plant.data.image!.height)
+      .sort((a, b) => a.data.order - b.data.order)
+      .map((plant) => ({ src: plant.data.image!, alt: plant.data.imageAlt! }));
+
+  const groups: PlantGroup[] = ["Bratki", "Balkonowe", "Chryzantemy"];
+  return groups.map((group) => ({
+    label: labelOf(group),
+    photos: [...stripOf[group], ...entryPhotos(group)],
+  }));
+}

@@ -14,19 +14,40 @@
  *  was to close it and aim at the next thumbnail. With 24 frames under `/kwiaty-balkonowe/`
  *  that is 23 round trips to see the strip, so the overlay now walks the set.
  *
- *  **The set is every `a[data-lightbox]` on the page, in document order, and it wraps.** That
- *  is safe because no page mixes two groups: a category page has its strip and nothing else,
- *  `/inspiracje/` and the home page have the slideshow and nothing else. If a page ever grows
- *  both, this has to become "the openers that share a container" rather than "all of them" -
- *  otherwise "next" would step out of the strip and into the slideshow without saying so.
+ *  **The set is the openers that share a container, in document order, and it wraps.** The
+ *  container is the nearest ancestor carrying `data-lightbox-group`; an opener with no such
+ *  ancestor falls back to the whole document, so a page that never marks a group behaves
+ *  exactly as it did when the set was "every `a[data-lightbox]` on the page".
+ *
+ *  It used to be the whole page, and that was safe only while no page mixed two groups - a
+ *  category page had its strip and nothing else, `/inspiracje/` and the home page had the
+ *  slideshow and nothing else. The home page gallery ends that: it puts a second set of
+ *  openers on the page that already carries the slideshow's, and without the grouping
+ *  "Następne" would step out of the gallery into the plantings without saying so.
+ *
+ *  The set is resolved **at click time**, not once at load: it costs one `querySelectorAll`
+ *  per opening rather than one per page, and it survives a group whose openers are filtered,
+ *  added or reordered after this script has run.
  *
  *  Wrapping rather than stopping at the ends is deliberate: buttons that go dead at the edges
  *  of a 24-frame row read as broken more often than they read as informative, and the position
  *  indicator already says where in the set you are.
  */
 
-const tiles = [...document.querySelectorAll<HTMLAnchorElement>("a[data-lightbox]")];
-if (tiles.length > 0) {
+const openers = [...document.querySelectorAll<HTMLAnchorElement>("a[data-lightbox]")];
+if (openers.length > 0) {
+  /** The openers that share `opener`'s group, in document order. */
+  function setFor(opener: HTMLAnchorElement): HTMLAnchorElement[] {
+    const group = opener.closest<HTMLElement>("[data-lightbox-group]");
+    const scope: ParentNode = group ?? document;
+    return [...scope.querySelectorAll<HTMLAnchorElement>("a[data-lightbox]")];
+  }
+
+  /** The set the overlay is currently walking. Empty while it is closed. */
+  let tiles: HTMLAnchorElement[] = [];
+  /** The frame that was clicked, kept for the case where the one being looked at cannot take
+   *  focus back - see `close`. */
+  let opened: HTMLAnchorElement | null = null;
   /** Which tile is showing. `-1` while the overlay is closed. Replaces the old `opener`
    *  reference: focus still has to go back to the tile that was clicked, but the overlay now
    *  also has to know where it is in the set, and one index answers both. */
@@ -71,10 +92,9 @@ if (tiles.length > 0) {
 
   /** A single photograph is a set of one: there is nowhere to go and nothing to count, so
    *  both readouts come off rather than sitting there inert. `/bratki/` is seven frames and
-   *  never hits this, but a page with one pending photograph would. */
-  const walkable = tiles.length > 1;
-  navigation.hidden = !walkable;
-  position.hidden = !walkable;
+   *  never hits this, but a page with one pending photograph would - and now so would a group
+   *  of one on a page whose other group is long, which is why this is decided per opening. */
+  let walkable = false;
 
   /** Point the overlay at one tile. Everything that changes per photograph changes here, so
    *  opening and stepping are the same operation with a different starting index. */
@@ -88,8 +108,15 @@ if (tiles.length > 0) {
     position.textContent = `${current + 1} z ${tiles.length}`;
   }
 
-  function open(index: number): void {
-    show(index);
+  /** Open at `opener`, walking the group it belongs to. The set is read here rather than at
+   *  load, so which photographs "Następne" reaches is decided by the frame that was clicked. */
+  function open(opener: HTMLAnchorElement): void {
+    tiles = setFor(opener);
+    opened = opener;
+    walkable = tiles.length > 1;
+    navigation.hidden = !walkable;
+    position.hidden = !walkable;
+    show(tiles.indexOf(opener));
     overlay.hidden = false;
     // The page behind must not scroll under the overlay. `scrollbar-gutter: stable` in
     // global.css is what keeps this from shifting the layout sideways.
@@ -109,17 +136,34 @@ if (tiles.length > 0) {
     // Focus goes back to the tile the visitor is actually looking at, which after stepping
     // through the set is not the one they clicked. Returning it to the opener would scroll
     // them back up the page to a photograph they have already left.
-    tiles[current]?.focus();
+    //
+    // Unless that tile is not on the page any more: the home page show keeps all 51 frames in
+    // the DOM and `hidden` on all but three, so stepping the overlay onto one of the hidden
+    // ones and closing would drop focus to the body. Second choice is the frame that was
+    // clicked - which is usually still on screen, because opening a photograph stops the show -
+    // and last is whatever of the group is visible, so focus lands somewhere in the set the
+    // visitor was looking at rather than at the top of the document.
+    // Both tests are needed and neither implies the other: `offsetParent` catches the frames
+    // inside `display: none`, and `closest("[inert]")` catches the ones that are laid out but
+    // waiting their turn - an inert subtree refuses focus silently, which is how this landed
+    // on the body the first time.
+    const shown = (tile: HTMLAnchorElement | null | undefined) =>
+      tile && tile.offsetParent !== null && tile.closest("[inert]") === null ? tile : null;
+    const back =
+      shown(tiles[current]) ?? shown(opened) ?? tiles.find((tile) => shown(tile)) ?? null;
+    back?.focus();
     current = -1;
+    tiles = [];
+    opened = null;
   }
 
-  for (const [index, tile] of tiles.entries()) {
-    tile.addEventListener("click", (event) => {
+  for (const opener of openers) {
+    opener.addEventListener("click", (event) => {
       // Leave the modified clicks alone - a middle click or ctrl-click means "open this
       // somewhere else", and the href is a perfectly good answer to that.
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
       event.preventDefault();
-      open(index);
+      open(opener);
     });
   }
 
