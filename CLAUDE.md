@@ -56,19 +56,23 @@ and `linkinator` finds no dead internal link.
   `wrzos.md`, knowingly sits under a selling window that is wrong for it. The merge made the
   second point louder rather than quieter: heather now sits under a page called "Kwiaty
   balkonowe" as well.
-- **93 photographs** in `src/assets/`. **All 39 entries now show a picture, but only 21 of
-  them show the holding's own.** The other eighteen carry a stand-in from Wikimedia Commons,
+- **117 photographs** in `src/assets/`. **All 39 entries now show a picture, but only 22 of
+  them show the holding's own.** The other seventeen carry a stand-in from Wikimedia Commons,
   taken in September 2026 because `/kwiaty-balkonowe/` was more striped placeholder than
-  photograph after the merge put every gap on one page. Those eighteen are **temporary and
+  photograph after the merge put every gap on one page. Those seventeen are **temporary and
   say so in three places**: they keep their `slot` (the brief for the frame the owners still
   owe), they carry an `imageCredit` no photograph of the owners' has, and each prints its
-  source under the picture. Swapping one back is a file plus three lines of frontmatter.
+  source under the picture. Swapping one back is a file plus three lines of frontmatter, and
+  **hortensja is the worked example** - it was the eighteenth until a photograph of the
+  holding's own hydrangeas arrived with the balcony batch, and taking it off the list cost
+  exactly that.
   `PhotoSlot` therefore renders nowhere today and still has to keep working - the next plant
-  the owners add will arrive before its picture does. Nineteen of the owners' own arrived in
-  September 2026 off the holding's Facebook page: fifteen chrysanthemums, and four pansies
-  and primroses, which took `/bratki/` from four to seven. `/chryzantemy/` carries a strip of
-  **twenty** frames, by some way the longest on the site - nineteen, plus the needle-petalled
-  frame that moved there when its entry was folded away.
+  the owners add will arrive before its picture does. Forty-four of the owners' own arrived in
+  September 2026 off the holding's Facebook page: fifteen chrysanthemums, four pansies
+  and primroses, which took `/bratki/` from four to seven, and **twenty-five balcony frames**,
+  which gave `/kwiaty-balkonowe/` the strip it was the only category page to lack.
+  **That strip is now the longest on the site at 24 frames**; `/chryzantemy/` has twenty -
+  nineteen, plus the needle-petalled frame that moved there when its entry was folded away.
 - `/` is a preview of the whole site: intro, season cards, three offer tiles opening with a
   mosaic of that group's photographs, the plantings slideshow in a reduced variant, the
   Facebook block and a map block. What each home page block may and may not repeat is argued
@@ -87,7 +91,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                                                                                                                      |
 | `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the three category pages derived from `offer.ts`. Also `offerPages` and `allPages` (flattened, for the 404). `/polityka-prywatnosci/` is deliberately absent from all three.                                                                                                                                                                      |
 | `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                                                                                                                  |
-| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the two strips (`chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                                                                                                 |
+| `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the three strips (`balconyStrip`, `chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. **The 23 plantings are no longer here** - they are the `compositions` collection.                                                                                                                               |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                       |
 | `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                        |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                                                                                                             |
@@ -96,7 +100,7 @@ Read this before adding a file - most things already have a home.
 | `src/content.config.ts`        | The zod schemas for `plants`, `pages`, `faq` and `compositions`.                                                                                                                                                                                                                                                                                                                                                                   |
 | `src/layouts/BaseLayout.astro` | The one layout: head, skip link, header, `<main>`, footer, JSON-LD.                                                                                                                                                                                                                                                                                                                                                                |
 | `src/components/`              | 19 components. `SeasonCards`, `OfferOverview` (home tiles), `OfferSection` (a whole category page), `PlantEntry`, `PhotoSlot` (a pending photograph), `PhotoStrip`, `Compositions` (the slideshow), `Intro`, `Header`, `Nav`, `Footer`, `Contact`, `Directions`, `MapEmbed`, `ConsentBanner`, `History`, `FacebookNews`, `Faq`, `Seo`.                                                                                             |
-| `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the slideshow), `lightbox.ts` (the overlay preview), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                                                                                                                                                               |
+| `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the slideshow), `lightbox.ts` (the overlay preview), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                                                                                                                             |
 | `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, daily.                                                                                                                                                                                                                                                                                                                                                              |
 | `docs/inwentaryzacja.md`       | The project chronicle: what was on the old site, where it went, every open question, and the version history.                                                                                                                                                                                                                                                                                                                      |
 | `docs/przekierowania.md`       | The 301 map.                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -273,10 +277,10 @@ plus manual viewport checks.
   **reverses** the adaptive frame (each file's own ratio, floored at 3:4) that the owners chose
   earlier in September 2026, and they reversed it themselves after seeing both - uniformity over
   fidelity to each frame. The price is measured in `PlantEntry.astro` and
-  `docs/inwentaryzacja.md`: of the owners' twenty-one, one is untouched, eighteen taller-than-4:3
-  files keep 52-61% of their height, and the two landscape files are cropped on width. The eighteen
+  `docs/inwentaryzacja.md`: of the owners' twenty-two, one is untouched, nineteen taller-than-4:3
+  files keep 52-61% of their height, and the two landscape files are cropped on width. The seventeen
   Wikimedia stand-ins pay far less, because they were picked against a ratio that was already
-  known - eleven lose nothing at all and the worst, bidens, keeps 56%. The crop is centred and
+  known - ten lose nothing at all and the worst, bidens, keeps 56%. The crop is centred and
   **`object-position` cannot rescue it** - aiming moves the band, and no position helps when the
   bloom is taller than the window. A badly clipped entry is fixed by re-cropping its source file,
   never by a per-entry exception; trytoma is the worked example, cropped from the top of its
@@ -291,7 +295,7 @@ plus manual viewport checks.
   descriptions are theirs to extend. There is also no
   `caption` field - the owners had the per-entry captions removed, and **that decision is
   about the plant entries alone.** **`imageCredit` is not a way back in**: it prints a
-  `<figcaption>` under the eighteen borrowed photographs, but it holds an author, a licence
+  `<figcaption>` under the seventeen borrowed photographs, but it holds an author, a licence
   and two links rather than anything about the plant, it is the condition CC BY and CC BY-SA
   attach to publishing the file at all, and the schema fails the build if it outlives the
   picture it credits. Editorial text under an entry is still closed. Two further
@@ -370,14 +374,17 @@ plus manual viewport checks.
   category page is alphabetical is deliberate and argued in `OfferOverview.astro`: a tile with
   room for four names wants the best four, not the first four of the alphabet. It shows most on
   the chrysanthemum tile, which opens with the wielkokwiatowe while the page closes with them.
-- **A page gets one photo strip, and the overline lives in `OfferSection`.** It briefly took a
+- **A page gets one photo strip, and the overline lives in `OfferSection`.** All three category
+  pages have had one since September 2026; `/kwiaty-balkonowe/` was last, because the hold-up
+  was material rather than code. It briefly took a
   list of labelled rows, when `/chryzantemy/` carried a second strip of finished pots beside the
   crop; the owner had that strip removed in September 2026 and its four frames moved to the end
   of `chrysanthemumStrip`, so the list was one element everywhere and the generality went with
   the strip it was added for. The argument for splitting is kept at `chrysanthemumStrip` in
-  `src/data/gallery.ts`, not deleted - it is the one to reach for if nineteen frames ever start
+  `src/data/gallery.ts`, not deleted - it is the one to reach for if twenty frames ever start
   reading as an undifferentiated wall, and the answer then is a second strip rather than a
-  shorter first one.
+  shorter first one. `balconyStrip` is the longer of the two at 24 and carries the same risk,
+  which is why its three buckets are ordered and argued the same way.
   - **The strip is lightboxed, and the entries deliberately are not.** Every frame in a
     `PhotoStrip` is an `<a data-lightbox>` around the thumbnail, reusing the same global
     `src/scripts/lightbox.ts` the slideshow uses - so with scripting off the link still opens the
@@ -520,12 +527,13 @@ Anything unconfirmed ships with a visible "pending confirmation" state rather th
 value. The full list is in `docs/inwentaryzacja.md` under "Czego nadal brakuje"; the ones
 that shape code decisions:
 
-1. **Photographs** - what is left is **the owners' own 4:3 frame for the eighteen entries now
-   standing on a Wikimedia stand-in**, plus an archival photograph for the history block. The
-   eighteen are the September 2026 import argued out in `docs/inwentaryzacja.md` under "Zdjęcia
-   zastępcze z Wikimedia Commons", which carries the provenance table and the swap procedure.
+1. **Photographs** - what is left is **the owners' own 4:3 frame for the seventeen entries now
+   standing on a Wikimedia stand-in**, plus an archival photograph for the history block. They
+   were eighteen; the September 2026 import is argued out in `docs/inwentaryzacja.md` under
+   "Zdjęcia zastępcze z Wikimedia Commons", which carries the provenance table and the swap
+   procedure, and hortensja has since come off it.
    **A borrowed frame closes the hole in the page, not the request**: the site sells plants
-   "z własnej uprawy" and eighteen of its thirty-nine pictures do not show them, which is
+   "z własnej uprawy" and seventeen of its thirty-nine pictures do not show them, which is
    why the `slot` brief stays on those entries and why they are the first thing on the owners'
    list rather than a settled matter. The archival photograph is **no longer urgent**: since
    September 2026 the block holds `historyPhoto`, the
@@ -551,8 +559,11 @@ that shape code decisions:
    Two rules for anything new: downscale to 2000px and **bake in the EXIF
    rotation** - many of the supplied files arrived as portrait frames flagged sideways, and
    `<Picture>` does not honour that flag.
-   **Wanting owner confirmation:** the Polish `alt` texts throughout, `historyPhoto`'s and the
-   eighteen stand-ins' among them, the wording of the attribution line itself, and the wording
+   **Wanting owner confirmation:** the Polish `alt` texts throughout, `historyPhoto`'s, the
+   seventeen stand-ins' and the balcony strip's twenty-four among them, whether the two
+   `planters-*` frames - the holding's planters standing outside someone else's premises, with
+   that business's sign legible in one of them - may be published at all, the wording of the
+   attribution line itself, and the wording
    of the one editorial caption on the site - the owners wrote "Wystawie
    kwiatów w Końskowoli" and it ships as "Na wystawie kwiatów w Końskowoli", one preposition
    added so a locative with nothing to govern it does not read as a typo; which chrysanthemum

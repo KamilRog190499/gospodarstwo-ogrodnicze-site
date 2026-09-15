@@ -2250,10 +2250,11 @@ się co wzięło.
 | 0.22.0  | **Fakty ujednolicone do czterech gniazd** na prośbę właścicieli. Bloki faktów były nierówne - 31 wpisów miało cztery, osiem od jednego do trzech - więc sąsiadujące wpisy pokazywały różne rzeczy w różnej liczbie wierszy. Teraz **każdy z 39 wpisów ma dokładnie cztery**, a trzy pierwsze etykiety są wszędzie te same: miara-albo-`Pokrój` → `Stanowisko` → `Podlewanie`, przy czwartym gnieździe `Uprawa` ustępującym `Sprzedaży`, `Zimowaniu` lub `Podłożu` tam, gdzie te mówią więcej (dziewięć wpisów). Schemat egzekwuje to przez `.length(4)`, więc wpis z trzema faktami wywala build; pole przestało być opcjonalne, a `PlantEntry` stracił martwą osłonę `facts &&`. Cena: **36 faktów wypadło** (głównie `Kwitnienie`, `Charakter` i `Odmiany`, w większości powtarzające zdanie z opisu obok), a **26 wartości dopisano z wiedzy ogrodniczej** - co **odwraca zasadę „tylko to, co mówi opis klienta”** obowiązującą tu od początku. Odwrócenie jest warunkowe: wszystkie 26 jest spisane co do jednej i czeka na potwierdzenie. Patrz [Cztery gniazda faktów](#cztery-gniazda-faktów---wrzesień-2026). |
 | 0.22.1  | **Filtr obsadzeń schodzi z pięciu rodzajów do trzech**: `Kosz i skrzynka` / `Donica` / `Rabata` zamiast `Kosz wiszący` / `Skrzynka` / `Donica` / `Rabata` / `Ekspozycja`. Przy 23 kadrach pięć przycisków dawało niecałe pięć kadrów na przycisk; teraz rozkład to 10 / 7 / 6. **„Ekspozycja” wypadła jako błąd, nie jako nadmiar** - nazywała okoliczność zdjęcia (stoisko, tunel), a nie coś, co odwiedzający obsadza, więc jako jedyna odpowiadała na inne pytanie niż etykieta „Co obsadzasz” nad nią; jej cztery kadry rozeszły się tam, gdzie wskazują ich własne opisy `alt`. Trzynaście plików zmienia `kind:`, nic poza tym - schemat i rząd przycisków idą za `compositionKinds` same. Tytuły i proza właścicieli ze słowem „ekspozycja” zostają co do słowa. Patrz [Trzy rodzaje obsadzeń zamiast pięciu](#trzy-rodzaje-obsadzeń-zamiast-pięciu---wrzesień-2026).                                                                                                                                                                                                                                           |
 | 0.23.0  | **Trzy strony kategorii wyrównane do jednego układu** na polecenie właścicieli, którzy obejrzeli oba warianty obok siebie. `/bratki/` i `/chryzantemy/` przechodzą z kolejności redakcyjnej na alfabetyczną i dostają spis literowy oraz przekładki, które dotąd miały tylko `/kwiaty-balkonowe/`. Prop `sort: "order"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | "name"`**znika** zamiast dostać trzecie wywołanie - przełącznik z jedną wartością jest martwy, a bez niego „bez wyjątków" jest własnością konstrukcji, nie zgodnością trzech plików. Cena jest na`/chryzantemy/`i przyjęto ją świadomie: alfabet odwraca tę stronę, więc wielkokwiatowe stoją ostatnie mimo`<title>`, otwiera ją jedyny opis, którego nie napisali właściciele, a wszystkie trzy nazwy mają tę samą literę, więc przekładka nic nie rozdziela. Kotwice bez zmian. Szczegóły: [Jeden układ na trzech stronach kategorii](#jeden-układ-na-trzech-stronach-kategorii--wrzesień-2026). |
+| 0.24.0  | **Pasek „Zdjęcia z gospodarstwa" na `/kwiaty-balkonowe/`** - ostatnia różnica w układzie między trzema stronami kategorii, i jedyna, która czekała na materiał, a nie na kod. Z paczki 45 kadrów z Facebooka gospodarstwa weszły 24: uprawa, pojedyncze gotowe kosze, dwie hortensje i dwie donice u klienta. Dziewięć obsadzonych kompozycji świadomie **nie** weszło - to gatunek zdjęć z `/inspiracje/`. Przy okazji **pierwszy zastępnik z Wikimedia zdjęty**: hortensja dostała własny kadr, zostaje siedemnaście. Szczegóły: [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 ### Paczki materiału od właścicieli
 
-Dziewięć dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
+Dziesięć dostaw, wszystkie we wrześniu 2026. Pełne rozliczenie każdej jest w [Zdjęcia](#zdjęcia)
 i w [Wymianie opisów](#wymiana-opisów--wrzesień-2026); tutaj sam spis, bo kolejność bywa
 potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
 
@@ -2287,6 +2288,13 @@ potrzebna przy ustalaniu, skąd wzięło się konkretne zdjęcie.
    `prymulka.md`, trzy do pasa na `/bratki/` (`offer-05..07`). Piąty plik na liście okazał się
    bajt w bajt kopią pierwszego. Ta paczka **zamyka otwarty punkt o prymulkach**, który stał
    od dołożenia grupy `Bratki`. Patrz [Prymulki](#prymulki--zamknięte-we-wrześniu-2026).
+10. **45 zdjęć kwiatów balkonowych z Facebooka gospodarstwa** - największa dostawa w projekcie.
+    Weszły 24 do pasa na `/kwiaty-balkonowe/` i jedno na wpis hortensji; odpadło 21, w tym
+    **sześć powtórzeń** kadrów już będących zdjęciami wpisów (znów w innym rozmiarze, więc
+    nie do wyłapania po hashu pliku - jak w paczce 8) i dziewięć obsadzonych kompozycji,
+    pominiętych świadomie. Ta paczka **zamyka ostatnią różnicę w układzie stron kategorii**
+    i zdejmuje pierwszy z osiemnastu zastępników z Wikimedia. Patrz
+    [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).
 
 ## Polityka prywatności - wrzesień 2026
 
@@ -2837,6 +2845,12 @@ w metadanych Commons w ogóle nie wchodził do puli - nie było przypadków „s
 | Wilczomlecz               | [Chamaesyce 'Diamond Frost'.jpg](https://commons.wikimedia.org/wiki/File:Chamaesyce_%27Diamond_Frost%27.jpg)                                                                                                             | Meneerke bloem       | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)  | 2048x1536 → 2000x1500 | bez straty            |
 | Wrzos                     | [Calluna vulgaris RF.jpg](https://commons.wikimedia.org/wiki/File:Calluna_vulgaris_RF.jpg)                                                                                                                               | Robert Flogaus-Faust | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0)        | 4608x3456 → 2000x1500 | bez straty            |
 
+**Wiersz „Hortensja" jest już nieaktualny.** We wrześniu 2026, razem z
+[paskiem zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026),
+zastępnik hortensji zdjęto i zastąpiono własnym kadrem gospodarstwa; `imageCredit` wyszedł
+z frontmatteru. To pierwszy z osiemnastu - **zostaje siedemnaście**. Tabela zostaje w tej
+postaci, bo jest zapisem tego, co się wtedy wydarzyło, a nie spisem stanu na dziś.
+
 ### Kadr kosztował mniej niż przy własnych zdjęciach
 
 Jedenaście z osiemnastu źródeł było już w proporcji bliskiej 4:3 i nie straciło nic. Najgorszy
@@ -2873,12 +2887,108 @@ Sundaville to znak towarowy, nie gatunek - pod kadrem stoi _Mandevilla sanderi_.
 1. **Podmiana wszystkich osiemnastu na własne kadry.** To jest właściwe rozwiązanie, a nie to.
    Strona sprzedaje rośliny „z własnej uprawy” i te osiemnaście zdjęć tej obietnicy nie
    ilustruje. Podmiana jednej pozycji = jeden plik w `src/assets/plants/` plus usunięcie
-   `imageCredit` z frontmatteru. Nic poza tym.
+   `imageCredit` z frontmatteru. Nic poza tym. **Hortensja przeszła tę drogę we wrześniu 2026
+   i jest dowodem, że procedura kosztuje dokładnie tyle - zostaje siedemnaście.**
 2. **Opisy `alt`** - osiemnaście nowych, napisanych tutaj z tego, co widać w kadrze. Trafiają
    na tę samą listę co wszystkie pozostałe opisy alternatywne w serwisie.
 3. **Brzmienie linii atrybucji** - „fot. … , Wikimedia Commons · … · kadr” jest nasze.
 4. **Czy w ogóle zostawiać obce zdjęcia**, gdyby właściciele woleli wrócić do zaślepek. Pasiasty
    `PhotoSlot` nie został usunięty z kodu i nadal obsługuje wpis bez zdjęcia.
+
+## Pasek zdjęć na `/kwiaty-balkonowe/` - wrzesień 2026
+
+`/bratki/` i `/chryzantemy/` miały pod listą roślin pasek zdjęć, `/kwiaty-balkonowe/` nie.
+[Czego ta zmiana nie zrobiła](#czego-ta-zmiana-nie-zrobiła) nazywało to „czwartą różnicą
+w układzie (…), której nie da się zamknąć kodem: w repozytorium nie ma materiału na taki pas".
+Materiał przyszedł - **45 kadrów z albumów gospodarstwa na Facebooku** - i pozycja jest
+zamknięta. `OfferSection` przyjmował `photos` od początku, więc kodu nie trzeba było zmieniać:
+doszedł jeden eksport w `src/data/gallery.ts` i jeden prop na stronie.
+
+### Zasada doboru: oferta, nie kompozycje
+
+Pas pokazuje **ofertę tak, jak stoi w tunelu** - uprawę i pojedyncze gotowe kosze
+jednogatunkowe. To jest ta sama linia, którą rysuje `chrysanthemumPhoto`, tylko poprowadzona
+w drugą stronę: skrzynka sprzedażowa pośrodku pokazu obsadzeń czyta się jak pomyłka, i tak samo
+czyta się obsadzona kompozycja pośrodku oferty.
+
+24 kadry, trzy koszyki i ogon. Kolejność niesie znaczenie, jak w `chrysanthemumStrip`:
+
+| Koszyk            | Ile | Co pokazuje                                                         |
+| ----------------- | --- | ------------------------------------------------------------------- |
+| `rows-01..06`     | 6   | uprawa - tace i masy jednego koloru, pelargonie → begonie → petunie |
+| `baskets-01..14`  | 14  | pojedynczy gotowy kosz - fuksje, petunie, begonie                   |
+| `pots-01..02`     | 2   | hortensje w doniczkach, jedyny krzew w tej grupie                   |
+| `planters-01..02` | 2   | donice gospodarstwa obsadzone u klienta, w Kazimierzu               |
+
+### Co odpadło i dlaczego - 21 z 45
+
+**Sześć było już w repozytorium** jako zdjęcia wpisów. Wyszło z porównania percepcyjnego
+(dHash) całej paczki z `src/assets/`, nie z oglądania - żaden plik nie był identyczny bajtowo,
+bo przeszły przez inną kompresję. To jest odpowiedź na pytanie, czemu pas nie powtarza listy
+nad sobą, i warto ją mieć, zanim ktoś zechce „dorzucić te, które wypadły":
+
+`plants/begonia.jpg`, `plants/dahlia.jpg`, `plants/lobelia.jpg`, `plants/bakopa.jpg`,
+`plants/petunia-surfinia.jpg`, `plants/koleus.jpg`.
+
+**Dziewięć to obsadzone kompozycje wielogatunkowe** - kosz niosący cztery gatunki naraz. Gatunek
+zdjęć ze slajdera `/inspiracje/`, do którego notka tej strony sama odsyła; druga, krótsza kopia
+pokazu pod listą roślin cofałaby tę granicę.
+
+**Pięć powtarzało kolor i ujęcie sąsiada** - dwa pełne różowe kosze petunii, drugi czerwony,
+drugi biały, druga fuksja w tej samej tonacji. Wybrano ostrzejszy plik z pary.
+
+**Jeden poszedł do wpisu, nie do pasa** - patrz niżej.
+
+### Hortensja: pierwszy zastępnik z Wikimedia zdjęty
+
+W paczce były trzy własne hortensje gospodarstwa, a wpis hortensji stał na
+[zastępniku z Commons](#zdjęcia-zastępcze-z-wikimedia-commons--wrzesień-2026). Bez podmiany ta
+sama strona pokazywałaby cudzą hortensję ekran nad własnymi. Liliowy kadr trafił do
+`src/assets/plants/hortensja.jpg`, `imageCredit` wyszedł z frontmatteru (schemat wywala
+budowanie, jeśli atrybucja przeżyje zdjęcie), `imageAlt` napisany od nowa - stary mówił
+„w odcieniach błękitu", a zdjęcie jest liliowo-różowe. Dwie pozostałe hortensje są w pasie jako
+`pots-01..02`. **Zostaje siedemnaście zastępników.**
+
+Wybór kadru nie był losowy: wyrenderowano kadr 4:3 wszystkich trzech kandydatów i obejrzano je,
+zgodnie z precedensem trytomy. Żaden nie ścinał kwiatostanu; wybrano liliowy, bo kwiatostan
+stoi w nim całą kulą pośrodku ramki, a przejście fiolet–biel–zieleń pokazuje rozpiętość barw
+hortensji lepiej niż płaska czerwień. `slot` zostaje - to pole jest wymagane i jest briefem
+ramki, nie znacznikiem zastępnika.
+
+### Opisy `alt`: gatunek tylko tam, gdzie nie ma pomyłki
+
+Nazywane: **pelargonia, fuksja, begonia bulwiasta, hortensja**. Nienazywane:
+
+- **surfinia** - to nazwa handlowa zwisającej petunii, a nie coś, co rozstrzyga zdjęcie;
+- **calibrachoa** - w tym repozytorium raz już wzięto ją za zwisającą petunię (patrz
+  [Zdjęcia](#zdjęcia)), więc żaden kadr z drobnym lejkiem nie dostał nazwy;
+- **niecierpek** - gatunek kadru z piątej paczki jest otwartą pozycją i tak zostaje.
+
+Dlatego `rows-05` (białe kwiaty w turkusowych skrzynkach) i oba `planters-*` nie nazywają
+rośliny w ogóle - opisują kolor i formę, dokładnie tak jak `historyPhoto`.
+
+### Przetwarzanie
+
+Reguła paska, nie wpisu: **skalowanie bez kadrowania**, bo `PhotoStrip` przycina do 3:4 w CSS,
+a lupa oddaje pełną klatkę. `sharp`, `.rotate()`, dłuższy bok do 2000 px, `withoutEnlargement`,
+progresywny JPEG q82. Siedem plików przyszło w 752×1020, poniżej progu, i są **kopiowane bajt
+w bajt** - skalowanie byłoby pustą operacją, a ponowne kodowanie kosztowałoby tylko jakość.
+Dwa kadry `planters-*` przyszły w 3024×4032 i zeszły do 1500×2000. **Żaden z 45 plików nie miał
+flagi EXIF orientation**, więc - inaczej niż w paczce galerii - nie było obrotu do wypalenia.
+
+### Co idzie na listę właścicieli
+
+1. **Opisy `alt` - 24 nowe**, odczytane z kadrów. Ta sama lista co wszystkie pozostałe opisy
+   alternatywne w serwisie.
+2. **Szyld obcej firmy w `planters-02`.** Oba kadry `planters-*` to jedyne zdjęcia
+   w repozytorium zrobione **poza gospodarstwem** - jego donice stojące u klienta w Kazimierzu.
+   W `planters-02` czytelny jest szyld i przeszklone wejście cudzego lokalu. Poszło do pasa na
+   wyraźną decyzję, ale zgoda na publikację wizerunku tego lokalu jest właścicieli, nie nasza.
+   Gdyby woleli inaczej: przyciąć szyld z górnej krawędzi kadru albo wyjąć obie klatki.
+3. **Czy kompozycje wielogatunkowe mają jednak wejść.** Dziewięć kadrów czeka; argument za
+   pominięciem jest wyżej, ale to jest wybór redakcyjny, a nie fakt.
+4. **Pozostałe 33 pliki paczki** nie są w repozytorium. Jeśli któryś ma wejść, wystarczy
+   wskazać - reguła nazewnictwa i przetwarzania jest opisana wyżej.
 
 ## Trzy rodzaje obsadzeń zamiast pięciu - wrzesień 2026
 
@@ -3016,18 +3126,27 @@ i jedyna, której nie da się zamknąć kodem: w repozytorium nie ma materiału 
 balkonowych to w 18 przypadkach zastępniki z Wikimedia Commons. **Do zgłoszenia właścicielom
 razem z tą zmianą** - potrzeba zdjęć oferty balkonowej, nie kodu.
 
+> **Zamknięte w 0.24.0.** Zdjęcia przyszły - 45 kadrów z albumów gospodarstwa - i strona ma
+> pasek (`balconyStrip`). Patrz
+> [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).
+> Diagnoza powyżej była trafna: brakowało materiału, nie kodu.
+
 ## Czego nadal brakuje
 
-1. Zdjęcia - **żaden wpis nie stoi już pusty, ale osiemnaście stoi na pożyczonym kadrze.**
-   Od września 2026 te osiemnaście ramek obsadzają zdjęcia z Wikimedia Commons, opisane
+1. Zdjęcia - **żaden wpis nie stoi już pusty, ale siedemnaście stoi na pożyczonym kadrze.**
+   Od września 2026 te ramki obsadzają zdjęcia z Wikimedia Commons, opisane
    w [Zdjęciach zastępczych](#zdjęcia-zastępcze-z-wikimedia-commons--wrzesień-2026) razem
-   z tabelą pochodzenia. **Prośba o własne kadry nie jest przez to zamknięta - jest tylko
+   z tabelą pochodzenia; było ich osiemnaście, hortensja zeszła z listy przy
+   [pasku balkonowym](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026). **Prośba o własne kadry
+   nie jest przez to zamknięta - jest tylko
    mniej widoczna**, bo zamiast pasiastej zaślepki stoi tam cudze zdjęcie, a strona sprzedaje
    rośliny „z własnej uprawy”. Nadal brakuje też archiwalnego zdjęcia gospodarstwa (3:2; ramka
    jest obsadzona zdjęciem z wystawy w Końskowoli, więc to prośba, a nie pusty kadr). Galeria,
-   wszystkie trzy karty sezonowe, chryzantemy i bratki są obsadzone własnymi kadrami. Opisy `alt` - czterech zdjęć chryzantem, sześciu
-   bratków, dziesięciu z piątej paczki, zdjęcia z Końskowoli w bloku historii
-   (`historyPhoto`), zdjęcia chryzantemy drobnokwiatowej i **osiemnastu zastępczych** - czekają
+   wszystkie trzy karty sezonowe, chryzantemy, bratki i kwiaty balkonowe są obsadzone własnymi
+   kadrami. Opisy `alt` - czterech zdjęć chryzantem, sześciu
+   bratków, dziesięciu z piątej paczki, **dwudziestu czterech z paska balkonowego**, zdjęcia
+   z Końskowoli w bloku historii
+   (`historyPhoto`), zdjęcia chryzantemy drobnokwiatowej i **siedemnastu zastępczych** - czekają
    na przejrzenie przez właścicieli, a razem z nimi **brzmienie
    jedynego podpisu na stronie**: właściciele podali „Wystawie kwiatów w Końskowoli”, a idzie
    „Na wystawie kwiatów w Końskowoli” (dołożony przyimek, żeby miejscownik miał czym rządzić).

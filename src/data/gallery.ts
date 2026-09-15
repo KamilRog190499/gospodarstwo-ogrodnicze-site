@@ -52,6 +52,30 @@ import pansy04 from "../assets/pansies/offer-04.jpg";
 import pansy05 from "../assets/pansies/offer-05.jpg";
 import pansy06 from "../assets/pansies/offer-06.jpg";
 import pansy07 from "../assets/pansies/offer-07.jpg";
+import balconyRows01 from "../assets/balcony/rows-01.jpg";
+import balconyRows02 from "../assets/balcony/rows-02.jpg";
+import balconyRows03 from "../assets/balcony/rows-03.jpg";
+import balconyRows04 from "../assets/balcony/rows-04.jpg";
+import balconyRows05 from "../assets/balcony/rows-05.jpg";
+import balconyRows06 from "../assets/balcony/rows-06.jpg";
+import balconyBasket01 from "../assets/balcony/baskets-01.jpg";
+import balconyBasket02 from "../assets/balcony/baskets-02.jpg";
+import balconyBasket03 from "../assets/balcony/baskets-03.jpg";
+import balconyBasket04 from "../assets/balcony/baskets-04.jpg";
+import balconyBasket05 from "../assets/balcony/baskets-05.jpg";
+import balconyBasket06 from "../assets/balcony/baskets-06.jpg";
+import balconyBasket07 from "../assets/balcony/baskets-07.jpg";
+import balconyBasket08 from "../assets/balcony/baskets-08.jpg";
+import balconyBasket09 from "../assets/balcony/baskets-09.jpg";
+import balconyBasket10 from "../assets/balcony/baskets-10.jpg";
+import balconyBasket11 from "../assets/balcony/baskets-11.jpg";
+import balconyBasket12 from "../assets/balcony/baskets-12.jpg";
+import balconyBasket13 from "../assets/balcony/baskets-13.jpg";
+import balconyBasket14 from "../assets/balcony/baskets-14.jpg";
+import balconyPot01 from "../assets/balcony/pots-01.jpg";
+import balconyPot02 from "../assets/balcony/pots-02.jpg";
+import balconyPlanter01 from "../assets/balcony/planters-01.jpg";
+import balconyPlanter02 from "../assets/balcony/planters-02.jpg";
 import pansyCrate from "../assets/pansies/crate-yellow.jpg";
 import heroGlasshouse from "../assets/hero/hero-glasshouse.jpg";
 import konskowolaStand from "../assets/farm/konskowola-stand.jpg";
@@ -325,5 +349,158 @@ export const pansyStrip: GalleryPhoto[] = [
   {
     src: pansy07,
     alt: "Skrzynka prymulek - białe, żółte, czerwone, różowe i fioletowe nad rozetami pomarszczonych liści",
+  },
+];
+
+/** The strip under the plant list on `/kwiaty-balkonowe/`: the balcony offer as it stands in
+ *  the tunnel.
+ *
+ *  **This is the page that had no strip**, and until September 2026 the reason was material
+ *  rather than code: the 23 frames in `src/assets/gallery/` are plantings shown on
+ *  `/inspiracje/`, and eighteen of the group's own entry photographs were borrowed from
+ *  Wikimedia Commons. Neither is an answer to "what does the balcony offer look like". A batch
+ *  of 45 frames off the holding's own Facebook albums closed it; 24 of them are here.
+ *
+ *  **Three jobs, and the order says which is which** - the shape `chrysanthemumStrip` already
+ *  uses. `rows-01..06` come first: the crop as it stands, trays and masses of one colour,
+ *  pelargoniums then begonias then petunias. `baskets-01..14` follow, one finished hanging
+ *  basket each - what a customer carries away rather than what is standing in the tunnel -
+ *  running fuchsias, petunias, begonias. `pots-01..02` are the two hydrangeas, pot plants
+ *  rather than baskets and the one thing in this group sold as a shrub.
+ *
+ *  **`planters-01..02` are the odd pair and are last on purpose: they are the only frames in
+ *  this repository taken away from the holding.** Two of its planters standing outside a
+ *  building in Kazimierz - the offer in use rather than for sale. They go on the owners' list
+ *  rather than passing quietly, because another business's sign and doorway are legible in
+ *  `planters-02`, and publishing that is theirs to allow rather than ours to assume
+ *  (docs/inwentaryzacja.md). Cropping the sign off the top of the frame is the fallback if they
+ *  would rather not.
+ *
+ *  **Nine mixed plantings in the batch were deliberately left out.** They are the genre of
+ *  `/inspiracje/` - one basket carrying four species at once - and a second, shorter copy of
+ *  the slideshow under the plant list would blur the line the page's own note draws when it
+ *  sends people to Inspiracje for exactly that. It is `chrysanthemumPhoto`'s argument run the
+ *  other way: a sales crate in the middle of the slideshow reads as a mistake, and so does a
+ *  composition in the middle of the offer.
+ *
+ *  **Six more were already in the repository** as the entry photographs for `begonia`,
+ *  `dahlia`, `lobelia`, `bakopa`, `petunia-surfinia` and `koleus` - found by comparing the
+ *  batch against `src/assets/` rather than by eye. That is why the row does not simply repeat
+ *  the list above it, and it is worth knowing before anyone adds back "the ones that got away".
+ *
+ *  **A seventh left the batch for an entry rather than for the strip.** The lilac hydrangea
+ *  became `plants/hortensja.jpg` and retired that entry's Wikimedia stand-in - the first of the
+ *  eighteen to go. The strip would otherwise have shown the holding's own hydrangeas a screen
+ *  below a borrowed one on the same page.
+ *
+ *  **The `alt` texts name a genus only where the frame cannot be mistaken.** Pelargonium,
+ *  fuchsia, tuberous begonia and hydrangea are named. **Surfinia, calibrachoa and busy lizzie
+ *  are not**: surfinia is a trade name for a trailing petunia and not something a photograph
+ *  can settle, calibrachoa has already been mistaken for a trailing petunia in this repository
+ *  once, and the species in the batch's white-flowered crates is the same open question
+ *  `plants/niecierpek-nowogwinejski.jpg` carries. `rows-05` and both `planters-*` therefore
+ *  name no plant at all and describe colour and form instead, which is what `historyPhoto`
+ *  does and for the same reason.
+ *
+ *  Processing is the strip rule, not the entry rule: scaled to the 2000px ceiling and **not**
+ *  cropped, because `PhotoStrip` crops to 3:4 in CSS and the lightbox hands back the whole
+ *  frame. Seven files arrived at 752x1020, under the ceiling, and are committed byte-for-byte -
+ *  a resize would be a no-op and re-encoding would only cost quality. None of the 45 carried an
+ *  EXIF orientation flag, so unlike the gallery batch there was no rotation to bake in.
+ *
+ *  **The alt texts are read off the pictures, not confirmed by the owners** (docs/inwentaryzacja.md). */
+export const balconyStrip: GalleryPhoto[] = [
+  {
+    src: balconyRows01,
+    alt: "Dwie partie pelargonii ustawione obok siebie w ostrym słońcu - po lewej czerwone, po prawej biało-różowe",
+  },
+  {
+    src: balconyRows02,
+    alt: "Pelargonie o koralowych kwiatach nad liśćmi z ciemną podkową, gęsty rząd w głąb uprawy",
+  },
+  {
+    src: balconyRows03,
+    alt: "Pelargonie biało-różowe z karminową plamką u nasady płatków, nad okrągłymi zielonymi liśćmi",
+  },
+  {
+    src: balconyRows04,
+    alt: "Begonie bulwiaste w skrzynkach - pełne kwiaty w czerwieni, łososiu, pomarańczu i żółci",
+  },
+  {
+    src: balconyRows05,
+    alt: "Białe pięciopłatkowe kwiaty nad ciemnozielonymi, lancetowatymi liśćmi, doniczki w turkusowych skrzynkach",
+  },
+  {
+    src: balconyRows06,
+    alt: "Rząd koszy z różowymi petuniami ciągnący się w głąb tunelu, nad nimi haki i konstrukcja",
+  },
+  {
+    src: balconyBasket01,
+    alt: "Fuksja o pełnych kwiatach - różowe działki odgięte nad purpurową koroną, kosz w tunelu",
+  },
+  { src: balconyBasket02, alt: "Fuksja o pełnych jasnoróżowych kwiatach na tle błękitnego nieba" },
+  {
+    src: balconyBasket03,
+    alt: "Fuksja o pojedynczych kwiatach - różowe działki nad białą koroną, rząd koszy w głębi",
+  },
+  {
+    src: balconyBasket04,
+    alt: "Fuksja o pojedynczych kwiatach - czerwone działki nad kremowobiałą koroną",
+  },
+  {
+    src: balconyBasket05,
+    alt: "Kosz petunii o fioletowych kwiatach nakrapianych bielą, trzymany na tle tunelu",
+  },
+  {
+    src: balconyBasket06,
+    alt: "Kosz fioletowych petunii, w tle czerwone i różowe kosze pod folią",
+  },
+  {
+    src: balconyBasket07,
+    alt: "Kosz czerwonych petunii, długi rząd kolejnych koszy w głąb tunelu",
+  },
+  {
+    src: balconyBasket08,
+    alt: "Kosz petunii w różowo-białe pasy układające się w gwiazdę, zawieszony na rurze",
+  },
+  {
+    src: balconyBasket09,
+    alt: "Kosz białych petunii z różowym żyłkowaniem płatków, w tle czerwone i różowe",
+  },
+  {
+    src: balconyBasket10,
+    alt: "Kosz białych petunii postawiony na ziemi, kwiaty zwieszone poza krawędź doniczki",
+  },
+  {
+    src: balconyBasket11,
+    alt: "Kosz pełnych, karbowanych petunii w ciemnym różu, w tle fioletowe kosze",
+  },
+  {
+    src: balconyBasket12,
+    alt: "Kosz różowych petunii z bliska, za nim kolejne kosze ustawione w rząd",
+  },
+  {
+    src: balconyBasket13,
+    alt: "Begonia zwisająca o pełnym, morelowym kwiecie, w doniczce pod błękitnym niebem",
+  },
+  {
+    src: balconyBasket14,
+    alt: "Begonia zwisająca o pełnych, ognistopomarańczowych kwiatach, kosz pod konstrukcją tunelu",
+  },
+  {
+    src: balconyPot01,
+    alt: "Hortensja o czerwonych kwiatostanach i ząbkowanych liściach, doniczka ustawiona na kamieniu",
+  },
+  {
+    src: balconyPot02,
+    alt: "Hortensja o różowych kwiatostanach, obok kwiatostany jeszcze zielone i kremowe",
+  },
+  {
+    src: balconyPlanter01,
+    alt: "Duża biała donica pełna amarantowych kwiatów nad ciemnozielonymi liśćmi, przy budynku na kostce brukowej",
+  },
+  {
+    src: balconyPlanter02,
+    alt: "Dwie białe donice z amarantowymi kwiatami ustawione przed przeszklonym wejściem",
   },
 ];

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import OfferSection from "../components/OfferSection.astro";
+import { balconyStrip } from "../data/gallery";
 
 /**
  * `/kwiaty-balkonowe/` - the WordPress address, unchanged, so no 301 is needed and the
@@ -23,6 +24,13 @@ import OfferSection from "../components/OfferSection.astro";
  * stayed in `order` on the argument that a short page has no use for a finding aid. The owners
  * looked at both and had the three pages aligned, so `OfferSection` runs one shape for all of
  * them and there is no `sort` prop to pass any more. Nothing on this page changed.
+ *
+ * **The photo strip arrived last**, in September 2026, and with it the last difference in
+ * layout between the three category pages. The hold-up was never the code - `OfferSection`
+ * has taken `photos` all along - but the material: the 23 frames in `src/assets/gallery/`
+ * belong to `/inspiracje/`, and eighteen of this group's own entries were standing on
+ * borrowed photographs. `balconyStrip` is argued out in `src/data/gallery.ts`, including why
+ * nine mixed plantings from the same batch stayed off it.
  */
 ---
 
@@ -36,5 +44,6 @@ import OfferSection from "../components/OfferSection.astro";
     group="Balkonowe"
     title="Kwiaty balkonowe"
     note="Poza samymi roślinami sprzedajemy gotowe obsadzone skrzynki, kosze i doniczki - kompozycje można oglądać w zakładce Inspiracje."
+    photos={balconyStrip}
   />
 </BaseLayout>
