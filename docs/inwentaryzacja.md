@@ -697,6 +697,43 @@ dało się na stronie zobaczyć w całości w żaden sposób.
   zapowiada. Gdyby to zaczęło mylić, tańszą poprawką jest dodać lupę wpisom niż odebrać ją
   pasom.
 
+#### Przechodzenie między zdjęciami - wrzesień 2026, zgłoszenie właściciela
+
+Podgląd był **ślepym zaułkiem**: otwierał jedno zdjęcie i jedyną drogą do następnego było
+zamknięcie go i trafienie w kolejną miniaturę. Przy czterech kadrach dawało się z tym żyć;
+przy dwudziestu czterech na `/kwiaty-balkonowe/` to 23 rundy tam i z powrotem, żeby obejrzeć
+pas. Zgłoszone przez właściciela, naprawione.
+
+- **Zbiór to wszystkie `a[data-lightbox]` na stronie, w kolejności dokumentu, i zawija się.**
+  Jest to bezpieczne, bo **żadna strona nie miesza dwóch grup**: strona kategorii ma swój pas
+  i nic więcej, `/inspiracje/` i strona główna mają pokaz i nic więcej (sprawdzone w zbudowanym
+  `dist/`: 0, 7, 20, 23 i 24 odnośniki na stronę). Gdyby kiedyś na jednej stronie stanęły oba,
+  trzeba to zmienić na „otwieracze z tego samego kontenera” - inaczej „następne” wyszłoby
+  z pasa w pokaz bez uprzedzenia. Zapisane też w nagłówku `lightbox.ts`.
+- **Zawijanie zamiast zatrzymania na końcach** - przyciski wygaszone na krańcach
+  dwudziestoczteroelementowego zbioru częściej czyta się jako zepsute niż jako informację,
+  a licznik pozycji i tak mówi, gdzie się jest.
+- **Sterowanie jest nad zdjęciem i pod zdjęciem, nigdy na nim.** Strzałka pływająca po
+  fotografii byłaby pierwszym miejscem, gdzie ten serwis kładzie tekst na zdjęciu. Stąd trzeci
+  wiersz siatki: pasek (licznik + „Zamknij”), zdjęcie, sterowanie („Poprzednie” / „Następne”).
+- **Strzałki to ten sam chevron co w menu i w FAQ** - dwie krawędzie 1px obrócone o 45°, nie
+  ikona i nie glif, bo design zabrania pierwszego. Dziedziczą `currentColor`, więc na hoverze
+  odwracają się razem z przyciskiem.
+- **Klawiatura:** `←` / `→` przechodzą, `Esc` zamyka jak dotąd. Pułapka na `Tab` była
+  jednolinijkowcem („jest jeden przycisk, więc wracaj na niego”) i jest teraz prawdziwym
+  cyklem po trzech.
+- **Zamknięcie oddaje focus na kadr, przy którym się skończyło**, a nie na ten, który się
+  kliknęło - inaczej po przejściu przez pół pasa strona przewijałaby się z powrotem do
+  zdjęcia, które odwiedzający już opuścił.
+- **Licznik pozycji („3 z 24”)** jest `aria-live="polite"`, więc zmiana pozycji jest
+  ogłaszana. Przy zbiorze jednoelementowym licznik i całe sterowanie znikają - nie ma dokąd
+  iść i nie ma czego liczyć. **To jest liczba na stronie, a lista rzeczy zakazanych w designie
+  wymienia „no counters”** - czytane jako zakaz liczników marketingowych, nie informacji
+  o pozycji; serwis drukuje zresztą liczniki typu „22 rośliny”. Do odrzucenia jedną linijką,
+  gdyby właściciele przeczytali tę regułę inaczej.
+- **Czego nie ma: gestu przesunięcia na dotyku.** Przyciski mają 44 px i działają palcem,
+  ale swipe jest tam oczekiwany i to jest świadoma dziura, nie przeoczenie.
+
 **Wrzesień 2026: `heroPhoto` podmienione na obraz wygenerowany przez AI**, na wyraźne
 polecenie, nie zdjęcie gospodarstwa. Plik: `src/assets/hero/hero-glasshouse.jpg` (1448×1086,
 4:3 - ten sam kadr poziomy, jakiego wymaga pas na górze strony głównej). Wcześniej `heroPhoto`
@@ -2251,6 +2288,7 @@ się co wzięło.
 | 0.22.1  | **Filtr obsadzeń schodzi z pięciu rodzajów do trzech**: `Kosz i skrzynka` / `Donica` / `Rabata` zamiast `Kosz wiszący` / `Skrzynka` / `Donica` / `Rabata` / `Ekspozycja`. Przy 23 kadrach pięć przycisków dawało niecałe pięć kadrów na przycisk; teraz rozkład to 10 / 7 / 6. **„Ekspozycja” wypadła jako błąd, nie jako nadmiar** - nazywała okoliczność zdjęcia (stoisko, tunel), a nie coś, co odwiedzający obsadza, więc jako jedyna odpowiadała na inne pytanie niż etykieta „Co obsadzasz” nad nią; jej cztery kadry rozeszły się tam, gdzie wskazują ich własne opisy `alt`. Trzynaście plików zmienia `kind:`, nic poza tym - schemat i rząd przycisków idą za `compositionKinds` same. Tytuły i proza właścicieli ze słowem „ekspozycja” zostają co do słowa. Patrz [Trzy rodzaje obsadzeń zamiast pięciu](#trzy-rodzaje-obsadzeń-zamiast-pięciu---wrzesień-2026).                                                                                                                                                                                                                                           |
 | 0.23.0  | **Trzy strony kategorii wyrównane do jednego układu** na polecenie właścicieli, którzy obejrzeli oba warianty obok siebie. `/bratki/` i `/chryzantemy/` przechodzą z kolejności redakcyjnej na alfabetyczną i dostają spis literowy oraz przekładki, które dotąd miały tylko `/kwiaty-balkonowe/`. Prop `sort: "order"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | "name"`**znika** zamiast dostać trzecie wywołanie - przełącznik z jedną wartością jest martwy, a bez niego „bez wyjątków" jest własnością konstrukcji, nie zgodnością trzech plików. Cena jest na`/chryzantemy/`i przyjęto ją świadomie: alfabet odwraca tę stronę, więc wielkokwiatowe stoją ostatnie mimo`<title>`, otwiera ją jedyny opis, którego nie napisali właściciele, a wszystkie trzy nazwy mają tę samą literę, więc przekładka nic nie rozdziela. Kotwice bez zmian. Szczegóły: [Jeden układ na trzech stronach kategorii](#jeden-układ-na-trzech-stronach-kategorii--wrzesień-2026). |
 | 0.24.0  | **Pasek „Zdjęcia z gospodarstwa" na `/kwiaty-balkonowe/`** - ostatnia różnica w układzie między trzema stronami kategorii, i jedyna, która czekała na materiał, a nie na kod. Z paczki 45 kadrów z Facebooka gospodarstwa weszły 24: uprawa, pojedyncze gotowe kosze, dwie hortensje i dwie donice u klienta. Dziewięć obsadzonych kompozycji świadomie **nie** weszło - to gatunek zdjęć z `/inspiracje/`. Przy okazji **pierwszy zastępnik z Wikimedia zdjęty**: hortensja dostała własny kadr, zostaje siedemnaście. Szczegóły: [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 0.25.0  | **Podgląd zdjęć przechodzi między zdjęciami** - zgłoszenie właściciela: z powiększenia nie dało się przejść do następnego kadru, trzeba było zamknąć i trafić w kolejną miniaturę. Doszły „Poprzednie” / „Następne”, strzałki `←` / `→`, licznik pozycji i prawdziwy cykl focusa po `Tab` (dotąd pułapka zakładała jeden przycisk). Zbiór zawija się i obejmuje wszystkie `a[data-lightbox]` na stronie - bezpieczne, bo żadna strona nie miesza pasa z pokazem. Sterowanie stoi nad i pod zdjęciem, nigdy na nim. Szczegóły: [Przechodzenie między zdjęciami](#przechodzenie-między-zdjęciami--wrzesień-2026-zgłoszenie-właściciela).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ### Paczki materiału od właścicieli
 

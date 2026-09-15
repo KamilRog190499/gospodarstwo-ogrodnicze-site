@@ -217,13 +217,37 @@ html.lightbox-open #consent {
   /* Dark ground, so the default ring fails 1.4.11 here too - see tokens.css. */
   --focus-ring: var(--green-lit);
   display: grid;
-  grid-template-rows: auto 1fr;
+  /* Three rows: the bar, the photograph, the step controls. The middle row is the only one
+     that flexes, so a tall photograph gives up height and the controls never leave the
+     viewport. */
+  grid-template-rows: auto 1fr auto;
   gap: 1rem;
   padding: 1rem var(--edge) 2rem;
 }
 
-.lightbox__close {
-  justify-self: end;
+/* Position readout on the left, close on the right. The readout is here rather than over the
+   photograph because nothing on this site puts text on a photograph. */
+.lightbox__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lightbox__position {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* --ink-grey carries this role on the light grounds and fails against the backdrop;
+     --green-lit is the token tokens.css designates for uppercase labels on dark (6.58:1). */
+  color: var(--green-lit);
+}
+
+/* Shared by all three controls, so "Zamknij", "Poprzednie" and "Następne" are one button in
+   three places rather than three buttons that happen to look alike. */
+.lightbox__button {
   font-family: inherit;
   font-size: 0.72rem;
   font-weight: 600;
@@ -236,11 +260,48 @@ html.lightbox-open #consent {
   min-height: var(--tap);
   display: inline-flex;
   align-items: center;
+  gap: 0.6rem;
   cursor: pointer;
 }
-.lightbox__close:hover {
+.lightbox__button:hover {
   color: var(--ink);
   background: var(--green-lit);
+}
+
+/* Keeps "Zamknij" on the right even when it is the bar's only child - with a set of one the
+   position readout is hidden, and `space-between` alone would swing the button to the left. */
+.lightbox__close {
+  margin-left: auto;
+}
+
+.lightbox__nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.lightbox__nav[hidden],
+.lightbox__position[hidden] {
+  display: none;
+}
+
+/* The same chevron as the menu and the FAQ, turned to point sideways: two 1px edges at 45
+   degrees, not an icon and not a glyph. It follows `currentColor` so it inverts with the
+   button on hover instead of disappearing into the fill. */
+.lightbox__prev::before,
+.lightbox__next::after {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+}
+.lightbox__prev::before {
+  transform: rotate(135deg);
+}
+.lightbox__next::after {
+  transform: rotate(-45deg);
 }
 
 /* One row, because there is one child: the caption under the photograph was removed in
