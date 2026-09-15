@@ -17,10 +17,12 @@ import OfferSection from "../components/OfferSection.astro";
  * people actually search for in the one field written for them. Both halves of the old
  * descriptions are folded in.
  *
- * `sort="name"` is the other consequence of the merge: 34 entries in editorial `order` is a
- * list nobody can find anything in, so this page alone runs alphabetically, with the letter
- * index and the dividers `OfferSection` draws for it. `/bratki/` and `/chryzantemy/` are
- * short enough to keep saying what the owners consider most important first.
+ * **The alphabet started here and is no longer this page's alone.** 34 entries in editorial
+ * `order` is a list nobody can find anything in, which is what first put this page in Polish
+ * alphabetical order with the letter index and the dividers; `/bratki/` and `/chryzantemy/`
+ * stayed in `order` on the argument that a short page has no use for a finding aid. The owners
+ * looked at both and had the three pages aligned, so `OfferSection` runs one shape for all of
+ * them and there is no `sort` prop to pass any more. Nothing on this page changed.
  */
 ---
 
@@ -33,7 +35,6 @@ import OfferSection from "../components/OfferSection.astro";
   <OfferSection
     group="Balkonowe"
     title="Kwiaty balkonowe"
-    sort="name"
     note="Poza samymi roślinami sprzedajemy gotowe obsadzone skrzynki, kosze i doniczki - kompozycje można oglądać w zakładce Inspiracje."
   />
 </BaseLayout>

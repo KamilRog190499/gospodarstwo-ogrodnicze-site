@@ -15,15 +15,27 @@ import { primaryPhone } from "../data/contact";
  * as much: "ta sama sekcja, węższy zbiór wpisów, ten sam komponent PlantEntry, ta sama
  * siatka". Each page passes its group and its own words; everything else is here.
  *
- * ## Two shapes, because one page is now ten times the size of another
+ * ## One shape, whether the page is long or short
  *
- * `/bratki/` holds two entries and `/chryzantemy/` four; `/kwiaty-balkonowe/` holds
- * thirty-four, having absorbed `Rabatowe` in September 2026 (see `src/data/offer.ts`).
- * Thirty-four entries in editorial `order` is a list nobody can find a plant in, so `sort="name"` puts that
- * page in Polish alphabetical order and draws two things the short pages have no use for: an
- * index grouped by initial, and a letter between the entries as the page scrolls past. Both are
- * off by default - a four-item page does not need finding aids, and `order` is where the owners
- * say what they consider most important.
+ * `/bratki/` holds two entries, `/chryzantemy/` three and `/kwiaty-balkonowe/` thirty-four,
+ * the last having absorbed `Rabatowe` in September 2026 (see `src/data/offer.ts`). All three
+ * run the same way: Polish alphabetical order, an index grouped by initial, and a letter
+ * between the entries as the page scrolls past.
+ *
+ * **That is the owners' call, and it reverses what stood here.** This component took a
+ * `sort: "order" | "name"` prop until they saw both shapes side by side - the long page
+ * alphabetical with its finding aids, the two short ones in editorial `order` on a flat list.
+ * The argument for the split was that two or three plants need no finding aid, and that `order`
+ * is where the owners say what they consider most important. They asked for the three pages to
+ * be aligned with no exceptions, so the prop went with the argument it existed for.
+ *
+ * **The price is on `/chryzantemy/`, and it was accepted knowingly.** Alphabetical order
+ * reverses that page, so chryzantema wielkokwiatowa - the flagship, and the word in the page's
+ * own `<title>` - now stands last, and the entry that leads is the one whose description is
+ * ours rather than the owners'. All three names share an initial, so the divider above the
+ * first entry parts nothing from nothing and the index has a single row. The page draws them
+ * anyway: "no exceptions" is what was asked for, and a rule with a length threshold in it is
+ * the thing that was removed.
  *
  * Outline: `h1` (this page's subject) then one `h2` per plant. No level is skipped and no
  * heading names anything other than the thing under it.
@@ -43,15 +55,6 @@ interface Props {
   /** The `group` value in the plants' frontmatter. */
   group: PlantGroup;
   title: string;
-  /** How the entries are ordered, and with them whether this page gets its letter index and
-   *  its dividers.
-   *
-   *  `"order"` is the frontmatter's own number - the owners' sense of what matters most, and
-   *  the right answer while a page fits on a screen or two. `"name"` is Polish alphabetical
-   *  order, for a page long enough that finding one plant beats being shown the best one
-   *  first. The two are one prop rather than two because grouping an `order` list by initial
-   *  would draw letters over a list that is not in letter order. */
-  sort?: "order" | "name";
   /** Sentence beside the heading. Defaults to `OFFER_LEAD` below, which is what every
    *  category page wants; pass a different one only for a page that genuinely says something
    *  else, and `""` for a page that should say nothing. */
@@ -87,9 +90,7 @@ interface Props {
 const OFFER_LEAD =
   "Kwiaty z naszej uprawy. Przy każdej roślinie są najważniejsze informacje o jej uprawie i o kolorach dostępnych u nas.";
 
-const { group, title, lead = OFFER_LEAD, note, photos, sort = "order" } = Astro.props;
-
-const byLetter = sort === "name";
+const { group, title, lead = OFFER_LEAD, note, photos } = Astro.props;
 
 /** Polish collation, not the default. `localeCompare` without a locale sorts "Łubin" past
  *  "Wrzos" and hides it at the end of the list, and files "Goździk" wherever the runtime's
@@ -97,9 +98,7 @@ const byLetter = sort === "name";
  *  Ł directly after L, ź inside G. */
 const entries = (await getCollection("plants"))
   .filter((plant) => plant.data.group === group)
-  .sort((a, b) =>
-    byLetter ? a.data.name.localeCompare(b.data.name, "pl-PL") : a.data.order - b.data.order,
-  );
+  .sort((a, b) => a.data.name.localeCompare(b.data.name, "pl-PL"));
 
 if (entries.length === 0) {
   throw new Error(`No plants with group "${group}" - the page would have a heading and no list.`);
@@ -110,19 +109,17 @@ if (entries.length === 0) {
 const initialOf = (name: string): string => name.trim().charAt(0).toLocaleUpperCase("pl-PL");
 
 /** The entries grouped by initial, in the order they already stand in - so this is a
- *  partition of a sorted list and never a second sort. Empty unless the page asked for it.
+ *  partition of a sorted list and never a second sort.
  *
  *  Feeds the index at the top. The list below reads the same grouping off `divider`, which is
  *  derived from the same array rather than recomputed, so the two cannot disagree about where
  *  a letter starts. */
 const letterGroups: { letter: string; plants: typeof entries }[] = [];
-if (byLetter) {
-  for (const plant of entries) {
-    const letter = initialOf(plant.data.name);
-    const open = letterGroups.at(-1);
-    if (open?.letter === letter) open.plants.push(plant);
-    else letterGroups.push({ letter, plants: [plant] });
-  }
+for (const plant of entries) {
+  const letter = initialOf(plant.data.name);
+  const open = letterGroups.at(-1);
+  if (open?.letter === letter) open.plants.push(plant);
+  else letterGroups.push({ letter, plants: [plant] });
 }
 
 /** Each entry, with the letter to draw above it, or null where it continues the current one.
@@ -133,8 +130,7 @@ if (byLetter) {
 const list = entries.map((entry, index) => ({
   entry,
   divider:
-    byLetter &&
-    (index === 0 || initialOf(entries[index - 1]!.data.name) !== initialOf(entry.data.name))
+    index === 0 || initialOf(entries[index - 1]!.data.name) !== initialOf(entry.data.name)
       ? initialOf(entry.data.name)
       : null,
 }));
@@ -176,32 +172,22 @@ const saleLine = saleWindow
     entries.length > 1 && (
       <nav class="offer__index" aria-label="Spis roślin na tej stronie">
         <p class="offer__indexLabel">Na tej stronie</p>
-        {byLetter ? (
-          <dl class="offer__letters">
-            {letterGroups.map((row) => (
-              <div class="offer__lettersRow">
-                <dt>{row.letter}</dt>
-                <dd>
-                  <ul>
-                    {row.plants.map((plant) => (
-                      <li>
-                        <a href={`#${plant.id}`}>{plant.data.name}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : (
-          <ul>
-            {entries.map((plant) => (
-              <li>
-                <a href={`#${plant.id}`}>{plant.data.name}</a>
-              </li>
-            ))}
-          </ul>
-        )}
+        <dl class="offer__letters">
+          {letterGroups.map((row) => (
+            <div class="offer__lettersRow">
+              <dt>{row.letter}</dt>
+              <dd>
+                <ul>
+                  {row.plants.map((plant) => (
+                    <li>
+                      <a href={`#${plant.id}`}>{plant.data.name}</a>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          ))}
+        </dl>
       </nav>
     )
   }
@@ -346,10 +332,12 @@ const saleLine = saleWindow
     border-bottom-color: var(--green);
   }
 
-  /* The index a page gets once it is long enough to be found in rather than read down.
-     Seventeen initials over thirty-four plants would be seventeen full-width rows - a screen
-     and a half of index standing in front of the first plant - so the rows run in columns:
-     three on a desktop, one on a phone, decided by `column-width` rather than by a breakpoint.
+  /* The index every category page now gets, sized by the longest of them. Seventeen initials
+     over thirty-four plants would be seventeen full-width rows - a screen and a half of index
+     standing in front of the first plant - so the rows run in columns: three on a desktop, one
+     on a phone, decided by `column-width` rather than by a breakpoint. A page with one or two
+     rows simply leaves the other columns empty, which is what a short index looks like in
+     print too; it is not worth a second rule to collapse them.
 
      **Columns and not a grid, because a grid aligns its rows across the tracks.** That is what
      it is for and it was wrong here: the P row holds four names and wraps to three lines, and

@@ -31,13 +31,13 @@ const plants = defineCollection({
         group: z.enum(plantGroups),
         /** Where the entry stands among its group's.
          *
-         *  **It stopped meaning "position on the page" for one of the three groups.**
-         *  `/kwiaty-balkonowe/` runs alphabetically since it absorbed `Rabatowe` in September
-         *  2026 - thirty-four entries in editorial order is a list nobody can find a plant in
-         *  (`OfferSection.astro`, prop `sort`). There it now decides only which four names and
-         *  which two photographs the home page tile shows, which is the question it was always
-         *  really answering: what the owners consider worth putting first. On `/bratki/` and
-         *  `/chryzantemy/` it still sets the order of the page as well.
+         *  **It no longer means "position on the page" anywhere.** Every category page runs in
+         *  Polish alphabetical order since the owners had the three of them aligned in
+         *  September 2026 (`OfferSection.astro`); `/kwiaty-balkonowe/` had gone that way first,
+         *  when absorbing `Rabatowe` made it thirty-four entries and editorial order made it
+         *  unsearchable. What this number decides now is which four names and which two
+         *  photographs each home page tile shows - which is the question it was always really
+         *  answering: what the owners consider worth putting first.
          *
          *  Values are unique across the whole collection rather than per group, which is why
          *  the merge needed no renumbering. Nothing requires that and nothing checks it. */

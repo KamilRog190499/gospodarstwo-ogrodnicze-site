@@ -342,13 +342,19 @@ plus manual viewport checks.
     colours a plant comes in. Nineteen entries still name them there and three already say
     nothing; a cut that took the count to four would be deleting a fact, not tightening a
     paragraph.
-- **A long category page sorts alphabetically, a short one by `order`.** `OfferSection` takes
-  `sort="order" | "name"`, defaulting to `order`; `/kwiaty-balkonowe/` is the one page that
-  passes `"name"`, because thirty-four entries in editorial order is a list nobody can find a
-  plant in. `"name"` also turns on the two finding aids that come with it: the "Na tej stronie"
-  index grouped by initial, and a large letter between the entries as the page scrolls. Both are
-  off on `/bratki/` and `/chryzantemy/`, which are short enough to say what matters first
-  instead. Collation is `localeCompare(…, "pl-PL")` and it is not optional - the default sorts
+- **Every category page sorts alphabetically, and there is no prop to say otherwise.** All three
+  get the same three things: Polish alphabetical order, the "Na tej stronie" index grouped by
+  initial, and a large letter between the entries as the page scrolls. `OfferSection` took a
+  `sort="order" | "name"` prop until September 2026, when only `/kwiaty-balkonowe/` passed
+  `"name"` - thirty-four entries in editorial order is a list nobody can find a plant in - and
+  `/bratki/` and `/chryzantemy/` stayed in `order` on the argument that a two- or three-item page
+  needs no finding aid and that `order` is where the owners say what matters most. **The owners
+  saw both and had the three pages aligned with no exceptions**, so the prop went with the
+  argument. What that cost is on `/chryzantemy/` and was accepted knowingly: the page reverses,
+  so chryzantema wielkokwiatowa - the flagship, and the phrase in the page's own `<title>` -
+  stands last, and all three names share an initial, so the index has one row and the divider
+  above the first entry parts nothing from nothing. Putting a length threshold back is a
+  client-visible change, not a tidy-up. Collation is `localeCompare(…, "pl-PL")` and it is not optional - the default sorts
   "Łubin" past "Wrzos". **The letter dividers are not headings** (`<p aria-hidden="true">`): the
   outline stays one `h1` and one `h2` per plant, and a screen reader gets the letters from the
   index, which is a real `<nav>` with real links. **The divider draws no line of its own**, and
@@ -359,11 +365,11 @@ plus manual viewport checks.
   plants that follow - and it is `--sage`, which `tokens.css` permits only on decorative type at
   24px and up. It never renders below 40px. **Do not take that green up to the index's `<dt>`**,
   which sits at 20px and stays `--ink-grey`.
-- **`order` no longer means "position on the page" everywhere.** On `/kwiaty-balkonowe/` it
-  decides only which four names and which two photographs the home page tile shows. That the
-  tile is in `order` while the page is alphabetical is deliberate and argued in
-  `OfferOverview.astro`: a tile with room for four names wants the best four, not the first four
-  of the alphabet.
+- **`order` no longer means "position on the page" anywhere.** It decides only which four names
+  and which two photographs each home page tile shows. That the tiles are in `order` while every
+  category page is alphabetical is deliberate and argued in `OfferOverview.astro`: a tile with
+  room for four names wants the best four, not the first four of the alphabet. It shows most on
+  the chrysanthemum tile, which opens with the wielkokwiatowe while the page closes with them.
 - **A page gets one photo strip, and the overline lives in `OfferSection`.** It briefly took a
   list of labelled rows, when `/chryzantemy/` carried a second strip of finished pots beside the
   crop; the owner had that strip removed in September 2026 and its four frames moved to the end

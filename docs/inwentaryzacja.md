@@ -2249,6 +2249,7 @@ się co wzięło.
 | 0.21.0  | **Zdjęcia zastępcze z Wikimedia Commons** - osiemnaście wpisów bez zdjęcia dostaje pożyczony kadr 4:3 na licencji CC/PD, więc na `/kwiaty-balkonowe/` nie ma już ani jednej zaślepki. Nowe pole `imageCredit` w schemacie plants (schemat wywala budowanie, jeśli atrybucja przeżyje zdjęcie) i linia atrybucji pod kadrem w `PlantEntry` - to nie jest powrót usuniętych podpisów, tylko warunek licencji. Zdjęcia są **tymczasowe**, `slot` na tych wpisach zostaje. Szczegóły: [Zdjęcia zastępcze](#zdjęcia-zastępcze-z-wikimedia-commons--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 0.22.0  | **Fakty ujednolicone do czterech gniazd** na prośbę właścicieli. Bloki faktów były nierówne - 31 wpisów miało cztery, osiem od jednego do trzech - więc sąsiadujące wpisy pokazywały różne rzeczy w różnej liczbie wierszy. Teraz **każdy z 39 wpisów ma dokładnie cztery**, a trzy pierwsze etykiety są wszędzie te same: miara-albo-`Pokrój` → `Stanowisko` → `Podlewanie`, przy czwartym gnieździe `Uprawa` ustępującym `Sprzedaży`, `Zimowaniu` lub `Podłożu` tam, gdzie te mówią więcej (dziewięć wpisów). Schemat egzekwuje to przez `.length(4)`, więc wpis z trzema faktami wywala build; pole przestało być opcjonalne, a `PlantEntry` stracił martwą osłonę `facts &&`. Cena: **36 faktów wypadło** (głównie `Kwitnienie`, `Charakter` i `Odmiany`, w większości powtarzające zdanie z opisu obok), a **26 wartości dopisano z wiedzy ogrodniczej** - co **odwraca zasadę „tylko to, co mówi opis klienta”** obowiązującą tu od początku. Odwrócenie jest warunkowe: wszystkie 26 jest spisane co do jednej i czeka na potwierdzenie. Patrz [Cztery gniazda faktów](#cztery-gniazda-faktów---wrzesień-2026). |
 | 0.22.1  | **Filtr obsadzeń schodzi z pięciu rodzajów do trzech**: `Kosz i skrzynka` / `Donica` / `Rabata` zamiast `Kosz wiszący` / `Skrzynka` / `Donica` / `Rabata` / `Ekspozycja`. Przy 23 kadrach pięć przycisków dawało niecałe pięć kadrów na przycisk; teraz rozkład to 10 / 7 / 6. **„Ekspozycja” wypadła jako błąd, nie jako nadmiar** - nazywała okoliczność zdjęcia (stoisko, tunel), a nie coś, co odwiedzający obsadza, więc jako jedyna odpowiadała na inne pytanie niż etykieta „Co obsadzasz” nad nią; jej cztery kadry rozeszły się tam, gdzie wskazują ich własne opisy `alt`. Trzynaście plików zmienia `kind:`, nic poza tym - schemat i rząd przycisków idą za `compositionKinds` same. Tytuły i proza właścicieli ze słowem „ekspozycja” zostają co do słowa. Patrz [Trzy rodzaje obsadzeń zamiast pięciu](#trzy-rodzaje-obsadzeń-zamiast-pięciu---wrzesień-2026).                                                                                                                                                                                                                                           |
+| 0.23.0  | **Trzy strony kategorii wyrównane do jednego układu** na polecenie właścicieli, którzy obejrzeli oba warianty obok siebie. `/bratki/` i `/chryzantemy/` przechodzą z kolejności redakcyjnej na alfabetyczną i dostają spis literowy oraz przekładki, które dotąd miały tylko `/kwiaty-balkonowe/`. Prop `sort: "order"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | "name"`**znika** zamiast dostać trzecie wywołanie - przełącznik z jedną wartością jest martwy, a bez niego „bez wyjątków" jest własnością konstrukcji, nie zgodnością trzech plików. Cena jest na`/chryzantemy/`i przyjęto ją świadomie: alfabet odwraca tę stronę, więc wielkokwiatowe stoją ostatnie mimo`<title>`, otwiera ją jedyny opis, którego nie napisali właściciele, a wszystkie trzy nazwy mają tę samą literę, więc przekładka nic nie rozdziela. Kotwice bez zmian. Szczegóły: [Jeden układ na trzech stronach kategorii](#jeden-układ-na-trzech-stronach-kategorii--wrzesień-2026). |
 
 ### Paczki materiału od właścicieli
 
@@ -2544,15 +2545,18 @@ Sortowanie idzie przez `localeCompare(…, "pl-PL")` i kolacja **nie jest tu opc
 domyślna wyrzuca „Łubin” za „Wrzos”, czyli na koniec listy, zamiast postawić go zaraz po
 „Lobelii”.
 
-Jedno i drugie jest **wyłączone na `/bratki/` i `/chryzantemy/`**. `OfferSection` dostał prop
-`sort: "order" | "name"`; przy dwóch i czterech wpisach pomoce w szukaniu są zbędne, a `order`
-mówi, co właściciele uważają za najważniejsze, i na krótkiej stronie to jest lepsza odpowiedź
-niż alfabet.
+Jedno i drugie było **wyłączone na `/bratki/` i `/chryzantemy/`**. `OfferSection` dostał prop
+`sort: "order" | "name"`; przy dwóch i czterech wpisach pomoce w szukaniu wydawały się zbędne,
+a `order` mówi, co właściciele uważają za najważniejsze, i na krótkiej stronie to miała być
+lepsza odpowiedź niż alfabet. **Właściciele obejrzeli obie wersje i kazali wyrównać wszystkie
+trzy strony**; prop zniknął razem z tym argumentem - patrz
+[Jeden układ na trzech stronach kategorii](#jeden-układ-na-trzech-stronach-kategorii--wrzesień-2026).
 
 ### `order` przestał znaczyć to samo wszędzie
 
 Na `/kwiaty-balkonowe/` `order` nie rządzi już kolejnością na stronie - steruje wyłącznie tym,
-które cztery nazwy i które dwa zdjęcia pokazuje kafel na stronie głównej. **Kafel jest więc
+które cztery nazwy i które dwa zdjęcia pokazuje kafel na stronie głównej. (Po wyrównaniu
+trzech stron nie rządzi nią **nigdzie**.) **Kafel jest więc
 w kolejności redakcyjnej, a strona w alfabetycznej, i to jest celowe**: kafel z miejscem na
 cztery nazwy ma pokazać cztery najlepsze, a nie cztery pierwsze z alfabetu, bo inaczej oferta
 otwierałaby się słowami „Aksamitka · Alstromeria · Bakopa · Begonia”. Argument stoi
@@ -2943,6 +2947,74 @@ Trzynaście z 23 plików zmieniło linię `kind:`; szóstka rabat została nietk
    równie dobrze jak na tarasie. Nazwy pojemników są uczciwsze.
 2. **Dwa przyciski: `W pojemniku` / `Rabata`.** Najkrótsze i prawdziwe, ale 17 z 23 kadrów
    ląduje pod jednym przyciskiem - filtr, który prawie nie filtruje.
+
+## Jeden układ na trzech stronach kategorii - wrzesień 2026
+
+Trzy strony oferty renderuje jeden komponent, ale od
+[scalenia oferty](#scalenie-oferty--wrzesień-2026) chodziły w dwóch trybach:
+`/kwiaty-balkonowe/` alfabetycznie, ze spisem literowym i przekładkami, a `/bratki/`
+i `/chryzantemy/` po `order`, na płaskiej liście nazw w spisie. **Właściciele obejrzeli oba
+układy obok siebie i kazali wyrównać trzy strony bez wyjątków.**
+
+Po zmianie wszystkie trzy chodzą tak samo: kolejność alfabetyczna `pl-PL`, spis „Na tej
+stronie" grupowany po literze i duża litera-przekładka między wpisami.
+
+|            | Balkonowe (34) | Bratki (2)                         | Chryzantemy (3)                   |
+| ---------- | -------------- | ---------------------------------- | --------------------------------- |
+| kolejność  | bez zmian      | bez zmian (alfabet = `order`)      | **odwrócona**                     |
+| spis       | bez zmian      | płaska lista → litery **B**, **P** | płaska lista → jeden wiersz **C** |
+| przekładki | bez zmian      | dochodzą **B** i **P**             | dochodzi jedno **C**              |
+
+### Co to kosztuje na `/chryzantemy/`
+
+To jedyna strona, na której zmiana widać w treści, i cena została przyjęta świadomie:
+
+1. **Kolejność się odwraca.** `order` szedł wielkokwiatowa (35) → średniokwiatowa (36) →
+   drobnokwiatowa (37), czyli malejącą wielkością kwiatu. Alfabet daje drobnokwiatowa →
+   średniokwiatowa → wielkokwiatowa. **Produkt flagowy stoi ostatni**, a `<title>` strony to
+   nadal „Chryzantemy wielkokwiatowe" - i tak ma zostać, bo to jest fraza, na którą ta strona
+   ma się wyszukiwać, niezależnie od tego, który wpis wypadnie pierwszy w dół strony.
+2. **Pierwszy wpis jest tym jedynym, którego opisu nie napisali właściciele.**
+   `chryzantema-drobnokwiatowa.md` powstał u nas (patrz
+   [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026)) i po tej zmianie
+   otwiera stronę. To wzmacnia, a nie osłabia, punkt o wymianie tego opisu.
+3. **Przekładka nic nie rozdziela.** Wszystkie trzy nazwy zaczynają się na „Chryzantema", więc
+   spis ma jeden wiersz „C", a nad pierwszym wpisem stoi jedno „C" i nic za nim nie następuje.
+   Strona rysuje je mimo to, bo „bez wyjątków" jest dokładnie tym, o co poproszono, a regułą,
+   którą usunięto, był próg długości strony.
+
+### Co się zmieniło w kodzie
+
+Prop `sort: "order" | "name"` **zniknął** zamiast dostać trzecie wywołanie. Prop z jedną
+możliwą wartością to martwy przełącznik, a to repozytorium ma na to precedens: `photos`
+przestało być listą etykietowanych rzędów w chwili, gdy zostało mu jedno wywołanie (patrz
+komentarz przy `chrysanthemumStrip` w `src/data/gallery.ts`). Usunięcie robi z „bez wyjątków"
+własność konstrukcyjną, a nie zgodność trzech plików, które mogą się rozjechać. **Przegrany
+argument nie został skasowany** - stoi w nagłówku `OfferSection.astro` i wyżej w tym pliku.
+
+Razem z propem zniknęła płaska gałąź spisu (`<ul>` zamiast `<dl>`) i warunki `byLetter` przy
+budowie grup literowych i przekładek. Zostało: `entries.length > 1` przy spisie, bo to
+zabezpieczenie na grupę, która spadnie do jednego wpisu, a nie na tryb strony. CSS bez zmian -
+`columns: 3 300px` przy jednym czy dwóch wierszach po prostu zostawia pozostałe kolumny puste,
+tak jak krótki indeks w druku.
+
+**Kotwice się nie zmieniły.** Biorą się z nazw plików, więc odwrócenie kolejności na
+`/chryzantemy/` nie psuje żadnego odnośnika wewnętrznego ani `plant-links.ts` - zmienia się
+tylko kolejność w DOM-ie.
+
+Poprawione przy okazji komentarze, które po zmianie kłamały: `order` w `src/content.config.ts`
+(„na `/bratki/` i `/chryzantemy/` nadal ustala kolejność strony" - już nigdzie nie ustala)
+i akapit o celowej rozbieżności kafla z jego stroną w `OfferOverview.astro` (dotyczy teraz
+wszystkich trzech kafli, nie jednego).
+
+### Czego ta zmiana nie zrobiła
+
+`/kwiaty-balkonowe/` **nadal nie ma paska zdjęć pod listą**, a `/bratki/` i `/chryzantemy/`
+mają (`pansyStrip`, `chrysanthemumStrip`). To czwarta różnica w układzie między tymi stronami
+i jedyna, której nie da się zamknąć kodem: w repozytorium nie ma materiału na taki pas.
+23 kadry w `src/assets/gallery/` to obsadzenia pokazywane na `/inspiracje/`, a zdjęcia wpisów
+balkonowych to w 18 przypadkach zastępniki z Wikimedia Commons. **Do zgłoszenia właścicielom
+razem z tą zmianą** - potrzeba zdjęć oferty balkonowej, nie kodu.
 
 ## Czego nadal brakuje
 
