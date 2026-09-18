@@ -104,7 +104,13 @@ if (openers.length > 0) {
     current = (index + tiles.length) % tiles.length;
     const tile = tiles[current];
     image.src = tile.href;
-    image.alt = tile.querySelector("img")?.alt ?? "";
+    /* The thumbnail's own `alt` first, which is what every frame in a strip and every slide
+       in the slideshow carries. `data-alt` is the fallback, and it exists for one case: a
+       Facebook post with text beside its photograph gives that photograph an empty `alt` on
+       purpose - the words next to it do the describing - and in the overlay those words are
+       gone. An unnamed image filling the screen is worse than a plain statement of what it
+       is, so `FacebookPost.astro` writes one there. See the note at `caption` in that file. */
+    image.alt = tile.querySelector("img")?.alt || (tile.dataset.alt ?? "");
     position.textContent = `${current + 1} z ${tiles.length}`;
   }
 

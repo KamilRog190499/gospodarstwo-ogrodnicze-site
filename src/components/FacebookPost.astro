@@ -1,0 +1,1174 @@
+---
+/** One post from the holding's Facebook page.
+ *
+ *  Reproduced from `NewsCard.astro` on the sibling site alpaki-kazimierzdolny.pl, at the
+ *  owner's instruction, in September 2026. It replaced a card that showed a date, 200
+ *  characters of text and one photograph; everything below that is not in the old card -
+ *  the page header, the tagged names, the carousel, the films, the counters - came from
+ *  there. The anatomy follows the post as Facebook itself lays one out: who wrote it and
+ *  when, then the text, then the pictures, then the counters and the way out.
+ *
+ *  **This is the one component on this site that carries icons, a border radius and a
+ *  shadow, and it is a deliberate exception rather than a drift.** CLAUDE.md says the design
+ *  has none of the three; the exception is written down there too. It exists because this
+ *  block is a view of somebody else's page and reads as one, and it stops at this component
+ *  and `FacebookNews.astro` around it.
+ *
+ *  Three things about it are load-bearing rather than decorative:
+ *
+ *  - The four rows line up across the cards in a row, so the photographs start at the same
+ *    height whatever the posts happen to say. `subgrid` does that on the real content,
+ *    which matters because the section shows every post without filtering: a post with no
+ *    text at all is normal here, and reserving four lines in every card leaves a visible hole
+ *    under the short ones. The reservation survives only as the fallback for browsers without
+ *    `subgrid`, and only where cards sit side by side - stacked on a phone there is nothing to
+ *    line up with.
+ *  - The card is not one big link. A stretched `::after` over the whole card is the usual way
+ *    to make a card clickable, and here it would sit on top of the carousel's arrows and
+ *    swallow them. The link stays its own element.
+ *  - Nothing here fetches anything from Meta. The photographs and the films are our own files,
+ *    put in `src/assets/facebook/` by `scripts/fetch-facebook.mjs`, which is why this block
+ *    needs no consent gate and why § 5 of the privacy policy can say what it says.
+ *
+ *  **The preview overlay is this site's own**, not the sibling's: the zoom link carries
+ *  `data-lightbox` and its `href` is the full frame, exactly as `PhotoStrip` does it, and
+ *  `src/scripts/lightbox.ts` picks it up. `data-lightbox-group` sits on the media block, so
+ *  the overlay walks this post's album and stops there - the same set the carousel moves
+ *  through. Without it "Następne" would step out of the post into the home page photo show.
+ */
+import { Picture, getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+import type { FacebookPost, FacebookMedia } from "../data/facebook";
+import { formatDate, isoDateTime } from "../data/facebook";
+import Icon from "./Icon.astro";
+import type { IconName } from "./Icon.astro";
+import { nbsp } from "../utils/typography";
+import { counted } from "../utils/plural";
+import { segments } from "../utils/message";
+
+interface Props {
+  post: FacebookPost;
+  /** Name of the Facebook page, shown on every card. */
+  pageName: string;
+  /** The page's profile picture. `null` until the first refresh downloads one - the card then
+   *  leaves the avatar out rather than showing a grey silhouette. */
+  avatar: ImageMetadata | null;
+}
+
+const { post, pageName, avatar } = Astro.props;
+
+const carousel = post.media.length > 1;
+
+/** "0:45" - the badge on a film's corner. */
+function runtime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  return `${m}:${String(sec).padStart(2, "0")}`;
+}
+
+/* The column is about 540px at the widest the shell allows - two of them inside the 1200px cap
+ * in tokens.css, with --gap-cards between - a little under half the viewport from the tablet
+ * width up, and nearly the whole screen on a phone. The fixed first clause is that cap: past
+ * 1200px the column stops growing, so a `vw` promise made there is a promise the layout no
+ * longer keeps.
+ *
+ * **Both this and the ladder below moved when the row went from three cards to two**, and they
+ * had to: a `sizes` written for a 380px column hands a 540px column an image meant for two
+ * thirds of it, and no amount of `srcset` steps fixes a wrong `sizes`. 1160 is the new top of
+ * the ladder because 540px on a 2x screen asks for about that; the filter in `srcset` drops it
+ * again for any source narrower than that, so a small photograph is still never upscaled. */
+const SIZES = "(min-width: 1200px) 540px, (min-width: 700px) 46vw, 92vw";
+const WIDTHS = [320, 460, 640, 920, 1160];
+
+/* Higher than the rest of the site, and the reason is second generation.
+ *
+ * Our own photographs come off an original: sharp is the first encoder to touch them, and
+ * astro.config.mjs tunes avif 40 / webp 68 / jpeg 78 for exactly that. A photograph from
+ * Facebook has been through their JPEG encoder before it reaches us, and avif is faithful - it
+ * preserves the first encoder's ringing and mosquito noise as carefully as it preserves the
+ * flowers, and then charges bytes for them. At the shared numbers that shows as a smeared,
+ * plasticky look on precisely what this page posts: petals, leaves, foil.
+ *
+ * Not set through image.service.config, on purpose. Those numbers reach neither the build
+ * cache nor the emitted file names, so changing them there leaves every browser holding the
+ * cached copy on the old file name. A `quality` prop does enter the hash.
+ */
+const QUALITY = { avif: 52, webp: 74, jpeg: 82 } as const;
+type Format = keyof typeof QUALITY;
+
+/** One format's `srcset` for one photograph.
+ *
+ *  Built by hand rather than with `<Picture>` because of the ladder above: the `quality` prop
+ *  takes a single number for every format at once, and the three encoders do not mean the same
+ *  thing by a number. Handing `<Picture>` avif's 52 would quietly drop webp from 68 to 52 and
+ *  jpeg from 78 to 52 - a visible loss for everyone whose browser takes the fallback, paid to
+ *  fix the format that needed no help.
+ */
+async function srcset(image: ImageMetadata, format: Format): Promise<string> {
+  // Never upscale: a source narrower than the widest step would otherwise be stretched and
+  // served as though it carried the detail.
+  const widths = WIDTHS.filter((width) => width <= image.width);
+  if (widths.length === 0) widths.push(image.width);
+
+  const made = await Promise.all(
+    widths.map((width) => getImage({ src: image, width, format, quality: QUALITY[format] })),
+  );
+  return made.map((image, index) => `${image.src} ${widths[index]}w`).join(", ");
+}
+
+/** Everything one still needs to render, in three formats. */
+const stills = new Map<
+  number,
+  { avif: string; webp: string; jpeg: string; src: string; width: number; height: number }
+>();
+for (const [index, item] of post.media.entries()) {
+  if (!item.image) continue;
+  if (item.kind === "video" && item.src) continue;
+
+  const [avif, webp, jpeg, fallback] = await Promise.all([
+    srcset(item.image, "avif"),
+    srcset(item.image, "webp"),
+    srcset(item.image, "jpeg"),
+    getImage({
+      src: item.image,
+      width: Math.min(920, item.image.width),
+      format: "jpeg",
+      quality: QUALITY.jpeg,
+    }),
+  ]);
+
+  stills.set(index, {
+    avif,
+    webp,
+    jpeg,
+    src: fallback.src,
+    width: item.image.width,
+    height: item.image.height,
+  });
+}
+
+/** The cap on what the preview overlay is handed. 2000px is the repository's own ceiling for
+ *  a source (CLAUDE.md), and `withoutEnlargement` is not a `getImage` option, so a file
+ *  narrower than that keeps its own width rather than being upscaled. */
+const PREVIEW_MAX = 2000;
+
+/** The shape every slide of a carousel takes on a phone.
+ *
+ *  A rail is one flex row, so its slides are all as tall as the tallest of them whatever their
+ *  own proportions say. The rule below 700px - frame takes the shape of what is in it - was
+ *  written for a post with a single photograph, where that is exactly right. In an album it is
+ *  not: one upright photograph among landscape ones leaves every landscape slide hanging from
+ *  the top of a box half again as tall, with the arrows and the dots floating in the empty
+ *  half underneath.
+ *
+ *  So an album gets one frame, worked out from what is actually in it rather than from a
+ *  number picked in advance: the shape of its tallest item, and never taller than square.
+ *
+ *  `undefined` for a post with one item, which keeps its own proportions as before.
+ */
+const railFrame = (() => {
+  if (!carousel) return undefined;
+  const shapes = post.media.flatMap((item) =>
+    item.image ? [item.image.width / item.image.height] : [],
+  );
+  if (shapes.length === 0) return undefined;
+  // The smallest ratio is the tallest item. Square is the floor.
+  return Math.max(Math.min(...shapes), 1);
+})();
+
+/* `<video poster>` takes a plain URL, so a poster cannot go through <Picture> and has to be
+   produced here instead. One width is enough: the poster is never drawn larger than the card,
+   and it is the only thing of a film that loads before somebody presses play. */
+const posters = new Map<number, string>();
+for (const [index, item] of post.media.entries()) {
+  if (item.kind === "video" && item.image) {
+    posters.set(index, (await getImage({ src: item.image, format: "jpg", width: 920 })).src);
+  }
+}
+
+/* What the overlay opens, made the way PhotoStrip makes it: one webp file in the `href`,
+   because that is both the no-JavaScript path and what src/scripts/lightbox.ts reads.
+
+   Made for exactly what renders as a still, which is every photograph plus the poster of a
+   film too large to carry. A film that plays here is deliberately not in the map: a link over
+   <video> swallows the play button, and that is the one thing the overlay must not cost. */
+const previews = new Map<number, string>();
+for (const [index, item] of post.media.entries()) {
+  if (!item.image || (item.kind === "video" && item.src)) continue;
+
+  const width = Math.min(PREVIEW_MAX, item.image.width);
+  previews.set(index, (await getImage({ src: item.image, width, format: "webp" })).src);
+}
+
+/* An empty `alt` says "this picture adds nothing the words beside it do not already say", and
+ * for a post with text that is true. For a post that is only a photograph it is a lie: the
+ * card would read out as a name, a date, three numbers and a link, with no hint that there is
+ * anything to look at. Those get a plain statement that a photograph is there - not a
+ * description, because nobody wrote one and guessing a species from a photograph is not done
+ * anywhere on this site, but not silence either. */
+const describe = (item: FacebookMedia, index: number): string => {
+  if (post.message.trim().length > 0) return "";
+  const co = item.kind === "video" ? "Nagranie" : "Zdjęcie";
+  return post.media.length > 1
+    ? `${co} ${index + 1} z ${post.media.length} we wpisie na Facebooku`
+    : `${co} z wpisu na Facebooku`;
+};
+
+/** What the overlay calls the picture, since the card's own `alt` is empty whenever the post
+ *  has text - the text sits beside it there and does the describing, and in the overlay it
+ *  does not. A full-screen image with no name at all is worse than a plain statement of what
+ *  it is. `lightbox.ts` reads it off `data-alt`.
+ *
+ *  Without a number on purpose. The overlay counts what it can show and the carousel counts
+ *  everything the post has, so in an album with a playable film in it the two would contradict
+ *  each other. The counting stays with the counter. */
+const caption = (item: FacebookMedia): string =>
+  item.kind === "video" ? "Kadr z nagrania we wpisie na Facebooku" : "Zdjęcie z wpisu na Facebooku";
+
+/* `nbsp` first, then the split - and that order is load-bearing. It swaps a space for U+00A0,
+   one character for one, so it moves none of the offsets Facebook gave us. The other way round
+   each segment would be typeset on its own, unable to see the word in front of it, and a
+   conjunction sitting right before a tagged name would keep its breakable space. */
+const parts = segments(nbsp(post.message), post.tags, post.permalink);
+
+const stats: { label: string; count: number; icon: IconName }[] = [
+  {
+    icon: "heart",
+    count: post.reactions,
+    label: counted(post.reactions, { one: "reakcja", few: "reakcje", many: "reakcji" }),
+  },
+  {
+    icon: "comment",
+    count: post.comments,
+    label: counted(post.comments, {
+      one: "komentarz",
+      few: "komentarze",
+      many: "komentarzy",
+    }),
+  },
+];
+
+/* Facebook omits `shares` entirely when nobody shared the post, so the entry is left out
+ * rather than printed as a zero. */
+if (post.shares !== null && post.shares > 0) {
+  stats.push({
+    icon: "share",
+    count: post.shares,
+    label: counted(post.shares, {
+      one: "udostępnienie",
+      few: "udostępnienia",
+      many: "udostępnień",
+    }),
+  });
+}
+---
+
+<article class="post">
+  <header class="post__head">
+    {
+      avatar && (
+        <Picture
+          class="post__avatar"
+          src={avatar}
+          formats={["avif", "webp"]}
+          fallbackFormat="jpg"
+          widths={[40, 80]}
+          sizes="40px"
+          loading="lazy"
+          decoding="async"
+          alt=""
+        />
+      )
+    }
+    <div class="post__who">
+      <p class="post__name">{pageName}</p>
+      <p class="post__meta">
+        {
+          /* The absolute date is what ships. src/scripts/facebook-news.ts rewrites it to
+            "3 dni temu" in the browser and keeps this text in the `title`, because a relative
+            date computed at build time starts lying the next morning. */
+        }
+        <time datetime={isoDateTime(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
+      </p>
+    </div>
+    {
+      /* The mark that says where the card came from, in Facebook's own blue - see the style
+        block for what else on this card is allowed to be blue, and why. */
+    }
+    <Icon name="facebook" class="post__source" />
+  </header>
+
+  {/* Rendered even when empty - see the note at the top of this file. */}
+  <div class="post__textwrap">
+    <p class="post__text">
+      {
+        parts.map((part) =>
+          part.kind === "text" ? (
+            part.text
+          ) : (
+            /* Built as nodes rather than through `set:html`. The text comes off Facebook,
+               which makes it input from outside; escaping stays Astro's job and no string of
+               ours is ever handed to the HTML parser. */
+            <a
+              class="post__tag"
+              href={part.href}
+              title={part.title}
+              target="_blank"
+              rel="noopener nofollow"
+            >
+              {part.text}
+            </a>
+          ),
+        )
+      }
+    </p>
+
+    {
+      /* Ships hidden and stays hidden unless src/scripts/facebook-news.ts finds the text
+         actually overflowing - which only a measurement in the browser can tell, and only
+         after the fonts have loaded. Without scripting there is no button, and no clamp
+         either: the clamp is gated on `html.js` in the style block below, so a visitor
+         without JavaScript gets the whole post rather than four lines and no way past them. */
+      post.message.trim().length > 0 && (
+        <button class="post__expand" type="button" aria-expanded="false" hidden>
+          Pokaż więcej
+        </button>
+      )
+    }
+  </div>
+
+  {
+    post.media.length > 0 && (
+      <div class="post__media" data-lightbox-group data-carousel={carousel ? "" : undefined}>
+        <div
+          class:list={["post__items", { post__rail: carousel }]}
+          style={railFrame ? `--frame: ${railFrame}` : undefined}
+          tabindex={carousel ? 0 : undefined}
+          role={carousel ? "group" : undefined}
+          aria-label={carousel ? "Zdjęcia i nagrania z wpisu" : undefined}
+        >
+          {post.media.map((item, index) => {
+            const preview = previews.get(index);
+            const still = stills.get(index);
+
+            return (
+              <div class="post__item">
+                {item.kind === "video" && item.src ? (
+                  /* `preload="none"` is what keeps a card weighing what it always did: not a
+                     byte of the film is fetched until somebody presses play, and until then
+                     the poster below is all there is. Served from our own server, so this
+                     stays true even while it plays - the browser never reaches Meta. */
+                  <video
+                    class="post__video"
+                    style={
+                      /* Sized to the frame itself, not to the box around it. Left to fill the
+                         box the browser paints its own black behind a contained frame, and a
+                         card ends up with two different backgrounds at once. The poster shares
+                         the film's proportions, so it can say what those are before a single
+                         byte of video has loaded. */
+                      item.image
+                        ? `aspect-ratio: ${item.image.width} / ${item.image.height}`
+                        : undefined
+                    }
+                    src={item.src}
+                    poster={posters.get(index)}
+                    controls
+                    preload="none"
+                    playsinline
+                    aria-label={describe(item, index) || "Nagranie z wpisu na Facebooku"}
+                  />
+                ) : preview && still && item.image ? (
+                  /* A link to the picture's own full-size file. Without scripting that is what
+                     a click gets you; with it, lightbox.ts catches the click and opens the
+                     overlay instead. Wrapped around the picture rather than stretched across
+                     the frame as an empty link, because an empty link would leave the overlay
+                     nothing to show while the full file loads. */
+                  <a
+                    class="post__zoom"
+                    href={preview}
+                    data-lightbox
+                    data-alt={caption(item)}
+                    aria-label={`Powiększ: ${caption(item)}`}
+                  >
+                    {/* Hand-built rather than <Picture> - see the note on `srcset` above. */}
+                    <picture>
+                      <source srcset={still.avif} type="image/avif" sizes={SIZES} />
+                      <source srcset={still.webp} type="image/webp" sizes={SIZES} />
+                      <img
+                        class="post__img"
+                        src={still.src}
+                        srcset={still.jpeg}
+                        sizes={SIZES}
+                        width={still.width}
+                        height={still.height}
+                        loading="lazy"
+                        decoding="async"
+                        alt={describe(item, index)}
+                      />
+                    </picture>
+                  </a>
+                ) : null}
+
+                {item.kind === "video" && (
+                  /* Marks a film as a film. Without it a still from a video is indis-
+                     tinguishable from a photograph, and nobody learns there is anything to
+                     play. Doubles as the label for one that is too large to carry. */
+                  <span class="post__runtime">
+                    <Icon name="play" />
+                    {item.seconds !== null ? runtime(item.seconds) : "Film"}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {carousel && (
+          <>
+            {/* Visible only without scripting: it says the strip holds more than one
+                photograph, which the dots say once they exist. */}
+            <span class="post__count">+{post.media.length - 1}</span>
+            <button class="post__arrow post__arrow--prev" type="button" hidden>
+              <Icon name="chevron-left" />
+              <span class="hidden-note">Poprzednie</span>
+            </button>
+            <button class="post__arrow post__arrow--next" type="button" hidden>
+              <Icon name="chevron-right" />
+              <span class="hidden-note">Następne</span>
+            </button>
+            <div class="post__dots" hidden>
+              {/* The slideshow's stop control, and the reason the slideshow is allowed to
+                  start at all: WCAG 2.2.2 asks for a mechanism to stop motion running longer
+                  than five seconds. Hovering and focusing pause it too, but neither exists
+                  under a thumb, and a mechanism most visitors happen to have is not a
+                  mechanism. facebook-news.ts unhides it only when there is something to stop,
+                  so it never appears where the visitor asked for less motion. */}
+              <button
+                class="post__toggle"
+                type="button"
+                aria-label="Wstrzymaj pokaz slajdów"
+                hidden
+              >
+                <Icon name="pause" class="post__toggle-icon post__toggle-icon--pause" />
+                <Icon name="play" class="post__toggle-icon post__toggle-icon--play" />
+              </button>
+            </div>
+            <p class="hidden-note" aria-live="polite" />
+          </>
+        )}
+      </div>
+    )
+  }
+
+  <footer class="post__foot">
+    <ul class="post__stats">
+      {
+        stats.map((stat) => (
+          <li>
+            <Icon name={stat.icon} />
+            <span aria-hidden="true">{stat.count}</span>
+            <span class="hidden-note">{stat.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="post__more" href={post.permalink} target="_blank" rel="noopener">
+      Zobacz na Facebooku
+      <span aria-hidden="true">→</span>
+    </a>
+  </footer>
+</article>
+
+<style>
+  /* Facebook's brand blue. It is not in tokens.css on purpose: tokens.css is this site's
+     palette, and this is somebody else's mark.
+
+     It appears twice. The glyph in the corner of the card keeps the brand value undiluted;
+     the mentions, hashtags and addresses inside a post take a darkened one (see .post__tag),
+     because #1877f2 does not clear AA on --paper. So the corner mark is the only thing on
+     this site wearing Facebook's exact blue.
+
+     Everything else on the card stays in the site's own colours. */
+  .post {
+    --fb-blue: #1877f2;
+
+    /* The post's own text size and leading, as tokens on the card rather than numbers repeated
+       down the file - **the clamp and the reservation below are the same four lines seen from
+       two sides**, and in the original they were two hand-written `1.55`s with a comment asking
+       the next person to keep them in step. A variable does not need asking.
+
+       Set here rather than in tokens.css because they are this card's business and nothing
+       else's. The owners reported the card as too loud in September 2026 and asked for smaller
+       and lighter type: the text went from 1rem/1.55 at the inherited weight to 0.92rem/1.6 at
+       350, and the name, the date, the counters and the reveal button came down with it. The
+       card is a quotation of somebody else's page and sits beside the site's own prose; it
+       should read quieter than the prose, not louder. */
+    --post-text: 0.92rem;
+    --post-line: 1.6;
+
+    /* Lighter than the band it sits on, which is the direction a lifted surface goes - the
+       shadow below only reads as a lift when the card is the brighter of the two. --paper on
+       --paper-clay is 1.08:1, the register every card on this site already uses; --paper-dim
+       there would be 1.003:1, which is no card at all (tokens.css). */
+    background: var(--paper);
+    border-radius: var(--radius);
+    box-shadow: var(--lift);
+    padding: clamp(1.1rem, 2.4vw, 1.5rem);
+    display: grid;
+    /* Explicit rows. With auto-placement a post with no photograph would pull its footer up
+       into the media row and the cards would stop lining up. */
+    grid-template-rows: auto auto auto 1fr;
+    row-gap: 0.85rem;
+  }
+
+  /* The cards share one set of rows, so every header, every photograph and every footer sits
+     on the same line across the row - without any card reserving space it does not need.
+     `span 4` matches the four rows FacebookNews.astro declares on the grid. */
+  @supports (grid-template-rows: subgrid) {
+    @media (min-width: 700px) {
+      .post {
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+      }
+
+      /* While any card is open the grid drops its shared rows - see the note in
+         FacebookNews.astro - and every card goes back to owning its own four. */
+      :global(.news__grid[data-loose]) .post {
+        grid-row: auto;
+        grid-template-rows: auto auto auto 1fr;
+      }
+    }
+  }
+
+  /* ---------- header ---------- */
+
+  /* Flex rather than three grid columns. With columns, a page that has no profile picture
+     shifts every child one column left and the Facebook mark lands in the flexible middle one
+     - pinned to the end of the name instead of the edge of the card. Here the name block takes
+     the slack, so the mark sits against the right edge whether or not there is an avatar. */
+  .post__head {
+    grid-row: 1;
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+  }
+
+  /* The one round corner in this design, and it is a photograph of a face-shaped thing in a
+     place every reader has seen a circle. */
+  .post :global(.post__avatar) {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--paper-dim);
+  }
+
+  .post__who {
+    display: grid;
+    gap: 0.1rem;
+    /* Takes the slack and pushes the mark right; `min-width: 0` lets the name ellipsis work
+       instead of the block refusing to shrink. */
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* global.css leaves paragraph margins to each component, and these three are all <p>:
+     without this the browser's own 1em top and bottom land on them, which pushes the date a
+     full line away from the name and opens a gap under the text. */
+  .post__name,
+  .post__meta,
+  .post__text {
+    margin: 0;
+  }
+
+  .post__name {
+    font-family: var(--sans);
+    /* 550 rather than 600. It still has to read as a name and not as a line of text, but at
+       this size 600 in Public Sans was the heaviest thing on the card - heavier than the
+       post itself, which is what people came to read. */
+    font-weight: 550;
+    font-size: 0.86rem;
+    line-height: 1.2;
+    color: var(--ink);
+    max-width: none;
+    /* The name is one line. A page that renames itself to something long should push the date
+       down, not wrap into the photograph. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .post__meta {
+    font-size: 0.74rem;
+    line-height: 1.2;
+    color: var(--ink-grey);
+    max-width: none;
+  }
+
+  .post__meta time {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Level with the middle of the avatar, which is the header's visual anchor. Pinned to the
+     top instead, it hangs off the card's edge with nothing beside it. */
+  .post :global(.post__source) {
+    font-size: 17px;
+    color: var(--fb-blue);
+  }
+
+  /* ---------- text ---------- */
+
+  /* The text and its control are one row of the card, so the button rides inside the row the
+     grid sizes rather than claiming a fifth. `relative` is what lets the button's tap target
+     reach 44px without pushing the paragraph around. */
+  .post__textwrap {
+    grid-row: 2;
+    position: relative;
+    display: grid;
+    gap: 0.35rem;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .post__text {
+    color: var(--ink-soft);
+    font-size: var(--post-text);
+    line-height: var(--post-line);
+    /* Below the 400 the body inherits. The site's own headings run at 350 and its prose at
+       400; this is a quotation of somebody else's writing, so it sits under both. */
+    font-weight: 350;
+    /* Facebook's line breaks are part of what the owners wrote. */
+    white-space: pre-line;
+    max-width: none;
+    /* An event address a hundred characters long has nothing in it a browser may break at.
+       Two things already hold that: the column is `minmax(0, 1fr)` in FacebookNews.astro, so
+       it cannot grow past its share, and src/utils/message.ts shortens an address to its host
+       plus what fits. This is the third, for whatever neither catches - a single unbroken word
+       longer than the column.
+
+       `break-word` and not `anywhere`: the two render the same except that `anywhere` also
+       counts inside words when the browser works out min-content, and with it the space
+       between two hashtags comes out zero wide. */
+    overflow-wrap: break-word;
+  }
+
+  /* Four lines, and the cut is scripting's rather than the document's.
+     Without JavaScript there is no cut at all and the whole post is on the page: longer, with
+     the rows out of line, and complete. The alternative was four lines and a link to Facebook,
+     which would send a visitor to Meta to read a sentence we had and withheld - the one thing
+     this section exists to avoid.
+
+     Plain `max-height`, not `-webkit-line-clamp`. The clamp works by making the paragraph a
+     `-webkit-box`, which treats its children the way flexbox does - and flexbox discards
+     whitespace *between* children. With every mention, hashtag and address an `<a>`, that
+     silently glues neighbours together. The clamp also stops generating the lines it hides, so
+     `scrollHeight` equals `clientHeight` and facebook-news.ts loses the only way it has to
+     tell whether there is anything to reveal.
+
+     What this costs is the ellipsis, and that is no loss: the button below says "Pokaż więcej"
+     in words. The cut lands on a line boundary rather than mid-glyph, because the height is
+     exactly four line boxes.
+
+     Keep this expression and the reservation further down in step - they are the same four
+     lines seen from two sides. */
+  :global(html.js) .post__text {
+    max-height: calc(4 * var(--post-line) * 1em);
+    overflow: hidden;
+  }
+
+  :global(html.js) .post[data-open] .post__text {
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* A post that is only a photograph leaves this element empty, and an empty element still
+     collects a gap on either side. Out of the flow entirely: with `subgrid` the row is defined
+     by the grid rather than by this card's contents, so the other cards keep it open and
+     nothing slips out of line. */
+  .post__text:empty {
+    display: none;
+  }
+
+  /* Fallback for browsers without `subgrid`: reserve the four lines so the photographs still
+     line up. Only where the cards are side by side - see the note at the top. */
+  @media (min-width: 700px) {
+    .post__textwrap {
+      min-height: calc(4 * var(--post-line) * var(--post-text));
+    }
+  }
+  @supports (grid-template-rows: subgrid) {
+    @media (min-width: 700px) {
+      .post__textwrap {
+        min-height: 0;
+      }
+    }
+  }
+
+  /* Mentions, hashtags and addresses the owners wrote.
+     Facebook's blue, darkened. #1877f2 is 3.98:1 on --paper and fails AA for text this size;
+     this keeps the hue and the saturation and moves only the lightness, which is the same
+     correction --ochre and --ink-grey already carry in tokens.css. The undarkened blue stays
+     on .post__source, where it sits on nothing and marks the source.
+
+     Underlined, and not by taste: against --ink-soft this blue is about 2:1, and a link told
+     apart from its paragraph by colour alone needs 3:1. There is no blue that clears 3:1
+     against the text and 4.5:1 against the paper at once, so the underline carries it - the
+     same one every other inline link on the site wears. */
+  .post__tag {
+    color: #0d6ce7;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .post__tag:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .post__tag:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  /* Shown by facebook-news.ts only where the text really overflows - see the note in the
+     markup. */
+  .post__expand {
+    appearance: none;
+    justify-self: start;
+    background: transparent;
+    border: 0;
+    padding: 0.15rem 0;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 550;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+    color: var(--green);
+    border-bottom: 1.5px solid var(--green);
+  }
+
+  .post__expand[hidden] {
+    display: none;
+  }
+
+  /* The tap target, spread to 44px without spending 44px of the row. The row is shared across
+     the cards, so every pixel this costs is a pixel of nothing in any card that has no
+     button. */
+  .post__expand::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -0.7rem 0;
+    height: var(--tap);
+    max-width: 12rem;
+  }
+
+  .post__expand:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .post__expand:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  /* Only while a card's height is being animated. The lift is painted outside the border box,
+     so this does not clip it. */
+  .post.is-moving {
+    overflow: hidden;
+  }
+
+  /* ---------- photographs ---------- */
+
+  .post__media {
+    grid-row: 3;
+    position: relative;
+    background: var(--paper-dim);
+  }
+
+  /* One frame for every card, and nothing cropped to fit it.
+     The page posts both upright films and landscape ones alongside photographs, and no single
+     frame flatters all three. `cover` would solve that by cutting - which takes half of every
+     upright film. `contain` keeps the whole frame and pays for it in background at the sides;
+     the rows stay level, which is what lets the three cards read as one object.
+
+     This is the one place on the site where a photograph is not cropped to a fixed shape.
+     PlantEntry crops every entry to 4:3 on purpose - those are our own files and can be
+     re-cropped. These are not ours and arrive in whatever shape the owners posted. */
+  .post__item {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-dim);
+    overflow: hidden;
+  }
+
+  /* <picture> is inline by default, and a percentage height inside an inline box has nothing
+     to resolve against. The link around it is in the same position, so both carry the frame's
+     height down to the image. */
+  .post__zoom,
+  .post__item picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  a.post__zoom {
+    cursor: zoom-in;
+  }
+
+  .post__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Height first, width from the proportions set inline above, then centred by the oldest
+     trick there is - so the element is the frame and nothing else, and the grey around it
+     belongs to the card rather than to the browser's own video backdrop. */
+  .post__video {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    background: var(--paper-dim);
+  }
+
+  /* On a phone the cards are stacked, `subgrid` is off and there is nothing to line up with -
+     so the frame stops being a fixed shape and simply takes the proportions of what is in it.
+     A 4:3 frame there leaves an upright film 120px wide with the browser's own controls
+     crammed into it, which is uncropped in the letter of the thing and useless in the spirit.
+     Capped so one upright film cannot take the whole screen. */
+  @media (max-width: 699px) {
+    .post__item {
+      aspect-ratio: auto;
+    }
+    .post__zoom,
+    .post__item picture {
+      height: auto;
+    }
+    .post__img {
+      height: auto;
+      max-height: 70vh;
+    }
+    .post__video {
+      position: static;
+      width: 100%;
+      height: auto;
+      max-height: 70vh;
+      margin-inline: auto;
+    }
+
+    /* Everything above is for a post with one photograph. A carousel takes it back: its slides
+       live in one flex row and are stretched to the tallest of them, so letting each one claim
+       its own height only means the shorter ones hang from the top of a box that belongs to
+       somebody else. `--frame` is set on the rail from the album's own contents - see
+       railFrame above - and every slide takes it, so the strip is one steady shape and each
+       picture is centred in it, exactly as on a wider screen. */
+    .post__rail > .post__item {
+      aspect-ratio: var(--frame, 4 / 3);
+    }
+    .post__rail > .post__item > .post__zoom,
+    .post__rail > .post__item picture {
+      height: 100%;
+    }
+    .post__rail > .post__item .post__img {
+      height: 100%;
+      max-height: none;
+    }
+    .post__rail > .post__item > .post__video {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      max-height: none;
+    }
+  }
+
+  /* Says "this is a film" and how long it runs. Same dark chip as the "+2" badge, in the same
+     corner, so the card has one vocabulary for "there is more here".
+
+     These three chips are the only text on this site that lies on a photograph, and they are
+     the exception CLAUDE.md names. They are labels on a control rather than editorial copy,
+     and the alternative - a band under the picture - is what broke the shared rows. */
+  .post__runtime {
+    position: absolute;
+    inset-block-start: 0.6rem;
+    inset-inline-start: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgb(31 42 33 / 82%);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    padding: 0.28rem 0.5rem;
+    /* Out of the way of the native controls, which sit along the bottom edge. */
+    pointer-events: none;
+  }
+  /* Filled rather than outlined: at three quarters of an already small line, a stroked
+     triangle reads as a smudge. */
+  .post__runtime :global(svg.icon) {
+    width: 0.8em;
+    height: 0.8em;
+  }
+
+  /* The strip scrolls with a finger and with the keyboard before any script runs; the dots and
+     arrows below are an addition to something that already works. */
+  .post__rail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .post__rail::-webkit-scrollbar {
+    display: none;
+  }
+  .post__rail > .post__item {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+  .post__rail:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -3px;
+  }
+
+  .post__count {
+    position: absolute;
+    inset-block-end: 0.6rem;
+    inset-inline-end: 0.6rem;
+    background: rgb(31 42 33 / 82%);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.55rem;
+  }
+  /* Hidden the moment scripting is known to be available - BaseLayout sets `.js` before first
+     paint, so it never flashes. The dots take over the same job. */
+  :global(html.js) .post__count {
+    display: none;
+  }
+
+  .post__dots[hidden] {
+    display: none;
+  }
+
+  /* On the photograph, in the same corner-to-corner strip the "+2" badge occupies without
+     scripting - so the two states of the same control sit in the same place. Below the
+     photograph they add their own band, which makes this card's media taller than the plain
+     ones beside it and breaks the row the cards otherwise share. */
+  .post__dots {
+    position: absolute;
+    inset-inline: 50%;
+    inset-block-end: 0.6rem;
+    translate: -50% 0;
+    width: fit-content;
+    display: flex;
+    /* Wide enough that the enlarged hit areas below do not overlap - two touch targets sitting
+       on top of each other are worse than one that is too small. */
+    gap: 1rem;
+    padding: 0.4rem 0.6rem;
+    background: rgb(31 42 33 / 82%);
+  }
+
+  .post__dots :global(.post__dot) {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgb(238 240 230 / 45%);
+    cursor: pointer;
+  }
+
+  /* On a touch screen these are the only carousel control there is - the arrows are gone by
+     then, deliberately, because a 36px arrow sits exactly where the swipe starts. That makes
+     an 8px dot the whole interface, and 8px is not a target anyone can hit. The pill stays
+     small; an invisible 24px square does the catching, which is the floor WCAG 2.2 sets for a
+     target (2.5.8). Not the site's own 44px --tap: four 44px squares would be wider than the
+     photograph they sit on. */
+  .post__dots :global(.post__dot)::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+  }
+  .post__dots :global(.post__dot[aria-current="true"]) {
+    background: var(--bone);
+  }
+  .post__dots :global(.post__dot:focus-visible) {
+    outline: 2px solid var(--green-lit);
+    outline-offset: 3px;
+  }
+
+  /* In the chip with the dots rather than anywhere else on the card: the chip is already where
+     this card says "there is more here", and a stop control for the slideshow belongs with the
+     thing that shows its position. Same 24px catching area as the dots, for the same reason. */
+  .post__toggle {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 12px;
+    height: 12px;
+    background: none;
+    color: rgb(238 240 230 / 70%);
+    cursor: pointer;
+  }
+  .post__toggle[hidden] {
+    display: none;
+  }
+  .post__toggle::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+  }
+  .post__toggle:hover {
+    color: var(--bone);
+  }
+  .post__toggle:focus-visible {
+    outline: 2px solid var(--green-lit);
+    outline-offset: 3px;
+  }
+  .post__toggle :global(.post__toggle-icon) {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Both glyphs ship in the markup and CSS picks one, because facebook-news.ts cannot render
+     an Astro component at runtime. `data-paused` on the button is the whole state. */
+  .post__toggle :global(.post__toggle-icon--play) {
+    display: none;
+  }
+  .post__toggle[data-paused] :global(.post__toggle-icon--pause) {
+    display: none;
+  }
+  .post__toggle[data-paused] :global(.post__toggle-icon--play) {
+    display: block;
+  }
+
+  /* Arrows only where there is a precise pointer to aim them with. Under a thumb they are
+     smaller than the 44px target and sit exactly where the swipe starts. */
+  .post__arrow {
+    display: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .post__arrow {
+      display: grid;
+      place-items: center;
+      position: absolute;
+      inset-block-start: calc(50% - 18px);
+      width: 36px;
+      height: 36px;
+      border: 0;
+      cursor: pointer;
+      background: rgb(250 247 240 / 92%);
+      color: var(--ink);
+      font-size: 1rem;
+    }
+    .post__arrow[hidden] {
+      display: none;
+    }
+    .post__arrow--prev {
+      inset-inline-start: 0.5rem;
+    }
+    .post__arrow--next {
+      inset-inline-end: 0.5rem;
+    }
+    .post__arrow:hover {
+      background: var(--paper);
+    }
+    .post__arrow:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  /* ---------- counters and the way out ---------- */
+
+  .post__foot {
+    grid-row: 4;
+    align-self: end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* Grey rather than ochre. CLAUDE.md gives ochre the counters as well as the overlines, and
+     the counter it means is "24 rośliny" - a number the page is making a point of. Three
+     figures reporting what strangers did on Facebook are not that, and in the accent they
+     would be the loudest thing on the card. The accent stays on .post__more below, which is
+     the one place this card asks to be clicked. */
+  .post__stats {
+    display: flex;
+    gap: 0.85rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 0.78rem;
+    color: var(--ink-grey);
+    font-variant-numeric: tabular-nums;
+  }
+  .post__stats li {
+    display: flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+  .post__stats :global(.icon) {
+    font-size: 1.05em;
+  }
+
+  .post__more {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    text-decoration: none;
+    border-bottom: 2px solid var(--ochre);
+    padding-bottom: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 1.8rem;
+  }
+  .post__more:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  .post__more:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  /* Text for screen readers only: the counters read as icons and numbers on screen, and
+     "87 reakcji" out loud. Also carries the labels of the two arrow buttons. */
+  .hidden-note {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

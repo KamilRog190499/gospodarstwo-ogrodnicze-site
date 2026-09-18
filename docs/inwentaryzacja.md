@@ -2471,6 +2471,10 @@ się co wzięło.
 | 0.24.0  | **Pasek „Zdjęcia z gospodarstwa" na `/kwiaty-balkonowe/`** - ostatnia różnica w układzie między trzema stronami kategorii, i jedyna, która czekała na materiał, a nie na kod. Z paczki 45 kadrów z Facebooka gospodarstwa weszły 24: uprawa, pojedyncze gotowe kosze, dwie hortensje i dwie donice u klienta. Dziewięć obsadzonych kompozycji świadomie **nie** weszło - to gatunek zdjęć z `/inspiracje/`. Przy okazji **pierwszy zastępnik z Wikimedia zdjęty**: hortensja dostała własny kadr, zostaje siedemnaście. Szczegóły: [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | 0.26.0  | **Pokaz zdjęć na stronie głównej** - 69 własnych kadrów, rząd naraz, pogrupowane kategoriami i podpisane, w kolejności roku. Odpowiedź na prośbę o „pokaz slajdów jak na obecnej stronie”, po dwóch odrzuconych turach makiet. **Slajd jest rzędem, nie zdjęciem**, bo pas 2:1 obecnego slidera stoi na osobnych kadrach panoramicznych, a tutaj 53 z 55 zdjęć są pionowe. Rzędy cięte wewnątrz grupy, znaczniki per grupa, kaskada krycia co 90 ms, zmiana co 6 s, trzy rzędy zamontowane naraz (11 z 69 zdjęć pobranych po wjechaniu sekcji na ekran), a „Więcej zdjęć” celuje w kotwicę `#zdjecia` na stronie kategorii. Przy okazji **podgląd zawężony do grupy** - strona główna jako pierwsza ma dwa zestawy zdjęć naraz - i naprawiony powrót focusa z kadru ukrytego lub `inert`. Szczegóły: [Pokaz zdjęć na stronie głównej](#pokaz-zdjęć-na-stronie-głównej---wrzesień-2026).                                                                                                                                                                                                                                |
 | 0.25.0  | **Podgląd zdjęć przechodzi między zdjęciami** - zgłoszenie właściciela: z powiększenia nie dało się przejść do następnego kadru, trzeba było zamknąć i trafić w kolejną miniaturę. Doszły „Poprzednie” / „Następne”, strzałki `←` / `→`, licznik pozycji i prawdziwy cykl focusa po `Tab` (dotąd pułapka zakładała jeden przycisk). Zbiór zawija się i obejmuje wszystkie `a[data-lightbox]` na stronie - bezpieczne, bo żadna strona nie miesza pasa z pokazem. Sterowanie stoi nad i pod zdjęciem, nigdy na nim. Szczegóły: [Przechodzenie między zdjęciami](#przechodzenie-między-zdjęciami--wrzesień-2026-zgłoszenie-właściciela).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 0.27.0  | **Blok „Co u nas słychać” przepisany z alpaków i przeniesiony na górę strony głównej** - na polecenie właścicieli. Karta pokazuje teraz wpis tak, jak rysuje go Facebook: awatar i nazwa profilu, data względna, cały tekst z „Pokaż więcej”, klikalne oznaczenia i hashtagi, karuzela wielu zdjęć, filmy odtwarzane z naszego serwera, liczniki reakcji. Przyszły z tym cztery wyjątki od reguł `CLAUDE.md` (ikony i cień, cztery breakpointy, czipy na zdjęciu, trzy nowe zależności), wszystkie nazwane i ograniczone do tego bloku. Pokaz zdjęć zszedł między „Inspiracje” a „Dojazd”, żeby dwie ciemne płyty się nie zetknęły. Model tokena zmieniony na użytkownika systemowego - `docs/facebook.md` przepisany.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 0.27.1  | **Styk hero i aktualności.** Zgłoszenie właściciela: sekcja źle przechodzi kolorystycznie z hero. Dwie przyczyny - kreska 2px z dwóch stykających się obramowań (defekt przenosin) i grunty różniące się o 1.003:1, czyli o nic. Obejrzane trzy warianty, wszedł **A**: hero schodzi z `--paper-blush` na `--paper`, co daje 1.079:1 - sufit tej palety. `--paper-blush` wypadł z `tokens.css`, bo nic już na nim nie stało; jasnych gruntów są trzy. Czcionka w kartach mniejsza i lżejsza (0.92rem/1.6, waga 350) na polecenie właścicieli.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 0.27.2  | **Dwa wpisy zamiast trzech w „Co u nas słychać”.** Pytanie właściciela o to, czy trójka jest dobra; okazało się, że powtarzają się dwie sąsiadujące trójki o tej samej anatomii - aktualności i kalendarz. Rozstrzygnęła nie rytmika, tylko to, że świeżość niesie data przy wpisie, a nie liczba kafelków: trzeci wpis kupuje redundancję i kosztuje każdą kartę 200 px szerokości, czyli połowę tekstu widocznego przed zwinięciem. Przy okazji dwa defekty siatki - dziura po odrzuconym wpisie i karta na całą szerokość przy jednym wpisie - oraz poprawione `SIZES` i `WIDTHS`, bo `sizes` pisane pod węższą kolumnę nie da się nadrobić krokami `srcset`.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| 0.27.3  | **Lead sekcji aktualności skrócony** na polecenie właściciela do samego „Ostatnie wpisy z naszego profilu na Facebooku." - odpadło „- co właśnie kwitnie i co jest w sprzedaży", bo mówią to lepiej same wpisy pod spodem. Nagłówek, overline i lead pustego stanu bez zmian; nadal są to nasze słowa i nadal czekają na przegląd właścicieli. Przy okazji sekcja dostała kreskę pod nagłówkiem - `border-bottom` na `.news__head`, ta sama co w `OfferOverview`, `GalleryShow`, `Compositions` i `SeasonCards`. Była jedynym pasmem na stronie, w którym nagłówek wchodził prosto w treść.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 ### Paczki materiału od właścicieli
 
@@ -3351,6 +3355,296 @@ razem z tą zmianą** - potrzeba zdjęć oferty balkonowej, nie kodu.
 > [Pasek zdjęć na `/kwiaty-balkonowe/`](#pasek-zdjęć-na-kwiaty-balkonowe--wrzesień-2026).
 > Diagnoza powyżej była trafna: brakowało materiału, nie kodu.
 
+## Blok Facebooka przepisany z alpaków - wrzesień 2026
+
+Właściciele obejrzeli blok „Co u nas słychać” obok tego, który stoi na bliźniaczej stronie
+alpaki-kazimierzdolny.pl, i wydali dwa polecenia naraz: **przenieść go na samą górę strony
+głównej** i **przepisać kartę dokładnie z tamtego projektu**. Oba weszły w całości.
+
+Co było przedtem: trzy kafelki z datą, tekstem obciętym do 200 znaków, jednym zdjęciem
+i linkiem „Czytaj całość na Facebooku”. Co jest teraz: wpis narysowany tak, jak rysuje go
+Facebook.
+
+### Co karta umie po zmianie
+
+| Element                      | Przedtem          | Teraz                                                          |
+| ---------------------------- | ----------------- | -------------------------------------------------------------- |
+| tekst wpisu                  | ucięty na 200 zn. | cały, zwinięty do czterech linii + „Pokaż więcej”              |
+| oznaczenia, hashtagi, adresy | zwykły tekst      | linki, niebieskie i podkreślone                                |
+| zdjęcia                      | jedno             | do dziesięciu, karuzela ze wskaźnikiem i strzałkami            |
+| filmy                        | brak              | odtwarzane z naszego serwera, `preload="none"`, badge z czasem |
+| nagłówek wpisu               | sama data         | awatar, nazwa profilu, data względna („3 dni temu”)            |
+| liczniki                     | brak              | reakcje, komentarze, udostępnienia                             |
+| powiększenie                 | brak              | lightbox, chodzi po albumie tego wpisu                         |
+
+Skąd co pochodzi: `FacebookPost.astro` z `NewsCard.astro`, `FacebookNews.astro` z `News.astro`,
+`src/scripts/facebook-news.ts` z `src/scripts/news.ts`, trzy pliki w `src/utils/`
+(`message.ts`, `plural.ts`, `typography.ts`) bez zmian, a pola, których karta potrzebuje -
+z `scripts/fetch-news.ts`.
+
+### Cztery reguły `CLAUDE.md`, które ta zmiana odwróciła
+
+Wszystkie cztery były w tym pliku i w `tokens.css` napisane jako zasady bez wyjątków. Wyjątek
+jest teraz jeden, nazwany i ograniczony do tego bloku - nie do „kart w ogóle”.
+
+1. **„No border radius, no shadows, no counters, no icons.”** Karta ma zaokrąglony róg
+   (`--radius: 6px`), cień (`--lift`), okrągły awatar, sześć piktogramów z Lucide, znak
+   Facebooka z Simple Icons i trzy liczniki reakcji. Argument za: ten blok jest **podglądem
+   cudzej strony** i jako jedyny element serwisu powinien wyglądać obco. Argument przeciw:
+   dokładnie ta reguła. Właściciele usłyszeli oba i wybrali.
+2. **„@astrojs/sitemap i sharp to jedyne zależności produkcyjne.”** Doszły trzy:
+   `astro-icon`, `@iconify-json/lucide`, `@iconify-json/simple-icons`. Odwiedzającego to nie
+   kosztuje nic - `astro-icon` wkleja SVG w czasie builda, do przeglądarki nie leci ani bajt
+   JavaScriptu, ani żadne zapytanie na cudzy serwer.
+3. **„Zero breakpointów; `grep -rn "@media" src/` ma zwracać jedną linijkę.”** Doszły cztery,
+   wszystkie w dwóch plikach bloku. Tylko jeden jest naprawdę nieusuwalny - **`700px`** - i nie
+   jest to szerokość układu, tylko warunek, od którego zależą cztery wspólne wiersze kart:
+   `subgrid` znaczy coś wyłącznie tam, gdzie karty stoją obok siebie, a siatka `auto-fit` nie
+   umie powiedzieć, w którym z dwóch stanów jest. Pozostałe trzy (`699px` - kadr na telefonie,
+   `520px` - przycisk na całą szerokość, `hover: hover and pointer: fine` - strzałki karuzeli)
+   przyszły z komponentem i zostały, bo poleceniem było „dokładnie”.
+4. **„Nic na tej stronie nie kładzie tekstu na zdjęciu.”** Kładą trzy czipy: czas trwania
+   filmu, badge „+2” i kropki karuzeli. Wszystkie trzy leżą na nieprzezroczystej płytce
+   `rgb(31 42 33 / 82%)`, są etykietami kontrolki, a nie treścią redakcyjną, a alternatywa -
+   pasek pod kadrem - rozjeżdżała wiersze wspólne dla trzech kart.
+
+### Trzy rzeczy, których świadomie **nie** przepisano
+
+To nie jest niedokończona robota, tylko miejsca, w których to repozytorium ma inne
+zobowiązania niż tamto.
+
+- **Snapshot zostaje w gicie.** W alpakach cache jest w `.gitignore` i leci prosto na serwer.
+  Tutaj nie ma jeszcze `deploy.yml`, a na commicie opiera się właściwość, którą `CLAUDE.md`
+  wymienia jako nośną: martwy token znaczy „feed się nie odświeżył”, nigdy „strona jest pusta”.
+- **Blok nie znika, gdy nie ma wpisów.** W alpakach sekcja chowa się w całości. Tutaj zostaje
+  pusty stan - decyzja właścicieli, podjęta świadomie przy tej zmianie. Zabezpieczenie wieku
+  (`MAX_AGE_DAYS = 60`) działa tak samo, tylko kończy się pustym stanem, a nie zniknięciem.
+- **`MAX_VIDEO_MB` to 12, nie 40.** Film, który tu pobierzemy, zostaje w historii repozytorium
+  na zawsze - także po tym, jak skrypt skasuje go z katalogu roboczego. Przy filmie co kilka
+  tygodni 12 MB jest do przyjęcia, 40 MB nie byłoby. Wpis z za dużym filmem i tak się pokazuje:
+  z klatką i linkiem, czyli ścieżką, którą karta i tak rysuje. **Gdyby repozytorium zaczęło
+  puchnąć, właściwą odpowiedzią jest rezygnacja z filmów, a nie podniesienie limitu.**
+
+### Model tokena zmieniony przy okazji
+
+Do tej pory `docs/facebook.md` kazał właścicielom wygenerować token strony i wpisać go jako
+`FB_ACCESS_TOKEN`. Teraz sekretem jest `FB_SYSTEM_USER_TOKEN` - token użytkownika systemowego
+z Meta Business Suite - a skrypt wymienia go przy każdym uruchomieniu na token strony przez
+`/me/accounts`. Powód: w _New Pages Experience_ Facebook nie przeczyta feedu zwykłym tokenem
+użytkownika i zwraca przy tym błąd, który brzmi jak brak uprawnień, choć nim nie jest
+(`subcode 2069032`). Token użytkownika systemowego jest przypisany do firmy, a nie do czyjegoś
+konta, więc nie przestaje działać, gdy ktoś zmieni sobie hasło.
+
+**Moment był na to najlepszy z możliwych: żadnego tokenu jeszcze nie wydano**, więc zmiana nie
+kosztowała właścicieli ani jednej czynności. `docs/facebook.md` jest przepisany pod nową
+procedurę.
+
+### Jedno odstępstwo od „dokładnie”, i to w skrypcie
+
+Alpaki zapisują pobrany plik bajt w bajt. To repozytorium ma zasadę **wypalania rotacji EXIF**,
+bo `<Picture>` nie honoruje tej flagi. Obie nie dają się spełnić naraz: przekodowanie przez
+`sharp` zrobiłoby z pliku z Facebooka **trzecią generację JPEG-a**, a to dokładnie ten problem,
+przez który `FacebookPost.astro` podnosi drabinkę jakości (avif 52 / webp 74 / jpeg 82 zamiast
+40 / 68 / 78).
+
+Rozwiązanie: `sharp` jest pytany o `orientation` i przekodowuje **tylko wtedy, gdy flaga nie
+mówi „pionowo”**. Rendery Meta zwykle mówią, więc w typowym przebiegu bajty lądują na dysku
+takie, jakie przyszły.
+
+### Podgląd zdjęć: nasz lightbox, nie tamten
+
+`Lightbox.astro` z alpaków nie przeszedł. Ta strona ma własny `src/scripts/lightbox.ts`
+z lepszym kontraktem - `a[data-lightbox]` z pełnym plikiem w `href`, grupy przez
+`[data-lightbox-group]`, chodzenie po zbiorze z zawijaniem - więc karta podpina się pod niego
+tak samo jak `PhotoStrip`. **Grupą jest album jednego wpisu**, ten sam zbiór, po którym chodzi
+karuzela; bez tego „Następne” wychodziłoby z wpisu w pokaz zdjęć.
+
+Jedna linijka dopisana w `lightbox.ts`: nakładka czyta `data-alt` z odnośnika, gdy miniatura ma
+puste `alt`. Puste `alt` przy wpisie z tekstem jest poprawne (tekst obok opisuje zdjęcie),
+ale w nakładce tego tekstu już nie ma, a obraz na cały ekran bez nazwy jest gorszy niż zdanie
+„Zdjęcie z wpisu na Facebooku”.
+
+### Kolejność sekcji na stronie głównej
+
+Przeniesienie bloku na górę zabrało jasny pas spomiędzy dwóch ciemnych płyt, więc **pokaz zdjęć
+zszedł na jego miejsce**. Kolejność jest teraz warunkiem poprawności, nie gustem:
+
+| #   | Sekcja          | Tło            |
+| --- | --------------- | -------------- |
+| 1   | `Intro`         | `--paper`      |
+| 2   | `FacebookNews`  | `--paper-clay` |
+| 3   | `SeasonCards`   | `--green-band` |
+| 4   | `OfferOverview` | `--paper-clay` |
+| 5   | `Compositions`  | `--green-band` |
+| 6   | `GalleryShow`   | `--paper`      |
+| 7   | `Directions`    | `--green-band` |
+
+### Styk hero i aktualności - i dlaczego `--paper-blush` wypadł z palety
+
+Pierwsza wersja przenosin zostawiła na tym styku dwie rzeczy nie do przyjęcia i właściciel
+zgłosił obie jako jedną: „sekcja musi lepiej przechodzić kolorystycznie z hero".
+
+**Defekt.** `Intro` zamyka się `border-bottom: 1px solid var(--rule)`, a `FacebookNews`
+otwierał się `border-top` tej samej grubości i koloru. Do września stykały się z
+`SeasonCards`, które `border-top` nie ma - po przenosinach spotkały się ze sobą i dały
+**kreskę 2px** na stronie, której całym słownikiem rozdzielania jest kreska 1px. Kreska z
+`FacebookNews` zeszła; hero rozdziela własną.
+
+**Rzecz gorsza od defektu.** Hero stało na `--paper-blush` `#F5EDE6`, a aktualności stoją na
+`--paper-clay` `#F4EEE4`. To **1.003:1**. Nie są to dwa zbliżone kolory, tylko jeden kolor, a
+kreska między dwoma identycznymi papierami czyta się jak zgubiony znak, nie jak granica.
+
+Ważne, żeby to zapisać dokładnie: **tego nie da się poprawić dostrajaniem**. `--ink-grey`
+niesie każdą wersalikową etykietę i każdy podpis pod zdjęciem i wymaga gruntu nie ciemniejszego
+niż L 0.8353, więc cała jasna paleta mieści się między 4.99:1 a 4.62:1 wobec tekstu - a wobec
+siebie nawzajem między 1.003:1 a **1.079:1**. Sufit to 1.079:1 i nic więcej w tej palecie nie
+ma.
+
+#### Trzy warianty obejrzane bok w bok
+
+Zrobione na żywej stronie, tym samym kadrem, wariantami wstrzykniętymi do CSS - nie rysunkiem.
+
+| Wariant                      | Co robi                                 | Koszt                                                                   |
+| ---------------------------- | --------------------------------------- | ----------------------------------------------------------------------- |
+| **A** hero na `--paper`      | krok 1.079:1, czyli cały dostępny sufit | hero traci najcieplejszy papier                                         |
+| **B** jeden ciąg, bez kreski | styk znika zamiast być słaby            | nie ma żadnej granicy                                                   |
+| **C** aktualności na ciemnej | przejście widać naprawdę                | `SeasonCards` musi zejść na jasne, a z nim ginie mechanika `.card--lit` |
+
+**Wszedł A**, wybrany przez właściciela po obejrzeniu makiet. Argument: 1.079:1 to sufit, a A
+jako jedyny ten sufit wykorzystuje - B rezygnuje z granicy, C przebudowuje sąsiednią sekcję.
+Kierunek jest przy tym właściwy, bo strona ciemnieje ku dołowi, a hero - pierwsza rzecz na
+ekranie - jest najjaśniejsze.
+
+**C nie jest odrzucone jako gorsze, tylko jako droższe**, i warto to pamiętać: jest jedynym
+wariantem, w którym przejście widać na pierwszy rzut oka, a białe karty z cieniem wyglądają na
+ciemnej zieleni lepiej niż gdziekolwiek indziej. Gdyby kiedyś kalendarz sprzedaży i tak szedł
+do przerysowania, to jest moment, żeby wrócić do tej rozmowy.
+
+#### `--paper-blush` wypadł z `tokens.css`
+
+`Intro` był jego jedynym użytkownikiem, więc po zmianie nie stało na nim nic. Token wyleciał
+dokładnie tak, jak wyleciał `--paper-sage` dwa tygodnie wcześniej i z tego samego powodu:
+**grunt, na którym nic nie stoi, to martwy ciężar - ale liczba za nim nie.** Obie wartości są
+zapisane przy gruntach w `tokens.css`.
+
+Jasnych gruntów są więc **trzy, nie cztery**, i reguła w `CLAUDE.md` została przepisana. Przy
+okazji dopisana jest tam rzecz, której wcześniej nie było napisane wprost, a która kosztowała
+tę rundę poprawek: **tam, gdzie styk ma być _widoczny_, a nie tylko wyczuwalny, jedynym
+narzędziem w tym projekcie jest ciemna płyta.**
+
+Dwa jasne grunty obok siebie są dozwolone - różnią się odcieniem, a rozdziela je kreska.
+Dwie ciemne płyty nie, i to jest zapisane przy `--green-band` w `tokens.css`. Przy okazji
+przestał obowiązywać powód, dla którego blok Facebooka renderował się z pustym stanem: nie
+stoi już między ciemnymi płytami. Pusty stan zostaje, ale już na decyzję właścicieli, nie na
+rytm strony.
+
+Argument za górą: katalog zmienia się raz na sezon, a to jedyna rzecz na stronie, która może
+się różnić między dwoma wtorkami. Koszt: hero przestało być jedyną rzeczą nad zgięciem. `h1`,
+tagline i przycisk z telefonem nadal otwierają dokument i nadal czyta się je pierwsze.
+
+### Dwa wpisy zamiast trzech
+
+Właściciel zapytał, czy trzy wpisy to dobra liczba - „na stronie głównej często jest czegoś
+trójka". Pytanie było trafne, ale problem okazał się węższy, niż zostało sformułowane.
+
+**To nie są trzy trójki, tylko dwie sąsiadujące trójki o tej samej anatomii.** Karta aktualności
+i karta kalendarza sprzedaży mają ten sam układ: wersalikowa etykieta, nagłówek, akapit, pod nim
+zdjęcie, pod zdjęciem drobny wiersz (liczniki albo daty). Trzy kolumny, ta sama rynna, jedna
+bezpośrednio nad drugą. Kafelki oferty w rzędzie trzecim są już inne - dwa zdjęcia obok siebie,
+bez akapitu - i dzieli je od aktualności cała ciemna płyta, więc nie były częścią problemu.
+
+#### Co rozstrzygnęło, i nie był to rytm
+
+Karta drukuje **datę względną** („3 dni temu"). To ona mówi, że gospodarstwo żyje - nie liczba
+kafelków. Trzeci wpis kupuje więc **redundancję, nie świeżość**, a płaci za nią najszerszą
+rzeczą, jaką ta sekcja ma:
+
+| Kolumn | Szerokość karty | Ile tekstu mieści się w czterech linijkach          |
+| ------ | --------------- | --------------------------------------------------- |
+| 3      | ~341 px         | ~180 znaków - cięty jest prawie każdy wpis          |
+| 2      | ~541 px         | ~280 znaków - większość wpisów mieści się w całości |
+
+Na makiecie widać to od razu: pierwszy wpis schodzi z czterech uciętych linijek na **trzy
+pełne**, a w drugim mieszczą się jeszcze hashtagi, których przy trzech kolumnach nie widać
+wcale. Obawa, że pionowe zdjęcie utonie w szerszej ramce 4:3, się nie potwierdziła - proporcja
+pustego pola jest identyczna (ramka zawsze 4:3, zdjęcie zawsze swoje), a samo zdjęcie jest
+większe.
+
+#### Argument, który przegrał, i dlaczego jest zapisany
+
+**Trzy wpisy dają odporność na wtopę.** Wpis bez tekstu albo udostępnienie cudzego posta to na
+Facebooku rzecz normalna; przy trzech kartach jedna taka to jedna trzecia sekcji, przy dwóch -
+połowa. To jest powód, dla którego warto będzie wrócić do trzech, jeśli feed okaże się ich
+pełen. **Rytm nim nie jest** - ta sprawa jest zamknięta.
+
+#### Czego nie zrobiono i dlaczego
+
+- **Jeden wyróżniony + dwa** - łamie rytm najmocniej i redakcyjnie jest słuszne, ale wyrzuca
+  cztery wspólne wiersze `subgrid`, które istnieją właśnie po to, żeby równe karty się
+  wyrównywały. Dużo dobrze uargumentowanego kodu za efekt, który daje też zwykłe „dwa".
+- **Lista zamiast kafelków** - czyta się jak feed, ale sekcja robi się znacznie wyższa, a stoi
+  na samej górze strony.
+- **Przestawienie sekcji, żeby rozdzielić bliźniaki** - odpada z arytmetyki. Trzy ciemne płyty
+  i dwie jasne między nimi wymuszają ogon `D L D L D`, więc jedyne przestawienie, które
+  rozdziela aktualności od kalendarza, wrzuca „Inspiracje" przed ofertę.
+- **Zmiana anatomii karty** (zdjęcie nad tekstem) - rozdzieliłaby bliźniaki bez ruszania liczby,
+  ale karta udaje wpis z Facebooka, a tam tekst stoi nad zdjęciem. To jedyna rzecz, po którą ta
+  karta w ogóle istnieje.
+
+#### Przy okazji: dwa defekty siatki, jeden po drugim
+
+Pierwszy był w kodzie od początku: `grid-template-columns` miało wpisane na sztywno
+`repeat(3, …)`, a `KEEP` to liczba, o którą skrypt **prosi**, nie ta, którą dostaje - wpisy bez
+tekstu i bez zdjęcia są odrzucane, więc feed może oddać mniej. Przy dwóch wpisach zostawała
+**dziura**: dwie wąskie karty przy lewej krawędzi i pusta trzecia kolumna. Liczba kolumn idzie
+teraz za `posts.length` przez `--cols` ustawiane inline.
+
+Drugi pojawił się dopiero po naprawie pierwszego i został złapany na makiecie: przy **jednym**
+wpisie karta rozciągała się na całą szerokość powłoki - 1139 px, tekst w linijkach po ponad sto
+znaków, ramka 4:3 wysoka na ~790 px, czyli zdjęcie większe niż w hero. To jest gorsze niż
+dziura. Stąd `news__grid--single` z `max-width: 36rem`, czyli mniej więcej tyle, ile karta ma
+przy dwóch - **karta wygląda tak samo, czy feed oddał jeden wpis, czy dwa.**
+
+#### Co jeszcze poszło z tą zmianą
+
+`SIZES` i drabinka `WIDTHS` w `FacebookPost.astro`. `sizes` napisane pod kolumnę 341 px podaje
+kolumnie 541 px obrazek przeznaczony na dwie trzecie jej szerokości, a tego nie naprawi żadna
+liczba kroków w `srcset`. Nowe wartości: `(min-width: 1200px) 540px, (min-width: 700px) 46vw,
+92vw`, a drabinka dostała krok 1160 px, bo 540 px na ekranie 2x tyle mniej więcej potrzebuje.
+Filtr w `srcset` i tak go odrzuca dla źródeł węższych, więc małe zdjęcie nadal nie jest
+skalowane w górę.
+
+### Dane do pracy bez tokenu
+
+`src/data/facebook-fixture.ts` - osiem zmyślonych wpisów, z których widać trzy; ćwiczą cztery
+kształty karty (długi tekst, album z filmem, sam obraz bez tekstu, sam tekst bez obrazu) plus
+przypadki brzegowe na ławce. Zdjęcia to stand-iny z `src/assets/`.
+
+**Plik nie ma prawa wejść do builda** - `facebook.ts` wpuszcza go wyłącznie pod
+`import.meta.env.DEV`. Powód jest ten sam, który każe `/faq/` trzymać się sześciu pytań: te
+zdania są nasze, a na karcie stoi nazwa profilu właścicieli. Build, który by po nie sięgnął,
+opublikowałby pod ich nazwiskiem tekst, którego nie napisali.
+
+Jeden szczegół z fixture jest testem, nie treścią: w `fixture-1` oznaczone nazwisko stoi za
+emoji. Facebook liczy `offset` w punktach kodowych, JavaScript indeksuje string w jednostkach
+UTF-16 i te dwie liczby rozjeżdżają się o jeden przy pierwszym emoji. Naiwne cięcie stringa
+daje „ Anna Wiśniewsk” - wygląda prawie dobrze, czyli najgorzej, jak błąd może wyglądać.
+Żaden inny wpis w tym pliku by tego nie wyłapał.
+
+### Co idzie na listę właścicieli
+
+1. **Opisy `alt` zdjęć z Facebooka.** Facebook nie podaje tekstu alternatywnego, a zgadywanie
+   gatunku z fotografii nie jest na tej stronie praktykowane. Karta mówi więc, czym zdjęcie
+   **jest** („Zdjęcie z wpisu na Facebooku”), a nie co przedstawia - i tylko przy wpisie bez
+   tekstu, bo przy wpisie z tekstem opisuje je tekst obok.
+2. **Overline „Bądź na bieżąco”, nagłówek „Co u nas słychać” i oba leady** - nasze słowa, nie
+   ich. Overline doszedł przy tej zmianie.
+3. **Zgoda na publikowanie liczników reakcji.** Karta drukuje, ile kto zebrał reakcji,
+   komentarzy i udostępnień. Wpis, który na Facebooku zebrał dwie reakcje, na stronie firmy
+   mówi to wprost.
+4. **Zgoda na publikowanie filmów.** Film z wpisu odtwarza się na stronie z naszego serwera -
+   to nowa kategoria materiału, której wcześniej na stronie nie było.
+
 ## Czego nadal brakuje
 
 1. Zdjęcia - **żaden wpis nie stoi już pusty, ale siedemnaście stoi na pożyczonym kadrze.**
@@ -3467,3 +3761,13 @@ razem z tą zmianą** - potrzeba zdjęć oferty balkonowej, nie kodu.
     `Kwiaty pachnące`, `heliotrop`: `Słodki, waniliowy zapach`, `orlik`:
     `Bylina mrozoodporna`), i przy okazji potwierdzenia warto zapytać, czy mają wrócić kosztem
     czwartego gniazda.
+22. **Blok „Co u nas słychać” - cztery rzeczy do potwierdzenia po przepisaniu karty.**
+    Szczegóły w [Bloku Facebooka](#blok-facebooka-przepisany-z-alpaków--wrzesień-2026);
+    w skrócie: **opisy `alt`** zdjęć z Facebooka (Facebook nie podaje tekstu alternatywnego,
+    a zgadywanie gatunku z fotografii nie jest tu praktykowane, więc karta mówi, czym zdjęcie
+    jest, a nie co przedstawia); **overline „Bądź na bieżąco”, nagłówek „Co u nas słychać”
+    i oba leady**, które są nasze, nie ich; **zgoda na publikowanie liczników reakcji** - wpis,
+    który zebrał dwie reakcje, mówi to teraz wprost na stronie firmy; i **zgoda na publikowanie
+    filmów**, bo film z wpisu odtwarza się na stronie i jest nową kategorią materiału. Do tego
+    jedno pytanie o samą publikację: karta pokazuje **cały** tekst wpisu zamiast 200 znaków,
+    więc każdy wpis trafia na stronę firmy w całości, ze zdjęciami, filmem i liczbami.

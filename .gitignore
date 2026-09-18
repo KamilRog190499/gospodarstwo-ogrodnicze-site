@@ -13,6 +13,10 @@ docs/lighthouse/*.json
 .DS_Store
 Thumbs.db
 
+# The Facebook refresh downloads into here and renames into src/assets/facebook/ only once
+# every file has arrived. It never survives a finished run - see scripts/fetch-facebook.mjs.
+.facebook-staging/
+
 # local
 .playwright-mcp/
 .env

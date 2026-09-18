@@ -1,1 +1,5 @@
-[]
+{
+  "fetchedAt": null,
+  "page": { "name": null, "avatar": null },
+  "posts": []
+}

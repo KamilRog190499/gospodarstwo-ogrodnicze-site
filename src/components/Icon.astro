@@ -1,0 +1,74 @@
+---
+/** The small pictograms in the news cards, and the only icons on this site.
+ *
+ *  A thin layer over `astro-icon`, which inlines each shape's SVG into the page at build
+ *  time from the `@iconify-json` packages in node_modules. Nothing reaches the browser but
+ *  the finished markup - no client JavaScript, no request to anyone else's server - so an
+ *  icon set costs a visitor exactly what a hand-written `<path>` did.
+ *
+ *  **CLAUDE.md says this design has no icons, and everywhere except the news cards that is
+ *  still true.** Direction is drawn with 1px chevrons in the menu, the FAQ and the lightbox;
+ *  nothing else on the site uses this component. The cards are a view of somebody else's
+ *  page, reproduced from the sibling site alpaki-kazimierzdolny.pl, and the marks are part
+ *  of what makes a post read as a post. Do not reach for this file to decorate a heading.
+ *
+ *  Two sets, for two jobs. Lucide supplies the interface marks: one 24x24 grid, one stroke
+ *  weight, round caps throughout. Simple Icons supplies Facebook's own mark, because a
+ *  brand's sign is the one thing that must not be redrawn; an approximation stops being the
+ *  sign people recognise without reading.
+ *
+ *  The names here stay ours rather than the library's. A card asks for "comment", not for
+ *  "lucide:message-circle", so changing sets later is a change in this file alone.
+ */
+import { Icon as Iconify } from "astro-icon/components";
+
+export type IconName =
+  "facebook" | "heart" | "comment" | "share" | "play" | "pause" | "chevron-left" | "chevron-right";
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const LIBRARY: Record<IconName, string> = {
+  facebook: "simple-icons:facebook",
+  heart: "lucide:heart",
+  comment: "lucide:message-square",
+  share: "lucide:share-2",
+  // Local - see src/icons/play.svg for why this one is not from a set.
+  play: "play",
+  // Local too - see src/icons/pause.svg, same reason as play.
+  pause: "pause",
+  "chevron-left": "lucide:chevron-left",
+  "chevron-right": "lucide:chevron-right",
+};
+
+/** Simple Icons ship as filled shapes, and so do the two drawn in src/icons/; Lucide
+ *  ships strokes. The two need opposite treatment, and a caller should not have to know
+ *  which is which. */
+const filled = name === "facebook" || name === "play" || name === "pause";
+---
+
+<Iconify name={LIBRARY[name]} class:list={["icon", { "icon--filled": filled }, className]} />
+
+<style>
+  .icon {
+    width: 1em;
+    height: 1em;
+    flex: none;
+    display: block;
+  }
+
+  /* Lucide carries its own stroke width and caps; this only ties the colour to whatever
+     text the icon happens to sit in. */
+  .icon:not(.icon--filled) {
+    fill: none;
+    stroke: currentColor;
+  }
+
+  .icon--filled {
+    fill: currentColor;
+  }
+</style>

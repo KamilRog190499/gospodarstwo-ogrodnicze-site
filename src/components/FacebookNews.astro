@@ -1,96 +1,87 @@
 ---
-import { Picture } from "astro:assets";
-
-import { facebookPosts } from "../data/facebook";
+import FacebookPost from "./FacebookPost.astro";
+import Icon from "./Icon.astro";
+import { facebookPosts, pageName, pageAvatar } from "../data/facebook";
 import { facebook } from "../data/contact";
 
 /**
- * "Co u nas słychać" - the three most recent Facebook posts, on the home page.
+ * "Co u nas słychać" - the two most recent Facebook posts, first thing under the hero.
  *
  * The site is a catalogue that changes once a season. Nothing on it could say *chrysanthemums
  * are on sale now*, and the owners already write exactly that on Facebook. This block is that
- * writing, and it exists so they do not have to do it twice.
+ * writing, and it exists so they do not have to do it twice. It moved to the top of the home
+ * page in September 2026 on the owner's instruction, for that reason: it is the only thing on
+ * the page that can differ between two Tuesdays.
+ *
+ * The card itself is `FacebookPost.astro`, reproduced from the sibling site
+ * alpaki-kazimierzdolny.pl in the same change. This file is the band around it - the heading,
+ * the lead, the row of cards and the way out.
  *
  * ## What this is not
  *
  * It is not an embed. There is no Facebook script, no iframe, no SDK, no like button and no
- * `fbcdn.net` in the built page - the text is data in the repository and the photographs are
- * files in `src/assets/facebook/`, put there by `scripts/fetch-facebook.mjs` and optimised by
- * the same pipeline as every other picture here. **That is why this block, alone among the
- * third-party things on this site, needs no consent gate:** the visitor's browser never
- * contacts Meta. The only link out is one they choose to click. If anybody ever "simplifies"
- * this into a plugin or a hotlinked `full_picture`, that property is what gets thrown away -
- * see the header of the fetch script.
- *
- * It is also not Facebook-shaped. No logo, no blue, no icons, no reaction counts: the design
- * is austere and a foreign brand block would be the loudest thing on the page (CLAUDE.md).
- * What marks the posts as theirs is the sentence under the heading, not a badge.
+ * `fbcdn.net` in the built page - the text is data in the repository and the photographs and
+ * films are files in `src/assets/facebook/`, put there by `scripts/fetch-facebook.mjs` and
+ * optimised by the same pipeline as every other picture here. **That is why this block, alone
+ * among the third-party things on this site, needs no consent gate:** the visitor's browser
+ * never contacts Meta. The only link out is one they choose to click. If anybody ever
+ * "simplifies" this into a plugin or a hotlinked `full_picture`, that property is what gets
+ * thrown away - and § 5 of the privacy policy becomes false with it.
  *
  * ## Rules that are easy to break here
  *
  * - **The text is not rewritten.** Same rule as the plant descriptions: it is the owners'
- *   voice, including any emoji they used. It is only shortened, on a word boundary, with the
- *   permalink carrying anyone who wants the rest.
- * - **No phone number.** The home page prints `602 518 401` exactly twice (Intro, footer) and
+ *   voice, including any emoji they used. It is not shortened either any more - the four-line
+ *   clamp is the browser's and only applies where scripting is on, so the whole post is always
+ *   in the document. The old 200-character cut sent people to Meta to read a sentence we had
+ *   and withheld.
+ * - **No phone number.** The home page prints a number exactly twice (Intro, footer) and
  *   `src/pages/index.astro` says to count it on the built page. This block adds none.
- * - **`alt` is honest rather than descriptive.** Facebook supplies no alternative text and
- *   guessing a species from a photograph is not done anywhere on this site, so the text says
- *   what the picture *is* - a photograph from a post of that date - and claims nothing about
- *   what is in it. Flagged in docs/inwentaryzacja.md for the owners.
- * - **An empty snapshot still renders the section**, with a different lead and no cards. That
- *   reverses how this block worked until September 2026, when it disappeared entirely rather
- *   than show an empty panel - a good rule in general, and the one the sibling site follows.
- *   It changed because the home page rhythm came to depend on this section: it is the light
- *   band between two dark plates, and dark plates cannot be adjacent (see --green-band in
- *   tokens.css). With the block gone the two plates merged into one, which is a worse failure
- *   than a section that says where the news lives.
+ * - **Two cards, and the number was argued rather than inherited.** It was three until
+ *   September 2026 - the sibling site shows three and the fetch script kept three - and the
+ *   owner asked whether three was right, having noticed that the home page carries a run of
+ *   trios. It does, and the ones that matter are adjacent: this row and the season calendar
+ *   under it have the same anatomy (uppercase label, heading, paragraph, photograph, a small
+ *   line beneath), so two identical grids of three sat one on top of the other.
  *
- *   The empty state says only what is true - that the owners post on Facebook and that new
- *   posts land here - and keeps the link that the populated state also carries. It invents no
- *   news. **Both the heading and the two leads are our words, not the owners'**, and are on
- *   their review list in docs/inwentaryzacja.md together.
+ *   What settled it was not the rhythm but the date. The card prints "3 dni temu", and **that**
+ *   is what says the holding is alive - not the count. A third post therefore buys redundancy,
+ *   not freshness, and it costs the widest thing on the page: at three columns a card is about
+ *   340px and the four-line clamp cuts nearly every post the owners write, where at two it is
+ *   about 540px and most of them fit whole.
+ *
+ *   **The argument that lost is worth keeping**, because it is the one that will come back: a
+ *   post with no text, or a share of somebody else's, is ordinary on Facebook, and at three
+ *   cards one dud is a third of the section while at two it is half. If the feed turns out to
+ *   be full of them, that is the reason to go back to three - not the rhythm.
+ * - **An empty snapshot still renders the section**, with a different lead and no cards. That
+ *   is where this parts company with the sibling site, which hides the block entirely. It is
+ *   the owners' call: they wanted a block that is always on the page, saying where the news
+ *   lives. It invents no news - the empty lead says only that they post on Facebook and that
+ *   new posts land here, and it keeps the link the populated state also carries.
+ *
+ *   The same state covers a snapshot that has gone stale; see MAX_AGE_DAYS in
+ *   `src/data/facebook.ts` for why an old post is treated as no post.
+ *
+ *   **Both leads, the overline and the heading are our words, not the owners'**, and are on
+ *   their review list in docs/inwentaryzacja.md together. The populated one was cut to its
+ *   first clause in September 2026 on the owner's instruction - it used to carry "- co właśnie
+ *   kwitnie i co jest w sprzedaży", which the posts underneath say better than a lead can.
  */
 
-/** Long enough for the seasonal announcements the owners actually write, short enough that
- *  three of them side by side stay the same height. Cut on a word boundary. */
-const LIMIT = 200;
-
-const dateFormat = new Intl.DateTimeFormat("pl-PL", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
-
-function shorten(text: string): { text: string; truncated: boolean } {
-  if (text.length <= LIMIT) return { text, truncated: false };
-
-  const cut = text.slice(0, LIMIT);
-  const lastSpace = cut.lastIndexOf(" ");
-  return { text: `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`, truncated: true };
-}
-
-const posts = facebookPosts.map((post) => {
-  const date = new Date(post.createdAt);
-  const dateText = dateFormat.format(date);
-
-  return {
-    ...post,
-    dateText,
-    /** `<time datetime>` wants the date alone, not the timestamp. */
-    dateAttr: date.toISOString().slice(0, 10),
-    body: shorten(post.text),
-    alt: `Zdjęcie z wpisu gospodarstwa z ${dateText}`,
-  };
-});
+/** Two is the whole row - see the note above. `scripts/fetch-facebook.mjs` keeps exactly two,
+ *  so this slice is the belt to that braces. */
+const posts = facebookPosts.slice(0, 2);
 ---
 
 <section id="aktualnosci" class="news" aria-labelledby="aktualnosci-title">
   <div class="news__head">
+    <p class="eyebrow news__eyebrow">Bądź na bieżąco</p>
     <h2 class="news__title" id="aktualnosci-title">Co u nas słychać</h2>
     <p class="news__lead">
       {
         posts.length > 0
-          ? "Ostatnie wpisy z naszego profilu na Facebooku - co właśnie kwitnie i co jest w sprzedaży."
+          ? "Ostatnie wpisy z naszego profilu na Facebooku."
           : "Najświeższe wiadomości piszemy na naszym profilu na Facebooku - co właśnie kwitnie i co jest w sprzedaży. Gdy pojawi się tam nowy wpis, trafia także tutaj."
       }
     </p>
@@ -98,60 +89,60 @@ const posts = facebookPosts.map((post) => {
 
   {
     posts.length > 0 && (
-      <ul class="news__grid">
+      /* The column count follows the number of posts rather than being written down as a
+         number, and that is a fix rather than a flourish: `KEEP` is what the fetch script tries
+         for, not what it gets - a post with neither text nor a photograph is dropped, so the
+         feed can hand back one post where two were asked for. With the count hard-coded, that
+         left a card sitting against the left edge and an empty column beside it. */
+      <div
+        class:list={["news__grid", { "news__grid--single": posts.length === 1 }]}
+        style={`--cols: ${posts.length}`}
+      >
         {posts.map((post) => (
-          <li class="news__item">
-            {post.image && (
-              <Picture
-                class="news__photo"
-                src={post.image}
-                formats={["avif", "webp"]}
-                fallbackFormat="jpg"
-                widths={[400, 800]}
-                sizes="(min-width: 1200px) 380px, (min-width: 640px) 30vw, 92vw"
-                width={400}
-                height={300}
-                alt={post.alt}
-                loading="lazy"
-              />
-            )}
-
-            <p class="news__date eyebrow">
-              <time datetime={post.dateAttr}>{post.dateText}</time>
-            </p>
-
-            {post.body.text && <p class="news__text">{post.body.text}</p>}
-
-            <p>
-              <a class="news__link" href={post.permalink} target="_blank" rel="noopener">
-                {post.body.truncated ? "Czytaj całość na Facebooku" : "Zobacz na Facebooku"}
-              </a>
-            </p>
-          </li>
+          <FacebookPost post={post} pageName={pageName} avatar={pageAvatar} />
         ))}
-      </ul>
+      </div>
     )
   }
 
-  <p>
-    <a class="cta-line" href={facebook} target="_blank" rel="noopener">
-      Nasz profil na Facebooku
+  <p class:list={["news__cta", { "news__cta--alone": posts.length === 0 }]}>
+    <a class="cta news__button" href={facebook} target="_blank" rel="noopener">
+      <Icon name="facebook" />
+      Obserwuj nas na Facebooku
     </a>
   </p>
 </section>
 
+<script>
+  import "../scripts/facebook-news";
+</script>
+
 <style>
+  /* **No `border-top` here, and that is a fix rather than an omission.** `Intro.astro` already
+     closes itself with a `border-bottom: 1px solid var(--rule)`, and when this section moved up
+     under the hero in September 2026 the two met with nothing between them: two 1px rules
+     stacked, drawn as a single 2px line, on a site whose whole vocabulary for separation is the
+     1px rule. It read as a defect because it was one. The hero's own line does the parting. */
   .news {
     background: var(--paper-clay);
-    border-top: 1px solid var(--rule);
     padding: var(--pad-section) var(--edge);
     display: grid;
     gap: var(--gap-entry);
   }
 
+  /* The rule under the heading is the one every other section on this site draws, with the
+     same weight, the same colour and the same 0.9rem of air above it - see `.overview__head`,
+     `.show__head` and `.comp__head`. It was missing here, which made this the only band whose
+     heading ran straight into its contents. */
   .news__head {
     display: grid;
     gap: 0.9rem;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.9rem;
+  }
+
+  .news__eyebrow {
+    font-size: 0.72rem;
   }
 
   .news__title {
@@ -163,55 +154,100 @@ const posts = facebookPosts.map((post) => {
     color: var(--ink-soft);
   }
 
-  /* Three across at full width, folding to two and then one as a column would drop under
-     260px. No breakpoint decides that - CLAUDE.md, "fix the minmax() value". */
+  /* One column, and one per post from the tablet width up - `--cols` is set on the element
+     from `posts.length`, so a feed that yields one post gets one column rather than one card
+     and a hole.
+
+     This is the project's one deliberate breakpoint outside `prefers-reduced-motion`, and it is
+     not a layout that could have been written in `auto-fit` - it is the condition the four
+     shared rows below depend on. `subgrid` only means anything where the cards stand side by
+     side; stacked, there is nothing to line up with, and the four-line reservation that stands
+     in for it would be four lines of nothing under every short post. An `auto-fit` grid cannot
+     say which of the two it is in. */
   .news__grid {
     display: grid;
     gap: var(--gap-cards);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    grid-template-columns: 1fr;
   }
 
-  .news__item {
+  @media (min-width: 700px) {
+    .news__grid {
+      grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    }
+
+    /* **One post must not take the whole shell**, and this is the second half of the fix
+       above rather than a flourish. Removing the empty column left the opposite defect: a
+       single card 1139px wide sets the owners' text in lines of over a hundred characters
+       and blows a 4:3 frame up to about 790px tall - a photograph bigger than the hero's.
+       36rem is about what a card gets when there are two of them, so the card looks the
+       same whether the feed gave one post or two, which is the point. */
+    .news__grid--single {
+      max-width: 36rem;
+    }
+  }
+
+  /* Four named rows - header, text, photographs, footer - that every card adopts with
+     `subgrid`, so the cards line up row by row however long their posts happen to be. The row
+     gap belongs to the card at that point, not to the grid between cards, which is why it drops
+     to zero here and the gap between columns is set on its own. The cards make one row, so
+     nothing needs a gap between rows of cards. */
+  @supports (grid-template-rows: subgrid) {
+    @media (min-width: 700px) {
+      .news__grid {
+        grid-template-rows: auto auto auto auto;
+        column-gap: var(--gap-cards);
+        row-gap: 0;
+      }
+
+      /* Set by src/scripts/facebook-news.ts while at least one card is open, and taken off
+         when the last one closes - a count, not a switch.
+         Rows shared between cards cannot grow for one of them: expanding a post in place would
+         push the one beside it open by the same amount, and a post with no text at all is
+         ordinary here, so its neighbour would be holding several centimetres of nothing above
+         its photograph. That is the hole `subgrid` was brought in to close. So while a
+         post is open the row lets go instead: each card takes its own height, the photographs
+         stop lining up, and nothing is padded out. The alignment comes back with the last card
+         that closes. */
+      .news__grid[data-loose] {
+        grid-template-rows: none;
+        align-items: start;
+      }
+    }
+  }
+
+  .news__cta {
     display: grid;
-    gap: 0.7rem;
-    align-content: start;
+    justify-items: center;
+    margin: 0;
   }
 
-  /* 4:3, cropped to the frame, with the same 1px rule as every other photograph here.
-     A Facebook photograph can be any shape at all, so the frame decides and `cover` obeys. */
-  .news__photo {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border: 1px solid var(--rule);
+  /* Centred under three cards, which is what it is centred against. With no cards there is
+     nothing above it to be centred under, and the button drifts into the middle of an empty
+     band while the heading and the lead sit hard left. So the empty state puts it back under
+     the sentence it belongs to. The sibling site never faces this - there the whole section
+     disappears instead. */
+  .news__cta--alone {
+    justify-items: start;
   }
 
-  /* Borrows .eyebrow for the lettering, but it is a timestamp on a post and not an overline
-     above a heading - so it stays out of the accent's territory and keeps the grey. */
-  .news__date {
-    font-size: 0.66rem;
-    color: var(--ink-grey);
+  /* `.cta` from global.css carries the shape - the one filled block on this site, deep green
+     with paper type. Only the glyph and its gap are local. Deliberately in the site's green
+     rather than Facebook's blue; the blue appears once, in the mark in the corner of each
+     card. */
+  .news__button {
+    gap: 0.6rem;
+    justify-content: center;
+  }
+  .news__button :global(.icon) {
+    width: 1.05em;
+    height: 1.05em;
   }
 
-  /* Left in the owners' own words; only the length is ours. */
-  .news__text {
-    white-space: pre-line;
-  }
-
-  /* Quieter than `.cta-line`: there are three of these in a row, and in uppercase with a rule
-     under each they would out-shout the heading above them. */
-  .news__link {
-    color: var(--green);
-    text-decoration: none;
-    border-bottom: 1px solid var(--rule-link);
-    padding-bottom: 0.15rem;
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap);
-  }
-
-  .news__link:hover {
-    border-bottom-color: var(--green);
+  /* On a phone the button takes the column: a centred block with the screen's width to spare
+     on either side reads as an afterthought. */
+  @media (max-width: 520px) {
+    .news__cta {
+      justify-items: stretch;
+    }
   }
 </style>

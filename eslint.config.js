@@ -18,11 +18,12 @@ export default defineConfig([
   },
   {
     // Build-time tooling: Node, not the browser. Declared here rather than pulling in the
-    // `globals` package for five names - `no-undef` is the only rule that needs them, and
+    // `globals` package for six names - `no-undef` is the only rule that needs them, and
     // the alternative is a dependency whose whole content is a list.
     files: ["scripts/**/*.mjs", "*.mjs"],
     languageOptions: {
       globals: {
+        AbortSignal: "readonly",
         Buffer: "readonly",
         console: "readonly",
         URL: "readonly",

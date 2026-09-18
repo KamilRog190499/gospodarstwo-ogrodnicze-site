@@ -12,7 +12,12 @@
 # A useful side effect: GitHub disables `schedule:` on repositories with 60 days of no
 # activity. A workflow that commits keeps its own schedule alive.
 #
-# Secrets: FB_PAGE_ID, FB_ACCESS_TOKEN. See docs/facebook.md.
+# Secrets: FB_PAGE_ID, FB_SYSTEM_USER_TOKEN. See docs/facebook.md.
+#
+# The second one changed name in September 2026 together with the token model: the feed is now
+# read with a page token derived at run time from a system user token, because Meta's new Pages
+# experience refuses a user token on a page's feed. The script does the exchange; this workflow
+# only hands it the long-lived secret.
 
 name: Refresh the Facebook feed
 
@@ -42,10 +47,10 @@ jobs:
       # `sharp` is a production dependency, so a full install is what the script needs.
       - run: npm ci
 
-      - run: node scripts/fetch-facebook.mjs
+      - run: npm run fetch:facebook
         env:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          FB_SYSTEM_USER_TOKEN: ${{ secrets.FB_SYSTEM_USER_TOKEN }}
 
       # Nothing to commit is the normal outcome on most days, and it is not a failure. A
       # failure here means the fetch failed - which is the alert that the token needs

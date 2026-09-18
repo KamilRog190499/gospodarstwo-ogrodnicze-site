@@ -73,11 +73,14 @@ and `linkinator` finds no dead internal link.
   which gave `/kwiaty-balkonowe/` the strip it was the only category page to lack.
   **That strip is now the longest on the site at 24 frames**; `/chryzantemy/` has twenty -
   nineteen, plus the needle-petalled frame that moved there when its entry was folded away.
-- `/` is a preview of the whole site: intro, season cards, three offer tiles opening with a
-  mosaic of that group's photographs, **the photo show carrying 69 of the holding's own frames
-  a row at a time, grouped by category and linking into each category page's `#zdjecia`**, the plantings slideshow in a reduced variant, the Facebook block
-  and a map block. What each home page block may and may not repeat is argued
-  out in `docs/inwentaryzacja.md` under "Strona główna jako witryna".
+- `/` is a preview of the whole site, **in this order, and the order is a correctness
+  constraint**: intro, the Facebook block, season cards, three offer tiles opening with a
+  mosaic of that group's photographs, the plantings slideshow in a reduced variant, **the photo
+  show carrying 69 of the holding's own frames a row at a time, grouped by category and linking
+  into each category page's `#zdjecia`**, and a map block. The Facebook block went to the top
+  and the photo show went down to make room in September 2026 - `src/pages/index.astro` carries
+  the light/dark table the order has to satisfy. What each home page block may and may not
+  repeat is argued out in `docs/inwentaryzacja.md` under "Strona główna jako witryna".
 
 **Not done:** `deploy.yml`, the Facebook token, and everything in
 `docs/inwentaryzacja.md` under "Czego nadal brakuje".
@@ -94,15 +97,18 @@ Read this before adding a file - most things already have a home.
 | `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                                                                                                                                                                                 |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the three strips (`balconyStrip`, `chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. Also `homeGallery`, which is those three strips grouped and put in calendar order for the home page show - the strips themselves, not copies, so a frame added to a strip appears there too. **The 23 plantings are no longer here** - they are the `compositions` collection. |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                                                                                      |
-| `src/data/facebook.ts`         | Types and image resolution for the generated snapshot. The only reader of `facebook-posts.json` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                                                                       |
+| `src/data/facebook.ts`         | Types, file resolution and the 60-day age fuse for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                            |
+| `src/data/facebook-fixture.ts` | Invented posts, so the news card can be worked on without a token. **`astro dev` only** - `facebook.ts` gates it on `import.meta.env.DEV`, because these carry the owners' page name on screen.                                                                                                                                                                                                                                                                                                   |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                                                                                                                                                                                        |
 | `src/content/compositions/`    | **The 23 plantings**, one `.md` each, the file name being the anchor. Body = the description, `tip` = "Nasza podpowiedź". Both are the owners' own words.                                                                                                                                                                                                                                                                                                                                         |
 | `src/content.config.ts`        | The zod schemas for `plants`, `pages`, `faq` and `compositions`.                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `src/layouts/BaseLayout.astro` | The one layout: head, skip link, header, `<main>`, footer, JSON-LD.                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `src/components/`              | 20 components. `SeasonCards`, `OfferOverview` (home tiles), `OfferSection` (a whole category page), `PlantEntry`, `PhotoSlot` (a pending photograph), `PhotoStrip`, `GalleryShow` (the home page photo show), `Compositions` (the slideshow), `Intro`, `Header`, `Nav`, `Footer`, `Contact`, `Directions`, `MapEmbed`, `ConsentBanner`, `History`, `FacebookNews`, `Faq`, `Seo`.                                                                                                                  |
-| `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the plantings slideshow), `gallery-show.ts` (the home page photo show), `lightbox.ts` (the overlay preview, which also steps through the set it was opened from), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                                                                                                                 |
-| `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, daily.                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `src/components/`              | 22 components. `SeasonCards`, `OfferOverview` (home tiles), `OfferSection` (a whole category page), `PlantEntry`, `PhotoSlot` (a pending photograph), `PhotoStrip`, `GalleryShow` (the home page photo show), `Compositions` (the slideshow), `Intro`, `Header`, `Nav`, `Footer`, `Contact`, `Directions`, `MapEmbed`, `ConsentBanner`, `History`, `FacebookNews` (the news band), `FacebookPost` (one card), `Icon` (the news cards' pictograms, and nothing else), `Faq`, `Seo`.                |
+| `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the plantings slideshow), `facebook-news.ts` (relative dates, the post carousel, the "Pokaż więcej" measurement), `gallery-show.ts` (the home page photo show), `lightbox.ts` (the overlay preview, which also steps through the set it was opened from), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                         |
+| `src/utils/`                   | Pure helpers with no data in them, all three brought over with the news card: `message.ts` (a post's text split into links, hashtags and mentions - the one place allowed to do arithmetic with Facebook's code-point offsets), `plural.ts` (`Intl.PluralRules`), `typography.ts` (`nbsp`).                                                                                                                                                                                                       |
+| `src/icons/`                   | Two hand-drawn SVGs, `play` and `pause`, that `astro-icon` inlines beside the Lucide and Simple Icons sets. Nothing outside the news cards uses an icon at all.                                                                                                                                                                                                                                                                                                                                   |
+| `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, daily. Trades `FB_SYSTEM_USER_TOKEN` for a page token, then writes the snapshot and downloads every photograph, poster frame and film it names.                                                                                                                                                                                                                                                                                    |
 | `docs/inwentaryzacja.md`       | The project chronicle: what was on the old site, where it went, every open question, and the version history.                                                                                                                                                                                                                                                                                                                                                                                     |
 | `docs/przekierowania.md`       | The 301 map.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `docs/facebook.md`             | Written for the owners: how to issue the token.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -167,8 +173,13 @@ Deliberate exceptions, all of them because the name is an address:
 ## Stack and commands
 
 Astro + TypeScript (strict), static output, **no client-side framework and no hydration**.
-Plain CSS - no Tailwind, no SCSS. Node >= 22.12, npm >= 9.6.5. `@astrojs/sitemap` and `sharp`
-are the only other runtime dependencies.
+Plain CSS - no Tailwind, no SCSS. Node >= 22.12, npm >= 9.6.5. Five other runtime
+dependencies: `@astrojs/sitemap`, `sharp`, and - since September 2026 and for the news cards
+alone - `astro-icon` with `@iconify-json/lucide` and `@iconify-json/simple-icons`. The three
+icon packages cost a visitor nothing: `astro-icon` inlines each shape's SVG at build time, so
+no JavaScript and no request to anyone else's server ships with them. They are here because
+the news card carries pictograms and Facebook's own mark; see the exemption under
+"Implementation rules" and the header of `src/components/Icon.astro`.
 
 ```bash
 npm run dev             # astro dev - http://localhost:4321
@@ -176,7 +187,7 @@ npm run build           # astro build -> dist/
 npm run preview         # astro preview
 npm run lint            # astro check && eslint .
 npm run format          # prettier --write .
-npm run fetch:facebook  # the feed refresh, by hand; needs FB_PAGE_ID and FB_ACCESS_TOKEN
+npm run fetch:facebook  # the feed refresh, by hand; needs FB_PAGE_ID and FB_SYSTEM_USER_TOKEN
 ```
 
 No test framework, and none is planned. Verification is `astro check` + `eslint`, then,
@@ -194,21 +205,45 @@ plus manual viewport checks.
 - **The design is deliberately austere.** No border radius, no shadows, no counters, no
   testimonials, no animations, no icons, no emoji. Hierarchy comes from 1px lines, type size
   and spacing.
-- **Four light grounds and two dark ones, and that is the whole palette of backgrounds.**
-  Four warm papers - `--paper`, `--paper-linen`, `--paper-clay`, `--paper-blush` - on the light
-  side; `--green-band` (**all three** dark plates on the home page) and `--ink` (the footer) on
-  the dark. **Every dark ground is on the home page or in the footer**: since September 2026
+  - **One block is exempt, and the exemption is named rather than general: "Co u nas słychać".**
+    In September 2026 the owners asked for that block to be reproduced exactly as it stands on
+    the sibling site alpaki-kazimierzdolny.pl, and what stands there is a Facebook post as
+    Facebook draws one: a lifted card with a soft corner, a round avatar, pictograms, reaction
+    counters, Facebook's own blue on the mark in the corner, and a carousel that advances by
+    itself. All of that shipped. The argument for allowing it is that the block is a _view of
+    somebody else's page_ and is the one thing here that should not look like the rest of the
+    site; the argument against it is this rule, and the owners heard it and chose anyway.
+    It reaches exactly three files - `FacebookPost.astro`, `FacebookNews.astro` and
+    `Icon.astro` - plus `--radius` and `--lift`, which are fenced off at the bottom of
+    `tokens.css`. **Do not spread any of it to a fourth.** A plant entry, an offer tile or a
+    season card asking for a shadow is a design decision to take with the owners, not a token
+    to reuse quietly.
+- **Three light grounds and two dark ones, and that is the whole palette of backgrounds.**
+  Three warm papers - `--paper`, `--paper-linen`, `--paper-clay` - on the light side;
+  `--green-band` (**all three** dark plates on the home page) and `--ink` (the footer) on
+  the dark. They were four until September 2026, when the hero came off `--paper-blush` and
+  nothing was left standing on it - the same fate `--paper-sage` met earlier that month. Both
+  values are kept at the grounds in `tokens.css` rather than deleted. **Every dark ground is on the home page or in the footer**: since September 2026
   each of the other ten pages is one flat light section, `/o-nas/` included - it was the one
   dark subpage until the owners asked for it to be brought into line, and `History.astro`
   records what that answered. `--green-deep` is a fill after that change, not a ground: the
   buttons, the chips, the lit season card, the skip link, the map placeholder.
   - **The light grounds differ in hue, not in lightness, and that is forced rather than
     chosen.** `--ink-grey` carries every uppercase label and every photo caption, and it needs a
-    ground of at least L 0.8353 to hold 4.5:1 against it. The four sit between 4.99:1 and
-    4.61:1, so there is no room for a fifth, darker one. A cool ground, `--paper-sage`
-    `#EBEEE1`, existed between the two September revisions at 4.54:1 - the floor itself - and
-    was removed once the calendar and the directions block became dark plates and nothing was
-    left standing on it.
+    ground of at least L 0.8353 to hold 4.5:1 against it. The three sit between 4.99:1 and
+    4.62:1, so there is no room for a darker one. A cool ground, `--paper-sage` `#EBEEE1`,
+    existed between the two September revisions at 4.54:1 - the floor itself - and was removed
+    once the calendar and the directions block became dark plates and nothing was left standing
+    on it.
+    - **The price of that ceiling is paid at every light-on-light join, and it is why the hero
+      is `--paper`.** Two light grounds are at most **1.079:1** apart, and the pair that met
+      under the hero when the news block moved up - blush against clay - was **1.003:1**, which
+      is one colour rather than two. A 1px rule between two identical papers reads as a stray
+      mark, not as a boundary, and no amount of tuning fixes it: the only answer is to spend the
+      whole 1.079:1, which means the lightest paper on one side of the join. **Where a join has
+      to be _seen_ rather than merely felt, a dark plate is the only instrument this design
+      has** - that was the variant that lost, and what it would have cost is in
+      `docs/inwentaryzacja.md`.
   - **The dark plates must never touch each other.** Above L 0.076 the ochre overline fails and
     above L 0.098 the labels do, so the entire usable range of dark greens spans 1.80:1 end to
     end - two adjacent plates cannot read as two. On the home page a light section always parts
@@ -228,17 +263,31 @@ plus manual viewport checks.
   under the home page `h1` where it lay on a photograph; the hero was rebuilt as two columns
   and the gradient went with it. `grep -rn "gradient" src/` still finds `PhotoSlot` and
   `MapEmbed`, and both are fine - hard-edged `repeating-linear-gradient` stripes hatching a
-  pending frame, which draw a pattern and never a blend. **Nothing on this site now puts text
-  on a photograph**, which is why no contrast here needs a browser to measure it any more;
-  colour on colour is arithmetic. The scrim's measuring method is kept in
+  pending frame, which draw a pattern and never a blend. **The only text on this site that lies
+  on a photograph is the three chips in a news card** - the film's running time, the "+2" badge
+  and the carousel's dots - and they are the same September 2026 exemption as the shadow and
+  the icons. They are labels on a control rather than editorial copy, they sit on an opaque
+  plate rather than on the picture itself, and the alternative - a band under the frame - is
+  what broke the rows the three cards share. Nothing else does it, which is why no contrast
+  here needs a browser to measure it any more; colour on colour is arithmetic. The scrim's measuring method is kept in
   `docs/inwentaryzacja.md` in case that ever changes - do not reinvent it, and never estimate
   it offline.
-- **The layout is fluid, and there are now zero breakpoints.** Everything is `clamp()`,
-  `auto-fit` and `minmax()`. The project's single media query lived in `Intro.astro`, where
-  the hero switched from 3:2 to 3:1 at 700px; the rebuilt two-column hero keeps one ratio at
-  every width and does not need it. Do not add breakpoints to fix a layout; fix the
-  `minmax()` value. (`prefers-reduced-motion` in `global.css` is not a breakpoint, and it is
-  the only `@media` left - `grep -rn "@media" src/` should return exactly one line.)
+- **The layout is fluid, and everything outside the news block is written without a
+  breakpoint.** Everything is `clamp()`, `auto-fit` and `minmax()`. The project's single media
+  query lived in `Intro.astro`, where the hero switched from 3:2 to 3:1 at 700px; the rebuilt
+  two-column hero keeps one ratio at every width and does not need it. Do not add breakpoints
+  to fix a layout; fix the `minmax()` value. (`prefers-reduced-motion` in `global.css` is not a
+  breakpoint.)
+  - **The news block brought four back, and they are the same exemption as the shadow.** This
+    rule used to end with "`grep -rn "@media" src/` should return exactly one line"; it now
+    returns several, and every one of them is in `FacebookNews.astro` or `FacebookPost.astro`.
+    Only one of the four is genuinely unavoidable and it is worth knowing which: **`700px`** is
+    not a layout width but the condition the four shared card rows depend on - `subgrid` means
+    something only where the three cards stand side by side, and an `auto-fit` grid cannot say
+    which of the two it is in. The other three (`699px` for the frame on a phone, `520px` for
+    the button, `(hover: hover) and (pointer: fine)` for the carousel arrows) came with the
+    component and were kept because the brief was to reproduce it exactly. Anywhere else on
+    this site, a breakpoint is still the wrong answer.
 - **Design tokens go in `src/styles/tokens.css`**; components must not hardcode colours or
   spacing.
 - **Fonts are self-hosted**, as `@fontsource-variable/fraunces` (serif, with its italic - the
@@ -508,27 +557,69 @@ plus manual viewport checks.
   track. A previous flex version made the four numbers start at four different positions;
   that was a reported defect. Keep the grid.
 - **The Facebook block refreshes itself, and three properties of that design are
-  load-bearing.** `scripts/fetch-facebook.mjs` fetches the three latest posts once a day on
+  load-bearing.** `scripts/fetch-facebook.mjs` fetches the two latest posts once a day on
   the self-hosted runner and **commits them to `main`** - the text as
-  `src/data/facebook-posts.json`, the photographs as real files in `src/assets/facebook/` -
-  so the ordinary build carries them out. All three properties are lost by the obvious
-  "simplification":
-  1. The photographs are downloaded, never linked: a `full_picture` URL is signed and expires
-     within days, so a snapshot of those URLs rots into broken images while looking fresh.
+  `src/data/facebook-posts.json`, the photographs, the poster frames and the films as real
+  files in `src/assets/facebook/` - so the ordinary build carries them out. All three
+  properties are lost by the obvious "simplification":
+  1. The files are downloaded, never linked: a `full_picture` or a video `source` URL is
+     signed and expires within days, so a snapshot of those URLs rots into broken images while
+     looking fresh.
   2. Because the files are ours, the visitor's browser never contacts Meta - which is the
      only reason this block needs no consent gate while the map does. A Facebook plugin, an
-     iframe or a hotlinked image would each hand every visitor's IP to Meta on page load.
+     iframe or a hotlinked image would each hand every visitor's IP to Meta on page load, and
+     § 5 of the privacy policy states in so many words that none of that happens.
   3. Because the snapshot is in git, a token that has stopped working means "the feed did not
      refresh", never "the page is blank", and the images go through `sharp` like every other
      picture here.
 
-  Do not move the refresh to the browser, to the web server, or to a Meta embed. The secrets
-  are not set yet, so there are no posts - and since September 2026 the block **still renders**,
-  with a different lead and no cards. It used to disappear instead, which is the better rule in
-  general; it changed because the home page rhythm now needs a light band between the plantings
-  plate and the directions plate, and two dark plates cannot be parted from each other. The
-  empty state claims no news, only that the owners post on Facebook and that new posts land
-  here. Both leads and the heading are our words and are on the owners' review list.
+  Do not move the refresh to the browser, to the web server, or to a Meta embed.
+
+  - **Two cards, not three, and `KEEP` in the fetch script is the other half of that
+    decision.** The row was three until September 2026, when the owner noticed that the home
+    page carries a run of trios - and the two that matter are adjacent, because this row and the
+    season calendar under it share an anatomy. What settled it was not the rhythm: the card
+    prints "3 dni temu", so **the date is what says the holding is alive, not the count**, and a
+    third post buys redundancy rather than freshness while costing every card 200px of width -
+    at three columns the four-line clamp cuts nearly every post the owners write. The argument
+    that lost is kept in the component and is the one to reach for if the feed turns out to be
+    full of text-less posts, where one dud is half the section. **The column count follows
+    `posts.length`** rather than being written down, because `KEEP` is what the script asks for
+    and not what it gets; a single post is capped at 36rem so it does not take the whole shell.
+  - **The card is the sibling site's, reproduced deliberately and in full.** In September 2026
+    the owners asked for "Co u nas słychać" to look and behave exactly as it does on
+    alpaki-kazimierzdolny.pl, and the whole stack came over with it: `FacebookPost.astro` from
+    that project's `NewsCard.astro`, `FacebookNews.astro` from its `News.astro`,
+    `src/scripts/facebook-news.ts` from its `src/scripts/news.ts`, the three files in
+    `src/utils/`, and the fields the card needs from its `scripts/fetch-news.ts`. What that
+    buys: albums with a carousel, films played from our own server, tagged names and hashtags
+    as links, reaction counters, the page's avatar, a relative date computed in the browser,
+    and the whole post rather than 200 characters of it. What it cost is written up as four
+    named exemptions above - the icons and the shadow, the breakpoints, the chips on a
+    photograph, and three new dependencies.
+  - **Three things were deliberately _not_ taken from that project**, and each has a reason
+    that belongs to this repository rather than to taste. Its cache is gitignored and
+    uploaded straight to the server; ours stays committed, because there is no `deploy.yml`
+    here yet and property 3 above depends on it. Its section disappears when the feed is empty
+    or stale; ours falls back to an empty state, on the owners' own decision. And its
+    `MAX_VIDEO_MB` is 40 where ours is **12**, because a film we commit is in this
+    repository's history forever - the cap is argued at the constant.
+  - **The 60-day fuse is not an editorial choice.** `MAX_AGE_DAYS` in `src/data/facebook.ts`
+    empties the block when the newest post passes two months, because the failure mode of a
+    broken pipeline is a snapshot that keeps serving the same three posts, and "news" from
+    three months ago reads as a business that has closed.
+
+  The secrets are not set yet, so there are no posts and the block renders its empty state -
+  which it now does on the strength of that decision alone. Until September 2026 it was also
+  load-bearing, as the light band between two dark plates; the block moved to the top of the
+  page that month and `GalleryShow` took over that job. The empty state claims no news, only
+  that the owners post on Facebook and that new posts land here. Both leads, the overline and
+  the heading are our words and are on the owners' review list.
+  - **`src/data/facebook-fixture.ts` must never reach a build.** It is invented copy printed
+    under the owners' own page name, and `facebook.ts` lets it in only under
+    `import.meta.env.DEV`. Relaxing that into a plain fallback would publish sentences they
+    never wrote, under their byline. It is the same rule that caps `/faq/` at six questions,
+    in the one place where breaking it would be quoted back at a visitor as theirs.
 
 - **SEO:** the current site ranks on plant names. Preserve the old URLs or set up 301
   redirects, and record the mapping in `docs/przekierowania.md` as the reference project does.

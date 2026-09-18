@@ -2,6 +2,7 @@
 import { execFileSync } from "node:child_process";
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import icon from "astro-icon";
 
 /**
  * `lastmod` for every entry in the sitemap: the date of the last commit rather than the
@@ -25,7 +26,12 @@ export default defineConfig({
      currently answers on HTTP only - a certificate and an HTTP→HTTPS redirect are needed
      before this goes live, or every canonical here points at a host that does not answer. */
   site: "https://gospodarstwo-saran.pl",
-  integrations: [sitemap({ lastmod: lastCommit })],
+  /* astro-icon inlines each icon's SVG into the page at build time, straight from the
+     @iconify-json packages in node_modules and from src/icons/. Nothing is fetched at
+     runtime and no client JavaScript ships with it, so an icon costs a visitor exactly
+     what a hand-written <path> would - which is the only reason this design, which
+     otherwise has no icons at all, can afford the ones in the news cards. */
+  integrations: [sitemap({ lastmod: lastCommit }), icon()],
   image: {
     service: {
       entrypoint: "astro/assets/services/sharp",

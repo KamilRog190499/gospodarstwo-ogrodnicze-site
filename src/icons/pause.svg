@@ -1,0 +1,8 @@
+<!-- Filled pause bars, for the button that stops the slideshow.
+     Local for the same reason as play.svg beside it: Lucide ships only an outlined variant,
+     and two stroked rectangles at 12px read as a smudge. The same rounding and the same
+     optical weight as the triangle, because the two share one button. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <rect x="6.5" y="4" width="4" height="16" rx="1.6"/>
+  <rect x="13.5" y="4" width="4" height="16" rx="1.6"/>
+</svg>

@@ -25,11 +25,14 @@ import { offer } from "../data/offer";
  * elements - and that is the price of the no-script fallback being the whole set rather than
  * one row of it.
  *
- * **Three things here are deliberately not props.** The ground is `--paper` because this band
- * sits between two other light sections and the dark plates on this page cannot touch; the
- * motion is the cascade, chosen out of three that were built and shown; and the group order is
- * the year, which is `homeGallery`'s business and not this component's. A prop for any of them
- * would be a second place to decide something already decided.
+ * **Three things here are deliberately not props.** The ground is `--paper`, and since
+ * September 2026 that is the most load-bearing thing about this component: the band moved down
+ * the page to sit between the plantings plate and the directions plate, so it is the light
+ * section that keeps those two dark ones from touching (--green-band in tokens.css, and the
+ * table in `src/pages/index.astro`). Painting it dark, or moving it, merges two sections into
+ * one. The motion is the cascade, chosen out of three that were built and shown; and the group
+ * order is the year, which is `homeGallery`'s business and not this component's. A prop for
+ * any of them would be a second place to decide something already decided.
  */
 interface Props {
   groups: GalleryGroup[];

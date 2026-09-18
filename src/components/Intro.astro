@@ -119,8 +119,16 @@ import { directionsUrl, primaryPhone } from "../data/contact";
   /* `auto-fit` with a 320px floor, like every other two-column block here: one column on a
      phone, two as soon as there is room. No breakpoint, and none needed - which column order
      results is decided by source order, so the text comes first on a narrow screen. */
+  /* **--paper, and it is the lightest ground on the site for a reason that is about the section
+     below rather than about this one.** The hero stood on --paper-blush until September 2026,
+     when the news block moved up directly under it: blush against the news block's --paper-clay
+     is 1.003:1, so the two bands were one field of paper cut by a hairline, and the hairline
+     read as a mistake. --paper makes that step 1.079:1 - the strongest this palette allows
+     between two light grounds, because --ink-grey needs a ground no darker than L 0.8353.
+     It is the ceiling, not a preference, and the direction is right: the page is lightest at
+     the top and darkens down. See tokens.css at the grounds, where blush's value is kept. */
   .intro {
-    background: var(--paper-blush);
+    background: var(--paper);
     border-bottom: 1px solid var(--rule);
     padding: var(--pad-section) var(--edge);
     display: grid;

@@ -1,6 +1,6 @@
 {
   "name": "gospodarstwo-ogrodnicze-site",
-  "version": "0.26.0",
+  "version": "0.27.3",
   "private": true,
   "type": "module",
   "engines": {
@@ -13,13 +13,16 @@
     "preview": "astro preview",
     "lint": "astro check && eslint .",
     "format": "prettier --write .",
-    "fetch:facebook": "node scripts/fetch-facebook.mjs"
+    "fetch:facebook": "node --env-file-if-exists=.env scripts/fetch-facebook.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/public-sans": "^5.3.0",
+    "@iconify-json/lucide": "^1.2.131",
+    "@iconify-json/simple-icons": "^1.2.95",
     "astro": "^7.2.10",
+    "astro-icon": "^1.2.0",
     "sharp": "^0.35.4"
   },
   "devDependencies": {

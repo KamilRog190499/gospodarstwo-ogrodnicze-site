@@ -1,87 +1,123 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Intro from "../components/Intro.astro";
+import FacebookNews from "../components/FacebookNews.astro";
 import SeasonCards from "../components/SeasonCards.astro";
 import OfferOverview from "../components/OfferOverview.astro";
-import GalleryShow from "../components/GalleryShow.astro";
 import Compositions from "../components/Compositions.astro";
-import FacebookNews from "../components/FacebookNews.astro";
+import GalleryShow from "../components/GalleryShow.astro";
 import Directions from "../components/Directions.astro";
 import { homeGallery } from "../data/gallery";
 
 /**
- * The home page: what the holding sells, which part of the year is running, what it looks
- * like, and how to get there.
+ * The home page: what is new this week, what the holding sells, which part of the year is
+ * running, what it looks like, and how to get there.
+ *
+ * ## Why the news stands first
+ *
+ * `FacebookNews` moved from second-to-last to directly under the hero in September 2026, on
+ * the owner's instruction. The argument is the one the block was built on: the catalogue
+ * changes once a season, and this is the only thing on the page that can differ between two
+ * Tuesdays. Someone who was here in May and comes back in October should be told that the
+ * chrysanthemums are out before they are told anything they already know.
+ *
+ * It costs the hero its position as the only thing above the fold, and that was weighed: the
+ * `h1`, the tagline and the call button are still the first things in the document and still
+ * the first thing read. What follows them is now news rather than the calendar.
  *
  * ## Where the photo show sits, and why there
  *
- * `GalleryShow` stands between the offer tiles and the plantings: the tiles say what is sold,
- * the show says what it looks like, and only then come the plantings, which are a different
- * question again. It is also the only place it can go. The sections alternate light and dark,
- * two dark plates cannot be told apart from each other (--green-band in tokens.css), and there
- * were no two adjacent light sections to put a dark one between - so the new band is light, and
- * a light band next to `--paper-clay` is the arrangement the top of this page already uses
- * three times over.
+ * `GalleryShow` went the other way in the same change, from between the offer tiles and the
+ * plantings to between the plantings and the map. It is not a preference. The sections
+ * alternate light and dark, two dark plates cannot be told apart from each other (--green-band
+ * in tokens.css explains why the usable range is that narrow), and the news block used to be
+ * the light band between `Compositions` and `Directions`. Taking it to the top left those two
+ * plates touching, and the show is the section that can stand between them: it is light, it
+ * belongs after the plantings rather than before them - the tiles say what is sold, the
+ * plantings say what can be made of it, the show says what all of it looks like - and it
+ * leaves the offer tiles next to `--paper-clay`, which is the arrangement the top of this page
+ * already uses.
  *
- * It carries **69 photographs** - every frame of the offer that is the holding's own and is
- * not already on this page - one row at a time. That is not 69 photographs' worth of page:
- * `gallery-show.ts` mounts three rows and hides the rest, and a hidden image is never
- * fetched. The "Więcej zdjęć" row under it points at `#zdjecia` on each category page,
- * which is the strip that holds that group's full set.
+ * So the order of sections on this page is a correctness constraint and not a layout taste.
+ * Light, light, dark, light, dark, light, dark:
  *
- * It used to be the entire site - fourteen plant descriptions, the gallery, the history and
- * the contact section on one scroll, with a menu whose five entries pointed at three
- * anchors. Cutting it back to an intro, the season and four tiles then went too far the
- * other way: the holding has 48 photographs of its own, that entrance showed four of them,
- * and the offer tiles carried none at all - on a business whose whole product is what a
- * plant looks like.
+ *   Intro          --paper
+ *   FacebookNews   --paper-clay
+ *   SeasonCards    --green-band
+ *   OfferOverview  --paper-clay
+ *   Compositions   --green-band
+ *   GalleryShow    --paper
+ *   Directions     --green-band
  *
- * **So this page shows the pictures, and only the pictures.** It is a preview of each part
- * of the site rather than a table of contents for it - but a preview, not a copy. The
- * subpages keep what makes them worth opening: the cultivation descriptions, the colour
- * lists, the filters, the phone numbers.
+ * Two light grounds may touch - they differ in hue and the rules do the parting. Two dark ones
+ * may not. The last join, --green-band against the --ink footer, is 1.44:1 and is the one that
+ * cannot be fixed; the footer colour is not up for negotiation.
+ *
+ * **The hero's ground is the newest line in that table and it was decided by the join under
+ * it.** It stood on --paper-blush, which against the news block's --paper-clay is 1.003:1 - one
+ * colour, not two - so the first join on the page read as a stray hairline rather than as a
+ * boundary. --paper makes it 1.079:1, the most this palette allows between two light grounds;
+ * blush left tokens.css with it, because nothing else stood on it. Three variants were built
+ * and looked at side by side before this one was taken, and the two that lost are recorded in
+ * docs/inwentaryzacja.md.
+ *
+ * The show carries **69 photographs** - every frame of the offer that is the holding's own and
+ * is not already on this page - one row at a time. That is not 69 photographs' worth of page:
+ * `gallery-show.ts` mounts three rows and hides the rest, and a hidden image is never fetched.
+ * The "Więcej zdjęć" row under it points at `#zdjecia` on each category page, which is the
+ * strip that holds that group's full set.
+ *
+ * This page used to be the entire site - fourteen plant descriptions, the gallery, the history
+ * and the contact section on one scroll, with a menu whose five entries pointed at three
+ * anchors. Cutting it back to an intro, the season and four tiles then went too far the other
+ * way: the holding has 48 photographs of its own, that entrance showed four of them, and the
+ * offer tiles carried none at all - on a business whose whole product is what a plant looks
+ * like.
+ *
+ * **So this page shows the pictures, and only the pictures.** It is a preview of each part of
+ * the site rather than a table of contents for it - but a preview, not a copy. The subpages
+ * keep what makes them worth opening: the cultivation descriptions, the filters, the phone
+ * numbers.
  *
  * Outline: `h1` in Intro, then one `h2` per section.
  *
  * ## The two blocks that repeat something, and what earns them their place
  *
  * - **Inspiracje** shows the same 23 plantings as `/inspiracje/`, with the filter, the
- *   thumbnail rail, the anchors, the structured data and the per-panel phone CTA all
- *   switched off (see the props on `Compositions.astro`). Every panel heading is a link to
- *   that planting on `/inspiracje/`, so the preview feeds the page rather than replacing it.
+ *   thumbnail rail, the anchors, the structured data and the per-panel phone CTA all switched
+ *   off (see the props on `Compositions.astro`). Every panel heading is a link to that planting
+ *   on `/inspiracje/`, so the preview feeds the page rather than replacing it.
  * - **Directions** stands where `ContactStrip` stood in 0.5, and would deserve the same
- *   deletion if it repeated what that one did. It does not: it prints no phone number.
- *   The strip was removed because `602 518 401` appeared three times on this page - in the
- *   Intro call button, in the strip and in the footer. The block answers the one question
- *   the footer cannot: where this is, on a map.
+ *   deletion if it repeated what that one did. It does not: it prints no phone number. The
+ *   strip was removed because the same number appeared three times on this page - in the Intro
+ *   call button, in the strip and in the footer. The block answers the one question the footer
+ *   cannot: where this is, on a map.
  *
  * **The phone count is the thing to watch on this page, and it is easy to get wrong.** The
  * first draft of 0.7 shipped the plantings strip with its panel CTA intact and put the number
- * on this page **25 times** - once in the Intro, once in the footer and once in each of the
- * 23 panels - while this very comment claimed it appeared once. Anything repeated per panel
- * is repeated 23 times here. Count it on the built page before trusting a sentence about it:
- * `grep -o 'href="tel:' dist/index.html | wc -l` should read **3**: the intro's one CTA plus the
- * footer's list of both numbers. The check used to name a number - `602 518 401` - which
+ * on this page **25 times** - once in the Intro, once in the footer and once in each of the 23
+ * panels - while this very comment claimed it appeared once. Anything repeated per panel is
+ * repeated 23 times here. Count it on the built page before trusting a sentence about it:
+ * `grep -o 'href="tel:' dist/index.html | wc -l` should read **3**: the intro's one CTA plus
+ * the footer's list of both numbers. The check used to name a number - `602 518 401` - which
  * stopped existing when the owners withdrew two of the four phones, so it was passing by
  * matching nothing. Count the links, not a particular number.
  *
  * ## The block that is not a preview of anything
  *
- * **Aktualności** (`FacebookNews`) stands between the plantings and the map, and it is the one
- * thing on this page that has no subpage behind it. The catalogue changes once a season; this
- * is where "chryzantemy są już w sprzedaży" can appear on a Tuesday, because the owners write
- * it on Facebook and a workflow carries it here.
+ * **Aktualności** (`FacebookNews`) is the one thing on this page with no subpage behind it.
+ * The catalogue changes once a season; this is where "chryzantemy są już w sprzedaży" can
+ * appear on a Tuesday, because the owners write it on Facebook and a workflow carries it here.
  *
- * **It is now load-bearing, which it was not before.** Until September 2026 this block vanished
- * when the snapshot was empty and the page had to read correctly without it. Since the home
- * page went to alternating grounds it is the light band between the plantings plate and the
- * directions plate, and two dark plates cannot be told apart from each other (--green-band in
- * tokens.css explains why the usable range is that narrow). So the block renders whether or not
- * there are posts, and moving it, or letting it disappear again, merges two sections into one.
+ * It renders whether or not there are posts. Until September 2026 that was load-bearing - it
+ * was the light band between two dark plates - and it no longer is, because the block does not
+ * stand between two dark plates any more. The empty state stays all the same, on the owners'
+ * own decision: a block that is always there, saying where the news lives, rather than a
+ * section that comes and goes with a token.
  *
  * The map is consent-gated, and the Facebook block needs no gate because it embeds nothing -
- * its pictures are our own files. So the home page still contacts nothing but our own server
- * until a visitor asks for the map.
+ * its pictures and its films are our own files. So the home page still contacts nothing but
+ * our own server until a visitor asks for the map.
  */
 
 const galleryGroups = await homeGallery();
@@ -93,9 +129,9 @@ const galleryGroups = await homeGallery();
   canonical="/"
 >
   <Intro />
+  <FacebookNews />
   <SeasonCards />
   <OfferOverview />
-  <GalleryShow groups={galleryGroups} />
   <Compositions
     level={2}
     showFilters={false}
@@ -106,6 +142,6 @@ const galleryGroups = await homeGallery();
     allLink
     ground="dark"
   />
-  <FacebookNews />
+  <GalleryShow groups={galleryGroups} />
   <Directions />
 </BaseLayout>

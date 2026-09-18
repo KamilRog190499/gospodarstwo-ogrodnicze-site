@@ -4,8 +4,11 @@
  * the original handoff and is not a source to copy from.
  *
  * The doctrine that has not changed: no component hardcodes a colour, a size or a spacing,
- * and there is no border radius and no shadow. **The one tonal gradient in the design is gone**
- * as of the revision below - it went out with the thing it existed for.
+ * and there is no border radius and no shadow - **with one exception, added September 2026 and
+ * fenced off at the bottom of this file**: the "Co u nas słychać" cards, reproduced from the
+ * sibling site at the owners' instruction, use --radius and --lift and nothing else does.
+ * **The one tonal gradient in the design is gone** as of the revision below - it went out with
+ * the thing it existed for.
  *
  * `grep -rn "gradient" src/` still finds two, and both are fine: `PhotoSlot` and `MapEmbed`
  * hatch their "nothing here yet" boxes with a `repeating-linear-gradient` whose stops are
@@ -61,45 +64,54 @@
   /* grounds */
   --paper: #faf7f0; /* Paper - the page ground, and text on dark */
   --paper-dim: #f2efe4; /* Dimmed paper - the season strip, chips, section grounds */
-  /* Clay, linen and blush - the warm light grounds of the home page, September 2026. They
-     replaced a single alternating pair and reversed the "at most two page backgrounds" rule
-     this file used to state, on the owner's report that the home page all blended together.
-     The reversal and its reason are in docs/inwentaryzacja.md; do not revert it on the
-     strength of the old sentence alone.
+  /* Clay and linen - the warm light grounds of the home page, September 2026. They replaced a
+     single alternating pair and reversed the "at most two page backgrounds" rule this file used
+     to state, on the owner's report that the home page all blended together. The reversal and
+     its reason are in docs/inwentaryzacja.md; do not revert it on the strength of the old
+     sentence alone.
 
      **They differ in hue, not in lightness, and that is forced rather than chosen.**
      --ink-grey carries every uppercase label and every photo caption on the site, and it needs
-     a ground of at least L 0.8353 to hold 4.5:1 against it. A fourth ground half a step darker
-     would take every label on the page under AA at once. So the room that is left is sideways:
+     a ground of at least L 0.8353 to hold 4.5:1 against it. A ground half a step darker would
+     take every label on the page under AA at once. So the room that is left is sideways:
 
-       --paper        L 0.931   4.99:1    the masthead, and light plates on the dark bands
+       --paper        L 0.931   4.99:1    the masthead, the hero, and light plates on the bands
        --paper-linen  L 0.876   4.82:1    the menu bar
        --paper-clay   L 0.860   4.62:1    the offer tiles and the news block
-       --paper-blush  L 0.855   4.61:1    the hero, the warmest of the four
 
-     A fifth ground, --paper-sage #EBEEE1, lived here between September's two revisions at
-     4.54:1 - the floor itself. It went when the calendar and the directions block became dark
-     plates and nothing was left standing on it. If a cool ground is ever wanted again, that
-     value is the darkest one that still works.
+     **Two grounds have been retired from this list and both values are kept, because a ground
+     nothing stands on is dead weight but the number behind it is not.**
+
+       --paper-sage   #EBEEE1   4.54:1 - the floor itself. Lived here between September's two
+                                revisions and went when the calendar and the directions block
+                                became dark plates. If a cool ground is ever wanted again, that
+                                value is the darkest one that still works.
+       --paper-blush  #F5EDE6   4.61:1 - the hero's ground, and the warmest paper this site has
+                                had. It went when the news block moved up under the hero: blush
+                                against clay is **1.003:1**, which is not two colours but one,
+                                so the join between the two sections read as a stray hairline
+                                rather than a boundary. The hero took --paper instead, which
+                                makes that step 1.079:1 - the strongest this palette allows
+                                between two light grounds, and the ceiling rather than a
+                                preference. Argued out in docs/inwentaryzacja.md under
+                                "Styk hero i aktualności".
 
      Careful where cards sit on these: a --paper-dim card on clay is 1.003:1, which is no card
      at all. Anything that must read as a plate on a warm ground uses --paper - 1.08:1, faint
      but real, and the register every card on this site already uses. */
   --paper-clay: #f4eee4;
-  /* Two more light grounds, September 2026. All four warm papers now sit within one step of
-     each other in lightness and differ in hue instead - which is not a stylistic preference
-     but the only room left: --ink-grey carries every uppercase label and every photo caption,
-     and it needs a ground of at least L 0.8353 to hold 4.5:1. Sage, the darkest ground this
-     site ever had, is at 4.54:1. There is no second step downwards.
+  /* The third warm paper, September 2026. All three sit within one step of each other in
+     lightness and differ in hue instead - which is not a stylistic preference but the only room
+     left: --ink-grey carries every uppercase label and every photo caption, and it needs a
+     ground of at least L 0.8353 to hold 4.5:1. Sage, the darkest ground this site ever had, is
+     at 4.54:1. There is no second step downwards.
 
-       --paper        4.99:1    --paper-linen  4.82:1
-       --paper-clay   4.62:1    --paper-blush  4.61:1
+       --paper        4.99:1    --paper-linen  4.82:1    --paper-clay   4.62:1
 
-     Linen is the masthead bar's ground and blush the hero's; the two differ from the paper
-     above them by 1.03 and 1.05 to one, which is why the header's rules do the separating
-     there and the colour only warms the band. */
+     Linen is the masthead bar's ground, and it differs from the paper above it by 1.03 to one -
+     which is why the header's rules do the separating there and the colour only warms the
+     band. */
   --paper-linen: #f7f3ea;
-  --paper-blush: #f5ede6;
 
   /* rules */
   --rule: #e2ddce; /* Rule - every 1px line, card and photo borders */
@@ -184,7 +196,6 @@
        --ochre     on --paper        5.56:1
        --ochre     on --paper-linen  5.37:1
        --ochre     on --paper-clay   5.15:1
-       --ochre     on --paper-blush  5.14:1
        --ochre-lit on --green-band   5.58:1
        --ochre-lit on --green-deep   5.10:1
        --ochre-lit on --ink          8.05:1 */
@@ -346,4 +357,26 @@
   --gap-entry: clamp(1.25rem, 4vw, 2.75rem);
 
   --tap: 44px;
+
+  /* ---------- the news block, and nothing else ---------- */
+
+  /* Two tokens with a boundary written into their name, the way --ochre has one. The doctrine
+     at the top of this file says there is no border radius and no shadow on this site, and
+     everywhere except "Co u nas słychać" that is still true: grep for them and the only users
+     are `FacebookPost.astro` and the band around it.
+
+     They are here because in September 2026 the owners asked for that block to be reproduced
+     exactly as it stands on the sibling site alpaki-kazimierzdolny.pl, where the cards are
+     lifted surfaces with a soft corner. It is a view of somebody else's page and reads as one;
+     that is the whole argument, and it does not extend to a plant entry, an offer tile or a
+     season card. **Do not reach for either of these outside that block** - if a second
+     component starts wanting them, that is a design decision to take with the owners, not a
+     token to reuse quietly.
+
+     --radius is the sibling's 6px unchanged. --lift is its shadow recomputed against this
+     site's --ink (#1F2A21) rather than copied with the alpaki ink in it; the geometry and the
+     two opacities are the same. A card only reads as lifted when it is brighter than what it
+     sits on, which is why the card is --paper and the band under it --paper-clay. */
+  --radius: 6px;
+  --lift: 0 1px 2px rgb(31 42 33 / 5%), 0 6px 16px -6px rgb(31 42 33 / 10%);
 }
