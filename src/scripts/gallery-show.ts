@@ -103,6 +103,9 @@ function initShow(root: HTMLElement): void {
   let rows: number[][] = [];
   /** Which group each row belongs to, parallel to `rows`. */
   let rowGroups: number[] = [];
+  /** How many frames a full row holds at the current width. A short row is centred against
+   *  this, so `render` needs it too. */
+  let perRow = 1;
 
   /** Where each group starts and ends in `slides`, read off the markup so the grouping is
    *  stated once, in the data, and not a second time here. */
@@ -117,7 +120,7 @@ function initShow(root: HTMLElement): void {
   function measure(): void {
     const gap = Number.parseFloat(getComputedStyle(track!).columnGap) || 0;
     const fits = Math.floor((track!.clientWidth + gap) / (FRAME_WIDTH + gap));
-    const perRow = Math.max(1, Math.min(MAX_PER_ROW, fits));
+    perRow = Math.max(1, Math.min(MAX_PER_ROW, fits));
 
     rows = [];
     rowGroups = [];
@@ -142,7 +145,14 @@ function initShow(root: HTMLElement): void {
       }
     }
 
-    track!.style.gridTemplateColumns = `repeat(${perRow}, 1fr)`;
+    // **Twice as many columns as frames, and every frame spans two of them.** A row that is
+    // one frame short has to be centred, and half a frame of free space on each side is not
+    // something a grid of whole columns can express: three frames in four columns can only
+    // start at column 1 or column 2, both of them off-centre. In half-columns the same row
+    // starts at column 2 of eight and ends at column 7, leaving one half-column either side.
+    // The frame keeps the width it had - `(W - 3G) / 4` either way - because a frame spanning
+    // two half-columns also swallows the gap between them.
+    track!.style.gridTemplateColumns = `repeat(${perRow * 2}, 1fr)`;
     if (totalLabel) totalLabel.textContent = String(rows.length);
   }
 
@@ -156,11 +166,16 @@ function initShow(root: HTMLElement): void {
       ...(rows[(current + 1) % rows.length] ?? []),
     ]);
 
+    // Half-columns of free space to the left of a short row, so it sits in the middle of the
+    // band rather than against its left edge. A full row gets nought.
+    const offset = perRow - showing.length;
+
     for (const [at, slide] of slides.entries()) {
       const column = showing.indexOf(at);
       const isShowing = column !== -1;
       slide.hidden = !mounted.has(at);
-      slide.style.gridColumn = String(isShowing ? column + 1 : 1);
+      // The hidden frames stack on the first two half-columns underneath the row on screen.
+      slide.style.gridColumn = `${isShowing ? offset + 1 + column * 2 : 1} / span 2`;
       slide.style.transitionDelay = isShowing ? `${column * CASCADE_STEP}ms` : "0ms";
       slide.toggleAttribute("data-current", isShowing);
       // Keeps the mounted-but-invisible frames out of the tab order and out of the

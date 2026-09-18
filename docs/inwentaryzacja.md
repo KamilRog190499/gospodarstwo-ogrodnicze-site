@@ -1203,6 +1203,15 @@ w obu wariantach ta sama. Zmierzony rozkład przy czterech w rzędzie: bratki 3-
 osiem rzędów po cztery i dwa po trzy, chryzantemy cztery po cztery i dwa po trzy - **żaden rząd
 nie ma mniej niż trzy kadry**.
 
+**Krótszy rząd jest wyśrodkowany**, a nie dosunięty do lewej - zgłoszenie właściciela po
+obejrzeniu na szerokim ekranie. Siatka ma **dwa razy więcej kolumn niż kadrów w rzędzie**,
+a każdy kadr zajmuje dwie: pół kadru wolnego z każdej strony nie da się inaczej wyrazić, bo
+trzy kadry w czterech kolumnach mogą zacząć się tylko w kolumnie 1 albo 2 i obie są poza
+środkiem. W półkolumnach ten sam rząd idzie od kolumny 2 do 7 z ośmiu. **Kadr nie zmienia
+przy tym szerokości** - `(W - 3G) / 4` w obu wariantach, bo kadr rozpięty na dwóch
+półkolumnach połyka też odstęp między nimi. Zmierzone przy 1512 px: 156 px wolnego z każdej
+strony, kadr 267 px w rzędzie pełnym i skróconym.
+
 **Zmierzone przy zmianie szerokości okna**, bo o to było osobne pytanie: 1280 px → 4 kadry
 i 19 slajdów, 900 px → 2 kadry i 35 slajdów, 390 px → 1 kadr i 69 slajdów. W obie strony
 **na ekranie zostaje to samo zdjęcie**, na które się patrzyło (skrypt przelicza pozycję z kadru,
