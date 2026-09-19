@@ -3417,8 +3417,9 @@ zobowiązania niż tamto.
   Tutaj nie ma jeszcze `deploy.yml`, a na commicie opiera się właściwość, którą `CLAUDE.md`
   wymienia jako nośną: martwy token znaczy „feed się nie odświeżył”, nigdy „strona jest pusta”.
 - **Blok nie znika, gdy nie ma wpisów.** W alpakach sekcja chowa się w całości. Tutaj zostaje
-  pusty stan - decyzja właścicieli, podjęta świadomie przy tej zmianie. Zabezpieczenie wieku
-  (`MAX_AGE_DAYS = 60`) działa tak samo, tylko kończy się pustym stanem, a nie zniknięciem.
+  pusty stan - decyzja właścicieli, podjęta świadomie przy tej zmianie. Działało przy tym
+  zabezpieczenie wieku (`MAX_AGE_DAYS = 60`), które kończyło się tym samym pustym stanem, a nie
+  zniknięciem; **zostało usunięte we wrześniu 2026** - patrz „Zdjęty bezpiecznik wieku” niżej.
 - **`MAX_VIDEO_MB` to 12, nie 40.** Film, który tu pobierzemy, zostaje w historii repozytorium
   na zawsze - także po tym, jak skrypt skasuje go z katalogu roboczego. Przy filmie co kilka
   tygodni 12 MB jest do przyjęcia, 40 MB nie byłoby. Wpis z za dużym filmem i tak się pokazuje:
@@ -3630,6 +3631,54 @@ emoji. Facebook liczy `offset` w punktach kodowych, JavaScript indeksuje string 
 UTF-16 i te dwie liczby rozjeżdżają się o jeden przy pierwszym emoji. Naiwne cięcie stringa
 daje „ Anna Wiśniewsk” - wygląda prawie dobrze, czyli najgorzej, jak błąd może wyglądać.
 Żaden inny wpis w tym pliku by tego nie wyłapał.
+
+### Zdjęty bezpiecznik wieku - wrzesień 2026
+
+Do tej pory `src/data/facebook.ts` trzymało stałą `MAX_AGE_DAYS = 60`: jeśli najnowszy
+wpis w snapshocie był starszy niż dwa miesiące, sekcja przestawała pokazywać karty i wracała do
+pustego stanu. **Właściciele poprosili o usunięcie tej reguły** - na stronie mają stać dwa
+ostatnie wpisy z profilu, niezależnie od daty. Stała i cały warunek zniknęły; `hasPosts` to
+teraz samo `loaded.length > 0`.
+
+Bezpośrednim powodem było to, że pierwsze udane pobranie danych (19 września 2026, z tokenem
+wpisanym do `.env`) przyniosło dwa prawdziwe wpisy - z 28 kwietnia i 12 kwietnia 2026 - a
+strona i tak pokazała pusty stan, bo najnowszy z nich miał 144 dni. Pobieranie działało
+poprawnie i bezpiecznik działał poprawnie; efekt był taki, że blok „Co u nas słychać” nie
+pokazywał niczego mimo sprawnego tokenu.
+
+**Czym ta reguła była i co jej zdjęcie kosztuje.** To nie był wybór redakcyjny, tylko czujnik
+awarii. Typowa awaria tego potoku - wygasły albo cofnięty token - nie objawia się błędem na
+stronie: workflow pada w GitHubie, a strona dalej buduje się ze starego snapshotu i pokazuje te
+same wpisy w nieskończoność. Bezpiecznik zamieniał ten stan w widoczny pusty blok. Po jego
+usunięciu:
+
+- martwy token wygląda dokładnie tak samo jak żywy - jak feed zatrzymany na ostatnim udanym
+  dniu, i nic na stronie nie mówi, który to przypadek;
+- **jedynym sygnałem awarii zostaje powiadomienie GitHuba o nieudanym przebiegu** workflow
+  `facebook-feed.yml`, więc ktoś musi je czytać;
+- przy dłuższej przerwie w pisaniu na profilu w rubryce „aktualności” stoi wpis sprzed wielu
+  miesięcy - z datą przy nim, bo kartę i tak podpisuje data względna („5 miesięcy temu”), a nie
+  sam tekst.
+
+Argument za bezpiecznikiem został właścicielom przedstawiony i mimo to poprosili o zmianę;
+zapisany jest tu i w komentarzu przy `hasPosts`, żeby nie wrócił jako „porządki”. **Gdyby
+kiedyś miał wrócić, to jest decyzja właścicieli, a nie sprzątanie kodu.**
+
+Pusty stan bloku nie zniknął - dalej obsługuje snapshot bez wpisów, czyli to, co jest w
+repozytorium do pierwszego udanego odświeżenia.
+
+**Wyniku ręcznego pobrania nie zacommitowano.** Posty, zdjęcia i film z tamtego przebiegu
+posłużyły wyłącznie do sprawdzenia, że potok działa, i zostały usunięte z drzewa roboczego;
+w repozytorium stoi dalej pusty snapshot (`posts: []`). Snapshot pisze workflow
+`facebook-feed.yml` i tylko on - plik zacommitowany ręcznie z czyjejś maszyny byłby drugim
+źródłem dla czegoś, co musi mieć dokładnie jedno. **Wpisy pojawią się na stronie dopiero po
+pierwszym przebiegu akcji z ustawionymi sekretami** `FB_PAGE_ID` i
+`FB_SYSTEM_USER_TOKEN`.
+
+Zmiana dotknęła pięciu plików: `src/data/facebook.ts` (stała i warunek),
+`src/components/FacebookNews.astro` oraz `src/data/facebook-fixture.ts`
+i `scripts/fetch-facebook.mjs` (komentarze, które się do niej odwoływały), a także
+`docs/facebook.md`, gdzie reguła była opisana właścicielom.
 
 ### Co idzie na listę właścicieli
 

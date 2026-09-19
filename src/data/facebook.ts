@@ -105,21 +105,6 @@ const cache = snapshot as unknown as Snapshot;
  *  arrives with the next refresh rather than needing a commit. */
 const FALLBACK_PAGE_NAME = "Gospodarstwo Ogrodnicze Saran";
 
-/** Past this, the section stops showing posts and falls back to its empty state.
- *
- *  This is a dead man's switch, not a preference. The failure mode of a broken pipeline -
- *  most likely a token that stopped working - is a snapshot that keeps serving the same three
- *  posts indefinitely, and a visitor reading "news" from three months ago concludes the
- *  holding has closed. The workflow fails loudly on a bad fetch, but nobody watches a mailbox
- *  forever; this is the part that does not depend on anyone noticing.
- *
- *  **It empties the section rather than hiding it**, which is where this parts company with
- *  the sibling site. There the whole block disappears; here the owners asked for a block that
- *  is always on the page, saying where the news lives. An empty state claims nothing, so it
- *  is safe to leave standing - which is exactly what a stale snapshot is not.
- */
-const MAX_AGE_DAYS = 60;
-
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>("../assets/facebook/*.jpg", {
   eager: true,
 });
@@ -182,7 +167,7 @@ function fromSnapshot(entry: Snapshot["posts"][number]): FacebookPost {
   };
 }
 
-/** The posts as the snapshot holds them, before the age fuse.
+/** The posts as the snapshot holds them.
  *
  *  `import.meta.env.DEV` is true under `astro dev` and false in `astro build`. The fixture is
  *  invented copy attributed on screen to the owners' own Facebook page, so a build that ever
@@ -193,11 +178,19 @@ const loaded: FacebookPost[] =
   cache.posts.length > 0 ? cache.posts.map(fromSnapshot) : import.meta.env.DEV ? fixturePosts : [];
 
 /** Whether there is anything worth printing as news. `false` puts the section into its empty
- *  state; it never removes the section. See MAX_AGE_DAYS. */
-export const hasPosts: boolean =
-  loaded.length > 0 &&
-  Date.now() - Math.max(...loaded.map((post) => post.publishedAt.getTime())) <
-    MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+ *  state; it never removes the section.
+ *
+ *  **Age is not a condition here, and that reverses a rule this file used to carry.** A
+ *  `MAX_AGE_DAYS = 60` fuse emptied the section once the newest post passed two months, on the
+ *  argument that the failure mode of a broken pipeline is a snapshot serving the same posts
+ *  forever, and that "news" from three months ago reads as a business that has closed. The
+ *  owners were told what it was for and asked in September 2026 for the two latest posts to
+ *  stand whatever their date. What that costs is the thing the fuse bought: a token that has
+ *  stopped working now shows as a feed frozen at its last good day rather than as an empty
+ *  block, and nothing on the page says which it is. The failed workflow run is the only
+ *  alert left, so it is the one somebody has to watch.
+ */
+export const hasPosts: boolean = loaded.length > 0;
 
 export const facebookPosts: FacebookPost[] = hasPosts ? loaded : [];
 

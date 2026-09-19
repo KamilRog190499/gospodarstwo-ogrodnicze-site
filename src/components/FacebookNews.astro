@@ -60,8 +60,11 @@ import { facebook } from "../data/contact";
  *   lives. It invents no news - the empty lead says only that they post on Facebook and that
  *   new posts land here, and it keeps the link the populated state also carries.
  *
- *   The same state covers a snapshot that has gone stale; see MAX_AGE_DAYS in
- *   `src/data/facebook.ts` for why an old post is treated as no post.
+ *   **It covers an empty snapshot only, and no longer a stale one.** A fuse in
+ *   `src/data/facebook.ts` used to drop the section into this state once the newest post
+ *   passed 60 days; the owners had it removed in September 2026, so the two latest posts now
+ *   stand whatever their date. The empty lead is therefore what ships before the first
+ *   successful refresh, and nothing else.
  *
  *   **Both leads, the overline and the heading are our words, not the owners'**, and are on
  *   their review list in docs/inwentaryzacja.md together. The populated one was cut to its

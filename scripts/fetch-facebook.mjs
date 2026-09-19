@@ -542,8 +542,9 @@ async function main() {
     .slice(0, KEEP);
 
   if (chosen.length === 0) {
-    // Not an error: a page really can have nothing renderable. The old snapshot stays, and the
-    // age fuse in src/data/facebook.ts empties the section once it passes 60 days.
+    // Not an error: a page really can have nothing renderable. The old snapshot stays and the
+    // section keeps showing it - since September 2026 nothing expires it, so a page that goes
+    // quiet keeps its last two posts on screen indefinitely.
     console.warn("fetch-facebook: no post worth showing - the snapshot stays as it is.");
     return;
   }

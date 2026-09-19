@@ -60,10 +60,12 @@ export const fixturePageName = "Gospodarstwo Ogrodnicze Saran";
 
 /** Dates relative to the build rather than fixed ones.
  *
- *  A hard-coded date would slide past MAX_AGE_DAYS in `facebook.ts` after two months and the
- *  fixture would silently stop rendering - the guard doing exactly its job, on the one data
- *  set where it is wrong. Counting back from today keeps the fixture usable for as long as
- *  the file exists.
+ *  The card prints a relative date - "3 dni temu" - so a fixed date would have the fixture
+ *  ageing on screen and eventually reading as a dead page, which is the one thing a fixture
+ *  must not rehearse. Counting back from today keeps it saying what it is there to say.
+ *  (It also used to matter for a reason that has since gone: a `MAX_AGE_DAYS` fuse in
+ *  `facebook.ts` would have stopped the fixture rendering after two months. The owners had
+ *  that fuse removed in September 2026.)
  */
 function daysAgo(days: number): Date {
   const date = new Date();

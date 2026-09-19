@@ -97,7 +97,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                                                                                                                                                                                 |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the three strips (`balconyStrip`, `chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. Also `homeGallery`, which is those three strips grouped and put in calendar order for the home page show - the strips themselves, not copies, so a frame added to a strip appears there too. **The 23 plantings are no longer here** - they are the `compositions` collection. |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                                                                                      |
-| `src/data/facebook.ts`         | Types, file resolution and the 60-day age fuse for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                            |
+| `src/data/facebook.ts`         | Types and file resolution for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                            |
 | `src/data/facebook-fixture.ts` | Invented posts, so the news card can be worked on without a token. **`astro dev` only** - `facebook.ts` gates it on `import.meta.env.DEV`, because these carry the owners' page name on screen.                                                                                                                                                                                                                                                                                                   |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                                                                                                                                                                                        |
@@ -604,15 +604,29 @@ plus manual viewport checks.
     or stale; ours falls back to an empty state, on the owners' own decision. And its
     `MAX_VIDEO_MB` is 40 where ours is **12**, because a film we commit is in this
     repository's history forever - the cap is argued at the constant.
-  - **The 60-day fuse is not an editorial choice.** `MAX_AGE_DAYS` in `src/data/facebook.ts`
-    empties the block when the newest post passes two months, because the failure mode of a
-    broken pipeline is a snapshot that keeps serving the same three posts, and "news" from
-    three months ago reads as a business that has closed.
+  - **Nothing expires a post, and the fuse that used to is gone on the owners' instruction.**
+    `MAX_AGE_DAYS = 60` in `src/data/facebook.ts` emptied the block once the newest post passed
+    two months; it was removed in September 2026, so the two latest posts stand whatever their
+    date. It was a dead man's switch rather than an editorial choice - the failure mode of a
+    broken pipeline is a snapshot that keeps serving the same posts, and "news" from three
+    months ago reads as a business that has closed - and the owners were told so and asked for
+    it anyway. **What that leaves:** a token that has stopped working is now indistinguishable
+    on the page from a page that has gone quiet, and the failed workflow run is the only alert
+    there is. The argument is kept at `hasPosts` and in `docs/inwentaryzacja.md` under "Zdjęty
+    bezpiecznik wieku"; putting it back is the owners' call, not a tidy-up.
 
-  The secrets are not set yet, so there are no posts and the block renders its empty state -
-  which it now does on the strength of that decision alone. Until September 2026 it was also
-  load-bearing, as the light band between two dark plates; the block moved to the top of the
-  page that month and `GalleryShow` took over that job. The empty state claims no news, only
+  **The pipeline is proven end to end; the snapshot in the repository is still empty, and that
+  is deliberate.** `npm run fetch:facebook` was run by hand in September 2026 against a token in
+  a local `.env` and brought back two real posts with their photographs and a film - so the
+  system user token, the page token exchange, the downloads and `sharp` all work. **That output
+  was not committed.** The snapshot is the daily workflow's to write, and a hand-run one
+  committed from a developer's machine would be a second source for a file that must have
+  exactly one. So the repository still ships `posts: []` and the block still renders its empty
+  state until `facebook-feed.yml` runs with the secrets set.
+  That empty state now covers one case only: the repository before its first successful refresh.
+  It renders on the strength of the owners' decision alone - until September 2026 it was also
+  load-bearing, as the light band between two dark plates, and the block moved to the top of the
+  page that month with `GalleryShow` taking over that job. The empty state claims no news, only
   that the owners post on Facebook and that new posts land here. Both leads, the overline and
   the heading are our words and are on the owners' review list.
   - **`src/data/facebook-fixture.ts` must never reach a build.** It is invented copy printed

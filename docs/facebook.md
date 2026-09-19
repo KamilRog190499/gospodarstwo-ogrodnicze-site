@@ -44,9 +44,16 @@ Zasady, które są tu ważne:
   filmu i linkiem do Facebooka, tylko bez odtwarzania na miejscu. Powód jest prozaiczny: każdy
   pobrany film zostaje w archiwum projektu na stałe.
 - **Pomijane są wpisy, które nie mają ani tekstu, ani zdjęcia.** Poza tym filtru nie ma.
-- **Jeśli najnowszy wpis ma więcej niż 60 dni**, blok przestaje pokazywać wpisy i wraca do
-  krótkiej informacji, że piszemy na Facebooku. To zabezpieczenie: lepiej nie pokazywać nic,
-  niż pokazywać jako „aktualności” coś sprzed kwartału.
+- **Wpisy nie mają terminu ważności.** Na stronie stoją dwa ostatnie wpisy z profilu,
+  niezależnie od tego, jak są stare. Do września 2026 działało tu zabezpieczenie: wpis starszy
+  niż 60 dni znikał, a blok wracał do krótkiej informacji, że piszemy na Facebooku. Właściciele
+  poprosili o jego usunięcie.
+
+  > **Co to zmienia w praktyce.** Jeśli token przestanie działać, strona nie zgłosi tego w
+  > żaden widoczny sposób - będzie dalej pokazywać dwa ostatnie pobrane wpisy, jak gdyby nic
+  > się nie stało. Jedynym sygnałem jest powiadomienie z GitHuba o nieudanym przebiegu. Warto
+  > też pamiętać, że przy dłuższej przerwie w pisaniu na profilu w rubryce „Co u nas słychać”
+  > będzie stał wpis sprzed wielu miesięcy z datą przy nim.
 
 > **Rzecz do świadomej zgody właścicieli.** Publikacja jest w pełni automatyczna - nikt nie
 > przegląda wpisów przed ich pojawieniem się na stronie. Każdy wpis na profilu, także
