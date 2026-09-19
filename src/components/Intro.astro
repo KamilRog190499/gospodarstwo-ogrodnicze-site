@@ -2,33 +2,51 @@
 import { Picture } from "astro:assets";
 import { heroPhoto } from "../data/gallery";
 import { directionsUrl, primaryPhone } from "../data/contact";
+import { nbsp } from "../utils/typography";
 
 /**
  * The entrance to the home page: the heading and what to do, beside a portrait of the
  * holding.
  *
- * ## What this replaced, and what went out with it
+ * ## The September 2026 rebuild, and the four site rules it suspends
  *
- * Until September 2026 this was a full-bleed panorama with the `h1` lying on it over
- * `--hero-scrim`. That arrangement is gone, and three things went with it that are worth
- * knowing about, because each one used to be a rule somewhere:
+ * The owners supplied a rendered comparison of this band and asked for it to be reproduced
+ * exactly. Three things in it are departures from rules written down in `CLAUDE.md`, and each
+ * one is here because they asked for it after the rule was put to them - not because the rule
+ * was forgotten. They are listed here so that nobody "fixes" them back:
  *
- * - **The scrim.** It was the only gradient in the design, and the only place on the site
- *   where contrast had to be measured in a browser rather than computed, because the
- *   background of the text was a photograph and the worst case was its brightest pixel. Text
- *   no longer lies on an image anywhere here. The measuring procedure is written up in
- *   `docs/inwentaryzacja.md` in case that ever changes - do not reinvent it, and do not
- *   estimate it offline.
- * - **The project's only media query.** The band switched 3:2 -> 3:1 at 700px because a
- *   panorama on a phone leaves a strip of photograph about as tall as a finger. A figure in a
- *   column has no such problem: `auto-fit` stacks it under the text and it keeps one ratio at
- *   every width. The project now has zero breakpoints.
- * - **The local `font-weight: 350` on the heading.** It was an optical correction for white
- *   type on a dark scrim, where a stroke reads heavier than the same stroke in ink on paper.
- *   On paper there is nothing to correct, so the override is gone - but the rendered weight
- *   does not change, because `global.css` sets 350 on every h1/h2/h3 anyway, on the owner's
- *   own instruction. What went away is a local exception that no longer had a reason, not a
- *   weight.
+ * 1. **Two hand-drawn sprigs and a handset, and they are icons.** The design is austere and the
+ *    rule is "no icons, no emoji", with one named exemption for the Facebook block and an
+ *    explicit instruction not to spread it to a fourth file. This is that fourth file. They are
+ *    inline SVG rather than `astro-icon`: nothing is added to the dependency list, nothing is
+ *    fetched, and the exemption stays where it can be seen. **Do not lift them into
+ *    `src/icons/` or reuse them elsewhere** - the moment a second component draws a sprig, the
+ *    site has an icon set and the rule is gone rather than suspended.
+ * 2. **`text-wrap: balance` is gone from the heading.** The reference breaks the heading
+ *    long-then-short ("balkonowych, rabatowych" / "i chryzantem"), which is what a line box
+ *    does on its own; `balance` exists to prevent exactly that and had to come off. `--text-h1`
+ *    did **not** have to move with it: measured in the widened column, 60px breaks this heading
+ *    exactly where the reference does, so the approved display size survives the rebuild.
+ * 3. **The heading is in two voices without being in two typefaces.** "Producent kwiatów" is
+ *    green and carries the sprig, but it is the same upright Fraunces as the ink half. The
+ *    italic was tried twice here - on "Producent" alone and on the whole phrase - and rejected
+ *    both times, so the masthead is again the only italic on the site.
+ *
+ * **Two marks from the reference are gone and are not to be restored on the strength of it.**
+ * It drew a 1px rule trailing off the overline and another trailing off the green half of the
+ * heading; the owners had both removed, the overline's first and the heading's after it. The
+ * sprig is what closes that line now. The rule in the divider above the facts is a different
+ * thing and stays - it separates two blocks rather than decorating a line of type.
+ *
+ * ## The two columns
+ *
+ * `flex-wrap` rather than the `auto-fit` grid every other two-column block here uses, and the
+ * reason is arithmetic rather than taste. `repeat(auto-fit, minmax(…, 1fr))` can only make
+ * columns of **equal** width, and equal columns give the text 572px at 1400px - narrow enough
+ * that the heading breaks into four lines with three short ones. The reference gives the text
+ * roughly three fifths of the band. `flex-wrap` buys that asymmetry and still stacks on a
+ * phone with **no media query**, so the project's zero-breakpoint rule survives intact.
+ * Verified at 360px: one column, no horizontal scroll.
  *
  * ## The photograph, and why it is the wrong one
  *
@@ -48,8 +66,7 @@ import { directionsUrl, primaryPhone } from "../data/contact";
  * So `heroPhoto` stays, and it is cropped: it is 1448x1086 (4:3), a generated image rather
  * than a photograph from the session, and a 4:5 box shows about 60% of its width. The crop is
  * done once, by `object-fit` in CSS, and aimed by `object-position` - `width`/`height` below
- * carry the file's real ratio so that Astro only scales. Effective resolution across this box
- * is about 1.6x on a wide screen rather than 2x.
+ * carry the file's real ratio so that Astro only scales.
  *
  * **What to do when a portrait frame arrives:** swap `heroPhoto` in `src/data/gallery.ts`,
  * put the file's real dimensions in `width`/`height` here, and delete this section of the
@@ -65,17 +82,65 @@ import { directionsUrl, primaryPhone } from "../data/contact";
   <div class="intro__text">
     <p class="eyebrow intro__place">Cholewianka pod Kazimierzem Dolnym</p>
     <h1 class="intro__title">
-      Kwiaty balkonowe, rabatowe i chryzantemy <em>z własnej uprawy</em>
+      {
+        /* The `{" "}` is load-bearing and not a stray. `.intro__lead` is a block, so the two
+          halves sit on their own lines whatever happens between them - but without an explicit
+          space the compiler collapses the newline away and the `h1` reads
+          "Producent kwiatówbalkonowych" to anything that takes its text rather than its
+          layout: a screen reader, a copy-paste, and a search engine indexing a site that
+          ranks on exactly these words. */
+      }
+      <span class="intro__lead"
+        >Producent <span class="intro__lead-last"
+          >kwiatów<svg
+            class="intro__sprig intro__sprig--lead"
+            viewBox="0 0 24 16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M1 15C7 14 13.2 10.2 21 1.6" />
+            <path d="M21 1.6c-4 .6-6.6 2.6-7.2 6.2 4-.4 6.6-2.4 7.2-6.2Z" />
+            <path d="M12.4 10.4c-3-2-4.2-4.9-3.4-8.2 3 1.9 4.2 4.8 3.4 8.2Z" />
+          </svg></span
+        ></span
+      >{" "}
+      {nbsp("balkonowych, rabatowych i chryzantem")}
     </h1>
+    {
+      /* **Two sentences, not three.** The handoff writes a third here - "Wszystko, co
+        sprzedajemy, pochodzi z naszej własnej uprawy." - and it shipped until the owners had it
+        taken out as redundant. `docs/design/README.md` § "Intro" and the v3 prototype both
+        still carry it, so they now disagree with this file on purpose; do not restore it from
+        them. The claim itself is not lost: the "Uprawa / Własna" fact below still makes it, as
+        do the page's meta description, /o-nas/ and the FAQ. */
+    }
     <p class="intro__body">
       Zachęcamy do zapoznania się z naszą ofertą. Zamówienia można składać telefonicznie lub na
-      terenie naszego gospodarstwa w Cholewiance pod Kazimierzem Dolnym. Wszystko, co sprzedajemy,
-      pochodzi z naszej własnej uprawy.
+      terenie naszego gospodarstwa w Cholewiance pod Kazimierzem Dolnym.
     </p>
     <div class="intro__actions">
-      <a class="cta" href={primaryPhone.href}>Zadzwoń: {primaryPhone.display}</a>
+      <a class="cta intro__call" href={primaryPhone.href}>
+        Zadzwoń: {primaryPhone.display}
+        <svg class="intro__handset" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            d="M6.4 3h3l1.5 4-2 1.5a12 12 0 0 0 5.6 5.6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.4 5.2 2 2 0 0 1 6.4 3Z"
+          />
+        </svg>
+      </a>
       <a class="cta-line" href="/kwiaty-balkonowe/">Zobacz ofertę</a>
       <a class="cta-line" href={directionsUrl} target="_blank" rel="noopener">Wyznacz trasę</a>
+    </div>
+    {
+      /* The rule that used to sit on `.intro__facts` as a `border-top`, now drawn as its own
+        element so the sprig can stand in the middle of it. Decoration with nothing to announce,
+        so it is hidden from the accessibility tree entirely. */
+    }
+    <div class="intro__divider" aria-hidden="true">
+      <svg class="intro__sprig intro__sprig--divider" viewBox="0 0 24 16" focusable="false">
+        <path d="M1 15C7 14 13.2 10.2 21 1.6" />
+        <path d="M21 1.6c-4 .6-6.6 2.6-7.2 6.2 4-.4 6.6-2.4 7.2-6.2Z" />
+        <path d="M12.4 10.4c-3-2-4.2-4.9-3.4-8.2 3 1.9 4.2 4.8 3.4 8.2Z" />
+      </svg>
     </div>
     {
       /* Three facts, each one a restatement of a sentence this site already says elsewhere -
@@ -105,7 +170,7 @@ import { directionsUrl, primaryPhone } from "../data/contact";
       formats={["avif", "webp"]}
       fallbackFormat="jpg"
       widths={[720, 1448]}
-      sizes="(min-width: 1200px) 950px, (min-width: 700px) 48vw, 92vw"
+      sizes="(min-width: 1200px) 620px, (min-width: 700px) 42vw, 92vw"
       width={1448}
       height={1086}
       alt={heroPhoto.alt}
@@ -116,9 +181,6 @@ import { directionsUrl, primaryPhone } from "../data/contact";
 </section>
 
 <style>
-  /* `auto-fit` with a 320px floor, like every other two-column block here: one column on a
-     phone, two as soon as there is room. No breakpoint, and none needed - which column order
-     results is decided by source order, so the text comes first on a narrow screen. */
   /* **--paper, and it is the lightest ground on the site for a reason that is about the section
      below rather than about this one.** The hero stood on --paper-blush until September 2026,
      when the news block moved up directly under it: blush against the news block's --paper-clay
@@ -127,17 +189,27 @@ import { directionsUrl, primaryPhone } from "../data/contact";
      between two light grounds, because --ink-grey needs a ground no darker than L 0.8353.
      It is the ceiling, not a preference, and the direction is right: the page is lightest at
      the top and darkens down. See tokens.css at the grounds, where blush's value is kept. */
+  /* Flex rather than the site's usual `auto-fit` grid - the header comment says why, and the
+     short version is that an `auto-fit` grid cannot make one column wider than the other. */
   .intro {
     background: var(--paper);
     border-bottom: 1px solid var(--rule);
     padding: var(--pad-section) var(--edge);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--gap-columns);
     align-items: center;
   }
 
+  /* **560px, and the basis is what decides when the band splits in two.** At 420px the two
+     columns fitted side by side from about 1000px up, which handed the text a 479px column
+     while `--text-h1` was already near its 60px maximum - "Producent kwiatów" alone then took
+     two lines and the heading ran to six. The basis is the width below which two columns are a
+     worse answer than one, so it belongs at the width the heading actually needs: 560px holds
+     the green phrase on one line at full display size. Below that the band stacks and the text
+     gets the whole shell, which reads better than a squeezed column beside a photograph. */
   .intro__text {
+    flex: 1 1 560px;
     display: grid;
     gap: 1.15rem;
     justify-items: start;
@@ -145,7 +217,11 @@ import { directionsUrl, primaryPhone } from "../data/contact";
 
   /* The village is named here *and* in the paragraph below, on purpose: an uppercase label is
      a poor sole hiding place for the most important fact on the site of a holding people drive
-     to, and a label weighs less in a search engine than a sentence in prose. */
+     to, and a label weighs less in a search engine than a sentence in prose.
+
+     **No trailing rule.** The reference drew one running off the end of this label and it
+     shipped for one release; the owners had it taken out, and the heading's own rule followed
+     it two releases later. Neither comes back without them asking. */
   .intro__place {
     font-size: 0.68rem;
   }
@@ -154,18 +230,40 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     font-size: var(--text-h1);
     letter-spacing: -0.015em;
     line-height: 1.04;
-    max-width: 18ch;
-    /* Without this the last two words - the italic ones - break as "z własnej / uprawy" and
-       the phrase that carries the whole claim is split across a very short last line. */
-    text-wrap: balance;
+    width: 100%;
+    /* No `text-wrap: balance` here, and its absence is deliberate - see point 3 of the header
+       comment. The reference breaks this heading long-then-short, which is what a line box does
+       unaided; `balance` exists to even lines out and would undo it. */
   }
 
-  /* The one italic on the site besides the masthead. --green rather than --sage: this runs at
-     display size, but it is a fragment of a heading and not the heading, so it is held to the
-     text green's 4.95:1 rather than to the large-type exception. */
-  .intro__title em {
-    font-style: italic;
+  /* --green rather than --sage: this runs at display size, but it is a fragment of a heading
+     and not the heading, so it is held to the text green's 4.95:1 rather than to the large-type
+     exception.
+
+     **Upright, and the italic is not coming back.** It sat on "Producent" alone, then on
+     "Producent kwiatów", and the owners rejected both - the slant on a phrase this long reads
+     as a different voice rather than as an accent. What carries the level is the colour and the
+     sprig, which is enough. The masthead is once again the only italic on the site, which is
+     what `fonts.css` and `Header.astro` have both claimed all along.
+
+     **A 1px rule ran from the sprig to the edge of the column for three releases and the owners
+     had it removed.** `display: block` is what is left of it: the rule needed a flex row to
+     grow into, and without it this only has to be a block so the ink half starts on its own
+     line. Do not put the rule back to "balance" the line - the sprig is deliberately the last
+     thing on it. */
+  .intro__lead {
+    display: block;
     color: var(--green);
+  }
+
+  /* Both sprigs. Stroke-drawn at a hair over 1px, which is the weight every other line on this
+     page is drawn at. */
+  .intro__sprig {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .intro__body {
@@ -180,14 +278,84 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     align-items: center;
   }
 
+  /* The handset rides inside the existing `.cta`, which is already an inline-flex row, so this
+     only has to space it and size it. `--paper` comes from `.cta`'s own colour by inheritance. */
+  .intro__call {
+    gap: 0.7rem;
+  }
+
+  .intro__handset {
+    flex: none;
+    width: 1.35em;
+    height: 1.35em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .intro__divider {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    margin-top: 0.35rem;
+    color: var(--green);
+  }
+
+  .intro__divider::before,
+  .intro__divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* The divider draws this block's top line now, so there is no `border-top` here any more -
+     one horizontal line, not two stacked a rem apart. */
+  /* 0.56em/0.22em rather than something rounder, and the six pixels are not cosmetic. At 390px -
+     the commonest phone width - the phrase plus a larger sprig needed 339px against 335px
+     available, so it broke into two lines for want of four pixels. This size brings it to about
+     332px and buys back a whole line of the heading. Below roughly 375px it wraps anyway,
+     cleanly, at the space between the two words, because `.intro__lead-last` keeps the leaf
+     attached to "kwiatów". */
+  .intro__sprig--lead {
+    display: inline-block;
+    vertical-align: middle;
+    width: 0.56em;
+    height: 0.37em;
+    margin-left: 0.22em;
+  }
+
+  /* The sprig is its own inline box, so a line break can fall between "kwiatów" and it - and at
+     390px one did, leaving the phrase on one line and the leaf alone on the next. Tying it to
+     the last word is the same job `nbsp()` does for the single-letter words in the ink half. */
+  .intro__lead-last {
+    white-space: nowrap;
+  }
+
+  .intro__sprig--divider {
+    flex: none;
+    width: 1.4rem;
+    height: 0.95rem;
+  }
+
+  /* **160px, and the floor is chosen for the phone rather than for the desktop.** At 130px this
+     grid went 2 + 1 on a phone, which leaves "Zamówienia" alone on a second row next to an
+     empty half - it reads as something that did not fit rather than as a decision. 160px is the
+     smallest floor that makes two columns impossible in a 335px text column, so the three facts
+     stack into one tidy list there, go two across on a tablet and three across on a desktop.
+     All three states are correct, which is the whole point of picking the floor instead of
+     writing a breakpoint. */
   .intro__facts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
     gap: 0.9rem 1.75rem;
     width: 100%;
-    border-top: 1px solid var(--rule);
-    padding-top: 1.1rem;
-    margin-top: 0.35rem;
+    /* Load-bearing, not tidiness - it is what clips the separators off the first item in
+       **every** row. See the rule below. */
+    overflow: hidden;
   }
 
   .intro__facts > div {
@@ -209,12 +377,55 @@ import { directionsUrl, primaryPhone } from "../data/contact";
     margin: 0;
   }
 
+  /* The separators the reference draws between the three facts, and getting them to survive
+     wrapping is the whole difficulty. `div + div` is wrong and was tried: it selects on DOM
+     order, not on position, so when this `auto-fit` grid drops to two columns the third fact
+     starts a row **carrying a separator at the left margin with nothing to its left**. Measured
+     at 500px, where the grid goes 2 + 1.
+
+     So every item draws its own line **into the gap on its left**, and the leftmost one in each
+     row has it clipped away: the line is absolutely positioned at half the column gap to the
+     left of the item, which for the first item of a row is outside the grid's content box, and
+     `overflow: hidden` on the grid cuts it off there. That happens on every row, however many
+     rows the `auto-fit` arithmetic decides on - no breakpoint, no counting, nothing to keep in
+     sync with the `minmax()` floor above.
+
+     Absolutely positioned rather than a `border-left` with padding, and that is the second
+     thing this had to get right: padding would indent the first fact by the gap width and
+     break its alignment with the paragraph and the button above it. This way the separators
+     cost the layout nothing at all. */
+  .intro__facts > div {
+    position: relative;
+  }
+
+  .intro__facts > div::before {
+    content: "";
+    position: absolute;
+    left: -0.875rem; /* half of the 1.75rem column gap */
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+
   /* The frame. `<Picture>` renders `<picture><img>`, so the ratio sits on this wrapper and the
      image fills it - putting `aspect-ratio` on the `img` alone leaves the wrapper at the
-     intrinsic height and opens a gap under the photograph. */
+     intrinsic height and opens a gap under the photograph.
+
+     `max-width` is what makes the band asymmetric: the text takes the room the photograph
+     gives up. Without it `flex: 1 1 320px` would grow the figure to match the text again. */
+  /* `--hero-lift` is the site's second shadow and the only one outside the news block; the
+     boundary and the reason are written at the token in `tokens.css`. The 1px border stays with
+     it rather than being replaced by it: the border is what draws the frame's edge against the
+     paper, and the shadow only puts the frame slightly above it. Dropping the border and
+     leaving the shadow makes the photograph float with no edge, which is a different design
+     from this one. */
   .intro__figure {
+    flex: 1 1 320px;
+    max-width: 480px;
     aspect-ratio: 4 / 5;
     border: 1px solid var(--rule);
+    box-shadow: var(--hero-lift);
   }
 
   .intro__figure > :global(picture) {

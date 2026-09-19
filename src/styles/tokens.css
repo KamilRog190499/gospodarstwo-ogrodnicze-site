@@ -379,4 +379,29 @@
      sits on, which is why the card is --paper and the band under it --paper-clay. */
   --radius: 6px;
   --lift: 0 1px 2px rgb(31 42 33 / 5%), 0 6px 16px -6px rgb(31 42 33 / 10%);
+
+  /* ---------- the home page hero photograph, and nothing else ---------- */
+
+  /* **The second shadow on this site, and like the first it has its boundary in its name.**
+     The owners asked for the hero frame to be given some depth in September 2026, after the
+     band was rebuilt against their reference. The argument that admitted --lift does not cover
+     this one - that block is a view of somebody else's page and is meant to look foreign,
+     whereas this is our own photograph in our own band - so this is simply the owners
+     overriding the austerity doctrine for one frame, with the doctrine put to them first.
+     **It stops at `Intro.astro`.** A plant entry, a strip frame or a slideshow slide asking for
+     a shadow is the same conversation again, not a licence already granted.
+
+     Not --lift reused, and the difference is size rather than taste. That shadow is drawn for a
+     ~370px card; this frame is about 450x565 on a desktop, and a blur that reads as a lifted
+     card under an object that big does not register at all. So the geometry is longer and
+     softer, while the ink stays the same --ink (#1F2A21). The -12px spread keeps it tucked
+     under the frame rather than pooling out around it, which is what starts to look like a
+     template.
+
+     **The opacity was chosen against the rendered page, not picked.** Three strengths were put
+     side by side at the real frame size: at 16% the shadow was invisible on --paper and read as
+     a rendering artefact rather than a decision, and at 28% it read as a stock drop-shadow and
+     took the frame off the page. 22% is the one that shows as depth and still lets the 1px
+     border do the work of drawing the edge. */
+  --hero-lift: 0 2px 4px rgb(31 42 33 / 5%), 0 20px 44px -12px rgb(31 42 33 / 22%);
 }
