@@ -340,6 +340,15 @@ Dwie kolumny (`auto-fit, minmax(min(100%,300px),1fr)`, `align-items: start`).
 
 ### 7. Stopka
 
+**Opis układu poniżej jest historyczny od września 2026.** Nazwa gospodarstwa stoi w osobnym
+rzędzie nad siatką, a nie jako pierwsza z kolumn; kolumn linków są cztery
+(`auto-fit, minmax(min(100%,170px),1fr)`, `gap: 2.25rem 2.5rem`), bo „Informacje” rozeszły się
+na „Informacje” i „Prywatność”; blurb ma `max-width: 44ch`; każdy wiersz listy jest
+podkreślonym celem dotykowym 32 px - **jedyne miejsce w projekcie, które nie trzyma reguły
+44 px**, i decyzja właścicieli. Powód, pomiary i cena są w
+[`docs/inwentaryzacja.md`](../inwentaryzacja.md), sekcja „Stopka: cztery kolumny, podkreślenia
+i cele dotykowe”. Obowiązuje `src/components/Footer.astro`.
+
 Tło `#23281F`, tekst `#C3CBB8`, padding `clamp(2.25rem,5vw,3.5rem)`. Cztery kolumny (`auto-fit, minmax(min(100%,220px),1fr)`, `gap: 1.5rem 2.5rem`), pod nimi pasek `border-top: 1px solid rgb(238 240 230 / 18%)`, `padding-top: 1rem`.
 
 1. Nazwa „Gospodarstwo Ogrodnicze „Saran”” (Instrument Serif `1.5rem`, `#EEF0E6`) + „Sprzedaż kwiatów balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych.” (`max-width: 34ch`).

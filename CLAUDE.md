@@ -513,6 +513,16 @@ plus manual viewport checks.
   home page's three dark plates do. A dark
   element on a light ground (`.cta`, `.skip`) does not need it - the 3px offset puts the ring
   on the paper around it.
+  - **The footer link rows are the one exception to 44 px, and the only place in the project
+    that writes a number instead of `var(--tap)`.** They are 32 px, on the owners' instruction
+    after seeing both. The rows had always sat on a 32 px pitch, so `--tap` widened the
+    columns' rhythm by half again and they reported it; 32 px puts the pitch back exactly
+    while still growing the target, because before this the tappable box was the ~18 px inline
+    box of the `<a>` rather than the 29 px row around it. WCAG 2.2 AA still holds - 2.5.8 asks
+    for 24x24 and the pitch clears it - and what is given up is 2.5.5, the AAA level the rest
+    of the site keeps. The argument is at `.footer__link` and in `docs/inwentaryzacja.md` under
+    "Stopka: cztery kolumny". Do not spread the number to another component, and do not
+    "restore" the footer to `--tap` as a tidy-up: it is a client-visible change.
 - **The menu has one group, and it is a native `<details>`.** Six top-level entries, of which
   `Oferta` is a `NavGroup` in `src/data/navigation.ts` rather than a destination - there is no
   `/oferta/` page and there should not be one, because it would be a second copy of the home

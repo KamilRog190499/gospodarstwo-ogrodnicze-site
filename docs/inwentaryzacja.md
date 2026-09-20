@@ -2627,6 +2627,7 @@ się co wzięło.
 | 0.27.1  | **Styk hero i aktualności.** Zgłoszenie właściciela: sekcja źle przechodzi kolorystycznie z hero. Dwie przyczyny - kreska 2px z dwóch stykających się obramowań (defekt przenosin) i grunty różniące się o 1.003:1, czyli o nic. Obejrzane trzy warianty, wszedł **A**: hero schodzi z `--paper-blush` na `--paper`, co daje 1.079:1 - sufit tej palety. `--paper-blush` wypadł z `tokens.css`, bo nic już na nim nie stało; jasnych gruntów są trzy. Czcionka w kartach mniejsza i lżejsza (0.92rem/1.6, waga 350) na polecenie właścicieli.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 0.27.2  | **Dwa wpisy zamiast trzech w „Co u nas słychać”.** Pytanie właściciela o to, czy trójka jest dobra; okazało się, że powtarzają się dwie sąsiadujące trójki o tej samej anatomii - aktualności i kalendarz. Rozstrzygnęła nie rytmika, tylko to, że świeżość niesie data przy wpisie, a nie liczba kafelków: trzeci wpis kupuje redundancję i kosztuje każdą kartę 200 px szerokości, czyli połowę tekstu widocznego przed zwinięciem. Przy okazji dwa defekty siatki - dziura po odrzuconym wpisie i karta na całą szerokość przy jednym wpisie - oraz poprawione `SIZES` i `WIDTHS`, bo `sizes` pisane pod węższą kolumnę nie da się nadrobić krokami `srcset`.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | 0.27.3  | **Lead sekcji aktualności skrócony** na polecenie właściciela do samego „Ostatnie wpisy z naszego profilu na Facebooku." - odpadło „- co właśnie kwitnie i co jest w sprzedaży", bo mówią to lepiej same wpisy pod spodem. Nagłówek, overline i lead pustego stanu bez zmian; nadal są to nasze słowa i nadal czekają na przegląd właścicieli. Przy okazji sekcja dostała kreskę pod nagłówkiem - `border-bottom` na `.news__head`, ta sama co w `OfferOverview`, `GalleryShow`, `Compositions` i `SeasonCards`. Była jedynym pasmem na stronie, w którym nagłówek wchodził prosto w treść.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| 0.28.9  | **Stopka: nazwa nad kolumnami, podkreślone linki, cele dotykowe 32 px.** Zgłoszenie właściciela „popraw stopkę”. Linki odróżniał od tekstu sam kolor (1,34:1), jedyną podkreśloną rzeczą był przycisk „Ustawienia mapy”, a cel dotykowy miał ~18 px. Sześć pozycji „Informacji” rozeszło się na „Informacje” i nową kolumnę „Prywatność”, próg siatki zszedł z 220 px na zmierzone 170 px. Po pokazaniu właścicielom: nazwa wyszła z siatki do własnego rzędu (była ściśnięta do 208 px), a wiersze z 44 px na 32 px, co odtwarza poprzedni skok; Facebook, przeniesiony przy podziale pod telefony, wrócił do „Informacji”. Szczegóły: [Stopka](#stopka-cztery-kolumny-podkreślenia-i-cele-dotykowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ### Paczki materiału od właścicieli
 
@@ -3845,6 +3846,148 @@ i `scripts/fetch-facebook.mjs` (komentarze, które się do niej odwoływały), a
    mówi to wprost.
 4. **Zgoda na publikowanie filmów.** Film z wpisu odtwarza się na stronie z naszego serwera -
    to nowa kategoria materiału, której wcześniej na stronie nie było.
+
+## Stopka: cztery kolumny, podkreślenia i cele dotykowe - wrzesień 2026
+
+Zgłoszenie właściciela brzmiało „popraw stopkę”, a przy oglądaniu wyszły trzy rzeczy
+sprawdzalne i jedna proporcja. Zmiana przeszła dwie rundy: pierwsza wersja miała pięć kolumn
+i wiersze 44 px, właściciele zobaczyli ją i odesłali z dwiema uwagami. Obie są niżej,
+w [Rundzie drugiej](#runda-druga-co-właściciele-odesłali).
+
+### Co było nie tak
+
+1. **Linki odróżniał od tekstu sam kolor.** `--footer-link` `#E4E7DC` do `--footer-body`
+   `#C3CBB8` to **1,34:1** przy 3:1, których WCAG 1.4.1 wymaga od różnicy opartej wyłącznie
+   na kolorze. Najdotkliwiej w kolumnie „Gospodarstwo”: klikalne numery telefonów stały
+   bezpośrednio pod nieklikalnym adresem, w tym samym stopniu i niemal tym samym kolorze.
+   Na `/kontakt/` te same numery mają podkreślenie od początku (`Contact.astro`) - stopka
+   była jedynym miejscem na stronie, gdzie numer telefonu go nie miał.
+2. **Jedynym podkreślonym elementem w stopce był przycisk.** `.footer__reset` („Ustawienia
+   mapy”) niósł `text-decoration: underline` we własnej regule, więc jedyna rzecz w tej
+   kolumnie, która nigdzie nie prowadzi, wyglądała najbardziej jak link. Podkreślenie
+   przeniesione na `.footer__link`, przycisk dziedziczy je jak każdy inny wiersz.
+3. **Cel dotykowy miał ~18 px wysokości.** `.footer__link` był elementem liniowym, więc
+   klikalne było samo pudełko liniowe `<a>` - około 18 px przy `0.95rem`. Wiersz listy miał
+   29 px, a skok między wierszami 32 px (29 px plus `gap: 0.2rem`), ale to jest odstęp,
+   a nie cel. Reguła 44 px z `CLAUDE.md` i z sekcji „Interactions & Behavior” handoffu nie
+   była spełniona; każdy inny element interaktywny w projekcie ją honoruje (`.cta` 50 px,
+   `.cta-line`, `.skip` i przyciski podglądu zdjęć `min-height: var(--tap)`).
+   **W pierwszej wersji tej sekcji stało „~19 px wysokości wiersza” - to była pomyłka**:
+   18 px dotyczyło celu, nie wiersza, a wiersz miał 29 px. Poprawka ma znaczenie, bo skok
+   32 px sam w sobie spełniał odstępowe kryterium WCAG 2.2 AA (2.5.8 chce 24 px), więc
+   usterką był rozmiar celu, a nie rytm kolumny.
+4. **„Informacje” miały sześć pozycji** przy trzech, dwóch i dwóch w pozostałych kolumnach -
+   półtora raza wyżej niż cokolwiek obok.
+
+### Podział kolumny
+
+| Przed                                                                                         | Po                                                     |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **Gospodarstwo**: adres, dwa telefony                                                         | **Gospodarstwo**: adres, dwa telefony                  |
+| **Informacje**: O nas, FAQ, Kontakt i dojazd, Facebook, Polityka prywatności, Ustawienia mapy | **Informacje**: O nas, FAQ, Kontakt i dojazd, Facebook |
+| —                                                                                             | **Prywatność**: Polityka prywatności, Ustawienia mapy  |
+
+Podział nie jest arbitralny - nazywa parę, którą komentarz w `Footer.astro` argumentował już
+wcześniej: pasek zgody pyta o przetwarzanie danych, a polityka jest dokumentem, w którego
+imieniu pyta.
+
+**Facebook przeszedł tam i z powrotem, i to jest decyzja właścicieli.** Pierwsza wersja podziału
+przeniosła go pod telefony, argumentując, że jest trzecim sposobem dodzwonienia się do
+gospodarstwa, a nie stroną serwisu. Właściciele to zobaczyli i poprosili o powrót do
+„Informacji”. Po tej rundzie „Gospodarstwo” to adres i telefony - sposoby dotarcia do
+człowieka - a odnośnik do cudzej platformy stoi z resztą adresów serwisu. Kolumna
+„Gospodarstwo” wróciła przez to do dwóch linków.
+
+Bez JavaScriptu `.footer__resetRow` znika i „Prywatność” ma jedną pozycję. To jest poprawne,
+a nie regresja: nie ma wtedy żadnej zgody do wycofania.
+
+### Runda druga: co właściciele odesłali
+
+Pierwsza wersja trzymała nazwę gospodarstwa jako pierwszą z **pięciu** równych kolumn siatki
+i dawała każdemu wierszowi listy `min-height: var(--tap)`, czyli 44 px. Obie rzeczy zostały
+zgłoszone.
+
+**„Gospodarstwo Ogrodnicze «Saran» jest zbyt wąskie.”** Pięć równych torów ścisnęło kolumnę
+tożsamości do 208 px, gdzie nazwa łamie się na trzy linie. Siatka `auto-fit` nie ma jak zrobić
+jednego toru szerszym od reszty: `grid-column: span 2` wymusiłby niejawną drugą kolumnę przy
+szerokościach jednokolumnowych, a stały pierwszy tor to media query, której ten projekt nie
+używa. Rozwiązaniem było **wyjęcie nazwy z siatki** do własnego rzędu `.footer__brand` nad
+kolumnami: dostaje pełną szerokość i składa się w jednej linii (386 px przy oknie 1400 px),
+a cztery kolumny linków odzyskują miejsce - tor urósł z 208 px na 270 px.
+
+Przy okazji `max-width` blurba poszedł z handoffowych `34ch` na **`44ch`**. W kolumnie ~270 px
+`34ch` nigdy o nic nie zawadzało; w pełnej szerokości zawadza i łamało zdanie na trzy linie pod
+nazwą składającą się w jednej. `44ch` to 396 px wobec 386 px nazwy, więc oba bloki kończą się
+razem, a zdanie stoi w dwóch liniach.
+
+**„Odstępy na wysokości były lepsze wcześniej.”** 44 px na wiersz rozciągnęło skok z 32 px na
+44 px, czyli o połowę. Wiersze zeszły więc na **`min-height: 32px`**, co odtwarza poprzedni skok
+co do piksela, a mimo to powiększa cel z ~18 px na 32 px - bo przedtem klikalne było pudełko
+liniowe `<a>`, a nie 29-pikselowy wiersz wokół niego. **To jedyne miejsce w projekcie, które
+wpisuje liczbę zamiast `var(--tap)`**, i jedyne, które nie trzyma reguły 44 px. WCAG 2.2 AA
+jest spełnione (2.5.8 chce 24×24, skok 32 px mieści się z zapasem); odpuszczone jest 2.5.5,
+czyli poziom AAA, którego trzyma się reszta strony. Decyzja właścicieli po zobaczeniu obu
+wariantów.
+
+**„Przenieś Facebook z «Gospodarstwa» do «Informacji».”** Trzecia uwaga, w osobnej turze.
+Cofa przeniesienie, które przyszło razem z podziałem kolumny - argument za tamtym jest
+w [Podziale kolumny](#podział-kolumny) i przegrał. Liczby wierszy w kolumnach są po tym 3 / 2
+/ 4 / 2 zamiast 3 / 3 / 3 / 2, więc układ jest odrobinę mniej równy, niż był - to była cena,
+za którą właściciele wybrali sens grupowania zamiast rytmu.
+
+### Próg siatki jest zmierzony, nie wybrany
+
+`minmax(min(100%, 170px), 1fr)` zamiast handoffowych 220 px. Najszerszy element stopki to
+wiersz telefonu **„Mateusz 722 238 987” - 154 px**, więc 170 px to najmniejszy okrągły próg,
+który nigdy go nie złamie. Próg decyduje też, jak długo utrzymują się cztery kolumny: cztery
+tory potrzebują 4×170 plus trzy odstępy 2,5 rem = 800 px treści, co formuła `--edge` osiąga
+przy ~889 px okna. Dzięki temu 1024, 1152, 1200 i wyżej mają cztery kolumny i nic nie zostaje
+osierocone pod spodem. Handoffowe 220 px potrzebowałyby 1000 px i zostawiłyby 1024 px z trzema
+kolumnami i samotną „Prywatnością”.
+
+Zmierzona drabina, na `npm run preview`:
+
+| Okno    | Kolumny | Tor    | Rzędy kolumn | Nazwa   | Wysokość stopki |
+| ------- | ------- | ------ | ------------ | ------- | --------------- |
+| 1400 px | 4       | 270 px | 1            | 1 linia | 469 px          |
+| 1024 px | 4       | 197 px | 1            | 1 linia | 458 px          |
+| 768 px  | 3       | 199 px | 2            | 1 linia | 555 px          |
+| 375 px  | 1       | 320 px | 4            | 2 linie | 930 px          |
+
+Żaden link nie łamie się na dwie linie w żadnym z tych układów i nigdzie nie ma poziomego
+przewijania.
+
+### Trzy odejścia od handoffu, wszystkie do odnotowania
+
+- **Nazwa poza siatką kolumn.** Sekcja 7 handoffu ma ją jako pierwszą z czterech kolumn.
+- **`gap` rzędów 2,25 rem zamiast 1,5 rem** - dla szerokości, przy których kolumna się zawija:
+  1,5 rem przy 0,35 rem wewnątrz kolumny nie czytało się jako przerwa między dwoma rzędami
+  kolumn, tylko jako jeden ciąg.
+- **`max-width` blurba `44ch` zamiast `34ch`** - powód wyżej, w rundzie drugiej.
+
+### Czym rysowane jest podkreślenie
+
+`--rule-link` przemapowany na `.footer` na `rgb(238 240 230 / 40%)` - ten sam mechanizm,
+którego `Compositions.astro` używa dla wariantu `ground="dark"`. Wartość jest inna niż tam
+(40% zamiast 35%), bo inne jest tło: 40% złożone na `--ink` `#1F2A21` daje `#727970`, czyli
+**3,32:1** - powyżej 3:1, których WCAG 1.4.11 wymaga od wskaźnika. 35% dałoby 2,86:1.
+Kontrast samego tekstu linku na tym tle to 11,88:1.
+
+### Co to kosztowało
+
+Po rundzie drugiej niewiele. Stopka jest wyższa niż przed zmianą, bo doszedł osobny rząd
+z nazwą i blurbem, a nie dlatego, że urosły listy - rytm kolumn wrócił dokładnie tam, gdzie
+był. Na telefonie przy oknie 375 px stopka ma 930 px, z czego jedenaście linków to 352 px.
+
+### Znalezione przy okazji, poza zakresem
+
+`Compositions.astro` ustawia `--rule-link: rgb(238 240 230 / 35%)` na tle `--green-band`
+`#38442F`, co daje **2,51:1** - poniżej progu 3:1 z WCAG 1.4.11. Ta zmiana tego nie ruszała.
+
+### Co idzie na listę właścicieli
+
+1. **„Prywatność”** - nagłówek nowej kolumny. Nasze słowo, nie ich, jak wszystkie etykiety
+   w stopce poza nazwami stron.
 
 ## Czego nadal brakuje
 
