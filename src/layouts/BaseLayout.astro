@@ -7,7 +7,18 @@ import Seo from "../components/Seo.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ConsentBanner from "../components/ConsentBanner.astro";
-import { phones, address, addressOneLine, facebook, directionsUrl } from "../data/contact";
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+
+import {
+  phones,
+  address,
+  addressOneLine,
+  facebook,
+  directionsUrl,
+  coordinates,
+} from "../data/contact";
+import { historyPhoto } from "../data/gallery";
 
 interface Props {
   title: string;
@@ -16,10 +27,39 @@ interface Props {
   /** Short name for the breadcrumb - the SEO `title` is a sentence and reads badly in a
    *  trail. Falls back to `title`. */
   breadcrumb?: string;
+  /** Photograph for the share card, cropped to 1200x630 below. Defaults to the holding's own
+   *  stand at the Końskowola flower show - the one frame in the repository that shows the
+   *  business rather than a plant, banner and all. A category page passes its own. */
+  ogImage?: ImageMetadata;
+  ogImageAlt?: string;
   noindex?: boolean;
 }
 
-const { title, description, canonical, breadcrumb, noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  canonical,
+  breadcrumb,
+  ogImage,
+  ogImageAlt,
+  noindex = false,
+} = Astro.props;
+
+/** The share card. Until September 2026 there was none at all: `Seo.astro` had taken an
+ *  `ogImage` prop since the beginning, but nothing ever passed one, so every link to this
+ *  site pasted into Facebook - the owners' own main channel - rendered as a bare grey box.
+ *
+ *  Cropped rather than picked: 1200x630 is 1.9:1 and no photograph in the repository is that
+ *  shape, so `fit: "cover"` takes the middle band. jpeg because the crawlers that read this
+ *  tag are not the browsers that understand avif. */
+const share = ogImage ? { src: ogImage, alt: ogImageAlt } : historyPhoto;
+const shareCard = await getImage({
+  src: share.src,
+  width: 1200,
+  height: 630,
+  fit: "cover",
+  format: "jpeg",
+});
 
 if (!Astro.site) {
   throw new Error("No `site` in astro.config.mjs - structured data needs absolute URLs.");
@@ -34,9 +74,14 @@ const businessId = new URL("/#gospodarstwo", Astro.site).href;
  *  `Florist` rather than the generic `LocalBusiness` alone: it is what places the holding
  *  among places that sell plants rather than among shops in general.
  *
- *  Two fields Google asks for are deliberately absent. `openingHoursSpecification` and
- *  `priceRange` are both unconfirmed (src/data/contact.ts), and a guessed value in
- *  structured data is worse than none - it is the version search engines quote back.
+ *  Three fields Google asks for are deliberately absent, all for the same reason: a guessed
+ *  value in structured data is worse than none, because it is the version search engines
+ *  quote back. `openingHoursSpecification` and `priceRange` are unconfirmed and there is
+ *  nothing in the repository to derive them from. `geo` is a step closer - the holding has a
+ *  verified Google Business Profile, so a pin exists - but it has to be read off that profile
+ *  rather than geocoded from the street address, or the site and the profile end up making
+ *  two different claims about one gate. See `coordinates` in src/data/contact.ts; the spread
+ *  below is already written and turns on the moment that value is filled in.
  */
 const structuredData = {
   "@context": "https://schema.org",
@@ -46,14 +91,33 @@ const structuredData = {
   description:
     "Rodzinne gospodarstwo ogrodnicze w Cholewiance pod Kazimierzem Dolnym - kwiaty balkonowe, rabatowe i wieloletnie oraz chryzantemy wielkokwiatowe z własnej uprawy.",
   url: Astro.site.href,
-  telephone: phones.map((phone) => phone.display),
+  /* E.164, not the spaced display form. The page prints "722 238 987" because that is how the
+     owners write it; a machine matching this record against the Google Business Profile wants
+     one unambiguous string, and `contact.ts` already holds it for the `tel:` links. */
+  telephone: phones.map((phone) => phone.href.replace("tel:", "")),
   address: {
     "@type": "PostalAddress",
     streetAddress: address.street,
     postalCode: address.postalCode,
     addressLocality: address.city,
+    /* The voivodeship, which the contact block has always printed and this record never
+       carried. "woj. lubelskie" is how the page writes it; the schema wants the region
+       itself. */
+    addressRegion: "lubelskie",
     addressCountry: address.country,
   },
+  /* Only when the pin is confirmed - see `coordinates` in src/data/contact.ts. An invented
+     one would be the version Google quotes back at someone already driving. */
+  ...(coordinates
+    ? {
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        },
+      }
+    : {}),
+  image: new URL(shareCard.src, Astro.site).href,
   areaServed: ["Kazimierz Dolny", "Puławy", "Nałęczów", "województwo lubelskie"],
   hasMap: directionsUrl,
   sameAs: [facebook],
@@ -106,7 +170,14 @@ const breadcrumbs =
       document.documentElement.classList.add("js");
     </script>
 
-    <Seo title={title} description={description} canonical={canonical} noindex={noindex} />
+    <Seo
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={shareCard.src}
+      ogImageAlt={share.alt}
+      noindex={noindex}
+    />
 
     {
       !noindex && (

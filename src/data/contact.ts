@@ -53,12 +53,38 @@ export const postalCity = `${address.postalCode} ${address.city}`;
 /** Full address on one line - footer and structured data. */
 export const addressOneLine = `${address.street}, ${address.postalCode} ${address.city}`;
 
-/** What the "Wyznacz trasę" link points at. A search by address rather than by
- *  coordinates: the holding has no confirmed pin, and a wrong pin sends someone down a
- *  field track. Swap for `?api=1&destination=<lat>,<lng>` once the owners confirm one. */
-export const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${address.street} ${address.city}`,
-)}`;
+/** The pin, for `GeoCoordinates` in the JSON-LD and for the "Wyznacz trasę" link.
+ *
+ *  `null` until someone reads it off the holding's verified Google Business Profile - which
+ *  is where it has to come from, because that profile is what Google already believes. A pin
+ *  geocoded from "Cholewianka 36" would be a second, competing claim about the same place,
+ *  and structured data that disagrees with the profile is worse than structured data that is
+ *  silent: it is the version quoted back at someone already driving.
+ *
+ *  Five decimal places or more (about a metre). Everything downstream is written already -
+ *  fill this in and `geo` appears in the JSON-LD and the directions link starts routing to
+ *  the pin instead of searching for the street. */
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+export const coordinates: Coordinates | null = null;
+
+/** What the "Wyznacz trasę" link points at.
+ *
+ *  With a confirmed pin it routes straight there. Without one it falls back to a search by
+ *  address, which is what it has always done - a wrong pin sends someone down a field track,
+ *  a search at least lands them in the right village. */
+export function directionsFor(pin: Coordinates | null): string {
+  return pin
+    ? `https://www.google.com/maps/dir/?api=1&destination=${pin.latitude},${pin.longitude}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        `${address.street} ${address.city}`,
+      )}`;
+}
+
+export const directionsUrl = directionsFor(coordinates);
 
 export const facebook = "https://www.facebook.com/p/Gospodarstwo-Ogrodnicze-Saran-100070553132348/";
 

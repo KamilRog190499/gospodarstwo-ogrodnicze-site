@@ -2627,6 +2627,7 @@ się co wzięło.
 | 0.27.1  | **Styk hero i aktualności.** Zgłoszenie właściciela: sekcja źle przechodzi kolorystycznie z hero. Dwie przyczyny - kreska 2px z dwóch stykających się obramowań (defekt przenosin) i grunty różniące się o 1.003:1, czyli o nic. Obejrzane trzy warianty, wszedł **A**: hero schodzi z `--paper-blush` na `--paper`, co daje 1.079:1 - sufit tej palety. `--paper-blush` wypadł z `tokens.css`, bo nic już na nim nie stało; jasnych gruntów są trzy. Czcionka w kartach mniejsza i lżejsza (0.92rem/1.6, waga 350) na polecenie właścicieli.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 0.27.2  | **Dwa wpisy zamiast trzech w „Co u nas słychać”.** Pytanie właściciela o to, czy trójka jest dobra; okazało się, że powtarzają się dwie sąsiadujące trójki o tej samej anatomii - aktualności i kalendarz. Rozstrzygnęła nie rytmika, tylko to, że świeżość niesie data przy wpisie, a nie liczba kafelków: trzeci wpis kupuje redundancję i kosztuje każdą kartę 200 px szerokości, czyli połowę tekstu widocznego przed zwinięciem. Przy okazji dwa defekty siatki - dziura po odrzuconym wpisie i karta na całą szerokość przy jednym wpisie - oraz poprawione `SIZES` i `WIDTHS`, bo `sizes` pisane pod węższą kolumnę nie da się nadrobić krokami `srcset`.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | 0.27.3  | **Lead sekcji aktualności skrócony** na polecenie właściciela do samego „Ostatnie wpisy z naszego profilu na Facebooku." - odpadło „- co właśnie kwitnie i co jest w sprzedaży", bo mówią to lepiej same wpisy pod spodem. Nagłówek, overline i lead pustego stanu bez zmian; nadal są to nasze słowa i nadal czekają na przegląd właścicieli. Przy okazji sekcja dostała kreskę pod nagłówkiem - `border-bottom` na `.news__head`, ta sama co w `OfferOverview`, `GalleryShow`, `Compositions` i `SeasonCards`. Była jedynym pasmem na stronie, w którym nagłówek wchodził prosto w treść.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| 0.29.0  | **Audyt SEO przed cutoverem.** Sufiks tytułu skrócony, żeby na każdej stronie zmieściła się nazwa miejscowości - żaden tytuł kategorii jej dotąd nie niósł, a najdłuższy tytuł miał 81 znaków przy 60 pokazywanych. Cztery opisy skrócone poniżej 160 znaków; z opisu `/kwiaty-balkonowe/` wypadła obietnica „dostępne kolory”, której strona nie spełnia od września. Doszły `robots.txt` (nie było żadnego) i `/llms.txt` jako endpoint czytający `season.ts`, żeby nie powstało drugie miejsce z datami sprzedaży. `og:image` zaczął w ogóle działać - `Seo.astro` przyjmował go od początku, ale nic go nie podawało. W JSON-LD doszły `telephone` w E.164, `addressRegion` i `image`; `geo` czeka na pinezkę z wizytówki i ma już napisaną całą obsługę. Do mapy przekierowań doszły strony załączników WordPressa i `/author/*` jako 410. Szczegóły: [Audyt SEO przed wdrożeniem](#audyt-seo-przed-wdrożeniem--wrzesień-2026).                                                                                                                                                                                   |
 | 0.28.9  | **Stopka: nazwa nad kolumnami, podkreślone linki, cele dotykowe 32 px.** Zgłoszenie właściciela „popraw stopkę”. Linki odróżniał od tekstu sam kolor (1,34:1), jedyną podkreśloną rzeczą był przycisk „Ustawienia mapy”, a cel dotykowy miał ~18 px. Sześć pozycji „Informacji” rozeszło się na „Informacje” i nową kolumnę „Prywatność”, próg siatki zszedł z 220 px na zmierzone 170 px. Po pokazaniu właścicielom: nazwa wyszła z siatki do własnego rzędu (była ściśnięta do 208 px), a wiersze z 44 px na 32 px, co odtwarza poprzedni skok; Facebook, przeniesiony przy podziale pod telefony, wrócił do „Informacji”. Szczegóły: [Stopka](#stopka-cztery-kolumny-podkreślenia-i-cele-dotykowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ### Paczki materiału od właścicieli
@@ -3988,6 +3989,142 @@ był. Na telefonie przy oknie 375 px stopka ma 930 px, z czego jedenaście link�
 
 1. **„Prywatność”** - nagłówek nowej kolumny. Nasze słowo, nie ich, jak wszystkie etykiety
    w stopce poza nazwami stron.
+
+## Audyt SEO przed wdrożeniem - wrzesień 2026
+
+Audyt zrobiony **przed cutoverem**, bo wdrożenie ma nastąpić przed 1 października, czyli przed
+startem sprzedaży chryzantem. Mierzone na `dist/` i na starym serwisie odpytanym na żywo -
+nowa strona nie ma jeszcze adresu, więc nie ma czego crawlować.
+
+### Co wyszło ze starego serwisu
+
+`http://gospodarstwo-saran.pl/wp-sitemap-posts-page-1.xml` podaje **dokładnie sześć adresów**:
+`/`, `/kwiaty-balkonowe/`, `/chryzantemy/`, `/o-nas/`, `/rabatowe/`, `/kontakt-2/`. Cztery
+pierwsze mają odpowiednik jeden do jednego; dwa ostatnie bez reguły 301 zwrócą 404. To
+potwierdza mapę w [`przekierowania.md`](przekierowania.md) i nic w niej nie zmienia.
+
+Zmienia natomiast dwie rzeczy, których w mapie nie było: **strony załączników WordPressa**
+(nagłówek `X-WP-Total` na `wp-json/wp/v2/media` mówi o 81 plikach, a wyszukiwarka pokazuje
+co najmniej trzy takie adresy w indeksie) i **`/author/kamilrog/`**, która w dodatku stoi
+w `wp-sitemap-users-1.xml`. Obie trafiły do mapy jako 410 - argument jest tam, w sekcji
+"Strony załączników i strona autora".
+
+### Co zostało zmienione w repozytorium
+
+**Sufiks tytułu skrócony z "Gospodarstwo Ogrodnicze «Saran»" na "«Saran», Kazimierz Dolny"**
+(`src/components/Seo.astro`). To jest ta zmiana, która kosztuje najwięcej do przemyślenia,
+więc powód w całości: Google pokazuje około 60 znaków tytułu, formalna nazwa zjadała 34
+z nich, a przez to **żadna strona kategorii nie miała w tytule nazwy miejscowości**. Tytuł
+brzmiał "Kwiaty balkonowe - Gospodarstwo Ogrodnicze «Saran»" i startował w ten sposób do
+zapytania "kwiaty balkonowe kazimierz dolny". Nowy sufiks kosztuje 27 znaków i mieści
+miejscowość na każdej stronie; najdłuższy tytuł w serwisie ma teraz 57 znaków.
+
+Oddane jest przy tym słowo "Gospodarstwo Ogrodnicze" **w wyniku wyszukiwania i tylko tam**.
+Formalna nazwa stoi nietknięta w maszcie, w `og:site_name` i w `name` w JSON-LD, czyli
+w miejscu, które wyszukiwarki czytają jako nazwę encji. **To jest jednak zmiana widoczna dla
+klienta i jest na liście do potwierdzenia** - nie dlatego, że jest wątpliwa technicznie, tylko
+dlatego, że dotyczy tego, jak firma nazywa się w Google.
+
+| Strona               | Tytuł przed                                                                | Znaków | Tytuł po                                                  | Znaków |
+| -------------------- | -------------------------------------------------------------------------- | ------ | --------------------------------------------------------- | ------ |
+| `/`                  | Gospodarstwo Ogrodnicze „Saran” - kwiaty balkonowe, rabatowe i chryzantemy | 74     | Kwiaty balkonowe i chryzantemy - „Saran”, Kazimierz Dolny | 57     |
+| `/kwiaty-balkonowe/` | Kwiaty balkonowe - Gospodarstwo Ogrodnicze „Saran”                         | 50     | Kwiaty balkonowe - „Saran”, Kazimierz Dolny               | 43     |
+| `/chryzantemy/`      | Chryzantemy wielkokwiatowe - Gospodarstwo Ogrodnicze „Saran”               | 60     | Chryzantemy wielkokwiatowe - „Saran”, Kazimierz Dolny     | 53     |
+| `/bratki/`           | Bratki - Gospodarstwo Ogrodnicze „Saran”                                   | 40     | Bratki i prymulki - „Saran”, Kazimierz Dolny              | 44     |
+| `/inspiracje/`       | Inspiracje - obsadzone kosze, skrzynki i donice - …                        | 81     | Inspiracje - gotowe obsadzenia - „Saran”, Kazimierz Dolny | 57     |
+| `/faq/`              | FAQ - Gospodarstwo Ogrodnicze „Saran”                                      | 37     | FAQ - częste pytania - „Saran”, Kazimierz Dolny           | 47     |
+
+Tytuł `/` stracił przy okazji słowo **"rabatowe"**. Nie zniknęło ze strony: niesie je tagline
+w maszcie na każdej podstronie, `h1` ("Producent kwiatów balkonowych, rabatowych
+i chryzantem"), `description` strony głównej i `description` w JSON-LD. Fraza "kwiaty
+rabatowe" pracuje dalej w opisie `/kwiaty-balkonowe/`, czyli tam, gdzie celuje w nią 301
+z `/rabatowe/`.
+
+`/bratki/` odwrotnie - **zyskał "prymulki"**. Reguła, która trzymała tam samo "Bratki", mówiła,
+że to jest słowo, na które strona musi rankować; jest nadal prawdziwa i nadal decyduje
+o kolejności. Zmieniło się miejsce: przy krótszym sufiksie drugie słowo nic pierwszemu nie
+zabiera, a w marcu "prymulki" to osobne zapytanie i ta strona jest jedyną odpowiedzią, jaką
+serwis na nie ma.
+
+**Cztery opisy skrócone poniżej 160 znaków.** Wszystkie cztery miały ten sam wzorzec: nazwę
+i miejscowość na końcu, czyli dokładnie tam, gdzie Google tnie.
+
+| Strona               | Przed | Po  |
+| -------------------- | ----- | --- |
+| `/kwiaty-balkonowe/` | 248   | 153 |
+| `/inspiracje/`       | 209   | 143 |
+| `/chryzantemy/`      | 204   | 144 |
+| `/`                  | 191   | 159 |
+
+Przy skracaniu `/kwiaty-balkonowe/` wypadła fraza **"Opis uprawy i dostępne kolory"**. To nie
+jest oszczędność miejsca, tylko poprawka faktu: chipy "Dostępne kolory" zeszły z każdego wpisu
+we wrześniu 2026 (patrz [Chipy kolorów usunięte](#chipy-kolorów-usunięte--wrzesień-2026)),
+a opis obiecywał je w wyniku wyszukiwania dalej.
+
+**`public/robots.txt`** - nie było go w ogóle. Bez `Disallow`, bo dziewięć stron nie ma czego
+chować, i bez blokady botów AI, bo dla gospodarstwa sprzedającego na miejscu cytowanie
+w odpowiedzi AI to zasięg. Istnieje głównie dla linii `Sitemap:` - dotąd mapa witryny była
+odkrywalna wyłącznie przez `<link rel="sitemap">` w `<head>`, a `robots.txt` starego serwisu
+wskazuje `/wp-sitemap.xml`, który po cutoverze przestanie istnieć.
+
+**`/llms.txt`** - jako **endpoint** (`src/pages/llms.txt.ts`), nie jako plik w `public/`, i to
+jest cała różnica. Terminy sprzedaży są zapisane w `src/data/season.ts` i tylko tam; ręczna
+kopia w `public/` byłaby drugim miejscem, w którym stoją daty sprzedaży - dokładnie tym, czego
+`CLAUDE.md` zabrania. Endpoint czyta `season.ts`, `offer.ts` i `contact.ts`, więc zmiana okna
+przechodzi tu sama. Wolno w nim tylko to, co strona już gdzieś mówi: żadnych godzin, żadnego
+e-maila, żadnych cen.
+
+**Karta udostępniania.** `Seo.astro` przyjmował `ogImage` od początku, ale **nic nigdy go nie
+podawało**, więc każdy link do tej strony wklejony na Facebooku - czyli na główny kanał
+właścicieli - renderował się jako szary prostokąt. `BaseLayout.astro` kadruje teraz jedną
+sztukę 1200x630 dla każdej strony. Domyślnie jest to `historyPhoto`, stoisko w Końskowoli:
+jedyny kadr w repozytorium pokazujący firmę, a nie roślinę, z jej własną tablicą w kadrze.
+`/chryzantemy/` i `/bratki/` podają własne. **Strona główna celowo nie podaje `heroPhoto`** -
+hero jest obrazem generowanym, a nie zdjęciem gospodarstwa, i to jest ostatnia rzecz, jaką
+należy dać karcie reprezentującej firmę.
+
+**JSON-LD `LocalBusiness` - trzy pola dołożone, jedno nadal puste.** `telephone` przeszedł
+z formy wyświetlanej ("722 238 987") na E.164 ("+48722238987"), którą `contact.ts` trzymał już
+dla odnośników `tel:`. `addressRegion` ("lubelskie") też był w `contact.ts` i był drukowany na
+stronie, tylko nie trafiał do danych strukturalnych. `image` wskazuje na kartę udostępniania.
+
+`geo` **nadal nie ma** i to jest jedyna pozycja tego audytu, która czeka na człowieka.
+`src/data/contact.ts` ma teraz `coordinates` (`null`) i całą obsługę napisaną po obu stronach -
+spread w `BaseLayout.astro` i `directionsFor()`, które przełącza "Wyznacz trasę" z szukania po
+adresie na trasowanie do pinezki. Pinezkę trzeba **odczytać ze zweryfikowanej wizytówki
+Google**, a nie zgeokodować z "Cholewianka 36": geokodowanie dałoby drugie, konkurencyjne
+twierdzenie o tym samym miejscu, a dane strukturalne niezgodne z wizytówką są gorsze niż ich
+brak - to jest wersja cytowana komuś, kto już jedzie.
+
+### Czego audyt świadomie nie ruszył
+
+- **Tekstów właścicieli**: 39 opisów roślin, karty sezonowe, sześć odpowiedzi na `/faq/`, lidy
+  sekcji. Wspólny lid trzech stron kategorii ("Kwiaty z naszej uprawy. Przy każdej roślinie…")
+  jest identyczny na `/kwiaty-balkonowe/`, `/bratki/` i `/chryzantemy/`, co dla strony
+  kategorii jest wadą - ale jego autorstwo jest po wrześniowej rundzie niejasne, więc trzy
+  osobne lidy są propozycją na liście niżej, a nie zmianą w kodzie.
+- **`FAQPage`** - Google wycofał wyniki rozszerzone dla FAQ **7 maja 2026**, dla wszystkich
+  witryn, nie tylko dla stron rządowych i medycznych jak w 2023. Schemat **zostaje**: nadal
+  jednoznacznie opisuje treść modelom, a `Faq.astro` buduje go z prawdziwych danych. Zmienia
+  się tylko to, czego się po nim spodziewać - nic w SERP-ie.
+- **Struktury grup i adresów**: wrzos pod "Kwiaty balkonowe", odwrócona alfabetyka na
+  `/chryzantemy/`, `/inspiracje/` poza stopką. Decyzje właścicieli, wszystkie udokumentowane
+  wyżej.
+- **Cienkich stron**: `/o-nas/` ma 282 słowa przy progu 400 dla strony "o nas" - i jest
+  jednocześnie stroną niosącą całe E-E-A-T serwisu (rok 1991, odznaka "Zasłużony dla
+  Rolnictwa", nagroda starosty puławskiego, 2,5 tys. m² pod osłonami). Rozbudowa wymaga ich
+  słów, nie naszych.
+
+### Do potwierdzenia przez właścicieli
+
+1. **Skrócony sufiks tytułu** - "«Saran», Kazimierz Dolny" zamiast pełnej nazwy. Pełna nazwa
+   zostaje w maszcie i w danych strukturalnych; chodzi wyłącznie o to, co widać w Google.
+2. **"Rabatowe" poza tytułem strony głównej** - fraza pracuje dalej w czterech innych
+   miejscach, ale to jest ich słowo ze starej strony.
+3. **"Bratki i prymulki" w tytule** zamiast samego "Bratki".
+4. **Współrzędne z wizytówki Google** - jedna liczba i wszystko po stronie kodu jest gotowe.
+5. Trzy osobne lidy stron kategorii zamiast jednego wspólnego.
+6. Rozbudowa `/o-nas/` - historia, nagrody, dzisiejsza uprawa ich słowami.
 
 ## Czego nadal brakuje
 

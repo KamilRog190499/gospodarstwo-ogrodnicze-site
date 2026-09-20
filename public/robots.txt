@@ -1,0 +1,15 @@
+# Gospodarstwo Ogrodnicze „Saran” - https://gospodarstwo-saran.pl
+#
+# Nine pages and nothing to hide, so there is no Disallow. Crawlers that read
+# pages for AI answers are welcome too: for a holding that sells on the spot,
+# being quoted in an AI answer is reach, not leakage.
+#
+# The Sitemap line is why this file exists at all. Before it, the sitemap was
+# discoverable only through <link rel="sitemap"> in the head (BaseLayout.astro),
+# and the WordPress robots.txt this one replaces pointed at /wp-sitemap.xml,
+# which stops existing at cutover.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://gospodarstwo-saran.pl/sitemap-index.xml

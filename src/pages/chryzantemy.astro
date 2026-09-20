@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import OfferSection from "../components/OfferSection.astro";
-import { chrysanthemumStrip } from "../data/gallery";
+import { chrysanthemumPhoto, chrysanthemumStrip } from "../data/gallery";
 
 /** `/chryzantemy/` - the WordPress address, unchanged (docs/przekierowania.md).
  *
@@ -29,7 +29,9 @@ import { chrysanthemumStrip } from "../data/gallery";
 
 <BaseLayout
   title="Chryzantemy wielkokwiatowe"
-  description="Chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe z własnej uprawy. Sprzedaż od początku października do 1 listopada, duży wybór kolorów. Gospodarstwo Ogrodnicze „Saran” pod Kazimierzem Dolnym."
+  description="Chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe z własnej uprawy pod Kazimierzem Dolnym. Sprzedaż od 1 października do 1 listopada."
+  ogImage={chrysanthemumPhoto.src}
+  ogImageAlt={chrysanthemumPhoto.alt}
   canonical="/chryzantemy/"
   breadcrumb="Chryzantemy"
 >

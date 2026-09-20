@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import OfferSection from "../components/OfferSection.astro";
-import { pansyStrip } from "../data/gallery";
+import { pansyPhoto, pansyStrip } from "../data/gallery";
 
 /** `/bratki/` - the one offer address with no WordPress predecessor: the old site did not
  *  sell pansies anywhere on it (docs/przekierowania.md, docs/inwentaryzacja.md).
@@ -21,13 +21,22 @@ import { pansyStrip } from "../data/gallery";
  *  group-mate does.
  *
  *  The `h1` moved with it: "Bratki i prymulki", which is what `navigation.ts` and the home
- *  page tile have called this page all along. The `<title>`, the canonical and the breadcrumb
- *  stay "Bratki" - that is the word the page has to rank on. */
+ *  page tile have called this page all along. The canonical and the breadcrumb stay "Bratki".
+ *
+ *  **The `<title>` now carries both**, which reverses what stood here. The rule it was
+ *  protecting - "Bratki" is the word the page has to rank on - is unchanged and still decides
+ *  the order: "Bratki" leads. What changed is the room. The title suffix was shortened in
+ *  `Seo.astro` to fit the town in, and "Bratki i prymulki - „Saran”, Kazimierz Dolny" is 44
+ *  characters against a budget of 60, so carrying the second word costs nothing that the
+ *  first one needed. In March "prymulki" is its own query and this page is the only answer
+ *  the site has to it. */
 ---
 
 <BaseLayout
-  title="Bratki"
+  title="Bratki i prymulki"
   description="Bratki i prymulki z własnej uprawy - sprzedaż w marcu, duży wybór kolorów. Gospodarstwo Ogrodnicze „Saran” pod Kazimierzem Dolnym."
+  ogImage={pansyPhoto.src}
+  ogImageAlt={pansyPhoto.alt}
   canonical="/bratki/"
   breadcrumb="Bratki"
 >

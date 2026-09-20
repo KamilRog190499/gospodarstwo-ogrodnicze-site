@@ -32,7 +32,9 @@ plus an informational catalogue. Do not add a cart, checkout, forms, accounts or
 The site is built and the content is migrated. `npm run lint` and `npm run build` are clean
 and `linkinator` finds no dead internal link.
 
-- **Nine pages**, plus a 404: `/`, `/kwiaty-balkonowe/`, `/bratki/`, `/chryzantemy/`,
+- **Nine pages**, plus a 404, plus two files that are not pages - `/robots.txt` (a static
+  file in `public/`) and `/llms.txt` (an **endpoint**, `src/pages/llms.txt.ts`, because it
+  prints selling dates and `season.ts` is the only place those may be written down): `/`, `/kwiaty-balkonowe/`, `/bratki/`, `/chryzantemy/`,
   `/inspiracje/`, `/o-nas/`, `/faq/`, `/kontakt/`, `/polityka-prywatnosci/`. Two of the three
   old WordPress offer addresses are kept unchanged; the third, `/rabatowe/`, was **merged away
   in September 2026** and needs a 301 onto `/kwiaty-balkonowe/` (docs/przekierowania.md) -
@@ -94,7 +96,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/offer.ts`            | **The three groups and the three category pages, in one table.** Exports `plantGroups`, which `src/content.config.ts` turns into the schema's `z.enum` and `navigation.ts` turns into menu entries. A new group starts here, never in the schema, and **dropping a value here is how a group is merged away** - the schema then fails the build on any `.md` left behind. Also holds `plantCount()`, the Polish three-form plural.                                                                |
 | `src/data/season.ts`           | **The only place selling dates are written down.** `saleWindows`, and `currentSeason` resolved at build time.                                                                                                                                                                                                                                                                                                                                                                                     |
 | `src/data/navigation.ts`       | The menu: six top-level entries, one of which (`Oferta`) is a `NavGroup` holding the three category pages derived from `offer.ts`. Also `offerPages` and `allPages` (flattened, for the 404). `/polityka-prywatnosci/` is deliberately absent from all three.                                                                                                                                                                                                                                     |
-| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                                                                                                                                                                                 |
+| `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators`, `taxId` and `coordinates` are all `null` - see Open items. The middle two are read only by the privacy policy; `coordinates` has its consumer side written (`directionsFor()`, the `geo` spread in `BaseLayout.astro`) and wants only a pin off the verified Google Business Profile.         |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the three strips (`balconyStrip`, `chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. Also `homeGallery`, which is those three strips grouped and put in calendar order for the home page show - the strips themselves, not copies, so a frame added to a strip appears there too. **The 23 plantings are no longer here** - they are the `compositions` collection. |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                                                                                      |
 | `src/data/facebook.ts`         | Types and file resolution for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                                                 |
@@ -647,6 +649,16 @@ plus manual viewport checks.
 
 - **SEO:** the current site ranks on plant names. Preserve the old URLs or set up 301
   redirects, and record the mapping in `docs/przekierowania.md` as the reference project does.
+  The old site has **exactly six addresses** (its `wp-sitemap-posts-page-1.xml`), of which
+  `/rabatowe/` and `/kontakt-2/` need a 301 and the rest map one to one. It also has up to **81
+  WordPress attachment pages** and an `/author/` archive, at least three of them in Google's
+  index and none of them in that sitemap; they get a **410**, not a 301 - redirecting file
+  pages onto a category page is a promise that page does not keep.
+  - **Every page title ends in `„Saran”, Kazimierz Dolny`**, and the short form is the point.
+    Google shows ~60 characters; the formal name spends 34 and left no room for the town, so
+    no category page named it at all. `titleSuffix` in `Seo.astro` carries the argument. The
+    formal name is untouched in the masthead, `og:site_name` and the JSON-LD `name` - do not
+    "restore" it here as a tidy-up, it is a client-visible change either way.
 
 ## Open items - do not resolve these unilaterally
 
