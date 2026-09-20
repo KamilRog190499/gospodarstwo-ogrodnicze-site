@@ -30,9 +30,18 @@ import { address, postalCity } from "../data/contact";
 <section id="dojazd" class="directions" aria-labelledby="dojazd-title">
   <div class="directions__where">
     <h2 class="directions__title" id="dojazd-title">Jak do nas trafić</h2>
+    {
+      /* **The owners' own wording since September 2026**, and it replaced ours. Two things in
+        it are deliberate rather than incidental: it is impersonal ("można obejrzeć i wybrać")
+        where ours addressed the visitor directly, which is the register the rest of the site
+        uses, and it says "w naszym gospodarstwie" where ours said "w tunelach". With that,
+        **no editorial sentence anywhere on the site says "tunel" outside `/faq/`, the history
+        page and the plantings** - the photo captions' `alt` texts still describe one, because
+        they describe what is in the frame. */
+    }
     <p class="directions__lead">
-      Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty oglądasz i kupujesz na miejscu, w
-      tunelach - zapraszamy.
+      Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty można obejrzeć i wybrać na miejscu w
+      naszym gospodarstwie. Serdecznie zapraszamy.
     </p>
     <p class="directions__address">
       {address.street}<br />{postalCity}<br />{address.region}

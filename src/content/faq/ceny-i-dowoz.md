@@ -1,10 +1,7 @@
 ---
-question: Ile kosztują rośliny i czy dowozicie?
+question: Ile kosztują rośliny?
 order: 5
 ---
 
-Cen nie podajemy na stronie, bo zależą od wielkości rośliny i od tego, jak daleko jest
-w sezonie. Ceny detaliczne i hurtowe przy większych ilościach ustalamy na miejscu lub
-telefonicznie.
-
-Istnieje możliwość dowozu własnym transportem - warunki ustalamy przy zamówieniu.
+Cen nie podajemy na stronie, bo zależą od wielkości rośliny, rynku i czasu. Ceny detaliczne
+i hurtowe przy większych ilościach ustalamy na miejscu lub telefonicznie.

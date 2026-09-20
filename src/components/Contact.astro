@@ -25,10 +25,15 @@ const SubHeading = level === 1 ? "h2" : "h3";
 <section id="kontakt" class="contact" aria-labelledby="kontakt-title">
   <div class="contact__phones">
     <Heading class="contact__title" id="kontakt-title">Kontakt</Heading>
-    <p class="contact__lead">
-      Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa. Sklepu internetowego nie
-      prowadzimy.
-    </p>
+    {
+      /* **"Sklepu internetowego nie prowadzimy" is not in this sentence and must not come
+        back.** The owners had it removed from here and from `OfferSection` in September 2026:
+        the fact belongs to `/faq/`, where a whole question answers it, and repeating it under
+        every heading made the site keep announcing what it does not do. The handoff prints it
+        here (docs/design/README.md, line 319), so this is a departure from the handoff and is
+        recorded as one in docs/inwentaryzacja.md. */
+    }
+    <p class="contact__lead">Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa.</p>
     <ul class="phones">
       {
         phones.map((phone) => (

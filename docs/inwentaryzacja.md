@@ -1038,12 +1038,12 @@ miejscem pełnych opisów uprawy, list kolorów i telefonów.
 
 Napisane przez nas, nie nadesłane. Tak jak opisy `alt`, czekają na potwierdzenie:
 
-| Miejsce                  | Tekst                                                                                                            |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| Nagłówek bloku dojazdu   | „Jak do nas trafić”                                                                                              |
-| Lead bloku dojazdu       | „Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty oglądasz i kupujesz na miejscu, w tunelach - zapraszamy.” |
-| Odnośnik w bloku dojazdu | „Telefony i kontakt”                                                                                             |
-| Odnośnik pod pokazem     | „Zobacz wszystkie obsadzenia”                                                                                    |
+| Miejsce                  | Tekst                                                                                                                                                                                                                                                                                           |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nagłówek bloku dojazdu   | „Jak do nas trafić”                                                                                                                                                                                                                                                                             |
+| Lead bloku dojazdu       | **zamknięte** - właściciele podali własne brzmienie we wrześniu 2026: „Jesteśmy w Cholewiance pod Kazimierzem Dolnym. Kwiaty można obejrzeć i wybrać na miejscu w naszym gospodarstwie. Serdecznie zapraszamy.”. Nasze było: „…Kwiaty oglądasz i kupujesz na miejscu, w tunelach - zapraszamy.” |
+| Odnośnik w bloku dojazdu | „Telefony i kontakt”                                                                                                                                                                                                                                                                            |
+| Odnośnik pod pokazem     | „Zobacz wszystkie obsadzenia”                                                                                                                                                                                                                                                                   |
 
 ### Czego blok dojazdu celowo nie robi
 
@@ -1282,6 +1282,15 @@ pobiera zawczasu i to daje przejściu poprzedni styl, z którego może przejść
 Lead jest jedynym tekstem w tym bloku, którego nie napisaliśmy - przyszedł gotowy. Nagłówek
 zostaje na liście do potwierdzenia.
 
+**Lead skrócony do pierwszego zdania - wrzesień 2026.** Właściciele zostawili „Nasze zdjęcia
+pokazują rytm roku w gospodarstwie i kolejne etapy naszej pracy.” i kazali usunąć resztę:
+spacer po sezonach („Wiosną zaczynamy od bratków i prymulek, latem pojawiają się pełne kosze
+i skrzynki, a jesienią czas na chryzantemy.”) oraz zdanie domykające („Zdjęcia pokazują, jak
+w ciągu roku zmienia się gospodarstwo i co powstaje dzięki naszej codziennej pracy.”). Oba
+zdania to nadal ich słowa i są tu zapisane, gdyby miały wrócić. Spacer po sezonach powtarzał
+zresztą to, co karty sezonowe wyżej na tej samej stronie mówią z datami, a zdanie domykające
+powtarzało pierwsze.
+
 Pełna lista tego, czego blok nie pokazuje, jest wyżej, przy regułach doboru.
 
 ## Kalendarz sprzedaży - wrzesień 2026
@@ -1466,9 +1475,18 @@ się marca, bo obiecanie towaru, którego może już nie być, jest gorsze niż 
 
 ## Teksty kart sezonowych - wrzesień 2026
 
-Wszystkie trzy karty dostały krótsze tytuły i przepisane opisy. **To szkic projektowy, nie
-słowa właścicieli** - punkt „Kalendarz” niżej zostaje przez to otwarty, a tabela poniżej jest
-po to, żeby właściciele mieli co z czym porównać.
+Karty przeszły w tym miesiącu **dwie rundy, jedna po drugiej**. Najpierw skrót i przepisanie
+u nas - szkic projektowy, wprost nie słowa właścicieli. Potem właściciele nadesłali własne
+brzmienie trzech opisów; weszło, ale **rozwinięte** - nadesłane zdania były o połowę krótsze
+od tego, co karta unosi, więc każdy opis otwiera się ich zdaniem i kończy naszym.
+
+Obie tabele zostają, bo bez nich nie da się później odróżnić ich słów od naszych. Punkt
+„Tytuły i opisy kart” w tabeli „Kalendarz” niżej **pozostaje otwarty** i po drugiej rundzie
+jest nawet ostrzejszy: teraz przebiega w środku każdego opisu, a nie między opisem a tytułem.
+
+### Runda 1 - szkic projektowy (nasze słowa)
+
+Wszystkie trzy karty dostały krótsze tytuły i przepisane opisy.
 
 | Karta                        | Było                                                                                                                                                                          | Jest                                                                                                                                                   |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -1483,7 +1501,7 @@ Nadkreślenia („Wczesna wiosna”, „Wiosna”, „Jesień”, a na zapalonej
 i „Wkrótce”) oraz podpisy pod zdjęciami **nie zostały ruszone** - podpisy dalej biorą się
 z `saleWindows[].months`, czyli z `src/data/season.ts`.
 
-### Co ta podmiana kosztuje
+#### Co ta podmiana kosztuje
 
 - **Tytuły kart 1 i 3 są odtąd co do słowa nagłówkami kafli oferty** („Bratki i prymulki”,
   „Chryzantemy” - `src/data/offer.ts`). Kafle stoją ekran niżej na tej samej stronie, a karty
@@ -1493,8 +1511,11 @@ z `saleWindows[].months`, czyli z `src/data/season.ts`.
 - **Słowo „tunel” znika z całej sekcji sezonowej.** Karta 1 straciła „prosto z tunelu”,
   karta 2 „w tunelu” na rzecz „w naszym gospodarstwie” - mimo że zdjęcie karty 2 to wnętrze
   tunelu, co mówi jego własny `alt` („…wewnątrz tunelu foliowego”). Tekst przestał opisywać
-  obrazek, przy którym stoi. Słowo zostaje na `/faq/`, w historii gospodarstwa
-  i w `Directions.astro`.
+  obrazek, przy którym stoi. Słowo zostawało wtedy na `/faq/`, w historii gospodarstwa
+  i w `Directions.astro`; **z tego ostatniego zeszło we wrześniu 2026**, gdy właściciele
+  podali własny lid bloku dojazdu, mówiący „w naszym gospodarstwie”. Poza `/faq/`, historią
+  i opisami obsadzeń żadne zdanie redakcyjne na stronie nie mówi już „tunel” - mówią to
+  jeszcze opisy `alt`, bo opisują to, co widać na zdjęciu.
 - **Karta 2 przez dziewięć miesięcy w roku czyta się „WIOSNA / Wiosenny sezon”.** Zapala się
   tylko od kwietnia do czerwca i dopiero wtedy nadkreślenie mówi „W TRAKCIE”. Jako jedyna nie
   może nazwać rzeczy, bo to okno sprzedaje balkonowe _i_ rabatowe, z dwóch stron naraz.
@@ -1502,7 +1523,7 @@ z `saleWindows[].months`, czyli z `src/data/season.ts`.
   strona się pozycjonuje, zostaje w treści karty i nadal jest tytułem strony `/chryzantemy/`,
   więc nie ginie z serwisu - ale na stronie głównej nie stoi już w `h3`.
 
-### Co zyskuje
+#### Co zyskuje
 
 - **Opis karty 3 przestaje wpisywać daty ręcznie w prozę.** Zdanie „Sprzedaż zaczyna się od
   początku października i trwa do 1 listopada” było drugim miejscem, w którym okno sprzedaży
@@ -1512,7 +1533,7 @@ z `saleWindows[].months`, czyli z `src/data/season.ts`.
   mówi „kompozycje można oglądać w zakładce Inspiracje”, a sekcja inspiracji otwiera się
   słowem „Kompozycje”. Karta robi więc miękki wskaźnik na `/inspiracje/`.
 
-### Czego nie zrobiono
+#### Czego nie zrobiono
 
 Pierwsza wersja opisu karty marcowej kończyła się zdaniem „W marcu pojawiają się też pierwsze
 kwiaty balkonowe i rabatowe”. To **nieprawda wobec okien sprzedaży** - balkonowe i rabatowe
@@ -1524,6 +1545,69 @@ więc do brzmienia „jeszcze zanim ruszą”.
 Nie da się tego zresztą uratować rozciągnięciem okna na marzec: `seasonOn()` szuka przez
 `saleWindows.find()`, czyli bierze **pierwsze** pasujące okno, więc marzec i tak trafiłby na
 bratki, a balkonowe dostałyby `null`. Nakładające się okna łamią ten model, nie tylko datę.
+
+### Runda 2 - zdania od właścicieli, rozwinięte
+
+Właściciele nadesłali własne brzmienie **trzech opisów** i cztery uwagi do nich. Tytuły
+zostały nietknięte, o czym niżej. Stan przed rundą 2 to kolumna „Jest” z tabeli wyżej.
+
+| Karta                       | Było (runda 1)                                                                                                                                         | Jest                                                                                                                                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 · marzec, opis            | „Zaczynamy sezon od kolorowych bratków i prymulek w skrzynkach i doniczkach. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.” | „W marcu rozpoczynamy sprzedaż bratków i prymulek z własnej uprawy. Bratki dostępne są w różnych kolorach. To pierwsze kwiaty w sezonie, jeszcze zanim ruszą balkonowe i rabatowe.”                       |
+| 2 · kwiecień–czerwiec, opis | „Kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje. Duży wybór kolorów i odmian czeka na miejscu, w naszym gospodarstwie.”                   | „Od kwietnia dostępne są kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje. To wtedy wybór kolorów i odmian jest największy, a rozsady można kupić na obsadzenie własnych skrzynek i doniczek.” |
+| 3 · jesień, opis            | „Jesienią oferujemy chryzantemy wielkokwiatowe w wielu kolorach i odmianach. Zamówienia na Wszystkich Świętych warto złożyć około tygodnia wcześniej.” | „Jesienią sprzedajemy chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe, w wielu kolorach i odmianach. Większe zamówienia warto składać jak najwcześniej.”                                     |
+
+#### Które zdanie jest czyje
+
+To jest ta tabela, po którą trzeba sięgnąć, zanim się cokolwiek w tych opisach ruszy.
+Nadesłane zdania są krótsze o połowę od tego, co karta unosi, więc każdy opis **otwiera się
+ich zdaniem i kończy naszym**. Granica biegnie w środku akapitu i nie widać jej z kodu.
+
+| Karta | Nadesłane (dosłownie)                                                                                                                                  | Dopisane u nas                                                                                                            |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| 1     | „W marcu rozpoczynamy sprzedaż bratków i prymulek. Bratki dostępne są w różnych kolorach.”                                                             | „z własnej uprawy” w pierwszym zdaniu; całe „To pierwsze kwiaty w sezonie, jeszcze zanim ruszą balkonowe i rabatowe.”     |
+| 2     | „Od kwietnia dostępne są kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje.”                                                                 | całe „To wtedy wybór kolorów i odmian jest największy, a rozsady można kupić na obsadzenie własnych skrzynek i doniczek.” |
+| 3     | „Jesienią sprzedajemy chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe.” oraz „większe zamówienia warto składać jak najwcześniej” (z uwag) | „, w wielu kolorach i odmianach”                                                                                          |
+
+#### Cztery uwagi, które przyszły z tekstem
+
+1. **Tytuły zostają takie, jakie były.** Nadesłany tekst nazywał kartę środkową „Kwiaty
+   balkonowe i rabatowe”; weszła z powrotem na „Wiosenny sezon”, bo tytuł nazywający towar
+   nie różni się niczym od kafla ekran niżej, w sekcji **„Kwiaty w naszej ofercie”**. To jest
+   ten sam rachunek, który w rundzie 1 zapisano jako koszt przy kartach 1 i 3 - tyle że tam
+   przyjęto go świadomie, a tu odrzucono. Karta 2 zostaje jedyną, która nie jest echem kafla.
+2. **Żadnych myślników w opisach.** Trzy opisy chodzą na przecinku i kropce. Runda 1 używała
+   myślnika w karcie 1 („bratki i prymulki - w skrzynkach i doniczkach”), handoff też.
+3. **„W skrzynkach i doniczkach” schodzi z karty marcowej, bo to nieprawda.** To poprawka
+   **faktu**, nie stylu: bratki i prymulki nie są tak sprzedawane, a zdanie stało na stronie
+   od rundy 1 i pochodziło jeszcze z handoffu („prosto z tunelu, w skrzynkach i doniczkach”).
+   Skrzynki i doniczki zostają na karcie 2, gdzie dotyczą rozsad kwiatów balkonowych.
+4. **Karta 2 nie mówi „wszystko oglądasz na miejscu, w naszym gospodarstwie”.** Zdanie
+   z rundy 1 (a wcześniej „Kolory i odmiany oglądasz na miejscu, w tunelu” z handoffu)
+   wypadło w całości. Sekcja sezonowa nie odsyła już na miejsce ani słowem.
+
+#### Co zostaje do rozstrzygnięcia
+
+- **Rada o zamówieniach mówi teraz dwie różne rzeczy na dwóch stronach.** Karta 3:
+  „większe zamówienia warto składać jak najwcześniej”. `src/pages/chryzantemy.astro`,
+  w `note` nad wpisami: „Przed Wszystkimi Świętymi zamówienia najlepiej złożyć
+  **z tygodniowym wyprzedzeniem**”. Uwaga dotyczyła karty, więc `note` został nietknięty -
+  ale to ta sama rada w dwóch wersjach i właściciele powinni wybrać jedną. Do zapytania.
+- **Punkt „Tytuły i opisy kart” w tabeli „Kalendarz” zostaje otwarty** i po tej rundzie
+  jest trudniejszy: przed nią całe opisy były nasze, teraz każdy jest w połowie ich,
+  a granicę zna tylko tabela wyżej.
+
+#### Co ta runda kosztuje
+
+- **Karta 3 traci wskazanie tygodnia.** „Około tygodnia wcześniej” było jedyną konkretną
+  liczbą w całej sekcji sezonowej; „jak najwcześniej” jest radą bez miary. Wersja z tygodniem
+  żyje dalej na `/chryzantemy/` - patrz punkt wyżej.
+- **Karta 1 traci „kolorowych” i konkret o pojemnikach**, ale zyskuje „z własnej uprawy”,
+  czyli frazę, na której stoi cała witryna.
+- **Opisy urosły z dwóch zdań do trzech (karty 1) i po dwa dłuższe (karty 2 i 3).** Rundę 1
+  robiono pod skrócenie; ta runda idzie w drugą stronę, na wyraźną prośbę. Trzy bloki w rzędzie
+  różnią się teraz wysokością tekstu bardziej niż przed nią - trzyma je `margin-top: auto`
+  na `.card__slot`, więc zdjęcia i daty i tak stoją równo.
 
 ## Zgłoszenia właścicieli - wrzesień 2026, druga tura
 
@@ -1625,17 +1709,18 @@ już nic.
 
 ## Kalendarz - do przejrzenia z właścicielami
 
-| Rzecz                      | Pytanie                                                                                                                                                                                                                                                             |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| „W trakcie"                | dotąd w kodzie i w handoffie stało „Trwa teraz"                                                                                                                                                                                                                     |
-| Nagłówek sekcji sezonu     | „Kiedy co sprzedajemy" zamiast „Sezon w gospodarstwie"                                                                                                                                                                                                              |
-| Podpisy kart               | „Marzec" (było „Marzec – kwiecień") i „Kwiecień – czerwiec · szczyt sezonu" (było „Maj – czerwiec · szczyt sezonu") - to **odejście od dosłownej treści handoffu** na karcie 2                                                                                      |
-| Tytuły i opisy kart        | wszystkie trzy przepisane we wrześniu 2026 - „Bratki i prymulki”, „Wiosenny sezon”, „Chryzantemy”. Szkic projektowy, nie słowa właścicieli; pełne _było → jest_ w sekcji „Teksty kart sezonowych” wyżej                                                             |
-| Karty bez odnośników       | do grupy prowadzi teraz wyłącznie kafel oferty                                                                                                                                                                                                                      |
-| Długość „Wkrótce"          | chryzantemy zapalają się 1 lipca (trzy miesiące wcześniej), bratki 2 listopada (cztery). Skrócenie to dołożenie granicy w tabeli okien, nie zmiana logiki                                                                                                           |
-| **Zima przestała milczeć** | od 2 listopada do końca lutego karta bratków jest ciemna i niesie „WKRÓTCE". CLAUDE.md mówi, że stan zimowy **nie jest zaprojektowany** i nic się w nim nie wymyśla; to jedno słowo, nie odrzucony baner „Sprzedaż wznawiamy w marcu", ale jest decyzją właścicieli |
-| Prymulki                   | własny wpis i własna grupa, gdy będzie tekst i zdjęcie                                                                                                                                                                                                              |
-| Twarz kafla                | kadry wybiera kolejność `order`, więc zdjęcie pelargonii bluszczolistnej wypchnie kiedyś fuksję z mozaiki bez niczyjej decyzji. Alternatywa: pole `featured` we frontmatterze                                                                                       |
+| Rzecz                      | Pytanie                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| „W trakcie"                | dotąd w kodzie i w handoffie stało „Trwa teraz"                                                                                                                                                                                                                                                                                                                            |
+| Nagłówek sekcji sezonu     | „Kiedy co sprzedajemy" zamiast „Sezon w gospodarstwie"                                                                                                                                                                                                                                                                                                                     |
+| Podpisy kart               | „Marzec" (było „Marzec – kwiecień") i „Kwiecień – czerwiec · szczyt sezonu" (było „Maj – czerwiec · szczyt sezonu") - to **odejście od dosłownej treści handoffu** na karcie 2                                                                                                                                                                                             |
+| Tytuły i opisy kart        | tytuły („Bratki i prymulki”, „Wiosenny sezon”, „Chryzantemy”) są **nasze** - właściciele proponowali dla karty 2 „Kwiaty balkonowe i rabatowe” i wycofali to, żeby tytuł nie powielał kafla oferty. Opisy są po drugiej rundzie **w połowie ich, w połowie nasze**; która połowa jest czyja, mówi tabela „Które zdanie jest czyje” w sekcji „Teksty kart sezonowych” wyżej |
+| Rada o zamówieniach        | karta chryzantem mówi „większe zamówienia warto składać jak najwcześniej”, a `note` na `/chryzantemy/` „z tygodniowym wyprzedzeniem”. Jedna rada, dwa brzmienia - do wyboru przez właścicieli                                                                                                                                                                              |
+| Karty bez odnośników       | do grupy prowadzi teraz wyłącznie kafel oferty                                                                                                                                                                                                                                                                                                                             |
+| Długość „Wkrótce"          | chryzantemy zapalają się 1 lipca (trzy miesiące wcześniej), bratki 2 listopada (cztery). Skrócenie to dołożenie granicy w tabeli okien, nie zmiana logiki                                                                                                                                                                                                                  |
+| **Zima przestała milczeć** | od 2 listopada do końca lutego karta bratków jest ciemna i niesie „WKRÓTCE". CLAUDE.md mówi, że stan zimowy **nie jest zaprojektowany** i nic się w nim nie wymyśla; to jedno słowo, nie odrzucony baner „Sprzedaż wznawiamy w marcu", ale jest decyzją właścicieli                                                                                                        |
+| Prymulki                   | własny wpis i własna grupa, gdy będzie tekst i zdjęcie                                                                                                                                                                                                                                                                                                                     |
+| Twarz kafla                | kadry wybiera kolejność `order`, więc zdjęcie pelargonii bluszczolistnej wypchnie kiedyś fuksję z mozaiki bez niczyjej decyzji. Alternatywa: pole `featured` we frontmatterze                                                                                                                                                                                              |
 
 ## Posty z Facebooka - wrzesień 2026
 
@@ -1832,6 +1917,43 @@ z kartami, tylko że jako całe zdanie, a nie jedno słowo na kaflu.
 pokazuje je praktycznie wyłącznie stronom rządowym i medycznym - gospodarstwo ogrodnicze nie
 zobaczy z tego nic w SERP-ie i nie należy tego obiecywać. Jest, bo nic nie kosztuje i bo
 jednoznacznie opisuje treść modelom językowym.
+
+### Przepisane odpowiedzi - wrzesień 2026, słowa właścicieli
+
+Właściciele przysłali własne brzmienie **wszystkich sześciu** odpowiedzi. Weszły dosłownie.
+Tabela wyżej („Co jest na stronie i skąd”) opisuje stan z budowy strony i zostaje jako zapis
+tego, skąd fakty pochodziły; poniżej jest to, co zostało z prozy.
+
+| Pytanie                      | Co wypadło                                                                                                                                                                                                                                     |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sklep internetowy i wysyłka  | cały drugi akapit: „Kwitnące rośliny w doniczkach źle znoszą kilka dni w paczce, a chryzantemy wielkokwiatowe o ciężkich kwiatach nie nadają się do przewozu w kartonie w ogóle.” oraz człon „kwiaty odbiera się na miejscu albo umawia dowóz” |
+| Jak złożyć zamówienie        | przykłady („na obsadzenie całego balkonu, rabaty czy grobu”) i uzasadnienie („w szczycie sezonu wybór schodzi w ciągu kilku dni”); „warto zadzwonić” zamienione na „najlepiej zadzwonić”                                                       |
+| Kiedy co jest w sprzedaży    | „a nie dostawa z hurtowni”; „w trzech oknach” zmienione na „w trzech okresach”                                                                                                                                                                 |
+| Czy rośliny z własnej uprawy | cały drugi akapit: „To znaczy, że rośliny nie jadą do nas z hurtowni ani zza granicy: są rozsadzane, podlewane i doprowadzane do kwitnienia w tych samych tunelach, z których je Państwo odbierają.”                                           |
+| Ile kosztują i czy dowozicie | „od tego, jak daleko jest w sezonie” zmienione na „rynku i czasu”; **cały akapit o dowozie**: „Istnieje możliwość dowozu własnym transportem - warunki ustalamy przy zamówieniu.”                                                              |
+| Gdzie jesteście              | „Sprzedaż odbywa się na terenie gospodarstwa, przy tunelach.”                                                                                                                                                                                  |
+
+Odnośnik `[Kontakt](/kontakt/)` w ostatniej odpowiedzi **został zachowany** - nadesłany tekst
+miał tam samo słowo „Kontakt”, ale to jedyna droga z FAQ do mapy i zdjęcie linku byłoby
+regresem, a nie zmianą treści.
+
+#### Pytanie o ceny straciło drugą połowę
+
+Nowa odpowiedź nie mówi nic o dowozie - akapit „Istnieje możliwość dowozu własnym
+transportem - warunki ustalamy przy zamówieniu.” wypadł. Pytanie brzmiało „Ile kosztują
+rośliny i czy dowozicie?”, więc zostałoby z połową odpowiedzi, a to jest strona, której cała
+reguła brzmi „każda odpowiedź jest czymś, co repozytorium już wie”. **Właściciele wybrali
+skrócenie pytania do „Ile kosztują rośliny?”** zamiast przywracania zdania.
+
+Sam fakt o dowozie nie zniknął z serwisu: stoi na każdej stronie kategorii
+(`OfferSection.astro`, `offer__prices` - „Istnieje możliwość dowozu własnym transportem.”).
+Warunki dowozu są od dawna na liście pytań do właścicieli niżej (punkt 4) i to się nie
+zmienia - `/faq/` po prostu przestało ich dotykać.
+
+**Nazwa pliku została nietknięta.** `ceny-i-dowoz.md` daje `id` elementu `<details>`, czyli
+opublikowaną kotwicę `/faq/#ceny-i-dowoz`; nic w repozytorium na nią nie wskazuje, ale
+kotwica jest adresem i zmienia się ją z powodu mocniejszego niż to, że przestała pasować do
+tytułu pytania.
 
 ### Pytania do właścicieli - bez nich FAQ się nie rozrośnie
 
@@ -2042,6 +2164,17 @@ właściciele ich użyli.
 Pierwsze zdanie było przepisane słowo w słowo z `docs/design/README.md`. Oba nowe są
 w rejestrze bezosobowym - ta sama decyzja, co przy poradach.
 
+**Lid stron kategorii stracił obietnicę kolorów - wrzesień 2026.** Na polecenie właścicieli
+człon „i o kolorach dostępnych u nas” został zastąpiony przez „i charakterystyce”; `OFFER_LEAD`
+w `OfferSection.astro` brzmi odtąd „Kwiaty z naszej uprawy. Przy każdej roślinie są
+najważniejsze informacje o jej uprawie i charakterystyce.”. Nowy człon pokrywa się z tym, co
+wpis faktycznie niesie - czterema faktami (wysokość/pokrój, stanowisko, podlewanie, uprawa).
+**To nie jest sam skrót, to naprawa nieprawdy**: chipy „Dostępne kolory” zeszły
+z każdego wpisu w tym samym miesiącu (patrz „Zdjęte chipy kolorów”), więc zdanie odsyłało do
+czegoś, czego pod rośliną już nie ma - dziewiętnaście z dwudziestu dwóch wpisów, które miały
+chipy, nazywa kolory w prozie, a trzy nie mówią o nich nic. Człon nie ma prawa wrócić,
+dopóki chipów nie ma.
+
 **Świadomie przyjęta nieścisłość - zamknięta we wrześniu 2026.** Na stronie głównej sekcja
 „Kwiaty w naszej ofercie” pokazuje cztery kafle kategorii, a nie listę roślin, więc zdanie
 o „każdej roślinie” było tam nietrafione. Wada szła od handoffu i była utrzymywana świadomie,
@@ -2069,13 +2202,32 @@ a mówiły dwa - `/kwiaty-balkonowe/` i `/rabatowe/` miały lid, `/bratki/` i `/
 - **Strona główna dostała własny tekst**, podany przez właściciela: „Nasza oferta obejmuje
   różnorodne gatunki i odmiany kwiatów, dopasowane do różnych potrzeb i warunków uprawy.
   Różnorodność kolorów, form i terminów kwitnienia pozwala wybrać rośliny odpowiednie na każdy
-  sezon.” Tym samym **domyka nieścisłość opisaną wyżej**: sekcja pokazuje cztery kafle
+  sezon.” **Drugie zdanie zeszło z niego we wrześniu 2026**, na polecenie właścicieli - lid to
+  odtąd jedno zdanie, a zapis „różnorodne… / Różnorodność…” na początku obu zdań przestał się
+  powtarzać. Tym samym **domyka nieścisłość opisaną wyżej**: sekcja pokazuje cztery kafle
   kategorii, więc zdanie o „każdej roślinie” opisywało tam coś, czego na ekranie nie ma. Teraz
   kafle mówią o ofercie jako całości, a cztery strony o tym, co stoi przy każdej roślinie.
 - **Zgłoszenie zawierało literówkę** - polecenie brzmiało „zamień X na X”, dwa razy to samo
   zdanie. Przyjęto odczytanie wynikające z reszty zgłoszenia: zdanie zostaje na stronach
   kategorii i ma być na wszystkich czterech, a nowy tekst dotyczy strony głównej. Do
   potwierdzenia, gdyby intencja była inna.
+
+### Zdanie o sklepie internetowym schodzi na `/faq/` - wrzesień 2026
+
+Właściciele kazali usunąć „Sklepu internetowego nie prowadzimy.” **wszędzie poza `/faq/`**.
+Zdanie stało w dwóch komponentach - `Contact.astro` (lid sekcji „Kontakt”, więc na stronie
+głównej i na `/kontakt/`) i `OfferSection.astro` (blok zamówień, więc na każdej z trzech stron
+kategorii). W obu brzmi odtąd samo „Zamówienia przyjmujemy telefonicznie oraz na terenie
+gospodarstwa.”.
+
+Na `/faq/` zostaje bez zmian, w pytaniu „Czy prowadzicie sklep internetowy i wysyłkę?”
+(`src/content/faq/sklep-internetowy.md`), gdzie jest odpowiedzią na zadane pytanie, a nie
+dopiskiem pod nagłówkiem.
+
+**To odstępstwo od handoffu** - `docs/design/README.md` w linii 319 drukuje oba zdania razem,
+jako jeden akapit bloku zamówień. Handoffu nie ruszamy, bo jest zapisem stanu sprzed zmian;
+zapis odstępstwa jest tutaj. Reguła „bez e-commerce” z `CLAUDE.md` się nie zmienia - zmienia
+się to, ile razy strona o tym mówi.
 
 ## Rozdzielenie sekcji i zmiana kroju - wrzesień 2026
 

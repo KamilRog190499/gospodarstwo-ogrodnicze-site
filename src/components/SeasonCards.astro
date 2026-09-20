@@ -52,6 +52,17 @@ import { compositionPhoto } from "../data/compositions";
  * back the duplication the cards were stripped of. If a link is ever wanted here again, that is
  * a decision to take on its merits, not a hole left by the merge.
  *
+ * ## Whose words the three bodies are
+ *
+ * Each of them **opens on a sentence the owners sent in September 2026** and carries a second
+ * one written here to give the card its length back; docs/inwentaryzacja.md tables both rounds
+ * under "Teksty kart sezonowych", sentence by sentence, so nobody has to guess later which
+ * half is whose. The titles are older than that and were **deliberately not** replaced by the
+ * names the owners' text used: a card called "Kwiaty balkonowe i rabatowe" is the offer tile
+ * one screen down under "Kwiaty w naszej ofercie" (`OfferOverview.astro`), and a heading that
+ * looks like a door but is not one is what this block was stripped of in 0.9. The overline says
+ * when, the title says which part of the year, the tiles say where to go.
+ *
  * The months come from `saleWindows` rather than from copy typed in here, so this block and
  * the category pages cannot end up quoting different dates - which is exactly what had
  * happened to `/bratki/`, still advertising a window the owners had changed.
@@ -73,7 +84,7 @@ const cards = [
     window: saleWindows[0]!,
     season: "Wczesna wiosna",
     title: "Bratki i prymulki",
-    body: "Zaczynamy sezon od kolorowych bratków i prymulek w skrzynkach i doniczkach. Sprzedajemy je w marcu, jeszcze zanim ruszą kwiaty balkonowe i rabatowe.",
+    body: "W marcu rozpoczynamy sprzedaż bratków i prymulek z własnej uprawy. Bratki dostępne są w różnych kolorach. To pierwsze kwiaty w sezonie, jeszcze zanim ruszą balkonowe i rabatowe.",
     meta: saleWindows[0]!.months,
     photo: pansyPhoto,
   },
@@ -81,7 +92,7 @@ const cards = [
     window: saleWindows[1]!,
     season: "Wiosna",
     title: "Wiosenny sezon",
-    body: "Kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje. Duży wybór kolorów i odmian czeka na miejscu, w naszym gospodarstwie.",
+    body: "Od kwietnia dostępne są kwiaty balkonowe i rabatowe, rozsady oraz gotowe kompozycje. To wtedy wybór kolorów i odmian jest największy, a rozsady można kupić na obsadzenie własnych skrzynek i doniczek.",
     // "szczyt sezonu" is the handoff's own wording; only the months in front of it moved.
     meta: `${saleWindows[1]!.months} · szczyt sezonu`,
     photo: tunnelPhoto,
@@ -90,7 +101,7 @@ const cards = [
     window: saleWindows[2]!,
     season: "Jesień",
     title: "Chryzantemy",
-    body: "Jesienią oferujemy chryzantemy wielkokwiatowe w wielu kolorach i odmianach. Zamówienia na Wszystkich Świętych warto złożyć około tygodnia wcześniej.",
+    body: "Jesienią sprzedajemy chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe, w wielu kolorach i odmianach. Większe zamówienia warto składać jak najwcześniej.",
     meta: saleWindows[2]!.months,
     photo: chrysanthemumPhoto,
   },

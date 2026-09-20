@@ -97,7 +97,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators` and `taxId` are all `null` - see Open items. The last two are read only by the privacy policy.                                                                                                                                                                                                 |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the three strips (`balconyStrip`, `chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. Also `homeGallery`, which is those three strips grouped and put in calendar order for the home page show - the strips themselves, not copies, so a frame added to a strip appears there too. **The 23 plantings are no longer here** - they are the `compositions` collection. |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                                                                                      |
-| `src/data/facebook.ts`         | Types and file resolution for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                            |
+| `src/data/facebook.ts`         | Types and file resolution for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                                                 |
 | `src/data/facebook-fixture.ts` | Invented posts, so the news card can be worked on without a token. **`astro dev` only** - `facebook.ts` gates it on `import.meta.env.DEV`, because these carry the owners' page name on screen.                                                                                                                                                                                                                                                                                                   |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                                                                                                                                                                                        |
@@ -723,6 +723,20 @@ that shape code decisions:
    of the handoff's own headings and leave two cards named exactly like the offer tiles a
    screen below them - how early "Wkrótce" should light up, and the fact that **winter is
    no longer silent**.
+   **The three bodies were rewritten a second time later that month and are now half theirs.**
+   The owners sent a sentence per card; it was too short to carry the block, so each body opens
+   on their sentence and closes on one written here. That boundary runs inside the paragraph
+   and is invisible in the code, so `docs/inwentaryzacja.md` tables it sentence by sentence
+   under "Teksty kart sezonowych" - anything touched in those three strings goes on that table
+   in the same commit. The same round settled two things worth not re-deriving. **A card title
+   never names the goods:** their text called the middle card "Kwiaty balkonowe i rabatowe"
+   and they pulled it back to "Wiosenny sezon", because a title naming the goods is the offer
+   tile one screen down under "Kwiaty w naszej ofercie". And a **factual** error that had
+   stood since the handoff came out: pansies and primroses are not sold "w skrzynkach
+   i doniczkach". **One contradiction is left open and is theirs to settle, not ours:** the
+   autumn card now says "większe zamówienia warto składać jak najwcześniej" while the `note`
+   on `/chryzantemy/` still says "z tygodniowym wyprzedzeniem" - one piece of advice in two
+   wordings, on two pages.
    Primroses are **no longer a word only** - `prymulka.md` and a photograph arrived in
    September 2026, so `/bratki/` holds two entries and its `h1` is "Bratki i prymulki" (the
    `<title>` stays "Bratki"). No separate group and no separate address: the owners say they

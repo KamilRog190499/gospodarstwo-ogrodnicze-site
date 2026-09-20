@@ -86,9 +86,17 @@ interface Props {
  *  the owners had removed there in September 2026 was a **different** sentence - "Duży wybór
  *  kolorów. Sprzedaż zaczyna się od początku października i trwa do 1 listopada." - because it
  *  repeated the selling dates and the colours that the entries' own facts and chips already
- *  carry. This one claims neither; it says where to look. docs/inwentaryzacja.md has both. */
+ *  carry. This one claims neither; it says where to look. docs/inwentaryzacja.md has both.
+ *
+ *  **It promised colours until September 2026 and does not any more.** The owners had the
+ *  clause "i o kolorach dostępnych u nas" replaced with "i charakterystyce", which is what
+ *  the four `facts` under every entry actually carry. Do not put the colours back: the
+ *  "Dostępne kolory" chips left every entry in the same month, so the sentence was sending
+ *  people to something that is no longer under a plant. Nineteen of the twenty-two entries
+ *  that had chips still name their colours in their prose and three say nothing about colour
+ *  at all, so the page cannot promise them either. */
 const OFFER_LEAD =
-  "Kwiaty z naszej uprawy. Przy każdej roślinie są najważniejsze informacje o jej uprawie i o kolorach dostępnych u nas.";
+  "Kwiaty z naszej uprawy. Przy każdej roślinie są najważniejsze informacje o jej uprawie i charakterystyce.";
 
 const { group, title, lead = OFFER_LEAD, note, photos } = Astro.props;
 
@@ -222,9 +230,9 @@ const saleLine = saleWindow
   {photos && photos.length > 0 && <PhotoStrip photos={photos} label="Zdjęcia z gospodarstwa" />}
 
   <div class="offer__order">
+    {/* See `Contact.astro` - "Sklepu internetowego nie prowadzimy" lives on `/faq/` alone. */}
     <p class="offer__orderText">
-      Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa. Sklepu internetowego nie
-      prowadzimy.
+      Zamówienia przyjmujemy telefonicznie oraz na terenie gospodarstwa.
     </p>
     <div class="offer__actions">
       <a class="cta" href={primaryPhone.href}>Zadzwoń: {primaryPhone.display}</a>
