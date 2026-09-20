@@ -1,0 +1,18 @@
+# Końce wiersza: LF wszędzie - w repozytorium, w każdej kopii roboczej i na
+# self-hosted runnerze. Bez tego pliku `core.autocrlf=true` na Windowsie każe
+# gitowi uznawać wypisane pliki za zmienione, choć ich bajty są identyczne:
+# `git status` pokazywał 87 zmodyfikowanych plików, a `git diff` - nic.
+# Prettier i tak zapisuje LF, więc to tylko spisanie stanu faktycznego.
+* text=auto eol=lf
+
+# Pliki binarne - nigdy nie konwertowane i nie porównywane jako tekst.
+# Zdjęcia roślin i obsadzeń, kadry i filmy pobrane z Facebooka, favicon.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.avif binary
+*.mp4 binary
+*.ico binary
+*.woff binary
+*.woff2 binary
