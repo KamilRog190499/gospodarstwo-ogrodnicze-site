@@ -2627,6 +2627,7 @@ się co wzięło.
 | 0.27.1  | **Styk hero i aktualności.** Zgłoszenie właściciela: sekcja źle przechodzi kolorystycznie z hero. Dwie przyczyny - kreska 2px z dwóch stykających się obramowań (defekt przenosin) i grunty różniące się o 1.003:1, czyli o nic. Obejrzane trzy warianty, wszedł **A**: hero schodzi z `--paper-blush` na `--paper`, co daje 1.079:1 - sufit tej palety. `--paper-blush` wypadł z `tokens.css`, bo nic już na nim nie stało; jasnych gruntów są trzy. Czcionka w kartach mniejsza i lżejsza (0.92rem/1.6, waga 350) na polecenie właścicieli.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 0.27.2  | **Dwa wpisy zamiast trzech w „Co u nas słychać”.** Pytanie właściciela o to, czy trójka jest dobra; okazało się, że powtarzają się dwie sąsiadujące trójki o tej samej anatomii - aktualności i kalendarz. Rozstrzygnęła nie rytmika, tylko to, że świeżość niesie data przy wpisie, a nie liczba kafelków: trzeci wpis kupuje redundancję i kosztuje każdą kartę 200 px szerokości, czyli połowę tekstu widocznego przed zwinięciem. Przy okazji dwa defekty siatki - dziura po odrzuconym wpisie i karta na całą szerokość przy jednym wpisie - oraz poprawione `SIZES` i `WIDTHS`, bo `sizes` pisane pod węższą kolumnę nie da się nadrobić krokami `srcset`.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | 0.27.3  | **Lead sekcji aktualności skrócony** na polecenie właściciela do samego „Ostatnie wpisy z naszego profilu na Facebooku." - odpadło „- co właśnie kwitnie i co jest w sprzedaży", bo mówią to lepiej same wpisy pod spodem. Nagłówek, overline i lead pustego stanu bez zmian; nadal są to nasze słowa i nadal czekają na przegląd właścicieli. Przy okazji sekcja dostała kreskę pod nagłówkiem - `border-bottom` na `.news__head`, ta sama co w `OfferOverview`, `GalleryShow`, `Compositions` i `SeasonCards`. Była jedynym pasmem na stronie, w którym nagłówek wchodził prosto w treść.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| 0.29.1  | **Audyt mobilny przed cutoverem.** Pasek miniatur na `/inspiracje/` był zgnieciony do 2 px na telefonie i 40 px na desktopie, bo jego `li` miały domyślny `flex-shrink` i dzieliły się szerokością zamiast przepełnić przewijany rail. Pasek zdjęć stał na telefonie w jednej kolumnie, a `sizes` obiecywało dwie, przez co każde zdjęcie na stronach kategorii było rozciągane 1,7x przy DPR 2; podłoga kolumny jest teraz clampem, co daje dwie kolumny do 320 px i nie rusza niczego powyżej 667 px - `/chryzantemy/` skróciło się o 46%. Mapa Google dostała `touch-action: pan-y`, bo przechwytywała pionowy gest. Pole dotyku „Pokaż więcej” było zaczepione do wrappera zamiast do przycisku i trafiało w cel przypadkiem. Pasek zgody zszedł ze starego `--ink` sprzed motywu 2a na `color-mix`. Doszedł `theme-color`. Szczegóły: [Audyt mobilny](#audyt-mobilny--wrzesień-2026).                                                                                                                                                                                                                             |
 | 0.29.0  | **Audyt SEO przed cutoverem.** Sufiks tytułu skrócony, żeby na każdej stronie zmieściła się nazwa miejscowości - żaden tytuł kategorii jej dotąd nie niósł, a najdłuższy tytuł miał 81 znaków przy 60 pokazywanych. Cztery opisy skrócone poniżej 160 znaków; z opisu `/kwiaty-balkonowe/` wypadła obietnica „dostępne kolory”, której strona nie spełnia od września. Doszły `robots.txt` (nie było żadnego) i `/llms.txt` jako endpoint czytający `season.ts`, żeby nie powstało drugie miejsce z datami sprzedaży. `og:image` zaczął w ogóle działać - `Seo.astro` przyjmował go od początku, ale nic go nie podawało. W JSON-LD doszły `telephone` w E.164, `addressRegion` i `image`; `geo` czeka na pinezkę z wizytówki i ma już napisaną całą obsługę. Do mapy przekierowań doszły strony załączników WordPressa i `/author/*` jako 410. Szczegóły: [Audyt SEO przed wdrożeniem](#audyt-seo-przed-wdrożeniem--wrzesień-2026).                                                                                                                                                                                   |
 | 0.28.9  | **Stopka: nazwa nad kolumnami, podkreślone linki, cele dotykowe 32 px.** Zgłoszenie właściciela „popraw stopkę”. Linki odróżniał od tekstu sam kolor (1,34:1), jedyną podkreśloną rzeczą był przycisk „Ustawienia mapy”, a cel dotykowy miał ~18 px. Sześć pozycji „Informacji” rozeszło się na „Informacje” i nową kolumnę „Prywatność”, próg siatki zszedł z 220 px na zmierzone 170 px. Po pokazaniu właścicielom: nazwa wyszła z siatki do własnego rzędu (była ściśnięta do 208 px), a wiersze z 44 px na 32 px, co odtwarza poprzedni skok; Facebook, przeniesiony przy podziale pod telefony, wrócił do „Informacji”. Szczegóły: [Stopka](#stopka-cztery-kolumny-podkreślenia-i-cele-dotykowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                  |
 
@@ -4125,6 +4126,167 @@ brak - to jest wersja cytowana komuś, kto już jedzie.
 4. **Współrzędne z wizytówki Google** - jedna liczba i wszystko po stronie kodu jest gotowe.
 5. Trzy osobne lidy stron kategorii zamiast jednego wspólnego.
 6. Rozbudowa `/o-nas/` - historia, nagrody, dzisiejsza uprawa ich słowami.
+
+## Audyt mobilny - wrzesień 2026
+
+Zrobiony po audycie SEO i z tego samego powodu: wdrożenie ma nastąpić przed 1 października,
+a ruch w tej branży jest w większości telefoniczny. Mierzone w przeglądarce na `npm run dev`
+i na `npm run preview`, przy 320, 360, 375, 640, 768 i 1200 px, na wszystkich dziesięciu
+adresach - nie szacowane z CSS-a.
+
+**Druga uwaga o metodzie: wysokości stron mierz na buildzie, nie na `dev`.** Na `npm run dev`
+blok „Co u nas słychać” pokazuje dwa wymyślone posty z `facebook-fixture.ts`, a produkcja stoi
+na stanie pustym - różnica to 1 627 px kontra 385 px na telefonie, czyli 1 240 px całej strony
+głównej. Liczby o stronie głównej w tej sekcji pochodzą z `preview`.
+
+**Uwaga o metodzie, bo inaczej liczby nie zgadzają się z telefonem.** Przeglądarka testowa
+rezerwuje 15 px na pasek przewijania (`scrollbar-gutter: stable` w `global.css`), więc okno
+360 px daje 345 px treści. Tam, gdzie liczyła się prawdziwa szerokość telefonu, okno
+ustawiano o te 15 px szersze - 335 px okna to 320 px układu.
+
+### Co było dobrze i nie wymagało niczego
+
+Warto to zapisać, żeby nikt tego nie „poprawiał":
+
+- **Zero poziomego przewijania** na wszystkich dziesięciu stronach przy 320 i 360 px
+  (`scrollWidth === clientWidth`), poza panelem menu opisanym niżej.
+- **Pasek zgody sam rezerwuje sobie miejsce.** `src/scripts/consent.ts` ustawia
+  `body { padding-block-end }` na własną wysokość i pilnuje tego `ResizeObserver`-em. Pasek ma
+  204 px przy 360 px (28% ekranu), ale **nie zasłania ani jednego linku w stopce** - zmierzone
+  na dole `/kontakt/`: zero zasłoniętych elementów.
+- **Cele dotykowe** poza wyjątkami niżej: kropki karuzeli Facebooka mają 8 px, ale
+  `::after { inset: -8px }` robi z nich 24 px; tiki galerii 44x44; numery telefonu 44;
+  przyciski filtrów i sterowania pokazem 44.
+- **Karuzela Facebooka jest zrobiona pod kciuk**: swipe plus kropki, a strzałki pojawiają się
+  tylko przy `(hover: hover) and (pointer: fine)`, czyli nigdy tam, gdzie zaczyna się gest.
+- **Obrazy**: 111 sztuk na stronie głównej, z tego 2 ładowane od razu (hero z
+  `fetchpriority="high"`), reszta `lazy`. Sprawdzono osobno, czy 68 ukrytych klatek pokazu nie
+  ściąga się hurtowo, kiedy sekcja wejdzie w kadr - **nie ściąga się**: po 7 sekundach pobrane
+  były 4 z 69.
+- Siatki w całym projekcie stoją na `minmax(min(100%, X), 1fr)`, więc klasyczne przepełnienie
+  siatki nie występuje nigdzie.
+
+### Co było zepsute
+
+**1. Pasek miniatur na `/inspiracje/` był zgnieciony do 2 px.**
+
+Największa usterka audytu i jedyna widoczna **na każdej szerokości**, nie tylko na telefonie.
+`.rail ul` jest przewijany w poziomie, ale jego `li` miały domyślne `flex-shrink: 1`, więc
+dwadzieścia trzy miniatury **dzieliły się szerokością kontenera zamiast go przepełnić**
+i poprosić o pasek przewijania. Dobijało to `img { max-width: 100% }` z `global.css`, które
+w takiej sytuacji wygrywa z `width: 96px` w `.thumb img`.
+
+|                                    | przed                        | po                        |
+| ---------------------------------- | ---------------------------- | ------------------------- |
+| `.thumb` przy 320 px               | 2x130 px                     | 98x130 px                 |
+| `.thumb` przy 1280 px              | 40x130 px                    | 98x130 px                 |
+| `rail.scrollWidth` / `clientWidth` | 265 / 265 - brak przewijania | 2465 / 305 - przewija się |
+
+Naprawa to jedna deklaracja, `.rail li { flex: none }`. Dla porównania `.panel` w tym samym
+pliku ma poprawne `flex: 0 0 min(100%, 980px)` od początku - przy railu po prostu tego
+zabrakło.
+
+**2. Pasek zdjęć stał na telefonie w jednej kolumnie, a `sizes` obiecywało dwie.**
+
+Dwie usterki naraz i jedna przyczyna. `minmax(min(100%, 200px), 1fr)` potrzebuje 432 px treści
+na dwie kolumny (2x200 plus 32 px `--gap-cards`), a najszerszy telefon daje około 390 - więc
+**każdy telefon dostawał jedną kolumnę**. Tymczasem `sizes` deklarowało `45vw`, czyli układ
+dwukolumnowy: przeglądarka liczyła 162 px, przy DPR 2 prosiła o 324 px, dostawała plik 360w
+i wstawiała go w ramkę o 305 px CSS - **1,7x rozciągnięcia na każdym zdjęciu każdej strony
+kategorii**.
+
+Podłoga kolumny jest teraz `clamp(120px, 30vw, 200px)`. 30vw dochodzi do 200 px przy oknie
+667 px, więc **powyżej tej szerokości nie zmienia się nic** - sprawdzone: 768 px nadal trzy
+kolumny, 1200 px nadal cztery po 228 px. Poniżej podłoga schodzi ze szerokością ekranu i siada
+na swoim minimum 120 px koło 400 px, co kupuje drugą kolumnę aż do 320 px włącznie.
+
+|                               | przed                               | po                     |
+| ----------------------------- | ----------------------------------- | ---------------------- |
+| kolumny przy 320 px układu    | 1 (265 px)                          | 2 (124 px)             |
+| kolumny przy 360 px układu    | 1 (305 px)                          | 2 (144 px)             |
+| pasek na `/chryzantemy/`      | 8 741 px                            | 2 208 px               |
+| pasek na `/kwiaty-balkonowe/` | 10 496 px                           | 2 536 px               |
+| cała strona `/chryzantemy/`   | 14 240 px                           | 7 638 px               |
+| plik do ramki przy DPR 2      | 360w na 610 px - rozciągnięcie 1,7x | 360w na 288 px - ostro |
+
+Na `/chryzantemy/` pasek zajmował **61% całej strony** przy trzech wpisach roślin. Po zmianie
+strona jest o 46% krótsza, a zdjęcia ostre.
+
+Żadnego breakpointu nie dodano - decyduje wartość w `minmax()`, czyli dokładnie to, o co prosi
+reguła układu płynnego w `CLAUDE.md`. Obie skrajności clampa są wybrane, nie zgadnięte: płaskie
+140 px zostawia najwęższe telefony w jednej kolumnie, płaskie 120 px wpuszcza trzecią kolumnę
+na ekran 500 px (ramki po 129 px), a na szerokim końcu - piątą kolumnę na pasmo 1200 px.
+
+**3. Mapa Google przechwytywała przewijanie palcem.**
+
+`.map__frame iframe` nie miał `touch-action`, więc pionowy gest zaczęty na mapie - a mapa jest
+pełnej szerokości i ma około 230 px wysokości na telefonie, na dwóch stronach: `/kontakt/`
+i bloku dojazdu na stronie głównej - trafiał do Google Maps i panoramował mapę zamiast przewinąć
+stronę. Teraz `touch-action: pan-y`: pion wraca do strony, a szczypanie, przeciąganie w poziomie
+i własne kontrolki mapy zostają przy mapie. **To jedyne ustalenie audytu wymagające jeszcze
+sprawdzenia na prawdziwym telefonie** - Playwright nie emuluje gestów wewnątrz iframe'a.
+
+**4. Pole dotyku „Pokaż więcej" w karcie Facebooka było zaczepione do złego pudełka.**
+
+Komentarz przy `.post__expand::after` obiecuje 44 px pola dotyku bez wydawania 44 px wiersza,
+ale sam przycisk nie miał `position: relative`, więc absolutnie pozycjonowane pudełko wisiało
+na `.post__textwrap` - najbliższym pozycjonowanym przodku. Zmierzone: `inset` wyliczało się na
+`88.875px 0px -11.2px` względem tego wrappera. **Trafiało w przycisk mimo to**, bo przycisk
+jest ostatnim dzieckiem wrappera - czyli cel miał właściwe 44 px, będąc zaczepionym do złego
+elementu, i zszedłby z przycisku tego dnia, w którym ktoś dołożyłby coś pod nim. Po dodaniu
+`position: relative` `inset` wylicza się na `-11.9px 0 -11.2px` **względem przycisku**, a pole
+dotyku jest 44-pikselowe z konstrukcji, nie z przypadku.
+
+Warto odnotować, czym to **nie** było: pudełko przycisku ma 76x22 px i pierwsze podejście do
+audytu zapisało je jako złamanie WCAG 2.5.8. Sprawdzenie `elementFromPoint` w siatce punktów
+pokazało, że pole dotyku sięga ±14 px od środka, czyli 24 px jest z zapasem spełnione. Usterką
+było zaczepienie, nie rozmiar.
+
+**5. Pasek zgody stał na kolorze sprzed motywu 2a.**
+
+`rgb(35 40 31 / 92%)` to **stare** `--ink` (#23281F), więc po przejściu palety na #1F2A21 pasek
+po cichu przestał pasować do stopki, którą cytuje - dokładnie ten sam błąd, który `global.css`
+opisuje jako naprawiony w lightboksie. Teraz `color-mix(in srgb, var(--ink) 92%, transparent)`
+z tym samym pełnokrytym fallbackiem pod spodem. Przy okazji `border-top` dostał `--footer-rule`,
+który jest co do wartości tym samym `rgb(238 240 230 / 18%)`.
+
+**6. Brakowało `<meta name="theme-color">`.**
+
+Pasek adresu Androida i obszar statusu iOS zostawały przy domyślnej szarości wokół ciepłej
+strony. Wartość to `--paper` przepisane ręcznie - `<meta>` nie czyta CSS-a - i jest to jedyne
+miejsce w projekcie, gdzie token jest kopiowany, a nie referencjonowany. Zapisane przy tagu
+i w `CLAUDE.md`, bo nic w buildzie tego nie pilnuje.
+
+**7. Panel „Oferta" wychodzi poza prawą krawędź przy ~320 px - zostawione świadomie.**
+
+Zmierzone przy oknie 320x640: po otwarciu panelu `scrollWidth` 312 przy `clientWidth` 305,
+panel zajmuje 136..312 px. `max-width: calc(100vw - 2rem)` tego nie łapie, bo to problem
+**pozycji**, nie szerokości: panel jest centrowany na własnym `<summary>` (`left: 50%`
+plus `translateX(-50%)`), a „Oferta" ląduje przy prawej krawędzi w zawiniętym pasku. Przy
+360 px panel mieści się z zapasem (106..282).
+
+Nie naprawione, bo każde pełne rozwiązanie CSS-owe jest zmianą widoczną dla właścicieli:
+zakotwiczenie panelu do paska zamiast do przycisku sprawia, że na desktopie panel przestaje
+wskazywać własny przycisk. Trzecia droga - korekta pozycji w `src/scripts/nav.ts` - odpada
+z zasady zapisanej w `CLAUDE.md`: ten plik tylko _zamyka_ panel i układ nie może od niego
+zależeć. Usterka dotyczy najwęższych telefonów i wynosi 7 px. **Do decyzji właścicieli.**
+
+### Do przejrzenia z właścicielami
+
+Wszystko poniżej jest zmierzone i wszystko jest ich decyzją, nie naszą - skala typografii,
+układ i długość stron są w `CLAUDE.md` zastrzeżone jako ustalenia klienta.
+
+| Rzecz                          | Pomiar                                                                                                                                                                                                                                                                                                       |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Wysokość nagłówka na telefonie | 234 px przy 360 px; **282 px przy 320 px, czyli 44% ekranu** - trzy kondygnacje plus menu zawijające się do trzech rzędów                                                                                                                                                                                    |
+| Etykiety wersalikowe           | tagline 10,24 px; `.entry__group` 9,6 px; `.facts dt` i `.intro__facts dt` 9,92 px; menu 12,48 px                                                                                                                                                                                                            |
+| `/kwiaty-balkonowe/`           | 45 875 px po skróceniu paska (było 53 834) - wciąż około 62 ekranów; sam spis „Na tej stronie" to 1 357 px, czyli dwa ekrany przed pierwszą rośliną                                                                                                                                                          |
+| Strona główna                  | 9 168 px na buildzie przy 360 px: hero 1 261, aktualności 385, kalendarz 1 688, oferta 1 358, inspiracje 1 234, zdjęcia 1 118, dojazd 757, stopka 930. **Aktualności urosną o ~1 240 px w dniu, w którym feed ruszy** - na `npm run dev` z dwoma postami z fixture ten blok ma 1 627 px, a strona 10 431 px. |
+| Lightbox na telefonie          | powiększa z 305 px do najwyżej 345 px (+13%) - daje brak kadrowania, nie rozmiar; bez szczypania do zoomu                                                                                                                                                                                                    |
+| Przycisk „Zadzwoń"             | tylko w hero, na dole stron kategorii i na `/kontakt/` - przy stronie długiej na 45 000 px nie ma go w zasięgu kciuka                                                                                                                                                                                        |
+| Panel „Oferta" przy 320 px     | usterka z punktu 7 wyżej                                                                                                                                                                                                                                                                                     |
+
+Nic z tej tabeli nie zostało ruszone.
 
 ## Czego nadal brakuje
 

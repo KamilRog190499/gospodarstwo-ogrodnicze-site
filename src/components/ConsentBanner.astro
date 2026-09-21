@@ -35,9 +35,16 @@
     inset-inline: 0;
     bottom: 0;
     z-index: 100;
-    background: rgb(35 40 31 / 92%);
+    /* The same ground as the lightbox, and derived from the token for the same reason it is
+       derived there: this was written out as `rgb(35 40 31 / 92%)`, which is the **old** --ink
+       (#23281F), so when the 2a theme moved --ink to #1F2A21 the bar quietly stopped matching
+       the footer it is meant to belong to. The fallback on the line above is the same token at
+       full opacity, for browsers without color-mix - worse looking, but never a see-through bar
+       over a scrolling page. */
+    background: var(--ink);
+    background: color-mix(in srgb, var(--ink) 92%, transparent);
     color: var(--footer-body);
-    border-top: 1px solid rgb(238 240 230 / 18%);
+    border-top: 1px solid var(--footer-rule);
     padding: 0.9rem var(--edge);
     display: flex;
     flex-wrap: wrap;

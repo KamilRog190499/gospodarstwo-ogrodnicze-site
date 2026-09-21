@@ -736,6 +736,8 @@ if (post.shares !== null && post.shares > 0) {
   .post__expand {
     appearance: none;
     justify-self: start;
+    /* The containing block for the tap target below - see the note there. */
+    position: relative;
     background: transparent;
     border: 0;
     padding: 0.15rem 0;
@@ -755,7 +757,16 @@ if (post.shares !== null && post.shares > 0) {
 
   /* The tap target, spread to 44px without spending 44px of the row. The row is shared across
      the cards, so every pixel this costs is a pixel of nothing in any card that has no
-     button. */
+     button.
+
+     **`position: relative` above is what makes that true, and until September 2026 it was
+     missing.** Without it the absolutely positioned box below hangs off `.post__textwrap`, the
+     nearest positioned ancestor, instead of off the button: measured on a phone, `inset`
+     resolved to `88.875px 0px -11.2px` of the wrap. It happened to land over the button anyway,
+     because the button is the last thing in that wrap - so the target measured right while being
+     anchored to the wrong box, and would have moved off the button the day anything was added
+     under it. Anchored to the button, the 44px box sits 11px below its baseline and covers it
+     by construction. */
   .post__expand::after {
     content: "";
     position: absolute;

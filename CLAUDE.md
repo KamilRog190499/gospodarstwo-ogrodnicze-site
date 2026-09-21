@@ -292,6 +292,16 @@ plus manual viewport checks.
     this site, a breakpoint is still the wrong answer.
 - **Design tokens go in `src/styles/tokens.css`**; components must not hardcode colours or
   spacing.
+  - **One value is copied rather than referenced, and it is `<meta name="theme-color">` in
+    `BaseLayout.astro`**, added September 2026 so a phone paints its address bar in the page's
+    own paper instead of its default grey. A `<meta>` cannot read a custom property, so `#FAF7F0`
+    is written out there; it is `--paper` and has to move with it, and nothing in the build would
+    catch it if it did not. That is the whole of the exception - a colour anywhere a stylesheet
+    can reach still comes from a token.
+  - The September 2026 mobile audit found one stale hardcoded colour and fixed it: the consent
+    bar was still on `rgb(35 40 31 / 92%)`, the **pre-2a** `--ink`, so it had quietly stopped
+    matching the footer it quotes. It now derives from `--ink` through `color-mix` exactly as
+    `.lightbox` does, with the same full-opacity fallback underneath.
 - **Fonts are self-hosted**, as `@fontsource-variable/fraunces` (serif, with its italic - the
   masthead needs it) and `@fontsource-variable/public-sans` (sans). Nothing is fetched from a
   Google CDN at runtime. Fraunces replaced Newsreader in September 2026 on the owner's choice,
@@ -437,6 +447,16 @@ plus manual viewport checks.
   reading as an undifferentiated wall, and the answer then is a second strip rather than a
   shorter first one. `balconyStrip` is the longer of the two at 24 and carries the same risk,
   which is why its three buckets are ordered and argued the same way.
+  - **The row folds by a clamped floor, not by a fixed one, and the phone is the reason.** The
+    September 2026 mobile audit found the strip standing in **one** column on every phone -
+    `minmax(min(100%, 200px), 1fr)` needs 432 px of content for two and the widest phone offers
+    about 390 - which made the strip 10 496 px on `/kwiaty-balkonowe/` and 61% of the whole page
+    on `/chryzantemy/`, and made the `sizes` attribute a lie: it promised two columns, so the
+    browser fetched a 360w file for a 305 px frame and upscaled every photograph 1.7x at DPR 2.
+    The floor is now `clamp(120px, 30vw, 200px)`, which reaches 200 px at a 667 px viewport - so
+    **nothing above that moves**, the tablet still folds three and the 1200 px band still holds
+    four - and gives two columns down to a 320 px phone. No breakpoint was added: this is the
+    `minmax()` value doing the deciding, which is what the fluid-layout rule above asks for.
   - **The strip is lightboxed, and the entries deliberately are not.** Every frame in a
     `PhotoStrip` is an `<a data-lightbox>` around the thumbnail, reusing the same global
     `src/scripts/lightbox.ts` the slideshow uses - so with scripting off the link still opens the
@@ -515,16 +535,24 @@ plus manual viewport checks.
   home page's three dark plates do. A dark
   element on a light ground (`.cta`, `.skip`) does not need it - the 3px offset puts the ring
   on the paper around it.
-  - **The footer link rows are the one exception to 44 px, and the only place in the project
-    that writes a number instead of `var(--tap)`.** They are 32 px, on the owners' instruction
-    after seeing both. The rows had always sat on a 32 px pitch, so `--tap` widened the
-    columns' rhythm by half again and they reported it; 32 px puts the pitch back exactly
-    while still growing the target, because before this the tappable box was the ~18 px inline
-    box of the `<a>` rather than the 29 px row around it. WCAG 2.2 AA still holds - 2.5.8 asks
-    for 24x24 and the pitch clears it - and what is given up is 2.5.5, the AAA level the rest
-    of the site keeps. The argument is at `.footer__link` and in `docs/inwentaryzacja.md` under
+  - **The footer link rows are the one exception to 44 px that the owners asked for.** They are
+    32 px, on their instruction after seeing both. The rows had always sat on a 32 px pitch, so
+    `--tap` widened the columns' rhythm by half again and they reported it; 32 px puts the pitch
+    back exactly while still growing the target, because before this the tappable box was the
+    ~18 px inline box of the `<a>` rather than the 29 px row around it. WCAG 2.2 AA still holds -
+    2.5.8 asks for 24x24 and the pitch clears it - and what is given up is 2.5.5, the AAA level
+    the rest of the site keeps. The argument is at `.footer__link` and in `docs/inwentaryzacja.md` under
     "Stopka: cztery kolumny". Do not spread the number to another component, and do not
     "restore" the footer to `--tap` as a tidy-up: it is a client-visible change.
+    - **It is not the only number in the project, and this sentence used to say it was.** The
+      mobile audit of September 2026 found `.chip` in `Compositions.astro` at a flat 36 px - the
+      plant chips under every planting, 23 of them on `/inspiracje/` and every one a link - and
+      `Nav.astro` at 48 px on both the bar and the panel, which the rule above already names.
+      Only the footer's 32 px was ever put to the owners. The chips clear WCAG 2.2 AA (2.5.8
+      asks 24x24) and miss the AAA 44 px this site otherwise holds to, so they are left where
+      they are: raising them is a visible change to a block the owners have already signed off,
+      not a tidy-up. Recorded so that the next person to grep for a hardcoded tap target finds
+      the answer rather than the contradiction.
 - **The menu has one group, and it is a native `<details>`.** Six top-level entries, of which
   `Oferta` is a `NavGroup` in `src/data/navigation.ts` rather than a destination - there is no
   `/oferta/` page and there should not be one, because it would be a second copy of the home

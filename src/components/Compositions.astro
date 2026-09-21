@@ -802,6 +802,17 @@ const imageList =
     overscroll-behavior-x: contain;
   }
 
+  /* **The thumbnails must not shrink, and leaving that to the default is what broke this rail.**
+     `.rail ul` is a horizontal scroller, but a flex item starts at `flex-shrink: 1`, so twenty-three
+     `li` divided the container between them instead of overflowing it and asking for a scrollbar:
+     the strip measured 2px per thumbnail at 320px and 40px at 1280px, and `rail.scrollWidth` was
+     never greater than `rail.clientWidth`. The `width: 96px` below could not hold it, because
+     `img { max-width: 100% }` in global.css wins against it once the box around it collapses.
+     `.panel` in the track above has carried `flex: 0 0 …` all along for the same reason. */
+  .rail li {
+    flex: none;
+  }
+
   .rail li[hidden] {
     display: none;
   }

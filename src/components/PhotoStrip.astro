@@ -103,12 +103,33 @@ const previews = await Promise.all(
     color: var(--ink-grey);
   }
 
-  /* Four portrait frames across a full-width row, folding to two and then one as the
-     column would drop under 200px. No breakpoint decides that. */
+  /* Four portrait frames across a full-width row, folding to three and then two as the
+     column would drop under the floor. No breakpoint decides that.
+
+     **The floor is a clamp rather than a flat 200px, and the phone is why.** At 200px a phone
+     never got two columns - 2x200 plus the 32px `--gap-cards` needs 432px of content and the
+     widest phone offers about 390 - so every strip stood in **one** column: 24 frames measured
+     10 496px on `/kwiaty-balkonowe/` and 20 frames were 8 741px of the 14 240px page on
+     `/chryzantemy/`, which is 61% of a category page spent on one vertical wall of photographs.
+     The `sizes` attribute above was written for the two columns nobody was getting, so the
+     browser sized each frame at 45vw (162px at 360px, 324px at DPR 2), picked the 360w file and
+     drew it into a 305px box - a 1.7x upscale, on every photograph, on every phone.
+
+     The clamp gives the floor back its width where there is width to give. 30vw reaches the
+     200px ceiling at a 667px viewport, so **from there up nothing moves at all** - the tablet
+     still folds three across and the 1200px band still holds four. Below it the floor shrinks
+     with the screen and settles on its 120px minimum around 400px, which is what buys the second
+     column: 2x120 plus the gap needs 272px and a 320px phone offers 280px of content. Checked
+     across the range rather than at the ends - 320, 360, 400, 450, 500, 600 and 667 all give two,
+     768 gives three, 1200 gives four.
+
+     Neither end of the clamp is arbitrary. A flat 140px floor leaves the narrowest phones in one
+     column again; a flat 120px one lets a third column onto a 500px screen, where the frames come
+     out 129px wide. And a flat 120px on the wide end would put a fifth column on the 1200px band. */
   .strip__grid {
     display: grid;
     gap: var(--gap-cards);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, clamp(120px, 30vw, 200px)), 1fr));
   }
 
   /* The link is the frame: block-level so the 1px rule below sits where the photograph does,

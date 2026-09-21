@@ -156,6 +156,15 @@ const breadcrumbs =
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      /* The colour the phone paints its own chrome with - the address bar on Android, the
+        status area on iOS - so the browser stops framing a warm page in its default grey.
+        **This is --paper written out, and it is the one place in the project where a token is
+        copied rather than referenced**, because `<meta>` cannot read CSS. It has to move with
+        `--paper` in src/styles/tokens.css; there is no build step that would catch it if it
+        does not. Not a `media` pair - this site has one theme and no dark mode. */
+    }
+    <meta name="theme-color" content="#FAF7F0" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
