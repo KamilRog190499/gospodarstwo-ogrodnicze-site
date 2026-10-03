@@ -54,22 +54,22 @@ import { facebook } from "../data/contact";
  *   post with no text, or a share of somebody else's, is ordinary on Facebook, and at three
  *   cards one dud is a third of the section while at two it is half. If the feed turns out to
  *   be full of them, that is the reason to go back to three - not the rhythm.
- * - **An empty snapshot still renders the section**, with a different lead and no cards. That
+ * - **An empty snapshot still renders the section**, with the same lead and no cards. That
  *   is where this parts company with the sibling site, which hides the block entirely. It is
  *   the owners' call: they wanted a block that is always on the page, saying where the news
- *   lives. It invents no news - the empty lead says only that they post on Facebook and that
- *   new posts land here, and it keeps the link the populated state also carries.
+ *   lives. It invents no news, and it keeps the link the populated state also carries.
  *
  *   **It covers an empty snapshot only, and no longer a stale one.** A fuse in
  *   `src/data/facebook.ts` used to drop the section into this state once the newest post
  *   passed 60 days; the owners had it removed in September 2026, so the two latest posts now
- *   stand whatever their date. The empty lead is therefore what ships before the first
+ *   stand whatever their date. The empty state is therefore what ships before the first
  *   successful refresh, and nothing else.
  *
- *   **Both leads, the overline and the heading are our words, not the owners'**, and are on
- *   their review list in docs/inwentaryzacja.md together. The populated one was cut to its
- *   first clause in September 2026 on the owner's instruction - it used to carry "- co właśnie
- *   kwitnie i co jest w sprzedaży", which the posts underneath say better than a lead can.
+ *   **One lead, not two, since October 2026.** The empty state used to carry three sentences of
+ *   its own ("Najświeższe wiadomości piszemy…") and the populated one a shorter line; the
+ *   owner had both replaced with "Aktualne posty z naszego Facebooka." - no poem. The lead,
+ *   the overline and the heading are our words, not the owners', and are on their review list
+ *   in docs/inwentaryzacja.md.
  */
 
 /** Two is the whole row - see the note above. `scripts/fetch-facebook.mjs` keeps exactly two,
@@ -81,13 +81,7 @@ const posts = facebookPosts.slice(0, 2);
   <div class="news__head">
     <p class="eyebrow news__eyebrow">Bądź na bieżąco</p>
     <h2 class="news__title" id="aktualnosci-title">Co u nas słychać</h2>
-    <p class="news__lead">
-      {
-        posts.length > 0
-          ? "Ostatnie wpisy z naszego profilu na Facebooku."
-          : "Najświeższe wiadomości piszemy na naszym profilu na Facebooku - co właśnie kwitnie i co jest w sprzedaży. Gdy pojawi się tam nowy wpis, trafia także tutaj."
-      }
-    </p>
+    <p class="news__lead">Aktualne posty z naszego Facebooka.</p>
   </div>
 
   {

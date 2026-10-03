@@ -73,6 +73,21 @@ import { nbsp } from "../utils/typography";
  * comment. Nothing else changes. The request is on the owners' list in
  * `docs/inwentaryzacja.md`.
  *
+ * ## Why one width
+ *
+ * The owner reported this photograph as very low quality in October 2026, and the arithmetic
+ * was against it. `cover` draws a 4:3 file into a 4:5 box at **5/3 of the box's width** - a
+ * 480px frame paints the picture 800 CSS px wide - but `sizes` used to describe the box, not
+ * the picture. So a desktop at DPR 1 was handed the 720w candidate (63 kB) and upscaled it,
+ * and a phone fared little better.
+ *
+ * So there is one candidate, the file's full width - even a 360px phone draws this picture
+ * about 600 CSS px wide, so nothing smaller is ever the right file. **The quality stays on the
+ * site-wide ladder** in `astro.config.mjs`: AVIF 55 and 80 were measured against 40 at this
+ * width and looked no sharper, at 306 and 596 kB against 191. The softness was the width, not
+ * the encoder. What is left is the source: at DPR 2 the 480px frame wants about 1600px and the
+ * file has 1448. Only a larger, real portrait frame closes that gap.
+ *
  * `loading="eager"` and `fetchpriority="high"` - this is the home page's LCP and there is no
  * point pretending otherwise.
  */
@@ -98,9 +113,9 @@ import { nbsp } from "../utils/typography";
             aria-hidden="true"
             focusable="false"
           >
-            <path d="M1 15C7 14 13.2 10.2 21 1.6" />
-            <path d="M21 1.6c-4 .6-6.6 2.6-7.2 6.2 4-.4 6.6-2.4 7.2-6.2Z" />
-            <path d="M12.4 10.4c-3-2-4.2-4.9-3.4-8.2 3 1.9 4.2 4.8 3.4 8.2Z" />
+            <path d="M1 15C7 14 13.2 10.2 21 1.6"></path>
+            <path d="M21 1.6c-4 .6-6.6 2.6-7.2 6.2 4-.4 6.6-2.4 7.2-6.2Z"></path>
+            <path d="M12.4 10.4c-3-2-4.2-4.9-3.4-8.2 3 1.9 4.2 4.8 3.4 8.2Z"></path>
           </svg></span
         ></span
       >{" "}
@@ -124,7 +139,7 @@ import { nbsp } from "../utils/typography";
         <svg class="intro__handset" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path
             d="M6.4 3h3l1.5 4-2 1.5a12 12 0 0 0 5.6 5.6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.4 5.2 2 2 0 0 1 6.4 3Z"
-          />
+          ></path>
         </svg>
       </a>
       <a class="cta-line" href="/kwiaty-balkonowe/">Zobacz ofertę</a>
@@ -137,9 +152,9 @@ import { nbsp } from "../utils/typography";
     }
     <div class="intro__divider" aria-hidden="true">
       <svg class="intro__sprig intro__sprig--divider" viewBox="0 0 24 16" focusable="false">
-        <path d="M1 15C7 14 13.2 10.2 21 1.6" />
-        <path d="M21 1.6c-4 .6-6.6 2.6-7.2 6.2 4-.4 6.6-2.4 7.2-6.2Z" />
-        <path d="M12.4 10.4c-3-2-4.2-4.9-3.4-8.2 3 1.9 4.2 4.8 3.4 8.2Z" />
+        <path d="M1 15C7 14 13.2 10.2 21 1.6"></path>
+        <path d="M21 1.6c-4 .6-6.6 2.6-7.2 6.2 4-.4 6.6-2.4 7.2-6.2Z"></path>
+        <path d="M12.4 10.4c-3-2-4.2-4.9-3.4-8.2 3 1.9 4.2 4.8 3.4 8.2Z"></path>
       </svg>
     </div>
     {
@@ -169,8 +184,8 @@ import { nbsp } from "../utils/typography";
       src={heroPhoto.src}
       formats={["avif", "webp"]}
       fallbackFormat="jpg"
-      widths={[720, 1448]}
-      sizes="(min-width: 1200px) 620px, (min-width: 700px) 42vw, 92vw"
+      widths={[1448]}
+      sizes="(min-width: 1200px) 800px, 100vw"
       width={1448}
       height={1086}
       alt={heroPhoto.alt}

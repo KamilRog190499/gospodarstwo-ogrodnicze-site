@@ -688,9 +688,10 @@ plus manual viewport checks.
   and one that has been wiped since.
   It renders on the strength of the owners' decision alone - until September 2026 it was also
   load-bearing, as the light band between two dark plates, and the block moved to the top of the
-  page that month with `GalleryShow` taking over that job. The empty state claims no news, only
-  that the owners post on Facebook and that new posts land here. Both leads, the overline and
-  the heading are our words and are on the owners' review list.
+  page that month with `GalleryShow` taking over that job. The empty state claims no news: it
+  carries the same one-line lead as the populated one ("Aktualne posty z naszego Facebooka.",
+  October 2026, on the owner's instruction) and the link to the profile. The lead, the overline
+  and the heading are our words and are on the owners' review list.
   - **`src/data/facebook-fixture.ts` must never reach a build.** It is invented copy printed
     under the owners' own page name, and `facebook.ts` lets it in only under
     `import.meta.env.DEV`. Relaxing that into a plain fallback would publish sentences they

@@ -9,18 +9,30 @@
  * Accept and reject are visually identical on purpose. A refusal that is harder to find
  * than an agreement is not a choice, and the law that requires the question also requires
  * that the two answers cost the same.
+ *
+ * **The wording is the sibling site's, word for word** (alpaki-kazimierzdolny.pl), on the
+ * owner's instruction in October 2026 - the title, the paragraph and "Akceptuję". Every claim
+ * in it was checked against this site before it was copied: no statistics and no cookies of our
+ * own (the decision lives in `localStorage`), the map is the only third-party element (the
+ * Facebook block is self-hosted - § 5 of the privacy policy), and "Ustawienia mapy" in the
+ * footer is where the consent is withdrawn. If any of the three stops being true, this text
+ * becomes false, not merely different from the sibling's.
  */
 ---
 
-<aside id="consent" class="consent" hidden aria-label="Zgoda na mapę Google">
-  <p class="consent__text">
-    Mapa dojazdu pochodzi z Google. Jej wyświetlenie przekazuje Google Twój adres IP i pozwala na
-    zapisanie plików cookies. Bez zgody mapa się nie wczyta. Szczegóły opisuje <a
-      href="/polityka-prywatnosci/">polityka prywatności</a
-    >.
-  </p>
+<aside id="consent" class="consent" hidden aria-label="Zgoda na treści zewnętrzne">
+  <div class="consent__text">
+    <p class="consent__title">Mapa Google i pliki cookie</p>
+    <p>
+      Ta strona nie prowadzi statystyk i nie zapisuje własnych plików cookie. Jedynym elementem
+      zewnętrznym jest mapa dojazdu Google - jej wyświetlenie przekazuje tej firmie Państwa adres IP
+      i pozwala jej zapisać własne pliki cookie. Zgodę można wycofać w stopce; szczegóły opisuje <a
+        href="/polityka-prywatnosci/">polityka prywatności</a
+      >.
+    </p>
+  </div>
   <div class="consent__actions">
-    <button type="button" data-consent="accept">Zgadzam się</button>
+    <button type="button" data-consent="accept">Akceptuję</button>
     <button type="button" data-consent="reject">Odrzucam</button>
   </div>
 </aside>
@@ -68,6 +80,18 @@
     max-width: 72ch;
     flex: 1 1 22rem;
     color: var(--footer-body);
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  /* An overline, so it is ochre - the one place that accent is allowed (CLAUDE.md), and on a
+     dark ground the lit variant, as on the footer. */
+  .consent__title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ochre-lit);
   }
 
   /* Not the prose green of `.copy a`: this ground is dark, and --green-lit is the accent the

@@ -30,17 +30,34 @@
  *  that decides how many fit, a tick per row would be anything from 19 to 69 squares; three
  *  jumps - beside a count that says where in the nineteen you are - say more and take one line.
  *
- *  ## Sixty-nine photographs, three rows mounted
+ *  ## Sixty-nine photographs, four rows mounted
  *
  *  Every frame is in the markup, which is what makes the no-script fallback complete - and if
  *  all 69 were laid out at once the browser would fetch all 69 the moment the section scrolled
  *  into view, because `loading="lazy"` measures intersection and they all share one grid cell.
- *  So everything outside **the row before, the row showing and the row after** is `hidden`, and
- *  an image inside `display: none` is never fetched. The row after is mounted but transparent,
- *  which is what fetches it in time to be faded in rather than to appear blank; and because it
- *  is already mounted, the fade has a previous computed style to transition from. A jump
- *  straight to a group the ticks were not next to appears without a fade, which is the right
- *  answer to a deliberate action.
+ *  So everything outside **the row before, the row showing and the two rows after** is
+ *  `hidden`, and an image inside `display: none` is never fetched. The rows after are mounted
+ *  but transparent, which is what fetches them in time to be faded in rather than to appear
+ *  blank; and because they are already mounted, the fade has a previous computed style to
+ *  transition from. A jump straight to a group the ticks were not next to appears without a
+ *  fade, which is the right answer to a deliberate action.
+ *
+ *  ## Why it no longer stutters
+ *
+ *  The owner reported the show as sluggish and often stuck in October 2026, and three things
+ *  in the old version earned it:
+ *
+ *  - **The row being replaced jumped to the first column** the instant the next one was
+ *    called, then faded out there - a visible lurch on every advance. It now keeps its column
+ *    until it is gone.
+ *  - **It faded out while the new row was still fading in**, so for a moment both were half
+ *    transparent and the paper showed through: a blink between every two rows. The outgoing
+ *    frame now stays opaque, underneath, until the frame replacing it has finished - a
+ *    crossfade, column by column.
+ *  - **It advanced on a clock whether or not the next row had arrived**, so on a slow phone a
+ *    row faded in blank and popped in later. The advance now waits for the next row's
+ *    photographs to be decoded (up to one more interval), and mounting two rows ahead means
+ *    that wait is almost always already over.
  *
  *  ## What was and was not carried over
  *
@@ -57,8 +74,9 @@
  *  - **No arrows on the photograph.** The old slider floats them over the picture; this site
  *    puts no text or control on a photograph, so the controls sit underneath, as the lightbox's
  *    do.
- *  - **3 seconds becomes 6.** Three is faster than a row of four can be looked at, and it is
- *    the interval the plantings slideshow next door already runs at.
+ *  - **3 seconds becomes 4.** Three is faster than a row of four can be looked at. It was 6
+ *    until October 2026, the interval the plantings slideshow runs at, and the owner found
+ *    that too slow for a show of this many photographs.
  *
  *  The rules it shares with `compositions.ts`, because two shows on one site that behaved
  *  differently would be worse than either behaviour alone: it pauses on hover and on focus,
@@ -83,7 +101,10 @@ function initShow(root: HTMLElement): void {
   const groupLabel = root.querySelector<HTMLElement>("[data-show-label]");
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const INTERVAL = 6000;
+  const INTERVAL = 4000;
+  /** The fade, in milliseconds. Written to `--show-fade` by `applyMotionPreference`, and read
+   *  here too because the outgoing frame waits for the incoming one to finish. */
+  let fade = 600;
   /** The narrowest a portrait frame may get before the row drops one. Measured against the
    *  track's own width and its gap, not against the viewport - the section sits inside `--edge`
    *  and the gap is a `clamp`, so a viewport number would be wrong at both ends. */
@@ -92,9 +113,14 @@ function initShow(root: HTMLElement): void {
    *  strips already settled as the floor. */
   const MAX_PER_ROW = 4;
   /** How far apart the frames of one row start fading. */
-  const CASCADE_STEP = 90;
+  const CASCADE_STEP = 120;
 
-  let timer: ReturnType<typeof setInterval> | null = null;
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  /** Bumped by every pause, so an advance that was waiting for photographs to decode can tell
+   *  that it has been called off in the meantime. */
+  let generation = 0;
+  /** The row that was on screen before this one - the frames that are fading out. */
+  let previousRow: number[] = [];
   /** True once the visitor has taken over. The show does not restart itself. */
   let stopped = reducedMotion.matches;
   let onScreen = true;
@@ -158,12 +184,15 @@ function initShow(root: HTMLElement): void {
 
   function render(): void {
     const showing = rows[current] ?? [];
-    // The row before and the row after stay mounted: the one after so its photographs are
-    // fetched before they are needed, the one before so it has somewhere to fade from.
+    // The row before and the two after stay mounted: the ones after so their photographs are
+    // fetched and decoded before they are needed, the one before - and whatever was last on
+    // screen - so it has somewhere to fade from.
     const mounted = new Set([
+      ...previousRow,
       ...(rows[(current - 1 + rows.length) % rows.length] ?? []),
       ...showing,
       ...(rows[(current + 1) % rows.length] ?? []),
+      ...(rows[(current + 2) % rows.length] ?? []),
     ]);
 
     // Half-columns of free space to the left of a short row, so it sits in the middle of the
@@ -173,10 +202,23 @@ function initShow(root: HTMLElement): void {
     for (const [at, slide] of slides.entries()) {
       const column = showing.indexOf(at);
       const isShowing = column !== -1;
+      const leaving = isShowing ? -1 : previousRow.indexOf(at);
       slide.hidden = !mounted.has(at);
-      // The hidden frames stack on the first two half-columns underneath the row on screen.
-      slide.style.gridColumn = `${isShowing ? offset + 1 + column * 2 : 1} / span 2`;
-      slide.style.transitionDelay = isShowing ? `${column * CASCADE_STEP}ms` : "0ms";
+      if (isShowing) {
+        slide.style.gridColumn = `${offset + 1 + column * 2} / span 2`;
+        slide.style.transitionDelay = `${column * CASCADE_STEP}ms`;
+        slide.style.zIndex = "2";
+      } else if (leaving !== -1) {
+        // Stays where it was and stays opaque, underneath, until the frame taking its column
+        // has finished fading in - so the paper never shows through between two rows.
+        slide.style.transitionDelay = `${leaving * CASCADE_STEP + fade}ms`;
+        slide.style.zIndex = "1";
+      } else {
+        // The waiting frames stack on the first two half-columns underneath the row on screen.
+        slide.style.gridColumn = "1 / span 2";
+        slide.style.transitionDelay = "0ms";
+        slide.style.zIndex = "0";
+      }
       slide.toggleAttribute("data-current", isShowing);
       // Keeps the mounted-but-invisible frames out of the tab order and out of the
       // accessibility tree while leaving them in the DOM. `querySelectorAll` still finds every
@@ -194,6 +236,7 @@ function initShow(root: HTMLElement): void {
       const label = slides[showing[0] ?? 0]?.dataset.groupLabel;
       if (label) groupLabel.textContent = label;
     }
+    previousRow = showing;
   }
 
   function show(index: number): void {
@@ -201,9 +244,34 @@ function initShow(root: HTMLElement): void {
     render();
   }
 
+  /** Resolves once every photograph of a row is decoded, or after `limit` ms, whichever comes
+   *  first - a file that never arrives must not hold the show up for good. */
+  function ready(index: number, limit: number): Promise<void> {
+    const images = (rows[index] ?? []).flatMap((at) => [
+      ...(slides[at]?.querySelectorAll<HTMLImageElement>("img") ?? []),
+    ]);
+    return Promise.race([
+      Promise.all(images.map((image) => image.decode().catch(() => undefined))).then(() => {}),
+      new Promise<void>((resolve) => setTimeout(resolve, limit)),
+    ]);
+  }
+
+  /** One advance at a time, each scheduled by the last - a `setTimeout` chain rather than a
+   *  `setInterval`, because an advance may have to wait for its photographs. */
+  function schedule(): void {
+    const token = generation;
+    timer = setTimeout(async () => {
+      const target = (current + 1) % rows.length;
+      await ready(target, INTERVAL);
+      if (token !== generation) return;
+      show(target);
+      schedule();
+    }, INTERVAL);
+  }
+
   function start(): void {
     if (stopped || timer !== null || !onScreen) return;
-    timer = setInterval(() => show(current + 1), INTERVAL);
+    schedule();
     toggle?.setAttribute("aria-pressed", "false");
     if (toggle) toggle.textContent = "Zatrzymaj";
   }
@@ -211,8 +279,9 @@ function initShow(root: HTMLElement): void {
   /** Temporary - hovering out or blurring resumes. */
   function pause(): void {
     if (timer === null) return;
-    clearInterval(timer);
+    clearTimeout(timer);
     timer = null;
+    generation += 1;
   }
 
   /** Permanent, until the visitor presses play again. */
@@ -283,7 +352,8 @@ function initShow(root: HTMLElement): void {
    *  this is not a media query. Reduced motion also means no automatic advance and no control
    *  offering to start one, the same bargain `compositions.ts` strikes. */
   function applyMotionPreference(): void {
-    root.style.setProperty("--show-fade", reducedMotion.matches ? "0ms" : "420ms");
+    fade = reducedMotion.matches ? 0 : 600;
+    root.style.setProperty("--show-fade", `${fade}ms`);
     if (reducedMotion.matches) {
       pause();
       stopped = true;

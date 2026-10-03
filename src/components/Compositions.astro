@@ -358,8 +358,12 @@ const imageList =
   }
 </section>
 <style>
+  /* **No `border-top`, and that is a fix rather than an omission.** On `/inspiracje/` this is
+     the first section, directly under the header's own `border-bottom`, and the two 1px rules
+     stacked into a 2px line under the menu that no other page had - the owner reported it in
+     October 2026. Same defect, same answer as `.history` and `.news`: the header draws the edge.
+     On the home page the band is dark and the colour change is the edge. */
   .comp {
-    border-top: 1px solid var(--rule);
     padding: var(--pad-section) var(--edge);
     display: grid;
     gap: 1.25rem;
@@ -387,8 +391,6 @@ const imageList =
      for. */
   .comp--dark {
     background: var(--green-band);
-    /* The colour change is the edge; a rule on top of it would draw a seam. */
-    border-top-color: var(--green-band);
     /* Set explicitly, and this is the one thing the token remapping below cannot do for it.
        `color` is inherited: by the time it reaches this section it has already been resolved
        on `body` from the page-level --ink, so pointing --ink somewhere else here changes
