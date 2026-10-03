@@ -2629,6 +2629,7 @@ się co wzięło.
 | 0.27.3  | **Lead sekcji aktualności skrócony** na polecenie właściciela do samego „Ostatnie wpisy z naszego profilu na Facebooku." - odpadło „- co właśnie kwitnie i co jest w sprzedaży", bo mówią to lepiej same wpisy pod spodem. Nagłówek, overline i lead pustego stanu bez zmian; nadal są to nasze słowa i nadal czekają na przegląd właścicieli. Przy okazji sekcja dostała kreskę pod nagłówkiem - `border-bottom` na `.news__head`, ta sama co w `OfferOverview`, `GalleryShow`, `Compositions` i `SeasonCards`. Była jedynym pasmem na stronie, w którym nagłówek wchodził prosto w treść.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | 0.29.1  | **Audyt mobilny przed cutoverem.** Pasek miniatur na `/inspiracje/` był zgnieciony do 2 px na telefonie i 40 px na desktopie, bo jego `li` miały domyślny `flex-shrink` i dzieliły się szerokością zamiast przepełnić przewijany rail. Pasek zdjęć stał na telefonie w jednej kolumnie, a `sizes` obiecywało dwie, przez co każde zdjęcie na stronach kategorii było rozciągane 1,7x przy DPR 2; podłoga kolumny jest teraz clampem, co daje dwie kolumny do 320 px i nie rusza niczego powyżej 667 px - `/chryzantemy/` skróciło się o 46%. Mapa Google dostała `touch-action: pan-y`, bo przechwytywała pionowy gest. Pole dotyku „Pokaż więcej” było zaczepione do wrappera zamiast do przycisku i trafiało w cel przypadkiem. Pasek zgody zszedł ze starego `--ink` sprzed motywu 2a na `color-mix`. Doszedł `theme-color`. Szczegóły: [Audyt mobilny](#audyt-mobilny--wrzesień-2026).                                                                                                                                                                                                                             |
 | 0.29.0  | **Audyt SEO przed cutoverem.** Sufiks tytułu skrócony, żeby na każdej stronie zmieściła się nazwa miejscowości - żaden tytuł kategorii jej dotąd nie niósł, a najdłuższy tytuł miał 81 znaków przy 60 pokazywanych. Cztery opisy skrócone poniżej 160 znaków; z opisu `/kwiaty-balkonowe/` wypadła obietnica „dostępne kolory”, której strona nie spełnia od września. Doszły `robots.txt` (nie było żadnego) i `/llms.txt` jako endpoint czytający `season.ts`, żeby nie powstało drugie miejsce z datami sprzedaży. `og:image` zaczął w ogóle działać - `Seo.astro` przyjmował go od początku, ale nic go nie podawało. W JSON-LD doszły `telephone` w E.164, `addressRegion` i `image`; `geo` czeka na pinezkę z wizytówki i ma już napisaną całą obsługę. Do mapy przekierowań doszły strony załączników WordPressa i `/author/*` jako 410. Szczegóły: [Audyt SEO przed wdrożeniem](#audyt-seo-przed-wdrożeniem--wrzesień-2026).                                                                                                                                                                                   |
+| 0.29.2  | **Odświeżanie feedu przestało commitować, zaczęło wdrażać.** Przebieg #25 padł na `git push` - fetch się udał, ale `main` pojechał dalej, zanim job wystartował, i push odbił się jako non-fast-forward. Workflow ma teraz kształt `news.yml` z alpaków: snapshot w `.gitignore`, `clean: false`, build i `scp` w tym samym przebiegu, zero gita. Przy okazji to on jest jedynym codziennym buildem, więc trzyma kalendarz sprzedaży. Szczegóły: [Odświeżanie feedu bez commita](#odświeżanie-feedu-bez-commita--październik-2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | 0.28.9  | **Stopka: nazwa nad kolumnami, podkreślone linki, cele dotykowe 32 px.** Zgłoszenie właściciela „popraw stopkę”. Linki odróżniał od tekstu sam kolor (1,34:1), jedyną podkreśloną rzeczą był przycisk „Ustawienia mapy”, a cel dotykowy miał ~18 px. Sześć pozycji „Informacji” rozeszło się na „Informacje” i nową kolumnę „Prywatność”, próg siatki zszedł z 220 px na zmierzone 170 px. Po pokazaniu właścicielom: nazwa wyszła z siatki do własnego rzędu (była ściśnięta do 208 px), a wiersze z 44 px na 32 px, co odtwarza poprzedni skok; Facebook, przeniesiony przy podziale pod telefony, wrócił do „Informacji”. Szczegóły: [Stopka](#stopka-cztery-kolumny-podkreślenia-i-cele-dotykowe--wrzesień-2026).                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ### Paczki materiału od właścicieli
@@ -4287,6 +4288,124 @@ układ i długość stron są w `CLAUDE.md` zastrzeżone jako ustalenia klienta.
 | Panel „Oferta" przy 320 px     | usterka z punktu 7 wyżej                                                                                                                                                                                                                                                                                     |
 
 Nic z tej tabeli nie zostało ruszone.
+
+## Odświeżanie feedu bez commita - październik 2026
+
+Przebieg #25 workflow „Refresh the Facebook feed” zakończył się błędem, i to **dopiero na
+ostatnim kroku**. Wszystko przed nim zadziałało: `npm ci` przeszedł, a `npm run fetch:facebook`
+zwrócił `2 post(s) […], 5 file(s) in src/assets/facebook/, 0 of them films`. Czyli token
+użytkownika systemowego, wymiana na token strony, pobieranie plików i `sharp` - sprawne.
+Zawiódł `git push`:
+
+```
+! [rejected]  main -> main (non-fast-forward)
+```
+
+**Mechanizm.** `actions/checkout@v4` bez `ref:` bierze SHA, które niosło _zdarzenie_, a nie
+aktualny czubek gałęzi. Przy `schedule:` na runnerze self-hosted te dwie rzeczy się rozjeżdżają:
+zdarzenie powstaje o 5:23 UTC, a job rusza, kiedy runner jest włączony. Przebieg wyszedł
+z `288031e`; 3 października o 18:44 na `main` wszedł `282a84a` („Add deployment workflow”).
+Commit snapshotu stanął więc na bazie starszej niż remote i nie miał jak wejść.
+
+### Dlaczego nie łatka na pushu
+
+Rebase przed pushem albo `ref: main` w checkoucie zamykają ten konkretny przebieg, ale cała
+klasa błędu bierze się stąd, że ten workflow **w ogóle commituje**. Na siostrzanej stronie
+alpaki-kazimierzdolny.pl ten sam feed działa i nigdy nic nie commituje: cache jest w
+`.gitignore`, leży w katalogu roboczym runnera dzięki `clean: false`, a workflow sam buduje
+serwis i wysyła `dist/`. Non-fast-forward jest tam strukturalnie niemożliwy.
+
+Tego kształtu nie dało się tu dotąd przenieść i `CLAUDE.md` zapisywał powód wprost: _„ours stays
+committed, **because there is no `deploy.yml` here yet**”_. Powód wygasł w `282a84a` - deploy
+istnieje i zna host, katalog przejściowy i nazwę skryptu. Zmiana jest więc wykonaniem decyzji,
+która czekała na jeden brakujący plik, a nie nowym pomysłem.
+
+### Co dokładnie zostało zrobione
+
+| Plik                                  | Zmiana                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.github/workflows/facebook-feed.yml` | Przepisany. Krok commitujący i `permissions: contents: write` usunięte; doszły `clean: false`, instalacja ze stemplem lockfile'a, build, trzy kroki `ssh`/`scp` z `deploy.yml` i raport nieudanego fetcha. `concurrency` z `facebook-feed` na **`deploy`**. `timeout-minutes: 20`. Drugi cron, `43 15 * * *`. |
+| `.gitignore`                          | `src/data/facebook-posts.json`, `src/assets/facebook/`, `.astro-cache/`.                                                                                                                                                                                                                                      |
+| indeks gita                           | `git rm --cached src/data/facebook-posts.json src/assets/facebook/.gitkeep`.                                                                                                                                                                                                                                  |
+| `src/data/facebook.ts`                | Snapshot wczytywany przez `import.meta.glob`, nie statycznym importem. `required()` → `onDisk()`: brakujący plik jest pomijany, nie fatalny.                                                                                                                                                                  |
+| `astro.config.mjs`                    | `cacheDir: "./.astro-cache"`.                                                                                                                                                                                                                                                                                 |
+| `scripts/fetch-facebook.mjs`          | Tylko komentarze: nagłówek i uzasadnienie `MAX_VIDEO_MB`.                                                                                                                                                                                                                                                     |
+
+**Zmiana w `src/data/facebook.ts` nie jest kosmetyką - bez niej nic by się nie zbudowało.**
+Moduł robił `import snapshot from "./facebook-posts.json"`, a statyczny import nieistniejącego
+modułu to twardy błąd builda, nie pusta wartość. Glob pasujący do zera plików daje pusty obiekt,
+czyli dokładnie pożądany fallback. Przy okazji odpadło rzutowanie `as unknown as Snapshot`:
+parametr typu globa robi to samo, a nie zależy od tego, co dziś leży w pliku.
+
+Drugie pół tej zmiany to odwrócenie reguły, która stała w nagłówku tego modułu: brakujący plik
+**rzucał wyjątkiem**. Argument był dobry, dopóki snapshot i jego pliki wchodziły jednym commitem
+
+- wtedy rozjazd mógł oznaczać tylko ręczną edycję, czyli błąd w repozytorium, wart zatrzymania
+  builda. Teraz to stan runnera, a przerwany fetch ma kosztować jedno zdjęcie, nie całą stronę -
+  tak, jak jest na siostrzanej stronie.
+
+### Czego nie przeniesiono i dlaczego
+
+**Bramki zmian**, czyli `scripts/news-changed.ts`, odcisku snapshotu i stempla `.news-deployed`.
+W alpakach bramka istnieje po to, żeby bezpiecznik wieku z `news.ts` miał kiedy wystrzelić, i to
+ona potrzebuje heartbeatu. Tutaj bezpiecznika nie ma - właściciele kazali go zdjąć we wrześniu
+2026 - więc oryginalne uzasadnienie nie przenosi się. Przenosi się za to mocniejsze: `deploy.yml`
+ma **tylko `push:`**, bez crona, a znacznik sezonu liczy się przy buildzie i jedno z pięciu
+przejść wypada **2 listopada**. Ten workflow jest więc jedynym codziennym buildem, jaki ta strona
+ma, i musi budować zawsze. Bramka z heartbeatem 7 dni zostawiłaby „CHRYZANTEMY · W TRAKCIE” na
+tydzień po sezonie; z heartbeatem jednego dnia przy dziennym cronie nigdy nie pomija, tylko
+zaczyna zależeć od minut. **Jeśli bramka ma kiedyś wrócić, najpierw dzienny `schedule:` musi
+wejść do `deploy.yml`.**
+
+Nie przeniesiono też `scripts/check-token-expiry.ts` wraz z jego osobnym alarmem „token wygasa”.
+To realna strata, bo po zdjęciu bezpiecznika wieku nieudany przebieg jest jedynym alertem, jaki
+ten feed ma - ale to nowy skrypt i osobna decyzja, nie element tej zmiany.
+
+### Co ta zmiana kosztuje
+
+`CLAUDE.md` wymieniał trzy własności projektu opartego na commitach. Dwie są nietknięte i to one
+są ważne: **pliki są pobierane, nie linkowane** (podpisany `full_picture` wygasa w kilka dni),
+oraz **przeglądarka gościa nigdy nie łączy się z Meta**, co jest jedynym powodem, dla którego ten
+blok nie potrzebuje bramki zgody, podczas gdy mapa Google potrzebuje. **§ 5 polityki prywatności
+pozostaje prawdziwy** - pliki wciąż są nasze i wciąż idą z naszego serwera.
+
+Trzecia jest oddana świadomie: snapshot w gicie znaczył, że padnięty token czyta się jako „feed
+się nie odświeżył”, nigdy „strona jest pusta”. Gwarantem jest teraz katalog roboczy runnera.
+**Wyczyszczony katalog roboczy = stan pusty do pierwszego udanego pobrania.** Przy działającym
+tokenie to najwyżej pół dnia; przy padniętym - do naprawy tokenu. Alpaki żyją z tym od początku.
+
+Dwa skutki uboczne są po stronie zysków. `lastmod` w sitemapie bierze się z daty ostatniego
+commita, a commity bota ruszały ją przy każdym odświeżeniu feedu i wchodziły w drogę ręcznemu
+bumpowi `version` - jedno i drugie przestaje się dziać. I lokalny `npm run fetch:facebook` nie
+brudzi już repozytorium, co zamyka osobną notkę o tym, że ręcznie pobrany snapshot byłby „drugim
+źródłem dla pliku, który musi mieć dokładnie jedno”.
+
+### Dwie rzeczy, które wyszły przy okazji
+
+**`cacheDir`.** Projekt nie miał tego ustawienia, więc cache obrazów leżał w
+`node_modules/.astro/assets`. `deploy.yml` niesie krok „Discard the image cache after an
+interrupted build” celujący w `.astro-cache` - u nas w katalog, który nie istniał, czyli atrapę.
+A chroni przed czymś realnym: Astro pisze do cache'u zwykłym `writeFile`, więc build ubity
+w połowie zapisu zostawia obcięte zdjęcie, które każdy następny build przeniósłby na stronę.
+Pytanie nie wstawało, dopóki `npm ci` kasował `node_modules` przy każdym przebiegu - a instalacja
+ze stemplem lockfile'a właśnie to kończy. `cacheDir: "./.astro-cache"` naprawia krok w
+`deploy.yml` **bez dotykania `deploy.yml`** i przenosi cache tam, gdzie przeżyje nawet pełne
+`npm ci`.
+
+**`MAX_VIDEO_MB`.** Uzasadnienie tej stałej brzmiało „12, a nie 40 jak u alpaków, i różnicą jest
+git”: film raz pobrany zostawał w historii repozytorium na zawsze. Git z tego wypadł, więc
+argument wygasł. Wartość **zostaje przy 12**, ale na węższym powodzie: `scp -r dist/.` wysyła
+całe `dist/` przy każdym przebiegu, więc film idzie przez sieć dwa razy na dobę i przy każdym
+pushu, a to, co jest w `dist/`, płaci odwiedzający na telefonie. **Podniesienie do 40 jest teraz
+dostępne i jest decyzją właścicieli** - kosztuje czas wysyłki i dane ich gości, a nic
+w repozytorium.
+
+### Czego to nie dowodzi
+
+Przebieg #25 dowiódł połowy przed pushem. Druga połowa - build na runnerze, `scp` i skrypt
+`/usr/local/bin/deploy-gospodarstwo-saran.sh` na hoście - **nie była jeszcze uruchomiona ani
+razu**, ani przez ten workflow, ani przez `deploy.yml`. Do czasu pierwszego zielonego przebiegu
+na stronie nie zmienia się nic, co właściciele mogą zobaczyć.
 
 ## Czego nadal brakuje
 

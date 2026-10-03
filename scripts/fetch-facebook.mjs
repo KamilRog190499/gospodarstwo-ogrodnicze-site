@@ -1,7 +1,7 @@
 // @ts-check
 /** Refreshes the Facebook snapshot the home page builds from.
  *
- *  Run by `.github/workflows/facebook-feed.yml` on the self-hosted runner, once a day. It
+ *  Run by `.github/workflows/facebook-feed.yml` on the self-hosted runner, twice a day. It
  *  writes two things and nothing else:
  *
  *    src/data/facebook-posts.json      the posts, as data
@@ -9,8 +9,9 @@
  *    src/assets/facebook/<id>-<n>.mp4  the films themselves, carried as they came
  *    src/assets/facebook/avatar.jpg    the page's own profile picture
  *
- *  All of it is committed to the repository. That is the whole design, and the reasons are
- *  worth keeping because each one is a way this could have been built and should not be:
+ *  All of it stays in the runner's working directory, where the same run builds the site and
+ *  uploads it. The files are gitignored. That is the whole design, and the reasons are worth
+ *  keeping because each one is a way this could have been built and should not be:
  *
  *  - **The files are downloaded, never linked.** A `full_picture` or a video `source` URL from
  *    Facebook is signed and expires within days; a snapshot holding those URLs goes to broken
@@ -19,11 +20,19 @@
  *    what `src/scripts/consent.ts` exists to prevent for the one other third party on this
  *    site. Local files mean the block needs no consent gate at all - and they are what makes
  *    § 5 of the privacy policy true rather than aspirational.
- *  - **The snapshot lives in git, not on the web server.** Astro runs images through sharp at
- *    build time, so a photograph delivered after the deploy would be the one unoptimised file
- *    on the site. Committing the snapshot puts the refresh through the normal build, and gives
- *    the feed a free property: a token that has stopped working means "the feed did not
- *    refresh", not "the page is empty".
+ *  - **The snapshot is built from, never delivered to a running server.** Astro runs images
+ *    through sharp at build time, so a photograph dropped onto the web server after a deploy
+ *    would be the one unoptimised file on the site. The refresh therefore goes through the
+ *    ordinary build: fetch, `astro build`, upload `dist/`, all in one run.
+ *
+ *    **This was a commit to `main` until October 2026**, which bought one property on top -
+ *    the snapshot was in git, so a dead token read as "the feed did not refresh" rather than
+ *    "the page is empty". It was given up because the push itself was the one thing here that
+ *    could fail on its own: `actions/checkout` takes the SHA the event carried, `main` moves
+ *    on, and the push is rejected as non-fast-forward with the fetch already done and nothing
+ *    wrong with it. The guarantee is now `clean: false` on the checkout, which keeps these
+ *    files between runs - the shape the sibling site has always used. The head of
+ *    facebook-feed.yml argues it out.
  *  - **Nothing is swapped in until every download has succeeded.** Everything lands in a
  *    staging directory first. A run interrupted halfway must not leave `src/assets/facebook/`
  *    holding half a post while the snapshot still describes the whole of it.
@@ -103,16 +112,21 @@ const MAX_SOURCE_PX = 2000;
  *  Facebook would hand Meta the IP address of everyone who opens the home page, and the
  *  section exists precisely so that never happens.
  *
- *  **12, not the sibling site's 40, and the difference is git.** There the cache is gitignored
- *  and lives in the runner's working directory, so a film that scrolls out of the feed is
- *  genuinely gone. Here the snapshot is committed, so every film ever downloaded stays in the
- *  history of this repository forever, even after the sweep at the bottom of this file deletes
- *  it from the working tree. At a film every few weeks that is tolerable; at 40 MB apiece it
- *  would not be. A film over the cap still appears as a post - it keeps its poster frame and
- *  its link out, which is the path the card already draws.
+ *  **12, where the sibling site has 40, and the argument for the gap has changed.** It used to
+ *  be git: the snapshot was committed here, so every film ever downloaded stayed in this
+ *  repository's history forever, even after the sweep at the bottom of this file deleted it
+ *  from the working tree. That stopped being true in October 2026, when the snapshot became
+ *  the runner's state exactly as it is on the sibling site - a film that scrolls out of the
+ *  feed is now genuinely gone, and the reason this number was a third of theirs went with it.
  *
- *  If the repository ever starts to feel heavy, the answer is to stop carrying films at all,
- *  not to raise this number.
+ *  It is kept at 12 on a weaker but real argument, not out of inertia. `scp -r dist/.` wipes
+ *  and re-uploads the whole of `dist/` on every run, so a film is carried across the LAN twice
+ *  a day and on every push, not once when it arrives; and whatever is in `dist/` is what a
+ *  visitor on a phone pays for. **Raising it to 40 is now available and is the owners' call** -
+ *  it costs upload time and their visitors' data, and nothing in the repository any more.
+ *
+ *  A film over the cap still appears as a post - it keeps its poster frame and its link out,
+ *  which is the path the card already draws.
  */
 const MAX_VIDEO_MB = 12;
 

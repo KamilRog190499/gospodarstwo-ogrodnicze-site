@@ -1,6 +1,7 @@
 # build
 dist/
 .astro/
+.astro-cache/
 
 # dependencies
 node_modules/
@@ -13,8 +14,15 @@ docs/lighthouse/*.json
 .DS_Store
 Thumbs.db
 
-# The Facebook refresh downloads into here and renames into src/assets/facebook/ only once
-# every file has arrived. It never survives a finished run - see scripts/fetch-facebook.mjs.
+# The Facebook snapshot - built by scripts/fetch-facebook.mjs and read by src/data/facebook.ts.
+# The runner's state, not the repository's: .github/workflows/facebook-feed.yml fetches it,
+# builds with it and uploads the result, and keeps it between runs with `clean: false`. It was
+# committed until October 2026 - the head of that workflow says why it no longer is.
+src/data/facebook-posts.json
+src/assets/facebook/
+
+# The refresh downloads into here and renames into src/assets/facebook/ only once every file
+# has arrived. It never survives a finished run - see scripts/fetch-facebook.mjs.
 .facebook-staging/
 
 # local

@@ -1,16 +1,61 @@
-# Refreshes the Facebook snapshot the home page builds from.
+# Refreshes the "Co u nas słychać" block with what is on the Facebook page.
 #
-# The job fetches the latest posts and their photographs and commits them to `main`. It does
-# not deploy anything: the commit lands on the branch the deploy workflow watches, so the
-# ordinary build carries the change out. One deployment path, not two.
+# The site is static, so "refreshing" means: fetch the posts, build the whole thing again,
+# upload it to the server - by the same route an ordinary deploy takes. That is why every
+# step from "Build" down is a copy of deploy.yml.
 #
-# Why a commit rather than writing straight to the web server: Astro optimises images at build
-# time, so a photograph delivered after the deploy would be the one unoptimised file on the
-# site. Committing also gives the feed its safety net - a token that has stopped working means
-# the snapshot is not refreshed, never that the page goes blank.
+# ## Why this does not commit anything
 #
-# A useful side effect: GitHub disables `schedule:` on repositories with 60 days of no
-# activity. A workflow that commits keeps its own schedule alive.
+# It did until October 2026: the snapshot and its photographs went into `main` as a bot commit,
+# and the push on deploy.yml carried them out. That shape had one failure mode and it fired on
+# run #25 - `actions/checkout` takes the SHA the *event* carried, `main` moved on before the
+# job started (the runner is self-hosted and GitHub's schedule is best-effort), and the push
+# was rejected as non-fast-forward. The fetch had succeeded; only the push failed.
+#
+# The sibling site alpaki-kazimierzdolny.pl never had that failure mode, because it never
+# pushes: its cache is gitignored, lives in the runner's working directory, and the workflow
+# builds and deploys it itself. The reason this repository did not copy that was written down
+# in CLAUDE.md - "ours stays committed, because there is no `deploy.yml` here yet". That reason
+# expired when deploy.yml arrived, so this is now that workflow, in that shape.
+#
+# The cache (src/data/facebook-posts.json and src/assets/facebook/) sits in the runner's
+# working directory and survives between runs thanks to `clean: false`. It does not go into the
+# repository: the history of this block is worth nothing, and bot commits would break the
+# by-hand version bump and spoil `lastmod` in the sitemap, which astro.config.mjs takes from
+# the date of the last commit.
+#
+# `clean: false` carries two more things across: node_modules, which is why the install step
+# below can skip an install that would change nothing, and .astro-cache/, which is where Astro
+# keeps the processed images.
+#
+# ## What is kept from the committed design, and what is given up
+#
+# Kept, and these two are the ones that matter: the files are downloaded rather than linked,
+# because a `full_picture` URL is signed and expires within days; and because the files are
+# ours, the visitor's browser never contacts Meta - which is the only reason this block needs
+# no consent gate while the map does, and the sentence § 5 of the privacy policy makes about
+# it. Neither changes here.
+#
+# Given up: the snapshot in git used to mean that a token which stopped working read as "the
+# feed did not refresh", never "the page is blank". The guarantee is now the runner's working
+# directory rather than the history, so a wiped working directory costs the block its posts
+# until the next successful fetch. The empty state covers that, and the sibling site has lived
+# with it from the start.
+#
+# ## A failed fetch does NOT stop the run, though it does end it red
+#
+# That is not an inconsistency; it is what keeps the selling calendar honest. `currentSeason`
+# in src/data/season.ts is resolved while the site is being built, against the clock, and one
+# of the five transitions falls on 2 November. deploy.yml runs on `push:` alone, so this
+# workflow is the only thing that rebuilds the site on a quiet day - and a token that died in
+# October must not be able to leave "CHRYZANTEMY · W TRAKCIE" standing into November. So the
+# run carries on, builds from the old cache, deploys, and is turned red at the end.
+#
+# There is no "has anything changed" gate here, and that is the one piece of the sibling's
+# news.yml not brought over. Over there it exists so the age fuse in src/data/news.ts has a
+# build to fire in; the owners had this site's fuse removed in September 2026, and the build is
+# now the season calendar's heartbeat instead - which has to beat every day, not only when
+# Facebook has something new.
 #
 # Secrets: FB_PAGE_ID, FB_SYSTEM_USER_TOKEN. See docs/facebook.md.
 #
@@ -22,50 +67,99 @@
 name: Refresh the Facebook feed
 
 on:
+  # Twice a day, and on minutes nobody else would pick. The holding posts a few times a month,
+  # so there is rarely anything to refresh - the second run is not there for fresher posts but
+  # to cover a lost event. GitHub's schedule is best-effort and the busiest moment is the start
+  # of every hour, which is why these sit at :23 and :43 rather than on the hour.
+  #
+  # A lost event costs more than it used to: this run is also the daily build the selling
+  # calendar needs, so a day with no run is a day the season marker does not move.
   schedule:
-    # Once a day, at 05:23 UTC. Off the hour on purpose - GitHub queues everything scheduled on
-    # the hour and runs it late. Once a day, not every half hour: a market garden posts a few
-    # times a month, and a missed run is made up by the next one.
     - cron: "23 5 * * *"
+    - cron: "43 15 * * *"
   workflow_dispatch:
 
-# The runner is the one that deploys (VM #1). If it is switched off the run simply does not
-# happen; the next day's does.
+# One group with deploy.yml: both workflows wipe the same /tmp/gospodarstwo-saran-dist
+# directory on the server, so a parallel run would overwrite files halfway through a copy.
 concurrency:
-  group: facebook-feed
+  group: deploy
   cancel-in-progress: false
 
 jobs:
   refresh:
     runs-on: self-hosted
-    permissions:
-      contents: write
+    # The shared `deploy` group is held for the length of a run, so a hung step would keep
+    # ordinary deployments waiting the default six hours.
+    timeout-minutes: 20
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Not a tidy-up to skip: this is what carries the snapshot, node_modules and the
+          # image cache from one run to the next. A clean checkout would throw the feed away
+          # every night and leave the block empty whenever a fetch failed.
+          clean: false
 
-      # `sharp` is a production dependency, so a full install is what the script needs.
-      - run: npm ci
+      - name: Install dependencies
+        # `npm ci` deletes node_modules and unpacks it again, which is a minute of work for
+        # nothing whenever the lockfile has not moved - and this runner keeps its working
+        # directory between runs. The stamp is a copy of the lockfile itself, written only
+        # after an install that finished, so there is no way to drift out of step with it:
+        # a changed lockfile, a half-finished install and a missing node_modules all fail the
+        # compare and install again.
+        run: |
+          if ! cmp -s package-lock.json node_modules/.lock-stamp; then
+            npm ci --prefer-offline --no-audit --no-fund
+            cp package-lock.json node_modules/.lock-stamp
+          fi
 
-      - run: npm run fetch:facebook
+      - name: Fetch posts from Facebook
+        id: fetch
+        # See the head of this file: a failure here must not stop the build, because the build
+        # is what moves the selling calendar on.
+        continue-on-error: true
         env:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_SYSTEM_USER_TOKEN: ${{ secrets.FB_SYSTEM_USER_TOKEN }}
+        run: npm run fetch:facebook
 
-      # Nothing to commit is the normal outcome on most days, and it is not a failure. A
-      # failure here means the fetch failed - which is the alert that the token needs
-      # reissuing, delivered by GitHub's own notification for a failed run.
-      - name: Commit the snapshot if it changed
+      - name: Build
+        id: build
+        run: npm run build
+
+      # Astro writes into the image cache with a plain writeFile and copies back out of it
+      # without checking anything, so a build killed in the middle of a write leaves a
+      # truncated photograph that every later build would carry on to the site. The question
+      # never came up while `npm ci` was deleting the whole directory on every run - the
+      # install step above is what ended that, which is also why astro.config.mjs now puts the
+      # cache in .astro-cache/ instead of under node_modules.
+      #
+      # The condition watches the Build step alone, not the run: a red run is the ordinary
+      # state of a dying token here, and only a Build that was interrupted can have left half
+      # a file behind.
+      - name: Discard the image cache after an interrupted build
+        if: ${{ always() && steps.build.outcome != 'success' && steps.build.outcome != 'skipped' }}
+        run: rm -rf .astro-cache
+
+      - name: Prepare deployment directory
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Staged first, then compared. A new photograph is an untracked file, and
-          # `git diff` on the working tree does not see one - checking before staging would
-          # skip the commit on exactly the day the first picture arrives.
-          git add -A src/data/facebook-posts.json src/assets/facebook
-          if git diff --cached --quiet; then
-            echo "No changes - nothing to do."
-            exit 0
-          fi
-          git commit -m "Refresh the Facebook snapshot"
-          git push
+          ssh deploy@192.168.1.66 "rm -rf /tmp/gospodarstwo-saran-dist/*"
+
+      - name: Upload dist
+        run: |
+          scp -r dist/. deploy@192.168.1.66:/tmp/gospodarstwo-saran-dist/
+
+      - name: Deploy
+        run: |
+          ssh deploy@192.168.1.66 "/usr/local/bin/deploy-gospodarstwo-saran.sh"
+
+      # Last, and after the deployment: the site is rebuilt with whatever was available, and
+      # the run ends red so that GitHub sends its notification. Since the owners had the age
+      # fuse removed, a failed run is the only alert this feed has - the page itself can no
+      # longer tell a dead token from a page that has gone quiet.
+      - name: Report a failed fetch
+        if: steps.fetch.outcome == 'failure'
+        run: |
+          echo "::error::Could not fetch the posts from Facebook - the usual cause is a token that has stopped working. The site was rebuilt and deployed from the previous snapshot, so nothing on the page is broken; the cards simply did not change. See docs/facebook.md for reissuing the token."
+          exit 1

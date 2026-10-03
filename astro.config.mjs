@@ -26,6 +26,18 @@ export default defineConfig({
      currently answers on HTTP only - a certificate and an HTTP→HTTPS redirect are needed
      before this goes live, or every canonical here points at a host that does not answer. */
   site: "https://gospodarstwo-saran.pl",
+  /* Out of node_modules, where Astro puts it by default, and into a directory of its own.
+     Both workflows check out with `clean: false` and skip `npm ci` whenever the lockfile has
+     not moved, so the processed images now survive from one run to the next instead of being
+     thrown away with node_modules - which is the whole point, because re-encoding 117
+     photographs is most of what a build here costs.
+
+     It also gives the "Discard the image cache after an interrupted build" step in both
+     workflows something to delete. Astro writes into this directory with a plain writeFile
+     and copies back out of it without checking anything, so a build killed mid-write leaves a
+     truncated photograph that every later build would carry on to the site. That step was
+     pointing at a path that did not exist while the cache lived under node_modules. */
+  cacheDir: "./.astro-cache",
   /* astro-icon inlines each icon's SVG into the page at build time, straight from the
      @iconify-json packages in node_modules and from src/icons/. Nothing is fetched at
      runtime and no client JavaScript ships with it, so an icon costs a visitor exactly
@@ -42,8 +54,8 @@ export default defineConfig({
       // than it needs across a 23-photograph gallery.
       //
       // Careful: these numbers reach neither the build cache nor the emitted filenames.
-      // The cache in node_modules/.astro/assets is keyed by the transform alone, so
-      // changing a number here does nothing until that directory is deleted.
+      // The cache in .astro-cache/assets is keyed by the transform alone, so changing a
+      // number here does nothing until that directory is deleted.
       config: {
         avif: { quality: 40 },
         webp: { quality: 68 },

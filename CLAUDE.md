@@ -84,8 +84,9 @@ and `linkinator` finds no dead internal link.
   the light/dark table the order has to satisfy. What each home page block may and may not
   repeat is argued out in `docs/inwentaryzacja.md` under "Strona główna jako witryna".
 
-**Not done:** `deploy.yml`, the Facebook token, and everything in
-`docs/inwentaryzacja.md` under "Czego nadal brakuje".
+**Not done:** the Facebook token, and everything in `docs/inwentaryzacja.md` under
+"Czego nadal brakuje". `deploy.yml` arrived in October 2026 and is untested against the
+server.
 
 ## Repository map
 
@@ -99,7 +100,7 @@ Read this before adding a file - most things already have a home.
 | `src/data/contact.ts`          | Two phone numbers (Mateusz, Łukasz - the other two were withdrawn as out of date in September 2026), the address, the directions URL, the Facebook link. `email`, `openingHours`, `administrators`, `taxId` and `coordinates` are all `null` - see Open items. The middle two are read only by the privacy policy; `coordinates` has its consumer side written (`directionsFor()`, the `geo` spread in `BaseLayout.astro`) and wants only a pin off the verified Google Business Profile.         |
 | `src/data/gallery.ts`          | The photographs pinned by name: `heroPhoto`, `chrysanthemumPhoto`, `pansyPhoto`, `historyPhoto`, and the three strips (`balconyStrip`, `chrysanthemumStrip`, `pansyStrip`). Each is an import plus a Polish `alt`. Also `homeGallery`, which is those three strips grouped and put in calendar order for the home page show - the strips themselves, not copies, so a frame added to a strip appears there too. **The 23 plantings are no longer here** - they are the `compositions` collection. |
 | `src/data/plant-links.ts`      | Maps a plant named on a planting to its entry's anchor, and is the `z.enum` the plantings' `plants` lists are validated against. Three states: linked; `href: null` (sold, no entry written yet); `companion: true` (grows in the plantings, not sold separately - the chip says "dodatek").                                                                                                                                                                                                      |
-| `src/data/facebook.ts`         | Types and file resolution for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`.                                                                                                                                                                                                                                                                                                                                                 |
+| `src/data/facebook.ts`         | Types and file resolution for the generated snapshot. The only reader of `facebook-posts.json`, `facebook-fixture.ts` and `src/assets/facebook/`. The snapshot and the asset files are globbed rather than imported, because both are gitignored and absent on a fresh clone; the fixture is a plain import, since it is committed.                                                                                                                                                               |
 | `src/data/facebook-fixture.ts` | Invented posts, so the news card can be worked on without a token. **`astro dev` only** - `facebook.ts` gates it on `import.meta.env.DEV`, because these carry the owners' page name on screen.                                                                                                                                                                                                                                                                                                   |
 | `src/data/version.ts`          | The footer's build stamp, from `package.json` and git.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `src/data/compositions.ts`     | The plantings' vocabulary: `compositionKinds` (the schema's `z.enum` and the filter row) and `compositionPhoto()`, the by-name lookup the spring season card uses instead of an array position (the history block had the other one until it got a photograph of its own).                                                                                                                                                                                                                        |
@@ -110,7 +111,7 @@ Read this before adding a file - most things already have a home.
 | `src/scripts/`                 | The only JavaScript sent to the browser: `consent.ts` (map consent), `compositions.ts` (the plantings slideshow), `facebook-news.ts` (relative dates, the post carousel, the "Pokaż więcej" measurement), `gallery-show.ts` (the home page photo show), `lightbox.ts` (the overlay preview, which also steps through the set it was opened from), `nav.ts` (closing the menu panel - an enhancement, never a dependency).                                                                         |
 | `src/utils/`                   | Pure helpers with no data in them, all three brought over with the news card: `message.ts` (a post's text split into links, hashtags and mentions - the one place allowed to do arithmetic with Facebook's code-point offsets), `plural.ts` (`Intl.PluralRules`), `typography.ts` (`nbsp`).                                                                                                                                                                                                       |
 | `src/icons/`                   | Two hand-drawn SVGs, `play` and `pause`, that `astro-icon` inlines beside the Lucide and Simple Icons sets. Nothing outside the news cards uses an icon at all.                                                                                                                                                                                                                                                                                                                                   |
-| `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, daily. Trades `FB_SYSTEM_USER_TOKEN` for a page token, then writes the snapshot and downloads every photograph, poster frame and film it names.                                                                                                                                                                                                                                                                                    |
+| `scripts/fetch-facebook.mjs`   | Build-time only. Run by `.github/workflows/facebook-feed.yml`, twice a day. Trades `FB_SYSTEM_USER_TOKEN` for a page token, then writes the snapshot and downloads every photograph, poster frame and film it names. What it writes is gitignored - the runner's state, not the repository's.                                                                                                                                                                                                     |
 | `docs/inwentaryzacja.md`       | The project chronicle: what was on the old site, where it went, every open question, and the version history.                                                                                                                                                                                                                                                                                                                                                                                     |
 | `docs/przekierowania.md`       | The 301 map.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `docs/facebook.md`             | Written for the owners: how to issue the token.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -596,12 +597,12 @@ plus manual viewport checks.
 - **Contact list layout:** the phone rows use `grid` with a fixed `minmax(8ch, auto)` first
   track. A previous flex version made the four numbers start at four different positions;
   that was a reported defect. Keep the grid.
-- **The Facebook block refreshes itself, and three properties of that design are
-  load-bearing.** `scripts/fetch-facebook.mjs` fetches the two latest posts once a day on
-  the self-hosted runner and **commits them to `main`** - the text as
+- **The Facebook block refreshes itself, and two properties of that design are
+  load-bearing.** `scripts/fetch-facebook.mjs` fetches the two latest posts twice a day on
+  the self-hosted runner and writes them into the working directory - the text as
   `src/data/facebook-posts.json`, the photographs, the poster frames and the films as real
-  files in `src/assets/facebook/` - so the ordinary build carries them out. All three
-  properties are lost by the obvious "simplification":
+  files in `src/assets/facebook/` - and **the same run then builds the site and uploads it**.
+  Both are lost by the obvious "simplification":
   1. The files are downloaded, never linked: a `full_picture` or a video `source` URL is
      signed and expires within days, so a snapshot of those URLs rots into broken images while
      looking fresh.
@@ -609,11 +610,19 @@ plus manual viewport checks.
      only reason this block needs no consent gate while the map does. A Facebook plugin, an
      iframe or a hotlinked image would each hand every visitor's IP to Meta on page load, and
      § 5 of the privacy policy states in so many words that none of that happens.
-  3. Because the snapshot is in git, a token that has stopped working means "the feed did not
-     refresh", never "the page is blank", and the images go through `sharp` like every other
-     picture here.
-
-  Do not move the refresh to the browser, to the web server, or to a Meta embed.
+     Do not move the refresh to the browser, to the web server, or to a Meta embed. The images
+     go through `sharp` like every other picture here, which is the reason the refresh runs
+     through a build at all rather than dropping files onto a running server.
+  - **It committed the snapshot to `main` until October 2026, and that was a third property:**
+    the snapshot was in git, so a token that had stopped working meant "the feed did not
+    refresh", never "the page is blank". It was given up because the push was the one step that
+    could fail on its own - `actions/checkout` takes the SHA the event carried, `main` moves on
+    before a self-hosted runner picks the job up, and the push is rejected as non-fast-forward
+    with the fetch already done and nothing wrong with it. Run #25 is that failure. The
+    guarantee is now `clean: false` on the checkout, which keeps the files between runs; the
+    cost is that a wiped working directory empties the block until the next successful fetch.
+    **The two properties above are not negotiable; this one was, and the owners' site is not
+    affected by the swap** - the head of `facebook-feed.yml` carries the argument.
 
   - **Two cards, not three, and `KEEP` in the fetch script is the other half of that
     decision.** The row was three until September 2026, when the owner noticed that the home
@@ -637,13 +646,21 @@ plus manual viewport checks.
     and the whole post rather than 200 characters of it. What it cost is written up as four
     named exemptions above - the icons and the shadow, the breakpoints, the chips on a
     photograph, and three new dependencies.
-  - **Three things were deliberately _not_ taken from that project**, and each has a reason
-    that belongs to this repository rather than to taste. Its cache is gitignored and
-    uploaded straight to the server; ours stays committed, because there is no `deploy.yml`
-    here yet and property 3 above depends on it. Its section disappears when the feed is empty
-    or stale; ours falls back to an empty state, on the owners' own decision. And its
-    `MAX_VIDEO_MB` is 40 where ours is **12**, because a film we commit is in this
-    repository's history forever - the cap is argued at the constant.
+  - **One thing is still deliberately _not_ taken from that project, and two were given
+    back.** Its section disappears when the feed is empty or stale; ours falls back to an empty
+    state, on the owners' own decision, and that difference stands. The other two closed in
+    October 2026. Its gitignored cache, uploaded straight to the server, was refused here only
+    "because there is no `deploy.yml` here yet"; `deploy.yml` arrived, so this repository now
+    works the same way. And its `MAX_VIDEO_MB` of 40 against our **12** was justified by a film
+    we commit living in the history forever - which is no longer what happens. The cap stays at
+    12 on a narrower argument, written out at the constant, and **raising it is now the owners'
+    call rather than a thing the repository forbids**.
+    - **The one piece of its `news.yml` still not here is the change gate** - `news-changed.ts`,
+      the fingerprint and the `.news-deployed` stamp. Over there it exists so the age fuse has a
+      build to fire in; this site's fuse is gone, and the build is the season calendar's
+      heartbeat instead, which has to beat every day rather than only when Facebook has
+      something new. A gate that sometimes skips the build is how "CHRYZANTEMY · W TRAKCIE"
+      would stand into November.
   - **Nothing expires a post, and the fuse that used to is gone on the owners' instruction.**
     `MAX_AGE_DAYS = 60` in `src/data/facebook.ts` emptied the block once the newest post passed
     two months; it was removed in September 2026, so the two latest posts stand whatever their
@@ -655,15 +672,20 @@ plus manual viewport checks.
     there is. The argument is kept at `hasPosts` and in `docs/inwentaryzacja.md` under "Zdjęty
     bezpiecznik wieku"; putting it back is the owners' call, not a tidy-up.
 
-  **The pipeline is proven end to end; the snapshot in the repository is still empty, and that
-  is deliberate.** `npm run fetch:facebook` was run by hand in September 2026 against a token in
-  a local `.env` and brought back two real posts with their photographs and a film - so the
-  system user token, the page token exchange, the downloads and `sharp` all work. **That output
-  was not committed.** The snapshot is the daily workflow's to write, and a hand-run one
-  committed from a developer's machine would be a second source for a file that must have
-  exactly one. So the repository still ships `posts: []` and the block still renders its empty
-  state until `facebook-feed.yml` runs with the secrets set.
-  That empty state now covers one case only: the repository before its first successful refresh.
+  **The pipeline is proven as far as a developer's machine reaches; what is unproven is the
+  runner.** `npm run fetch:facebook` was run by hand in September 2026 against a token in a
+  local `.env` and brought back two real posts with their photographs and a film, and the
+  workflow's own run #25 did the same on the runner - so the system user token, the page token
+  exchange, the downloads and `sharp` all work. What has never run to the end is the half after
+  the fetch: the build, the `scp` and the deploy script on the LAN host. Until it does, nothing
+  the owners can see has changed.
+  **There is no snapshot in the repository at all any more**, so a fresh clone and a wiped
+  runner both render the block's empty state - `src/data/facebook.ts` globs the file rather than
+  importing it, precisely so that is not a build error. The question of a hand-run snapshot
+  being "a second source for a file that must have exactly one" is closed rather than answered:
+  a local run now leaves nothing to commit.
+  That empty state covers two cases: a working directory before its first successful refresh,
+  and one that has been wiped since.
   It renders on the strength of the owners' decision alone - until September 2026 it was also
   load-bearing, as the light band between two dark plates, and the block moved to the top of the
   page that month with `GalleryShow` taking over that job. The empty state claims no news, only
@@ -757,8 +779,8 @@ that shape code decisions:
    instead, which is a complete identification, not a placeholder), **the NIP** (`taxId`,
    likewise `null`), the e-mail from item 2, and the wording of the whole document, which is
    ours rather than theirs. One line in it is a promise about a machine: **"3 miesiące" for
-   the server log** has to be matched by `logrotate` when `deploy.yml` is written, or the
-   sentence changed. The full table is in `docs/inwentaryzacja.md` under "Polityka
+   the server log** has to be matched by `logrotate` on the server, or the sentence changed.
+   `deploy.yml` exists now and does not touch it - the promise is still unkept. The full table is in `docs/inwentaryzacja.md` under "Polityka
    prywatności". **§ 5 is the paragraph to watch**: it states that the Facebook block never
    contacts Meta, which is true only while the snapshot is downloaded and self-hosted - any
    move to a plugin, an iframe or a hotlinked image makes the policy false, not just the
@@ -802,18 +824,22 @@ that shape code decisions:
 
 ## Deployment
 
-The reference project deploys from `main` via GitHub Actions on a **self-hosted runner**:
-`npm ci`, `npm run build`, then `scp dist/` to a LAN host and run a deploy script there over
-SSH. Assume the same shape here, and confirm the host, paths and script name before writing
-`.github/workflows/deploy.yml` - they are per-site.
+Two workflows deploy, both on the **self-hosted runner** and both by the same route:
+`npm run build`, `scp dist/.` to `deploy@192.168.1.66:/tmp/gospodarstwo-saran-dist/`, then
+`/usr/local/bin/deploy-gospodarstwo-saran.sh` over SSH. `deploy.yml` does it on a push to
+`main`; `facebook-feed.yml` does it twice a day after refreshing the feed. **They share
+`concurrency: group: deploy`**, and that is required rather than tidy - both wipe the same
+staging directory, so a parallel run would overwrite files halfway through a copy. Neither has
+been run against the server yet.
 
-**`deploy.yml` does not exist yet**, and when it is written it needs a **daily** `schedule:`
-alongside `push:`, not a monthly one. Four of the five season transitions fall on the first
-of a month, but the fifth is 2 November, and a monthly build would leave "CHRYZANTEMY ·
-W TRAKCIE" standing for the whole month after the season ended. The daily Facebook workflow
-does not cover this: it commits only when there are new posts, so on a quiet November it
-never triggers a build at all. Until this exists, the season marker is frozen at whatever the
-last build said.
+**`deploy.yml` runs on `push:` alone, so the daily build is `facebook-feed.yml`'s job**, and
+that is now the only thing keeping the season marker honest. Four of the five transitions fall
+on the first of a month and the fifth is 2 November, so a build that stops happening leaves
+"CHRYZANTEMY · W TRAKCIE" standing after the season ended. Two things follow, and both are
+load-bearing: that workflow has **no change gate** - it builds and deploys on every run,
+whether or not Facebook had anything new - and a **failed fetch does not stop it**, because a
+token that died in October must not be able to freeze the calendar. If a gate is ever wanted
+there, the daily `schedule:` has to move into `deploy.yml` first.
 
 `version` in `package.json` is the source of truth for the site version and is bumped by hand
 on every push to `main` (patch for copy/styling, minor for a new section or page).

@@ -2,15 +2,22 @@
 
 Na stronie głównej, **zaraz pod nagłówkiem i zdjęciem wejściowym**, jest blok
 **„Co u nas słychać”** z dwoma ostatnimi wpisami z profilu gospodarstwa na Facebooku. Nikt nie
-przepisuje ich ręcznie - raz dziennie robi to za nas skrypt.
+przepisuje ich ręcznie - dwa razy na dobę robi to za nas skrypt.
 
 Ten dokument opisuje, jak to działa, co trzeba zrobić raz na starcie i co zrobić, kiedy
 przestanie działać.
 
 ## Co dokładnie trafia na stronę
 
-Codziennie o 5:23 rano skrypt pyta Facebooka o ostatnie wpisy z profilu i zapisuje w projekcie
-**dwa najnowsze**. Potem strona się przebudowuje.
+Dwa razy na dobę, rano i po południu (7:23 i 17:43 czasu letniego, godzinę wcześniej zimą),
+skrypt pyta Facebooka o ostatnie wpisy z profilu i bierze **dwa najnowsze**. Potem od razu,
+w tym samym przebiegu, strona przebudowuje się i wchodzi na serwer.
+
+> **Dlaczego dwa razy, a nie raz.** Nie dla świeższych wpisów - przy kilku wpisach w miesiącu
+> jeden przebieg dziennie w zupełności wystarcza. Drugi jest na wypadek, gdyby GitHub zgubił
+> pierwszy, co mu się zdarza. Od października 2026 ten przebieg jest jedyną rzeczą, która
+> przebudowuje stronę w dniu, w którym nikt nic nie zmienił - a to od przebudowy zależy
+> kalendarz sprzedaży, który sam z siebie nie przeskakuje z „W trakcie” na „Wkrótce”.
 
 > **Dlaczego dwa, a nie trzy.** Przy dwóch kartach każda jest o połowę szersza, więc mieści się
 > w niej znacznie więcej Państwa tekstu, zanim pojawi się przycisk „Pokaż więcej”, a zdjęcia są
@@ -117,12 +124,20 @@ ma dostępu do tej strony (wtedy rzecz jest do naprawienia w **Ustawieniach firm
 tokenie).
 
 To jedyny alarm, jaki tu jest - jeśli nikt nie czyta tych maili, feed potrafi stać w miejscu
-tygodniami. Po dwóch miesiącach blok sam przestaje pokazywać stare wpisy (patrz wyżej), ale to
-zabezpieczenie, a nie powiadomienie.
+tygodniami, a strona nie powie o tym ani słowa. Nie ma już nic, co by go z czasem wyłapało:
+zabezpieczenie, które po dwóch miesiącach samo chowało stare wpisy, zostało usunięte na
+Państwa prośbę we wrześniu 2026 (patrz wyżej).
 
 **Co zrobić:** powtórzyć kroki 3–4 powyżej i podmienić `FB_SYSTEM_USER_TOKEN` w ustawieniach
 repozytorium. Nic więcej. Strona przez cały ten czas pokazuje ostatnie pobrane wpisy - nie
-znika i nie pustoszeje, jest tylko nieaktualna.
+znika i nie pustoszeje, jest tylko nieaktualna. Nieudane pobranie nie wstrzymuje przy tym
+przebudowy: strona i tak wychodzi na serwer, więc kalendarz sprzedaży przeskakuje na czas,
+nawet gdy token leży od tygodnia.
+
+> Jedyny przypadek, w którym blok naprawdę pustoszeje, to wyczyszczenie katalogu roboczego na
+> komputerze budującym stronę - tam, a nie w archiwum projektu, leżą teraz pobrane wpisy
+> i zdjęcia. Wtedy blok wraca do krótkiej informacji, że piszemy na Facebooku, do pierwszego
+> udanego pobrania. Przy działającym tokenie trwa to najwyżej pół dnia.
 
 ## Uruchomienie ręczne
 
@@ -139,6 +154,9 @@ Skrypt albo kończy się powodzeniem i podmienia `src/data/facebook-posts.json` 
 pośredniego. Wszystko pobiera najpierw do katalogu roboczego i podmienia dopiero wtedy, gdy ma
 komplet.
 
+Oba te miejsca są od października 2026 wyłączone z archiwum projektu, więc uruchomienie
+lokalne nie zostawia po sobie żadnego śladu do zatwierdzania.
+
 ## Pliki
 
 | Plik                                  | Rola                                                     |
@@ -147,7 +165,7 @@ komplet.
 | `src/data/facebook-posts.json`        | Zapisane wpisy. **Generowany - nie edytować.**           |
 | `src/assets/facebook/`                | Zapisane zdjęcia i filmy. **Generowane - nie edytować.** |
 | `src/data/facebook.ts`                | Wczytuje jedno i drugie, nadaje typy.                    |
-| `src/components/FacebookNews.astro`   | Pasek z trzema kartami na stronie głównej.               |
+| `src/components/FacebookNews.astro`   | Pasek z dwiema kartami na stronie głównej.               |
 | `src/components/FacebookPost.astro`   | Jedna karta - wygląd i układ wpisu.                      |
 | `src/scripts/facebook-news.ts`        | Data względna, przewijanie zdjęć, „Pokaż więcej”.        |
-| `.github/workflows/facebook-feed.yml` | Codzienne odświeżanie.                                   |
+| `.github/workflows/facebook-feed.yml` | Odświeżanie dwa razy na dobę, z przebudową i wdrożeniem. |

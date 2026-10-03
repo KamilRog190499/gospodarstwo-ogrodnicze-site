@@ -1,9 +1,11 @@
 /** The Facebook snapshot, as typed data for `FacebookNews.astro`.
  *
  *  `facebook-posts.json` and the files in `src/assets/facebook/` are **generated** by
- *  `scripts/fetch-facebook.mjs` and committed; nobody edits them by hand. This module is the
- *  only thing that reads them, and it exists to do two jobs the JSON cannot: give the posts a
- *  type, and turn a file name into an `ImageMetadata` that Astro will optimise.
+ *  `scripts/fetch-facebook.mjs`; nobody edits them by hand, and since October 2026 they are
+ *  not in the repository at all - they are the deploy runner's state, fetched and built with
+ *  in one run of `.github/workflows/facebook-feed.yml`. This module is the only thing that
+ *  reads them, and it exists to do two jobs the JSON cannot: give the posts a type, and turn
+ *  a file name into an `ImageMetadata` that Astro will optimise.
  *
  *  Nothing here runs in the browser and nothing here talks to Meta. A visitor's browser loads
  *  the photographs and the films from our own server, which is the whole reason this block
@@ -15,28 +17,29 @@
  *
  *  `gallery.ts` lists its photographs as one `import` statement each, deliberately - one
  *  photograph chosen in one place, and a missing file breaks the build with the name of the
- *  file in the message. That is not available here: the file names are post ids that do not
- *  exist until the workflow runs, and change every time it does. `import.meta.glob` is the
- *  only way to hand Vite a set of files whose names are unknown when the code is written. It
- *  is not a shortcut taken to save typing.
+ *  file in the message. That is not available here, and for two reasons now. The file names
+ *  are post ids that do not exist until the workflow runs and change every time it does; and
+ *  the snapshot itself is gitignored, so on a fresh clone it is simply not there, and a static
+ *  import of a module that does not exist is a build error rather than an empty value.
+ *  `import.meta.glob` answers both - a glob that matches nothing is an empty object, which is
+ *  exactly the fallback wanted. It is not a shortcut taken to save typing.
  *
- *  ## A missing file is fatal here, and that is a difference from the sibling site
+ *  ## A missing file is dropped rather than fatal, and that reverses what stood here
  *
- *  alpaki-kazimierzdolny.pl drops a photograph its cache names but the disk does not have,
- *  because that cache is gitignored and lives in the runner's working directory - an
- *  interrupted fetch there should cost one photograph rather than the whole page. Here the
- *  snapshot and its files are committed together in one commit, so the two can only disagree
- *  if somebody edited one of them by hand. That is a bug in the repository, and it stops the
- *  build.
+ *  It used to throw. The argument was that the snapshot and its files arrived in one commit,
+ *  so the two could only disagree if somebody had edited one of them by hand - a bug in the
+ *  repository, and one worth stopping the build for. That argument went with the commit: the
+ *  snapshot is the runner's state now, exactly as on alpaki-kazimierzdolny.pl, and an
+ *  interrupted fetch should cost one photograph rather than the whole page. So a file the
+ *  snapshot names and the disk does not have is left out, as it is on the sibling site.
  *
- *  The empty snapshot - which is what ships until the first successful refresh - is not an
- *  error and renders the section's empty state. See `hasPosts`.
+ *  No snapshot at all is not an error either: `posts` comes out empty and the section renders
+ *  its empty state, which is what should be live in that state. See `hasPosts`.
  */
 import type { ImageMetadata } from "astro";
 
 import type { MessageTag } from "../utils/message";
 import { fixturePosts, fixtureAvatar, fixturePageName } from "./facebook-fixture";
-import snapshot from "./facebook-posts.json";
 
 /** One thing a card shows. A film keeps its still as the poster, so a card looks the same
  *  before anybody presses play - and nothing of the film itself is fetched until they do. */
@@ -93,13 +96,21 @@ interface Snapshot {
   }[];
 }
 
-/** The cast is not laziness, and removing it breaks the build on a Tuesday. TypeScript infers
- *  a JSON import from the file's *current contents*: with an empty `posts` array the entries
- *  are `never`, and on a day when every post happens to carry a photograph `image` infers as
- *  `string`, which makes a comparison against `undefined` below "a comparison with no
- *  overlap" - a type error caused by nothing but that day's data. The file is generated, so
- *  its type belongs to the generator. */
-const cache = snapshot as unknown as Snapshot;
+/* A glob of exactly one file, rather than an import of it - see the head of this module. The
+   type parameter is doing a second job while it is here, and it is not decoration: TypeScript
+   infers a plain JSON import from the file's *current contents*, so with an empty `posts`
+   array the entries came out `never`, and on a day when every post happened to carry a
+   photograph `image` inferred as `string` and the comparison against `undefined` below became
+   "a comparison with no overlap" - a type error caused by nothing but that day's data. A glob
+   is typed by its parameter and never by the bytes on disk, which is where the type of a
+   generated file belongs. */
+const snapshotModules = import.meta.glob<{ default: Snapshot }>("./facebook-posts.json", {
+  eager: true,
+});
+
+/** `null` on a fresh clone, and on a runner whose working directory has been wiped before a
+ *  fetch has ever succeeded there. */
+const cache: Snapshot | null = Object.values(snapshotModules)[0]?.default ?? null;
 
 /** Name shown on every card. From the snapshot where there is one, so a rename on Facebook
  *  arrives with the next refresh rather than needing a commit. */
@@ -129,16 +140,10 @@ const videos = new Map<string, string>(
   Object.entries(videoFiles).map(([filePath, url]) => [basename(filePath), url]),
 );
 
-/** A file the snapshot names has to be on disk - see the note at the top. */
-function required<T>(file: string, from: Map<string, T>): T {
-  const found = from.get(file);
-  if (found === undefined) {
-    throw new Error(
-      `facebook.ts: the snapshot names src/assets/facebook/${file}, which is not there. ` +
-        "Re-run `npm run fetch:facebook` rather than editing the snapshot by hand.",
-    );
-  }
-  return found;
+/** A file the snapshot names but the disk does not have is left out rather than fatal - see
+ *  the note at the top. */
+function onDisk<T>(file: string, from: Map<string, T>): T | null {
+  return from.get(file) ?? null;
 }
 
 function fromSnapshot(entry: Snapshot["posts"][number]): FacebookPost {
@@ -149,12 +154,13 @@ function fromSnapshot(entry: Snapshot["posts"][number]): FacebookPost {
     publishedAt: new Date(entry.publishedAt),
     permalink: entry.permalink,
     media: entry.media.flatMap<FacebookMedia>((item) => {
-      const image = item.image ? required(item.image, images) : null;
+      const image = item.image ? onDisk(item.image, images) : null;
 
       if (item.kind === "video") {
-        const src = item.video ? required(item.video, videos) : null;
-        // Nothing to show and nothing to play - the whole item goes. The fetch script does
-        // not write such an item, so this is a guard rather than a path.
+        const src = item.video ? onDisk(item.video, videos) : null;
+        // Nothing to show and nothing to play - the whole item goes. The fetch script does not
+        // write such an item, so this is reached only by a fetch that died between writing a
+        // file and writing the snapshot that names it.
         if (!image && !src) return [];
         return [{ kind: "video", image, src, seconds: item.seconds ?? null }];
       }
@@ -175,7 +181,11 @@ function fromSnapshot(entry: Snapshot["posts"][number]): FacebookPost {
  *  into a plain fallback - see the head of facebook-fixture.ts.
  */
 const loaded: FacebookPost[] =
-  cache.posts.length > 0 ? cache.posts.map(fromSnapshot) : import.meta.env.DEV ? fixturePosts : [];
+  cache && cache.posts.length > 0
+    ? cache.posts.map(fromSnapshot)
+    : import.meta.env.DEV
+      ? fixturePosts
+      : [];
 
 /** Whether there is anything worth printing as news. `false` puts the section into its empty
  *  state; it never removes the section.
@@ -195,7 +205,7 @@ export const hasPosts: boolean = loaded.length > 0;
 export const facebookPosts: FacebookPost[] = hasPosts ? loaded : [];
 
 export const pageName: string =
-  cache.page.name ?? (import.meta.env.DEV ? fixturePageName : FALLBACK_PAGE_NAME);
+  cache?.page.name ?? (import.meta.env.DEV ? fixturePageName : FALLBACK_PAGE_NAME);
 
 /** The page's own profile picture, downloaded alongside the photographs.
  *
@@ -204,8 +214,8 @@ export const pageName: string =
  *  no snapshot at all the fixture's stand-in takes over, under the same rule as the posts
  *  themselves: nothing invented reaches a build.
  */
-export const pageAvatar: ImageMetadata | null = cache.page.avatar
-  ? required(cache.page.avatar, images)
+export const pageAvatar: ImageMetadata | null = cache?.page.avatar
+  ? onDisk(cache.page.avatar, images)
   : import.meta.env.DEV
     ? fixtureAvatar
     : null;
