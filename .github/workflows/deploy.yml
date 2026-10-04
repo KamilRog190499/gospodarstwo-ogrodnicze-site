@@ -36,7 +36,7 @@ jobs:
 
       - name: Prepare deployment directory
         run: |
-          ssh deploy@192.168.1.66 "rm -rf /tmp/gospodarstwo-saran-dist/*"
+          ssh deploy@192.168.1.66 "mkdir -p /tmp/gospodarstwo-saran-dist && rm -rf /tmp/gospodarstwo-saran-dist/*"
 
       - name: Upload dist
         run: |
