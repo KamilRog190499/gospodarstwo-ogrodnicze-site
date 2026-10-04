@@ -798,8 +798,9 @@ that shape code decisions:
    no longer silent**.
    **The three bodies were rewritten a second time later that month and are now half theirs.**
    The owners sent a sentence per card; it was too short to carry the block, so each body opens
-   on their sentence and closes on one written here. That boundary runs inside the paragraph
-   and is invisible in the code, so `docs/inwentaryzacja.md` tables it sentence by sentence
+   on their sentence and closes on one written here - except the middle card, whose body the
+   owners replaced whole in October 2026 and which is now entirely theirs. That boundary runs
+   inside the paragraph and is invisible in the code, so `docs/inwentaryzacja.md` tables it sentence by sentence
    under "Teksty kart sezonowych" - anything touched in those three strings goes on that table
    in the same commit. The same round settled two things worth not re-deriving. **A card title
    never names the goods:** their text called the middle card "Kwiaty balkonowe i rabatowe"
