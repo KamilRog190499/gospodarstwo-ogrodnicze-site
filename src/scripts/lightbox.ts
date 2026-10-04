@@ -177,6 +177,36 @@ if (openers.length > 0) {
   prevButton.addEventListener("click", () => show(current - 1));
   nextButton.addEventListener("click", () => show(current + 1));
 
+  // **A sideways swipe on the photograph steps the set** (October 2026) - the first thing a
+  // thumb tries in a photo viewer, and until then it did nothing. Touch and pen only; a mouse
+  // drag is a selection. A second finger on the glass means a pinch, never a swipe, so the
+  // gesture is dropped the moment one arrives. 40px and mostly sideways counts, the same
+  // threshold as the home page photo show.
+  const figure = overlay.querySelector<HTMLDivElement>(".lightbox__figure")!;
+  const touches = new Set<number>();
+  let swipeFrom: { x: number; y: number } | null = null;
+  figure.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    touches.add(event.pointerId);
+    swipeFrom = touches.size === 1 ? { x: event.clientX, y: event.clientY } : null;
+  });
+  const lift = (event: PointerEvent) => {
+    touches.delete(event.pointerId);
+  };
+  figure.addEventListener("pointercancel", (event) => {
+    lift(event);
+    swipeFrom = null;
+  });
+  figure.addEventListener("pointerup", (event) => {
+    lift(event);
+    if (!swipeFrom || !walkable) return;
+    const dx = event.clientX - swipeFrom.x;
+    const dy = event.clientY - swipeFrom.y;
+    swipeFrom = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    show(current + (dx < 0 ? 1 : -1));
+  });
+
   // Clicking the backdrop closes; clicking the photograph itself does not.
   overlay.addEventListener("click", (event) => {
     if (event.target === overlay) close();

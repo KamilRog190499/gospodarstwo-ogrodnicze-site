@@ -183,13 +183,36 @@ const imageList =
     )
   }
 
+  {
+    /* **Two groups, the same as the home page photo show** (October 2026). As one wrapping
+      row of four, "Zatrzymaj" fell onto a line of its own on a phone and the pair that means
+      back and forward was split by the counter. Now the counter and the pause button are one
+      group and the two steps the other; on a phone the steps take a line and split it in half,
+      on a desktop everything shares one line. `flex-basis` decides, not a breakpoint. */
+  }
   <div class="controls" data-controls>
-    <button type="button" data-prev aria-controls="comp-track">Poprzednie</button>
-    <p class="counter" role="status">
-      <span data-index>1</span> z <span data-total>{total}</span>
-    </p>
-    <button type="button" data-next aria-controls="comp-track">Następne</button>
-    <button type="button" data-toggle aria-pressed="false">Zatrzymaj</button>
+    <div class="controls__status">
+      <p class="counter" role="status">
+        <span data-index>1</span> z <span data-total>{total}</span>
+      </p>
+      <button type="button" class="controls__toggle" data-toggle aria-pressed="false"
+        >Zatrzymaj</button
+      >
+    </div>
+    <div class="controls__steps">
+      <button
+        type="button"
+        class="controls__step controls__step--prev"
+        data-prev
+        aria-controls="comp-track">Poprzednie</button
+      >
+      <button
+        type="button"
+        class="controls__step controls__step--next"
+        data-next
+        aria-controls="comp-track">Następne</button
+      >
+    </div>
   </div>
 
   <p id="comp-hint" class="sr-only">
@@ -533,6 +556,33 @@ const imageList =
     gap: 0.6rem 1rem;
   }
 
+  /* The counter on the left and the pause button on the right of their own line on a phone;
+     beside the steps on a desktop. */
+  /* **The two groups share the free space unequally, and that is the whole fix for the
+     in-between widths** (October 2026). The status group grows a thousand times faster than
+     the steps, so while both fit on one line it takes all the spare room and the steps stay at
+     their 26rem basis - a compact pair at the end of a desktop line. Once they no longer fit,
+     the steps wrap onto a line of their own, are the only item on it, and grow to its full
+     width, edge to edge with the line above. The `max-width: 26rem` this replaced held them at
+     26rem even then, so between about 450 and 750px the pair stopped short of the pause button
+     above it and the two lines did not line up. */
+  .controls__status {
+    flex: 1000 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem 1rem;
+  }
+
+  /* Two equal halves. See the note above the status group for how wide. */
+  .controls__steps {
+    flex: 1 1 26rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
   .controls button {
     font-family: inherit;
     font-size: 0.72rem;
@@ -547,6 +597,36 @@ const imageList =
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+    /* No 300ms wait for a double-tap zoom when the steps are tapped in quick succession. */
+    touch-action: manipulation;
+  }
+
+  /* Wide enough for "Odtwórz" and "Zatrzymaj" both, so nothing shifts when it changes. */
+  .controls__toggle {
+    min-width: 9.5rem;
+    justify-content: center;
+  }
+
+  /* The site's direction mark - two 1px edges at 45 degrees, as in the menu, the lightbox and
+     the photo show - on the outer side of each label. */
+  .controls__step {
+    justify-content: center;
+    gap: 0.6rem;
+  }
+  .controls__step::before,
+  .controls__step::after {
+    width: 0.5em;
+    height: 0.5em;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+  .controls__step--prev::before {
+    content: "";
+    transform: rotate(135deg);
+  }
+  .controls__step--next::after {
+    content: "";
+    transform: rotate(-45deg);
   }
   .controls button:hover {
     color: var(--paper);
@@ -564,7 +644,6 @@ const imageList =
     color: var(--ink-grey);
     font-variant-numeric: tabular-nums;
     min-width: 6ch;
-    text-align: center;
   }
 
   /* ---------- the strip ---------- */

@@ -30,7 +30,7 @@ import { offer } from "../data/offer";
  * the page to sit between the plantings plate and the directions plate, so it is the light
  * section that keeps those two dark ones from touching (--green-band in tokens.css, and the
  * table in `src/pages/index.astro`). Painting it dark, or moving it, merges two sections into
- * one. The motion is the cascade, chosen out of three that were built and shown; and the group
+ * one. The motion is a sideways slide of the whole row (October 2026, after three fades); and the group
  * order is the year, which is `homeGallery`'s business and not this component's. A prop for
  * any of them would be a second place to decide something already decided.
  */
@@ -121,35 +121,56 @@ const previews = await Promise.all(
     }
   </ul>
 
+  {
+    /* **Two groups, not one row of five, and the phone is the reason** (October 2026). As a
+      single wrapping row the five controls fell apart on a 390px screen: "Poprzednie" and
+      "Zatrzymaj" on one line and "Następne" alone on the next, under "Poprzednie", so the pair
+      that means back and forward no longer read as a pair. Now the dots and the pause button
+      are one group and the two steps are the other; on a phone the steps take a line of their
+      own and split it in half - back on the left under the left thumb, forward on the right -
+      and on a desktop both groups share one line. No breakpoint: `flex-basis` decides. */
+  }
   <div class="show__controls">
-    {
-      /* The old slider's dots, drawn as this design draws things: a 1px square, filled when it
+    <div class="show__status">
+      {
+        /* The old slider's dots, drawn as this design draws things: a 1px square, filled when it
         is the group showing. No border radius anywhere on this site. One per **group**, not one
         per row - `gallery-show.ts` says why - so this row is three squares at every width. */
-    }
-    <ul class="show__ticks" role="list">
-      {
-        groups.map((group) => (
-          <li>
-            <button
-              type="button"
-              class="show__tick"
-              data-show-tick
-              aria-label={`Pokaż: ${group.label}`}
-            >
-              <span class="show__tickMark" />
-            </button>
-          </li>
-        ))
       }
-    </ul>
+      <ul class="show__ticks" role="list">
+        {
+          groups.map((group) => (
+            <li>
+              <button
+                type="button"
+                class="show__tick"
+                data-show-tick
+                aria-label={`Pokaż: ${group.label}`}
+              >
+                <span class="show__tickMark" />
+              </button>
+            </li>
+          ))
+        }
+      </ul>
 
-    <div class="show__buttons">
-      <button type="button" class="show__button" data-show-prev>Poprzednie</button>
-      <button type="button" class="show__button" data-show-toggle aria-pressed="false">
+      <button type="button" class="show__button show__toggle" data-show-toggle aria-pressed="false">
         Zatrzymaj
       </button>
-      <button type="button" class="show__button" data-show-next>Następne</button>
+    </div>
+
+    {
+      /* The arrows are two 1px edges turned 45 degrees - the same construction as the menu's
+        chevron, not an icon - and they sit on the outer side of each label, pointing the way the
+        row will move. */
+    }
+    <div class="show__steps">
+      <button type="button" class="show__button show__step show__step--prev" data-show-prev>
+        Poprzednie
+      </button>
+      <button type="button" class="show__button show__step show__step--next" data-show-next>
+        Następne
+      </button>
     </div>
   </div>
 
@@ -182,6 +203,12 @@ const previews = await Promise.all(
     padding: var(--pad-section) var(--edge);
     display: grid;
     gap: 1.75rem;
+    /* The rows slide sideways (gallery-show.ts), and the section is what clips them - so a row
+       crosses out to the edge of the band rather than over the page beside it. `hidden` first
+       for browsers without `clip`; `clip` where it exists, because it makes no scroll
+       container and so cannot be scrolled sideways by a trackpad mid-slide. */
+    overflow: hidden;
+    overflow: clip;
   }
 
   .show__head {
@@ -228,16 +255,27 @@ const previews = await Promise.all(
 
   /* The row. `grid-template-columns` is written by the script, which is the only thing that
      knows how many frames fit; every slide sits on row 1, and the mounted-but-not-showing ones
-     stack in the first column, under the row on screen. */
+     stack in the first column, under the row on screen. The movement itself is not here: the
+     script animates `transform` directly, and only while a row is crossing. A leaving frame stays
+     visible until it is out of the band, but cannot be clicked on its way out. */
+  /* Vertical scrolling stays the browser's; a horizontal movement is a swipe, handled in
+     gallery-show.ts. Only once the script is running - the no-script list is a plain list. */
+  .show[data-ready] .show__track {
+    touch-action: pan-y;
+  }
+
   .show[data-ready] .show__slide {
     grid-row: 1;
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--show-fade, 600ms) ease-in-out;
+  }
+
+  .show[data-ready] .show__slide[data-current],
+  .show[data-ready] .show__slide[data-leaving] {
+    opacity: 1;
   }
 
   .show[data-ready] .show__slide[data-current] {
-    opacity: 1;
     pointer-events: auto;
   }
 
@@ -278,10 +316,31 @@ const previews = await Promise.all(
     color: var(--ink-grey);
   }
 
-  .show__buttons {
+  /* The dots on the left and the pause button on the right of their own line on a phone;
+     beside the steps on a desktop. */
+  /* **The two groups share the free space unequally, and that is the whole fix for the
+     in-between widths** (October 2026). The status group grows a thousand times faster than
+     the steps, so while both fit on one line it takes all the spare room and the steps stay at
+     their 26rem basis - a compact pair at the end of a desktop line. Once they no longer fit,
+     the steps wrap onto a line of their own, are the only item on it, and grow to its full
+     width, edge to edge with the line above. The `max-width: 26rem` this replaced held them at
+     26rem even then, so between about 450 and 750px the pair stopped short of the pause button
+     above it and the two lines did not line up. */
+  .show__status {
+    flex: 1000 1 auto;
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Two equal halves. See the note above the status group for how wide. */
+  .show__steps {
+    flex: 1 1 26rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 
   .show__button {
@@ -295,11 +354,44 @@ const previews = await Promise.all(
     padding: 0 1rem;
     min-height: var(--tap);
     cursor: pointer;
+    /* No 300ms wait for a double-tap zoom, and no zoom when the steps are tapped quickly. */
+    touch-action: manipulation;
   }
 
   .show__button:hover {
     border-color: var(--green);
     color: var(--green);
+  }
+
+  /* Wide enough for "Odtwórz" and "Zatrzymaj" both, so the line does not shift when the label
+     changes under the visitor's finger. */
+  .show__toggle {
+    min-width: 9.5rem;
+  }
+
+  .show__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .show__step::before,
+  .show__step::after {
+    width: 0.5em;
+    height: 0.5em;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .show__step--prev::before {
+    content: "";
+    transform: rotate(135deg);
+  }
+
+  .show__step--next::after {
+    content: "";
+    transform: rotate(-45deg);
   }
 
   .show__ticks {

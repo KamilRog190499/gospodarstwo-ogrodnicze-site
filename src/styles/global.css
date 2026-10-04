@@ -218,9 +218,17 @@ html.lightbox-open #consent {
   --focus-ring: var(--green-lit);
   display: grid;
   /* Three rows: the bar, the photograph, the step controls. The middle row is the only one
-     that flexes, so a tall photograph gives up height and the controls never leave the
-     viewport. */
-  grid-template-rows: auto 1fr auto;
+     that gives way, so a tall photograph loses height and the controls never leave the
+     viewport.
+
+     **`minmax(0, auto)` and `align-content: center` rather than `1fr`, and the phone is the
+     reason** (October 2026). With `1fr` the photograph's row took every spare pixel, so on a
+     390px screen a 4:3 frame sat at the top and "Poprzednie" / "Następne" were pinned to the
+     bottom edge some 300px below it - a long reach from the picture to the thing that changes
+     it. Now the three rows are packed around the photograph and centred as one block; a frame
+     too tall for the screen still shrinks, because the middle track's floor is zero. */
+  grid-template-rows: auto minmax(0, auto) auto;
+  align-content: center;
   gap: 1rem;
   padding: 1rem var(--edge) 2rem;
 }
@@ -274,11 +282,18 @@ html.lightbox-open #consent {
   margin-left: auto;
 }
 
+/* Two equal halves, up to 13rem each: on a phone the pair fills the width and each button is
+   half the screen to aim at; on a desktop it stays a compact pair under the photograph. */
 .lightbox__nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 13rem));
   justify-content: center;
   gap: 1rem;
-  flex-wrap: wrap;
+}
+.lightbox__nav .lightbox__button {
+  justify-content: center;
+  /* No 300ms wait for a double-tap zoom when the steps are tapped in quick succession. */
+  touch-action: manipulation;
 }
 .lightbox__nav[hidden],
 .lightbox__position[hidden] {
@@ -312,6 +327,9 @@ html.lightbox-open #consent {
   grid-template-rows: minmax(0, 1fr);
   justify-items: center;
   min-height: 0;
+  /* A sideways swipe here changes the photograph (src/scripts/lightbox.ts); pinch-zoom stays
+     the browser's, because looking closer is half of what this overlay is for. */
+  touch-action: pan-y pinch-zoom;
 }
 
 /* `min-height: 0` above plus `max-height: 100%` here is what keeps a 3:4 photograph
