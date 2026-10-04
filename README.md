@@ -208,3 +208,6 @@ trzy brakujące zdjęcia roślin, godziny sprzedaży, e-mail, token do Facebooka
 czeka na potwierdzenie danych administratora - i na `logrotate` ustawiony zgodnie z podanym
 w niej okresem przechowywania logów.
 Mapa przekierowań ze starych adresów: [`docs/przekierowania.md`](docs/przekierowania.md).
+
+
+<!-- Deployment test -->
