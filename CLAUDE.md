@@ -486,7 +486,8 @@ plus manual viewport checks.
     `docs/inwentaryzacja.md`, not a decision to make here.
 - **Non-editorial data goes in typed `src/data/*.ts`**, imported directly - one place per
   fact, so a phone number changes once and updates the intro CTA, the contact list, the
-  footer and the JSON-LD together. See the repository map above for which file owns what.
+  FAQ and the JSON-LD together. The footer prints no numbers since October 2026, on the
+  owners' instruction - only the address. See the repository map above for which file owns what.
 - **The Google map is consent-gated**, not lazy-loaded: nothing reaches Google before the
   visitor agrees. The "Wyznacz trasę" link works without consent and stays visible as the
   alternative. The map is on two pages (`/kontakt/` and the home page's `Directions.astro`);
@@ -710,11 +711,16 @@ plus manual viewport checks.
   WordPress attachment pages** and an `/author/` archive, at least three of them in Google's
   index and none of them in that sitemap; they get a **410**, not a 301 - redirecting file
   pages onto a category page is a promise that page does not keep.
-  - **Every page title ends in `„Saran”, Kazimierz Dolny`**, and the short form is the point.
+  - **Every subpage title ends in `„Saran”, Kazimierz Dolny`**, and the short form is the point.
     Google shows ~60 characters; the formal name spends 34 and left no room for the town, so
     no category page named it at all. `titleSuffix` in `Seo.astro` carries the argument. The
     formal name is untouched in the masthead, `og:site_name` and the JSON-LD `name` - do not
     "restore" it here as a tidy-up, it is a client-visible change either way.
+  - **The home page is the one exception**: since October 2026, on the owners' instruction, its
+    title is "Gospodarstwo Ogrodnicze „Saran” - Sprzedaż kwiatów balkonowych, rabatowych
+    i chryzantem" - the formal name plus the header tagline, 87 characters. Google cuts it
+    after "balkonowych" and the town is not in it; the owners chose that wording, so do not
+    shorten it back as an SEO tidy-up.
 
 ## Open items - do not resolve these unilaterally
 

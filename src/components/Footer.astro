@@ -1,5 +1,5 @@
 ---
-import { phones, address } from "../data/contact";
+import { address } from "../data/contact";
 import { offerPages } from "../data/navigation";
 import { versionLabel, buildStamp } from "../data/version";
 
@@ -41,6 +41,11 @@ import { versionLabel, buildStamp } from "../data/version";
  * October 2026 they asked for it out of the footer altogether. The profile is still linked
  * from the "Co u nas słychać" block on the home page (and stays in the JSON-LD `sameAs`).
  * Do not put it back without asking.
+ *
+ * **"Gospodarstwo" holds the address alone, with no phone numbers**, on the owners' instruction
+ * of October 2026. The numbers are on every page above the footer that needs them - the intro
+ * CTA, `/kontakt/`, the `phones` block on `/faq/` - and in the JSON-LD `telephone`. Do not put
+ * them back without asking.
  *
  * With JavaScript off `.footer__resetRow` is hidden and "Prywatność" holds a single link.
  * That is correct rather than a regression: there was never any consent to withdraw.
@@ -95,17 +100,6 @@ const year = new Date().getFullYear();
     <div class="footer__col">
       <h2 class="footer__label">Gospodarstwo</h2>
       <p class="footer__text">{address.street}<br />{address.postalCode} {address.city}</p>
-      <ul class="footer__list">
-        {
-          phones.map((phone) => (
-            <li>
-              <a class="footer__link" href={phone.href}>
-                {phone.person} {phone.display}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
     </div>
 
     <nav class="footer__col" aria-labelledby="footer-info">
@@ -166,9 +160,10 @@ const year = new Date().getFullYear();
      the move that costs nothing: it gets the full width and sets on one line, and the four
      link columns get the room back.
 
-     170px rather than the handoff's 220px, and the value is measured rather than picked: the
-     widest thing in this footer is the phone row "Mateusz 722 238 987" at 154px, so 170px is
-     the smallest round floor that never wraps one. It also decides how long four columns
+     170px rather than the handoff's 220px, and the value was measured rather than picked: the
+     widest thing in this footer was the phone row "Mateusz 722 238 987" at 154px, so 170px is
+     the smallest round floor that never wrapped one. The phone rows left in October 2026; the
+     floor was kept, because changing it moves every column on the owners' signed-off footer. It also decides how long four columns
      survive. Four tracks need 4x170 plus three 2.5rem gaps = 800px of content, which the
      --edge formula reaches at about 889px of viewport - so 1024, 1152, 1200 and up all hold
      four columns with nothing orphaned underneath. 220px would have needed 1000px and left

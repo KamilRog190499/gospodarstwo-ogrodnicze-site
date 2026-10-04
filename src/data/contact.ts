@@ -1,5 +1,5 @@
 /** Contact details of the holding. Single source of truth - the intro CTA, the contact
- *  section, the footer and the LocalBusiness JSON-LD all read from here, so a number
+ *  section, the footer's address and the LocalBusiness JSON-LD all read from here, so a number
  *  changes in one place.
  *
  *  Taken from http://gospodarstwo-saran.pl/kontakt-2/ and confirmed by the design handoff -
@@ -19,8 +19,8 @@ export interface Phone {
  *
  *  The old site listed four. In September 2026 the owners said that Tadeusz's 602 518 401 and
  *  Jolanta's 662 760 375 are no longer current, so both are gone. Everything that prints a
- *  number reads from here - the intro CTA, the contact list, the footer, the `phones` block on
- *  `/faq/` and the JSON-LD `telephone` - so they disappeared from all of them at once. Two
+ *  number reads from here - the intro CTA, the contact list, the `phones` block on `/faq/` and
+ *  the JSON-LD `telephone` (the footer stopped printing numbers in October 2026) - so they disappeared from all of them at once. Two
  *  numbers on a page that used to show four is the owners' decision, not an omission. */
 export const phones: Phone[] = [
   { person: "Mateusz", display: "722 238 987", href: "tel:+48722238987" },
