@@ -3,6 +3,8 @@ import { Picture } from "astro:assets";
 import { heroPhoto } from "../data/gallery";
 import { directionsUrl, primaryPhone } from "../data/contact";
 import { nbsp } from "../utils/typography";
+import { offer } from "../data/offer";
+import { currentSeason } from "../data/season";
 
 /**
  * The entrance to the home page: the heading and what to do, beside a portrait of the
@@ -91,6 +93,16 @@ import { nbsp } from "../utils/typography";
  * `loading="eager"` and `fetchpriority="high"` - this is the home page's LCP and there is no
  * point pretending otherwise.
  */
+
+// "Zobacz ofertę" leads to whatever is on sale today, or, between windows, to whatever opens
+// next - the same rule that lights one season card (see `season.ts`), so the button and the
+// card always point at the same group. Resolved at build time like everything seasonal here;
+// the daily build is what moves it on. `/kwiaty-balkonowe/` is only the fallback for an empty
+// calendar, which `seasonOn` never returns while `saleWindows` has a row.
+const seasonWindow = currentSeason.open ?? currentSeason.soon;
+const offerHref =
+  offer.find((page) => page.groups.some((group) => seasonWindow?.groups.includes(group)))?.href ??
+  "/kwiaty-balkonowe/";
 ---
 
 <section class="intro">
@@ -142,7 +154,7 @@ import { nbsp } from "../utils/typography";
           ></path>
         </svg>
       </a>
-      <a class="cta-line" href="/kwiaty-balkonowe/">Zobacz ofertę</a>
+      <a class="cta-line" href={offerHref}>Zobacz ofertę</a>
       <a class="cta-line" href={directionsUrl} target="_blank" rel="noopener">Wyznacz trasę</a>
     </div>
     {

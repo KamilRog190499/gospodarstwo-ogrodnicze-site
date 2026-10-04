@@ -505,6 +505,10 @@ plus manual viewport checks.
     one card is ever lit. `OfferSection.astro` prints a line under the heading on each
     category page - "Sprzedaż trwa: …", "Sprzedaż wkrótce: …", or the bare dates - because
     someone arriving from a search never sees the home page.
+  - **The hero's "Zobacz ofertę" follows the season too**, since October 2026 on the owners'
+    instruction: it links to the category page of the open window, or of the next one to open
+    when none is - the same group the lit season card names. It prints no seasonal wording,
+    only the destination moves; `Intro.astro` resolves it from `currentSeason`.
   - **The home page offer tiles carry a season chip**, in three states: "W sprzedaży",
     "Wkrótce", "Poza sezonem". This reverses what stood here - the marker was put on the tiles
     for one release, taken off on the argument that a row of equal doors, one per page, is what
