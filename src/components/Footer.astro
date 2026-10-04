@@ -1,5 +1,5 @@
 ---
-import { phones, address, facebook } from "../data/contact";
+import { phones, address } from "../data/contact";
 import { offerPages } from "../data/navigation";
 import { versionLabel, buildStamp } from "../data/version";
 
@@ -36,12 +36,11 @@ import { versionLabel, buildStamp } from "../data/version";
  * "Prywatność" is our word and not the owners' - it is on their review list in
  * docs/inwentaryzacja.md.
  *
- * **Facebook stays in "Informacje", and that is the owners' second word on it.** The split
- * first moved it up under the two phone numbers, on the argument that it is a third way of
- * reaching the holding rather than a page of the site; they saw that and asked for it back.
- * So "Gospodarstwo" is the address and the phones - the ways to reach a person - and the link
- * to somebody else's platform sits with the rest of the site's destinations. Do not move it
- * again without asking.
+ * **There is no Facebook link down here, and that is the owners' third word on it.** The split
+ * first moved it up under the two phone numbers; they asked for it back in "Informacje"; in
+ * October 2026 they asked for it out of the footer altogether. The profile is still linked
+ * from the "Co u nas słychać" block on the home page (and stays in the JSON-LD `sameAs`).
+ * Do not put it back without asking.
  *
  * With JavaScript off `.footer__resetRow` is hidden and "Prywatność" holds a single link.
  * That is correct rather than a regression: there was never any consent to withdraw.
@@ -74,9 +73,7 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="footer__brand">
     <p class="footer__name">Gospodarstwo Ogrodnicze „Saran”</p>
-    <p class="footer__blurb">
-      Sprzedaż kwiatów balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych.
-    </p>
+    <p class="footer__blurb">Sprzedaż kwiatów balkonowych, rabatowych i chryzantem</p>
   </div>
 
   <div class="footer__columns">
@@ -117,9 +114,6 @@ const year = new Date().getFullYear();
         <li><a class="footer__link" href="/o-nas/">O nas</a></li>
         <li><a class="footer__link" href="/faq/">FAQ</a></li>
         <li><a class="footer__link" href="/kontakt/">Kontakt i dojazd</a></li>
-        <li>
-          <a class="footer__link" href={facebook} target="_blank" rel="noopener">Facebook</a>
-        </li>
       </ul>
     </nav>
 
@@ -208,11 +202,11 @@ const year = new Date().getFullYear();
     color: var(--bone);
   }
 
-  /* The header's tagline used to stand here, one sentence above a blurb that is a superset
-     of it: "Sprzedaż kwiatów balkonowych, rabatowych i chryzantem" over "Sprzedaż kwiatów
-     balkonowych, rabatowych, wieloletnich i chryzantem wielkokwiatowych". It went back to
-     the header, where the specification puts it; the column keeps the blurb, which says
-     more. */
+  /* The blurb is the header's tagline word for word, without a full stop, on the owners'
+     instruction of October 2026. It was the handoff's longer "Sprzedaż kwiatów balkonowych,
+     rabatowych, wieloletnich i chryzantem wielkokwiatowych." until then; the owners called
+     that wrong. (The tagline itself once stood here as well, one line above that blurb, and
+     went back to the header - the two are now the same sentence, so do not stack them.) */
 
   /* 44ch, not the handoff's 34ch. 34ch was a cap inside a ~270px column, where it never bound
      on anything; in the full-width brand row it does, and it broke the sentence over three

@@ -591,8 +591,9 @@ plus manual viewport checks.
     has to be argued - this one item was.
 - **The header tagline** "Sprzedaż kwiatów balkonowych, rabatowych i chryzantem" is the exact
   tagline from the current site - do not reword it, and **do not move it.** It was once
-  relocated to the footer, where it landed one line above the footer blurb, which is a
-  superset of it; it was moved back. Moving it is a client-visible change to the spec: ask,
+  relocated to the footer, where it landed one line above the footer blurb; it was moved
+  back. Since October 2026 the footer blurb is this same sentence, on the owners' instruction,
+  so the two must not be stacked again. Moving it is a client-visible change to the spec: ask,
   then write it down in `docs/`.
 - **Contact list layout:** the phone rows use `grid` with a fixed `minmax(8ch, auto)` first
   track. A previous flex version made the four numbers start at four different positions;
