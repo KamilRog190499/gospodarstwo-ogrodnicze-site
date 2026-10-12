@@ -1520,8 +1520,8 @@ z `saleWindows[].months`, czyli z `src/data/season.ts`.
   tylko od kwietnia do czerwca i dopiero wtedy nadkreślenie mówi „W TRAKCIE”. Jako jedyna nie
   może nazwać rzeczy, bo to okno sprzedaje balkonowe _i_ rabatowe, z dwóch stron naraz.
 - **„Chryzantemy wielkokwiatowe” schodzą z nagłówka do akapitu.** Fraza, po której stara
-  strona się pozycjonuje, zostaje w treści karty i nadal jest tytułem strony `/chryzantemy/`,
-  więc nie ginie z serwisu - ale na stronie głównej nie stoi już w `h3`.
+  strona się pozycjonuje, zostaje w treści karty i otwiera opis meta strony `/chryzantemy/`
+  (do października 2026 była jej tytułem), więc nie ginie z serwisu - ale na stronie głównej nie stoi już w `h3`.
 
 #### Co zyskuje
 
@@ -3483,9 +3483,10 @@ To jedyna strona, na której zmiana widać w treści, i cena została przyjęta 
 
 1. **Kolejność się odwraca.** `order` szedł wielkokwiatowa (35) → średniokwiatowa (36) →
    drobnokwiatowa (37), czyli malejącą wielkością kwiatu. Alfabet daje drobnokwiatowa →
-   średniokwiatowa → wielkokwiatowa. **Produkt flagowy stoi ostatni**, a `<title>` strony to
-   nadal „Chryzantemy wielkokwiatowe" - i tak ma zostać, bo to jest fraza, na którą ta strona
-   ma się wyszukiwać, niezależnie od tego, który wpis wypadnie pierwszy w dół strony.
+   średniokwiatowa → wielkokwiatowa. **Produkt flagowy stoi ostatni.** `<title>` strony brzmiał
+   wtedy „Chryzantemy wielkokwiatowe”, żeby fraza trzymała się strony niezależnie od kolejności;
+   od października 2026 tytuł to „Chryzantemy” (patrz „Tytuły kart: pełna nazwa po kresce”),
+   a fraza otwiera opis meta.
 2. **Pierwszy wpis jest tym jedynym, którego opisu nie napisali właściciele.**
    `chryzantema-drobnokwiatowa.md` powstał u nas (patrz
    [Chryzantema drobnokwiatowa](#chryzantema-drobnokwiatowa--wrzesień-2026)) i po tej zmianie
@@ -4146,10 +4147,47 @@ brak - to jest wersja cytowana komuś, kto już jedzie.
   Rolnictwa", nagroda starosty puławskiego, 2,5 tys. m² pod osłonami). Rozbudowa wymaga ich
   słów, nie naszych.
 
+### Tytuły kart: pełna nazwa po kresce - październik 2026
+
+Na polecenie właściciela każdy tytuł podstrony ma postać **`{temat} | Gospodarstwo Ogrodnicze
+„Saran”`**. To odwraca wrześniowy sufiks "«Saran», Kazimierz Dolny" z tabeli wyżej: firma ma się
+w karcie przeglądarki i w wyniku wyszukiwania nazywać swoją pełną nazwą. Kreska pionowa, a nie
+dywiz, bo temat może mieć własny dywiz („FAQ - częste pytania”) i dwa tytuły czytały się dotąd
+„a - b - c”.
+
+| Strona                   | Przed                                                     | Po                                                                                       | Znaków |
+| ------------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------ |
+| `/`                      | Gospodarstwo Ogrodnicze „Saran” - Sprzedaż kwiatów …      | Gospodarstwo Ogrodnicze „Saran” \| Sprzedaż kwiatów balkonowych, rabatowych i chryzantem | 87     |
+| `/kwiaty-balkonowe/`     | Kwiaty balkonowe - „Saran”, Kazimierz Dolny               | Kwiaty balkonowe \| Gospodarstwo Ogrodnicze „Saran”                                      | 50     |
+| `/bratki/`               | Bratki i prymulki - „Saran”, Kazimierz Dolny              | Bratki i prymulki \| Gospodarstwo Ogrodnicze „Saran”                                     | 51     |
+| `/chryzantemy/`          | Chryzantemy wielkokwiatowe - „Saran”, Kazimierz Dolny     | Chryzantemy \| Gospodarstwo Ogrodnicze „Saran”                                           | 45     |
+| `/inspiracje/`           | Inspiracje - gotowe obsadzenia - „Saran”, Kazimierz Dolny | Inspiracje i obsadzenia \| Gospodarstwo Ogrodnicze „Saran”                               | 57     |
+| `/o-nas/`                | O nas - „Saran”, Kazimierz Dolny                          | O nas \| Gospodarstwo Ogrodnicze „Saran”                                                 | 39     |
+| `/faq/`                  | FAQ - częste pytania - „Saran”, Kazimierz Dolny           | FAQ - częste pytania \| Gospodarstwo Ogrodnicze „Saran”                                  | 54     |
+| `/kontakt/`              | Kontakt i dojazd - „Saran”, Kazimierz Dolny               | Kontakt i dojazd \| Gospodarstwo Ogrodnicze „Saran”                                      | 50     |
+| `/polityka-prywatnosci/` | Polityka prywatności - „Saran”, Kazimierz Dolny           | Polityka prywatności \| Gospodarstwo Ogrodnicze „Saran”                                  | 54     |
+| 404                      | Nie ma takiej strony - „Saran”, Kazimierz Dolny           | Nie ma takiej strony \| Gospodarstwo Ogrodnicze „Saran”                                  | 54     |
+
+**Cena: miejscowość wyszła z tytułów.** Odzyskują ją opisy meta - każda indeksowana strona
+poza polityką prywatności mówi teraz „pod Kazimierzem Dolnym” (dopisane na `/inspiracje/`
+i `/faq/`). Opisy mają 129-153 znaki; `/` i `/o-nas/` skrócono o jedno słowo („Rodzinne”,
+„dzisiejsza”), żeby zmieściły się w 155.
+
+Przy okazji:
+
+- **`/chryzantemy/` ma tytuł „Chryzantemy”**, jak `h1` i menu, na polecenie właściciela.
+  „Chryzantemy wielkokwiatowe” otwiera teraz opis meta.
+- **Okruszek `/bratki/` to „Bratki i prymulki”** - okruszek każdej strony to jej etykieta w menu.
+- **Opisy nie przepisują już dat ani liczb ręcznie.** `/chryzantemy/` miał „od 1 października
+  do 1 listopada”, `/bratki/` „w marcu” - obie daty stały drugi raz poza `season.ts`; teraz
+  biorą `months` z `windowFor()`. „34 rośliny” na `/kwiaty-balkonowe/` liczy `plantCount()`.
+
+**Do potwierdzenia:** pisownia „Ogrodnicze” wielką literą (tak jak w maszcie i JSON-LD).
+
 ### Do potwierdzenia przez właścicieli
 
-1. **Skrócony sufiks tytułu** - "«Saran», Kazimierz Dolny" zamiast pełnej nazwy. Pełna nazwa
-   zostaje w maszcie i w danych strukturalnych; chodzi wyłącznie o to, co widać w Google.
+1. ~~**Skrócony sufiks tytułu**~~ - **rozstrzygnięte w październiku 2026 odwrotnie**: tytuły
+   kończą się pełną nazwą po kresce, patrz „Tytuły kart: pełna nazwa po kresce” wyżej.
 2. **"Rabatowe" poza tytułem strony głównej** - fraza pracuje dalej w czterech innych
    miejscach, ale to jest ich słowo ze starej strony.
 3. **"Bratki i prymulki" w tytule** zamiast samego "Bratki".

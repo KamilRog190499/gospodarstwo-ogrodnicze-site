@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import OfferSection from "../components/OfferSection.astro";
+import { getCollection } from "astro:content";
 import { balconyStrip } from "../data/gallery";
+import { plantCount } from "../data/offer";
 
 /**
  * `/kwiaty-balkonowe/` - the WordPress address, unchanged, so no 301 is needed and the
@@ -31,12 +33,16 @@ import { balconyStrip } from "../data/gallery";
  * belong to `/inspiracje/`, and eighteen of this group's own entries were standing on
  * borrowed photographs. `balconyStrip` is argued out in `src/data/gallery.ts`, including why
  * nine mixed plantings from the same batch stayed off it.
+ *
+ * The count closing the description is counted, not typed: it said "34 rośliny" by hand until
+ * October 2026, which the next entry the owners add would have made untrue.
  */
+const count = (await getCollection("plants", (plant) => plant.data.group === "Balkonowe")).length;
 ---
 
 <BaseLayout
   title="Kwiaty balkonowe"
-  description="Kwiaty balkonowe, rabatowe i wieloletnie z własnej uprawy pod Kazimierzem Dolnym: pelargonie, petunie i surfinie, begonie, fuksje, hortensje. 34 rośliny."
+  description={`Kwiaty balkonowe, rabatowe i wieloletnie z własnej uprawy pod Kazimierzem Dolnym: pelargonie, petunie i surfinie, begonie, fuksje, hortensje. ${plantCount(count)}.`}
   canonical="/kwiaty-balkonowe/"
   breadcrumb="Kwiaty balkonowe"
 >

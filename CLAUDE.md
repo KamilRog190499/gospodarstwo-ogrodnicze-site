@@ -418,7 +418,7 @@ plus manual viewport checks.
   needs no finding aid and that `order` is where the owners say what matters most. **The owners
   saw both and had the three pages aligned with no exceptions**, so the prop went with the
   argument. What that cost is on `/chryzantemy/` and was accepted knowingly: the page reverses,
-  so chryzantema wielkokwiatowa - the flagship, and the phrase in the page's own `<title>` -
+  so chryzantema wielkokwiatowa - the flagship, and the phrase opening the page's `description` -
   stands last, and all three names share an initial, so the index has one row and the divider
   above the first entry parts nothing from nothing. Putting a length threshold back is a
   client-visible change, not a tidy-up. Collation is `localeCompare(…, "pl-PL")` and it is not optional - the default sorts
@@ -711,16 +711,26 @@ plus manual viewport checks.
   WordPress attachment pages** and an `/author/` archive, at least three of them in Google's
   index and none of them in that sitemap; they get a **410**, not a 301 - redirecting file
   pages onto a category page is a promise that page does not keep.
-  - **Every subpage title ends in `„Saran”, Kazimierz Dolny`**, and the short form is the point.
-    Google shows ~60 characters; the formal name spends 34 and left no room for the town, so
-    no category page named it at all. `titleSuffix` in `Seo.astro` carries the argument. The
-    formal name is untouched in the masthead, `og:site_name` and the JSON-LD `name` - do not
-    "restore" it here as a tidy-up, it is a client-visible change either way.
+  - **Every subpage title is `{topic} | Gospodarstwo Ogrodnicze „Saran”`**, since October 2026
+    on the owners' instruction: the formal name, after the one pipe in the string. It replaced the
+    short suffix `„Saran”, Kazimierz Dolny`, which spent fewer of Google's ~60 characters and fit
+    the town in; the owners want the business under its own name instead. **The price is that
+    no title names the town, so every indexable page's `description` has to** - that is the rule
+    that pays for the suffix, and the one to keep when a description is rewritten (only
+    `/polityka-prywatnosci/` and the `noindex` 404 go without). The pipe rather than a hyphen
+    because a topic may carry a hyphen of its own (`FAQ - częste pytania`). Every subpage title
+    is at most 60 characters. The argument is at `fullTitle` in `Seo.astro`; the suffix is
+    `siteName` itself, so the name is written once.
+  - **A breadcrumb is the menu label.** `breadcrumb` on each page matches what `navigation.ts`
+    calls it; the `h1` is free to differ, since it is the owners' copy.
+  - **No description types in a date or a count.** `/bratki/` and `/chryzantemy/` take the
+    selling window from `windowFor()` in `season.ts`, `/kwiaty-balkonowe/` counts its entries
+    through `plantCount()`.
   - **The home page is the one exception**: since October 2026, on the owners' instruction, its
-    title is "Gospodarstwo Ogrodnicze „Saran” - Sprzedaż kwiatów balkonowych, rabatowych
+    title is "Gospodarstwo Ogrodnicze „Saran” | Sprzedaż kwiatów balkonowych, rabatowych
     i chryzantem" - the formal name plus the header tagline, 87 characters. Google cuts it
-    after "balkonowych" and the town is not in it; the owners chose that wording, so do not
-    shorten it back as an SEO tidy-up.
+    after "balkonowych"; the owners chose that wording, so do not shorten it back as an SEO
+    tidy-up. It names the business itself, so `Seo.astro` adds no suffix to it.
 
 ## Open items - do not resolve these unilaterally
 

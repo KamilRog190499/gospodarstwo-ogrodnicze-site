@@ -47,27 +47,27 @@ const imageUrl = ogImage ? new URL(ogImage, Astro.site).href : null;
 
 const siteName = "Gospodarstwo Ogrodnicze „Saran”";
 
-/* The suffix every page title gets, and it is deliberately not `siteName`.
+/* Every title is "{topic} | Gospodarstwo Ogrodnicze „Saran”" - the formal name, after the one
+ * pipe in the string. The owners' decision of October 2026, and it reverses what stood here.
  *
- * Google shows about 60 characters of a title. The formal name spends 34 of them, which left
- * no room for the one word that earns a local business its clicks: the town. "Kwiaty
- * balkonowe" ranked against "kwiaty balkonowe kazimierz dolny" with the locality nowhere in
- * the title at all. This form costs 27 and fits the town on every subpage - the longest of
- * them is 57 characters.
+ * The suffix used to be the short form "„Saran”, Kazimierz Dolny": the formal name spends 34 of
+ * the ~60 characters Google shows, and the short one fitted the town into every subpage title.
+ * The owners want the business to read under its own name in a browser tab and a search result,
+ * so the town left the titles and lives in every page's `description` instead - which is the
+ * rule that pays for this, and the one to keep when a description is rewritten. The longest
+ * subpage title is 60 characters.
  *
- * The home page is the exception, on the owners' instruction of October 2026: its title is the
- * formal name plus the header tagline, 87 characters, so Google cuts it after "balkonowych"
- * and the town is not in it. They asked for exactly that wording; the trade is recorded in
- * docs/inwentaryzacja.md beside the title table.
+ * The pipe, not a hyphen, because a topic may carry a hyphen of its own ("FAQ - częste
+ * pytania"): with one mark for both, two titles read "a - b - c" and nobody could tell where the
+ * page ended and the business began.
  *
- * What is given up is the word "Gospodarstwo Ogrodnicze" in the search result, and only
- * there. The formal name is untouched in the masthead, in `og:site_name` below, and in the
- * JSON-LD `name` - which is the string search engines read as the entity's name. */
-const titleSuffix = "„Saran”, Kazimierz Dolny";
+ * The home page is the exception: its title is the formal name plus the header tagline, on the
+ * owners' instruction, 87 characters, so Google cuts it after "balkonowych". It names the
+ * business itself and so skips the suffix below - the same pipe, the other way round. */
 
 /* A page whose own title already names the business skips the suffix, so it can write the
    whole thing itself rather than stutter. The home page is the only one that does. */
-const fullTitle = title.includes("Saran") ? title : `${title} - ${titleSuffix}`;
+const fullTitle = title.includes("Saran") ? title : `${title} | ${siteName}`;
 ---
 
 <title>{fullTitle}</title>

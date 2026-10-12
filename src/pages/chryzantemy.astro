@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import OfferSection from "../components/OfferSection.astro";
 import { chrysanthemumPhoto, chrysanthemumStrip } from "../data/gallery";
+import { windowFor } from "../data/season";
 
 /** `/chryzantemy/` - the WordPress address, unchanged (docs/przekierowania.md).
  *
@@ -12,11 +13,17 @@ import { chrysanthemumPhoto, chrysanthemumStrip } from "../data/gallery";
  *  doing and not an oversight: they had the three category pages aligned on one layout in
  *  September 2026 (see `OfferSection.astro`), and alphabetically `drobnokwiatowa` leads and
  *  `wielkokwiatowa` closes - the reverse of the `order` numbers, which still run
- *  wielko → średnio → drobno and still decide what the home page tile shows. The `<title>` is
- *  unchanged: "Chryzantemy wielkokwiatowe" is the phrase this page has to rank on, whichever
- *  entry happens to be first down the page. All three names share an initial, so the index has
- *  one row and the divider above the first entry parts nothing - known, and accepted with the
- *  alignment.
+ *  wielko → średnio → drobno and still decide what the home page tile shows. All three names
+ *  share an initial, so the index has one row and the divider above the first entry parts
+ *  nothing - known, and accepted with the alignment.
+ *
+ *  **The `<title>` is "Chryzantemy", like the `h1` and the menu**, since October 2026 on the
+ *  owners' instruction. It said "Chryzantemy wielkokwiatowe" until then, on the argument that
+ *  this is the phrase the page has to rank on; the phrase now opens the `description` instead,
+ *  and stands in the `note` and in the flagship entry.
+ *
+ *  The selling window in the `description` comes from `season.ts`, like the one `OfferSection`
+ *  prints - it was typed in here by hand until October 2026.
  *
  *  **Three types, not four.** The owners folded the needle-petalled chrysanthemum into
  *  `chryzantema-sredniokwiatowa` in September 2026 - it is a petal shape, not a size class, and
@@ -25,11 +32,13 @@ import { chrysanthemumPhoto, chrysanthemumStrip } from "../data/gallery";
  *  three is the kind of drift this project keeps one copy of everything to avoid. The
  *  photograph did not go - it is `rows-12` in `chrysanthemumStrip` below. What the deleted
  *  entry said, in the owners' own words, is preserved in docs/inwentaryzacja.md. */
+const saleWindow = windowFor("Chryzantemy");
+const selling = saleWindow ? ` Sprzedaż: ${saleWindow.months.toLocaleLowerCase("pl-PL")}.` : "";
 ---
 
 <BaseLayout
-  title="Chryzantemy wielkokwiatowe"
-  description="Chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe z własnej uprawy pod Kazimierzem Dolnym. Sprzedaż od 1 października do 1 listopada."
+  title="Chryzantemy"
+  description={`Chryzantemy wielkokwiatowe, średniokwiatowe i drobnokwiatowe z własnej uprawy pod Kazimierzem Dolnym.${selling}`}
   ogImage={chrysanthemumPhoto.src}
   ogImageAlt={chrysanthemumPhoto.alt}
   canonical="/chryzantemy/"
