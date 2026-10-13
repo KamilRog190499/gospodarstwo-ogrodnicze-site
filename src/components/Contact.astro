@@ -38,7 +38,7 @@ const SubHeading = level === 1 ? "h2" : "h3";
       {
         phones.map((phone) => (
           <li class="phones__row">
-            <span class="phones__person">{phone.person}</span>
+            <span class="phones__person">{phone.person}</span>{" "}
             <a class="phones__number" href={phone.href}>
               {phone.display}
             </a>

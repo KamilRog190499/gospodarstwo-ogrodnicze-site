@@ -174,9 +174,12 @@ const imageList =
             Wszystkie
           </button>
           {kinds.map((kind) => (
-            <button type="button" data-filter={kind} aria-pressed="false">
-              {kind}
-            </button>
+            <Fragment>
+              {" "}
+              <button type="button" data-filter={kind} aria-pressed="false">
+                {kind}
+              </button>
+            </Fragment>
           ))}
         </div>
       </div>
@@ -205,7 +208,7 @@ const imageList =
         class="controls__step controls__step--prev"
         data-prev
         aria-controls="comp-track">Poprzednie</button
-      >
+      >{" "}
       <button
         type="button"
         class="controls__step controls__step--next"
@@ -288,14 +291,20 @@ const imageList =
                               <a class="chip" href={plant.href}>
                                 {plant.label}
                                 {notes.map((note) => (
-                                  <span class="chip__note">· {note}</span>
+                                  <Fragment>
+                                    {" "}
+                                    <span class="chip__note">· {note}</span>
+                                  </Fragment>
                                 ))}
                               </a>
                             ) : (
                               <span class="chip chip--flat">
                                 {plant.label}
                                 {notes.map((note) => (
-                                  <span class="chip__note">· {note}</span>
+                                  <Fragment>
+                                    {" "}
+                                    <span class="chip__note">· {note}</span>
+                                  </Fragment>
                                 ))}
                               </span>
                             )}
@@ -325,7 +334,7 @@ const imageList =
                     <a class="cta" href={primaryPhone.href}>
                       Zapytaj: {primaryPhone.display}
                     </a>
-                  )}
+                  )}{" "}
                   <a class="cta-line" href="/kontakt/">
                     Kontakt i dojazd
                   </a>

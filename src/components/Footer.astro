@@ -126,8 +126,15 @@ const year = new Date().getFullYear();
     </nav>
   </div>
 
+  {
+    /* The {" "} between items, here and beside every other pair of inline items on the site,
+      is for text readers, not for the eye: compressHTML drops the newlines between tags, so
+      without it Google quotes neighbours as one glued word ("Saran”v0.29.10"). Every parent
+      it sits in is a flex or grid container, where a whitespace-only run renders nothing -
+      put one inside a plain block or inline parent and it becomes a visible space. */
+  }
   <div class="footer__bar">
-    <span>© {year} Gospodarstwo Ogrodnicze „Saran”</span>
+    <span>© {year} Gospodarstwo Ogrodnicze „Saran”</span>{" "}
     <span class="footer__version" title={buildStamp}>{versionLabel}</span>
   </div>
 </footer>

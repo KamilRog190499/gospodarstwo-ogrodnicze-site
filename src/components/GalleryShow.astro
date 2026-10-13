@@ -82,7 +82,7 @@ const previews = await Promise.all(
       about one part of the offer instead of four unrelated frames. */
   }
   <p class="show__group" role="status">
-    <span class="show__groupName" data-show-label>{groups[0]?.label}</span>
+    <span class="show__groupName" data-show-label>{groups[0]?.label}</span>{" "}
     <span class="show__count">
       <span data-show-index>1</span> z <span data-show-total>{frames.length}</span>
     </span>
@@ -167,7 +167,7 @@ const previews = await Promise.all(
     <div class="show__steps">
       <button type="button" class="show__button show__step show__step--prev" data-show-prev>
         Poprzednie
-      </button>
+      </button>{" "}
       <button type="button" class="show__button show__step show__step--next" data-show-next>
         Następne
       </button>
